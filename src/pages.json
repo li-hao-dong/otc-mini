@@ -25,6 +25,15 @@
 				"navigationBarBackgroundColor": "#fff",
 				"enablePullDownRefresh": true
 			}
+		},
+		{
+			"path": "pages/inquiryResult/inquiryResult",
+			"style": {
+				"navigationBarTitleText": "询价结果",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": true
+			}
 		}
 	],
 	"globalStyle": {

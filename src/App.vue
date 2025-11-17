@@ -16,7 +16,7 @@ page{
   --color-primary-bg: #d6423a;
   --color-secondary-bg: #f5f5f5;
   --color-primary-text: #ffffff;
-  --size-text: 14px;
+  --size-text: 16px;
 }
 
 .container{

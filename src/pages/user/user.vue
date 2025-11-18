@@ -2,7 +2,7 @@
   <view class="container">
     <view class="userPage">
       <view class="signBox" @click="login">
-        <view class="avator"></view>
+        <view class="avator"><uni-icons type="person" size="66" color="white"></uni-icons></view>
         <view class="userData">
           <view class="userName">
             <input type="text" placeholder="请输入你的昵称" v-model="username">
@@ -86,7 +86,11 @@ const changePicker = <T>(e: T) => {
   width: 70px;
   height: 70px;
   border-radius: 50%;
-  background: #999999;
+  background: #d1d1d1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .userName{

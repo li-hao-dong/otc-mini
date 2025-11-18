@@ -1,11 +1,13 @@
 <template>
   <view class="container">
     <view class="userPage">
-      <view class="signBox">
+      <view class="signBox" @click="login">
         <view class="avator"></view>
         <view class="userData">
-          <view class="userName">昵称</view>
-          <view class="userTel">120****1234</view>
+          <view class="userName">
+            <input type="text" placeholder="请输入你的昵称" v-model="username">
+          </view>
+          <view class="userTel">{{tel}}</view>
         </view>
       </view>
 <!--      <view class="userTel">-->
@@ -13,17 +15,59 @@
 <!--      </view>-->
       <view class="row idCard">
         <view class="label">身份号码</view>
-        <view class="view">320************1234</view>
+        <view class="value">
+          <input type="text" placeholder="请输入你的身份证号码" v-model="idCard">
+        </view>
       </view>
       <view class="row provinceCity">
-        <view class="label">省市</view>
-        <view class="value">广东深圳</view>
+        <view class="label">省市区</view>
+        <view class="value">
+          <picker mode="region" @change="changePicker" :disabled="address">{{ address ? address : '请设置地址' }}</picker>
+        </view>
+
       </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
+
+import {ref} from "vue";
+
+const address = ref<string|undefined>()
+const idCard = ref<string|undefined>("320************1234")
+const username = ref<string|undefined>("张三丰")
+const tel = ref<string|undefined>("138****1234")
+
+const login = () => {
+  uni.login({
+    "provider": "weixin",
+    "onlyAuthorize": true, // 微信登录仅请求授权认证
+    success: function(event){
+      const {code} = event
+      //客户端成功获取授权临时票据（code）,向业务服务器发起登录请求。
+      console.log("code", code)
+      // uni.request({
+      //   url: 'https://www.example.com/loginByWeixin', //仅为示例，并非真实接口地址。
+      //   data: {
+      //     code: event.code
+      //   },
+      //   success: (res) => {
+      //     //获得token完成登录
+      //     uni.setStorageSync('token',res.token)
+      //   }
+      // });
+    },
+    fail: function (err) {
+      // 登录授权失败
+      // err.code是错误码
+    }
+  })
+}
+
+const changePicker = <T>(e: T) => {
+  address.value = e.detail!.value.join('');
+}
 
 </script>
 
@@ -58,6 +102,11 @@
   padding: 10px 15px;
   background: white;
   border-bottom: 1px solid #f2f2f2;
+}
+
+.value input{
+  width: 100%;
+  text-align: right;
 }
 
 .idCard{

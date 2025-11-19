@@ -103,54 +103,42 @@
       </view>
     </view>
   </view>
-  
+
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import {onMounted, ref} from "vue";
+import { loadingToast, hideLoading, succToast, failToast } from "@/utils/toast/toast";
+import {inquiryOptions} from "@/api";
+import {
+  Code, type InquiryOptionsResp,
+  type OptionType,
+  type Source,
+  type StructureDefinition,
+  type Term
+} from "@/interfaces/inquiry/inquiryOptions";
 
 type OptionTypeCode = "SNOWBALL" | "VANILLA";
 
 const underlying = ref("");
-const optionTypes = ref<{ code: OptionTypeCode; name: string }[]>([
-  { code: "SNOWBALL", name: "雪球" },
-  { code: "VANILLA", name: "普通" },
-]);
-const selectedType = ref<OptionTypeCode>("SNOWBALL");
+const optionTypes = ref<OptionType[]>([]);
+const selectedType = ref<Code>("SNOWBALL");
 
-const structures = ref<{ code: string; name: string }[]>([
-  { code: "ATM", name: "平值" },
-  { code: "ITM", name: "实值" },
-  { code: "OTM", name: "虚值" },
-]);
+const structures = ref<StructureDefinition[]>();
 const selectedStructures = ref<string[]>(['ATM']);
 
-const nominalAmounts = ref<number[]>([100, 200, 500, 1000, 2000]);
+const nominalAmounts = ref<number[]>();
 const selectedNominal = ref<number>(100);
 
-const terms = ref<{ code: string; name: string }[]>([
-  { code: "1M", name: "1个月" },
-  { code: "3M", name: "3个月" },
-  { code: "6M", name: "6个月" },
-  { code: "12M", name: "12个月" },
-  { code: "24M", name: "24个月" },
-  { code: "36M", name: "36个月" },
-]);
+const terms = ref<Term[]>();
 const selectedTerms = ref<string[]>(['1M']);
 
-const sources = ref<{ code: string; name?: string }[]>([
-  { code: "ALL", name: "全部" },
-  { code: "GF", name: "GF" },
-  { code: "CICC", name: "CICC" },
-  { code: "CMB", name: "CMB" },
-  { code: "HXB", name: "HXB" },
-  { code: "CGB", name: "CGB" },
-  { code: "BOSC", name: "BOSC" },
-  { code: "SPDB", name: "SPDB" },
-  { code: "BOCOM", name: "BOCOM" },
-  { code: "GWB", name: "GWB" },
-]);
+const sources = ref<Source[]>();
 const selectedSources = ref<string[]>(["GF"]);
+
+onMounted(() => {
+  getOptions();
+})
 
 const selectType = (code: OptionTypeCode) => {
   selectedType.value = code;
@@ -187,7 +175,19 @@ const toggleSource = (code: string) => {
   }
 };
 
-import { loadingToast, hideLoading, succToast, failToast } from "@/utils/toast/toast";
+const getOptions = () => {
+  // Placeholder for fetching options from an API if needed
+  inquiryOptions().then((res: InquiryOptionsResp) => {
+    // Process response if needed
+    optionTypes.value = <OptionType[]>res.optionTypes;
+    structures.value = <StructureDefinition[]>res.structures;
+    nominalAmounts.value = <number[]>res.nominalAmounts;
+    terms.value = <Term[]>res.terms;
+    sources.value = <Source[]>res.sources;
+  }).catch(() => {
+    failToast("获取询价选项失败");
+  });
+};
 
 const submit = () => {
   if (!underlying.value || selectedStructures.value.length === 0 || selectedTerms.value.length === 0) {

@@ -17,13 +17,13 @@ export interface InquiryOptionsResp {
     [property: string]: any;
 }
 
-interface OptionType {
+export interface OptionType {
     code?: Code;
     name?: string;
     [property: string]: any;
 }
 
-enum Code {
+export enum Code {
     Snowball = "SNOWBALL",
     Vanilla = "VANILLA",
 }
@@ -36,7 +36,7 @@ interface PopularUnderlying {
     [property: string]: any;
 }
 
-interface Source {
+export interface Source {
     code?: string;
     isActive?: boolean;
     name?: string;
@@ -46,7 +46,7 @@ interface Source {
 /**
  * StructureDefinition
  */
-interface StructureDefinition {
+export interface StructureDefinition {
     /**
      * 结构代码
      */
@@ -56,7 +56,7 @@ interface StructureDefinition {
      * 结构显示名称
      */
     name?: string;
-    relativeStrike?: number;
+    // relativeStrike?: number;
     strikeType?: StrikeType;
     [property: string]: any;
 }
@@ -68,7 +68,7 @@ enum StrikeType {
     Otm = "OTM",
 }
 
-interface Term {
+export interface Term {
     code?: string;
     days?: number;
     name?: string;

@@ -75,7 +75,7 @@ import type {InquiryHistoryResp} from "@/interfaces/inquiry/inquiryHistory";
 import {inquiryHistory} from "@/api";
 
 const store = useStore();
-const history = ref<InquiryHistoryResp[]>([]);
+const history = ref<InquiryHistoryResp[]|undefined>([]);
 const moreDataStatus = ref<boolean>(!true);
 
 onMounted(() => {

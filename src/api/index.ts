@@ -6,6 +6,7 @@ import type {InquiryOptionsResp} from "@/interfaces/inquiry/inquiryOptions";
 import type {InquiryHistoryResp} from "@/interfaces/inquiry/inquiryHistory";
 import http from "@/utils/request/request";
 
+// MOCK API 基础地址
 const BASE_URL = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
 
 /**
@@ -49,59 +50,13 @@ const inquiryQuote = (inquiryQuoteReq:InquiryQuoteReq) => {
 /**
  * 获取询价选项配置
  * */
-const inquiryOptions = (inquiryQuoteReq:InquiryQuoteReq) => {
-    http.get("/inquiry/options")?.then(response => {
-        console.log("inquiryQuoteReq", inquiryQuoteReq);
-        const res: response = {
-            code: 200,
-            message: "success",
-            requestId: "1234567890",
-            timestamp: new Date(),
-            data: {
-                nominalAmounts: [100.0],
-                optionTypes: [
-                    {
-                        code: "SNOWBALL",
-                        name: "雪球",
-                    },
-                    {
-                        code: "VANILLA",
-                        name: "普通",
-                    }
-                ],
-                popularUnderlyings: [
-                    {
-                        assetCode: "1234567890",
-                        assetName: "1234567890",
-                        currentPrice: 10.0,
-                        priceChange: "10.0",
-                    }
-                ],
-                sources: [
-                    {
-                        code: "1234567890",
-                        isActive: true,
-                    }
-                ],
-                structures: [
-                    {
-                        code: "1234567890",
-                        exoticStructure: "1234567890",
-                        name: "1234567890",
-                        relativeStrike: 10.0,
-                        strikeType: 'ATM',
-                    }
-                ],
-                terms: [
-                    {
-                        code: "1234567890",
-                        days: 10,
-                        name: "1234567890",
-                    }
-                ]
-            } as InquiryOptionsResp
+export const inquiryOptions = ():InquiryOptionsResp => {
+    return new Promise(async (resolve, reject) => {
+        const res: response = <response>await  http.get(`${BASE_URL}/inquiry/options`)
+        console.log("InquiryOptionsResp res", res);
+        if (res.code !== 200) {
+            resolve(res.data as InquiryOptionsResp)
         }
-        return res
     })
 }
 /**

@@ -29,10 +29,6 @@ const http = {
      * @description http 请求 get 方法
      * */
     get(url: string) {
-        if (!navigator.onLine) {
-            // 无网络连接
-            return;
-        }
         // 有网络
         return new Promise((resolve, reject) => {
             uni.request({
@@ -43,12 +39,12 @@ const http = {
                 //     Authorization: useStore().token,
                 // },
                 success: (res:response) => {
-                    if (res.data.code) {
+                    if (!res.data.code) {
                         // this.checkoutDataCode(res.data.code);
                         failToast(res.data.msg);
                         return;
                     }
-                    resolve(res);
+                    resolve(res.data);
                 },
                 fail: (err) => {
                     // this.checkoutStatusCode(err.statusCode);
@@ -64,11 +60,6 @@ const http = {
      * @param {object} data
      * */
     post(url: string, data: any) {
-        if (!navigator.onLine) {
-            // 无网络连接
-            return;
-        }
-        // 有网络
         return new Promise((resolve, reject) => {
             uni.request({
                 method: "POST",
@@ -79,7 +70,7 @@ const http = {
                 // },
                 data,
                 success: (res:response) => {
-                    if (res.data.code) {
+                    if (!res.data.code) {
                         // this.checkoutDataCode(res.data.code);
                         failToast(res.data.msg);
                         return;

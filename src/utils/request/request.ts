@@ -39,7 +39,8 @@ const http = {
                 //     Authorization: useStore().token,
                 // },
                 success: (res:response) => {
-                    if (!res.data.code) {
+                    console.log("res@@@", res);
+                    if (res.statusCode != 200) {
                         // this.checkoutDataCode(res.data.code);
                         failToast(res.data.msg);
                         return;
@@ -70,7 +71,7 @@ const http = {
                 // },
                 data,
                 success: (res:response) => {
-                    if (!res.data.code) {
+                    if (res.statusCode != 200) {
                         // this.checkoutDataCode(res.data.code);
                         failToast(res.data.msg);
                         return;

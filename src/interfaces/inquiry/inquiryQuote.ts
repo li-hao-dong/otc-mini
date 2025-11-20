@@ -74,7 +74,7 @@ export interface InquiryResp {
 /**
  * QuoteResult
  */
-interface QuoteResult {
+export interface QuoteResult {
     quotes?: Quote[];
     /**
      * 结构代码

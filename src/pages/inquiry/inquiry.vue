@@ -108,21 +108,23 @@
 
 <script setup lang="ts">
 import {onMounted, ref} from "vue";
-import { loadingToast, hideLoading, succToast, failToast } from "@/utils/toast/toast";
-import {inquiryOptions} from "@/api";
+import {failToast, hideLoading, loadingToast} from "@/utils/toast/toast";
+import {inquiryOptions, inquiryQuote} from "@/api";
 import {
-  Code, type InquiryOptionsResp,
+  Code,
+  type InquiryOptionsResp,
   type OptionType,
   type Source,
   type StructureDefinition,
   type Term
 } from "@/interfaces/inquiry/inquiryOptions";
+import type {InquiryQuoteReq, InquiryResp} from "@/interfaces/inquiry/inquiryQuote";
 
 type OptionTypeCode = "SNOWBALL" | "VANILLA";
 
 const underlying = ref("");
 const optionTypes = ref<OptionType[]>([]);
-const selectedType = ref<Code>("SNOWBALL");
+const selectedType = ref<Code>(Code.Snowball);
 
 const structures = ref<StructureDefinition[]>();
 const selectedStructures = ref<string[]>(['ATM']);
@@ -141,14 +143,14 @@ onMounted(() => {
 })
 
 const selectType = (code: OptionTypeCode) => {
-  selectedType.value = code;
+  selectedType.value = <Code>code;
 };
 
 const toggleStructure = (code: string) => {
   const i = selectedStructures.value.indexOf(code);
   if (i >= 0) {
     selectedStructures.value.splice(i, 1);
-  } else if (selectedStructures.value.length < 3) {
+  } else if (selectedStructures.value.length <= 3) {
     selectedStructures.value.push(code);
   }
 };
@@ -161,7 +163,7 @@ const toggleTerm = (code: string) => {
   const i = selectedTerms.value.indexOf(code);
   if (i >= 0) {
     selectedTerms.value.splice(i, 1);
-  } else if (selectedTerms.value.length < 3) {
+  } else if (selectedTerms.value.length <= 3) {
     selectedTerms.value.push(code);
   }
 };
@@ -179,6 +181,7 @@ const getOptions = () => {
   // Placeholder for fetching options from an API if needed
   inquiryOptions().then((res: InquiryOptionsResp) => {
     // Process response if needed
+    console.log("res!!!!", res)
     optionTypes.value = <OptionType[]>res.optionTypes;
     structures.value = <StructureDefinition[]>res.structures;
     nominalAmounts.value = <number[]>res.nominalAmounts;
@@ -194,35 +197,16 @@ const submit = () => {
     failToast("请完善必选项");
     return;
   }
-  const payload = {
+  const payload: InquiryQuoteReq = {
     nominalAmount: selectedNominal.value,
-    optionType: selectedType.value,
+    optionType: <Code>selectedType.value,
     sources: selectedSources.value.includes("ALL") ? [] : selectedSources.value,
     structures: selectedStructures.value,
     terms: selectedTerms.value,
     underlying: underlying.value,
   };
-  loadingToast("询价中");
-//   uni.request({
-//     url: "/inquiry/quote",
-//     method: "POST",
-//     data: payload,
-//     success: (res) => {
-//       hideLoading();
-//       const ok = (res.statusCode === 200) && (res.data && (res.data.code === 200));
-//       if (ok) {
-//         succToast("询价成功");
-//         uni.navigateTo({ url: "/pages/inquiryResult/inquiryResult" });
-//       } else {
-//         failToast("询价失败");
-//       }
-//     },
-//     fail: () => {
-//       hideLoading();
-//       failToast("询价失败");
-//     },
-//   });
-    uni.navigateTo({ url: "/pages/inquiryResult/inquiryResult" });
+  uni.setStorageSync('InquiryQuoteReqPayload', payload)
+  uni.navigateTo({ url: "/pages/inquiryResult/inquiryResult" });
 };
 </script>
 

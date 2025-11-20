@@ -7,44 +7,19 @@ import type {InquiryHistoryResp} from "@/interfaces/inquiry/inquiryHistory";
 import http from "@/utils/request/request";
 
 // MOCK API 基础地址
-const BASE_URL = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
+// const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
+const BASE_URL: string = "http://backtest.sunsmicro.com:22901/api/v1"
 
 /**
  * 发起询价
  * */
-const inquiryQuote = (inquiryQuoteReq:InquiryQuoteReq) => {
-    http.post("/inquiry/quote", {inquiryQuoteReq})?.then(response => {
-        console.log("inquiryQuoteReq", inquiryQuoteReq);
-        const res: response = {
-            code: 200,
-            message: "success",
-            requestId: "1234567890",
-            timestamp: new Date(),
-            data: {
-                currentPrice: 10.0,
-                inquiryId: "1234567890",
-                inquiryTime: new Date(),
-                nominalAmount: 100.0,
-                priceChange: "10.0",
-                results: [
-                    {
-                        quotes: [
-                            {
-                                isAvailable: true,
-                                isRecommended: true,
-                                price: 10.0,
-                                productCode: "1234567890",
-                                sourceCode: "1234567890",
-                                sourceName: "1234567890",
-                            },
-                        ],
-                        structure: "1234567890",
-                        structureName: "1234567890",
-                    }
-                ]
-            } as InquiryResp
+export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): InquiryResp => {
+    return new Promise(async (resolve, reject) => {
+        const res: response = <response>await  http.post(`${BASE_URL}/inquiry/quote`, inquiryQuoteReq)
+        console.log("InquiryResp res", res);
+        if (res.code !== 200) {
+            resolve(res.data as InquiryResp)
         }
-        return res
     })
 }
 /**

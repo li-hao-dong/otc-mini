@@ -18,42 +18,138 @@
 
       <view class="row rowMid">
         <view class="para"><text class="labelBold">询价人:</text></view>
-        <view class="para"><text class="labelBolder">询价规模: 100万</text></view>
+        <view class="para"><text class="labelBolder">询价规模: 待定</text></view>
       </view>
-
+<!-- 
       <view class="table">
         <view class="tableHeader">
           <view class="th thW66L"><text class="thText">结构</text></view>
-          <view class="th thW84"><text class="thText">1个月</text></view>
-          <view class="th thW84"><text class="thText">2周</text></view>
-          <view class="th thW84"><text class="thText">2个月</text></view>
+          <view class="th thW84" v-for="(term, index) in terms" :key="index"><text class="thText">{{ term }}</text></view>
           <view class="th thW66R"><text class="thText">报价方</text></view>
         </view>
         <view class="tableBody">
-          <view class="tr" v-for="(r,i) in 10" :key="i">
-            <view class="td tdW66L"><text class="tdText" :class="r.c1Class">{{ i }}</text></view>
-            <view class="td tdW84"><text class="tdText" :class="r.c2Class">{{ i }}</text></view>
-            <view class="td tdW84"><text class="tdText" :class="r.c3Class">{{ i }}</text></view>
-            <view class="td tdW84"><text class="tdText" :class="r.c4Class">{{ i }}</text></view>
-            <view class="td tdW66R"><text class="tdText" :class="r.c5Class">{{ i }}</text></view>
+          <view class="tr" v-for="(item, index) in results" :key="index">
+            <view class="td tdW66L"><text class="tdText">{{ item.structureName }}</text></view>
+            <view class="td tdW84" v-for="(term, i) in terms" :key="i"><view class="tdText" >{{ item.terms[term].price }}%</view></view>
+            <view class="td tdW66R" ><view class="tdText">{{ item.sourceCode }}</view></view>
           </view>
         </view>
       </view>
 
+      <view style="width: 100%;">
+        <view :style="`width:100%; display: inline-grid; grid-template-columns: repeat(${terms.length ? terms.length + 2 : 2 }, 1fr);`">
+          <view class="th"><text class="thText">结构</text></view>
+          <view class="th" v-for="(term, index) in terms" :key="index"><text class="thText">{{ term }}</text></view>
+          <view class="th"><text class="thText">报价方</text></view>
+        </view>
+        <view class="tr" v-for="(item, index) in results" :key="index" :style="`width:100%; display: inline-grid; grid-template-columns: repeat(${terms.length ? terms.length + 2 : 2 }, 1fr);`">
+          <view class="td"><text class="tdText">{{ item.structureName }}</text></view>
+          <view class="td" v-for="(term, i) in terms" :key="i"><view class="tdText" >{{ item.terms[term].price }}%</view></view>
+          <view class="td" ><view class="tdText">{{ item.sourceCode }}</view></view>
+        </view>
+      </view> -->
+
+      <uni-table ref="table" border stripe emptyText="暂无更多数据">
+        <uni-tr>
+          <uni-th align="center">结构</uni-th>
+          <uni-th align="center" v-for="(term, index) in terms" :key="index">{{ term }}</uni-th>
+          <uni-th align="center">报价方</uni-th>
+        </uni-tr>
+        <uni-tr v-for="(item, index) in results" :key="index">
+          <uni-td>{{ item.structureName }}</uni-td>
+          <uni-td v-for="(term, i) in terms" :key="i">{{ item.terms[term].price }}%</uni-td>
+          <uni-td>{{ item.sourceCode }}</uni-td>
+        </uni-tr>
+      </uni-table>
+
+
       <view class="row actions">
         <view class="btn fixed" role="button" tabindex="0"><text class="btnText">客服</text></view>
-        <view class="btn grow" role="button" tabindex="0"><text class="btnText">重新询价</text></view>
+        <view class="btn grow" role="button" tabindex="0"><text class="btnText" @click="getInquiryResults">重新询价</text></view>
       </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-const assetName = ref("招商银行");
-const assetCode = ref("600036.SH");
-const currentPrice = ref("42.96");
-const priceChange = ref("0.00%");
+import {onMounted, ref} from "vue";
+import {hideLoading, loadingToast} from "@/utils/toast/toast";
+import {inquiryQuote} from "@/api";
+import type {InquiryResp, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
+const assetName = ref<string | undefined>();
+const assetCode = ref<string | undefined>();
+const currentPrice = ref<number | undefined>();
+const priceChange = ref<string | undefined>();
+const terms = ref<string[] | undefined>();
+const results = ref<QuoteResult[] | undefined>([]);
+
+onMounted(() => {
+  getInquiryResults();
+})
+
+const getInquiryResults = () => {
+  // Placeholder for fetching inquiry results
+
+  const payload = uni.getStorageSync('InquiryQuoteReqPayload')
+  if(Object.keys(payload).length === 0){
+    console.log("没有询价请求参数")
+    return;
+  }
+
+  loadingToast("询价中");
+  inquiryQuote(payload).then((res: InquiryResp) =>{
+    console.log("inquiryQuote res1111,", res)
+    assetName.value = res.data.underlying;
+    assetCode.value = res.data.underlyingCode;
+    currentPrice.value = res.data.currentPrice;
+    priceChange.value = res.data.priceChange;
+    // interface QuoteItem {
+    //   structure: string;
+    //   structureName: string;
+    //   term: string;
+    //   termName: string;
+    //   quotes: {
+    //     price: string;
+    //     sourceCode: string;
+    //   }[];
+    // }
+    //
+
+    const filterData: any = {};
+    res.data.results.map((item:QuoteResult) => {
+      if(!filterData[item.structure!]){
+        filterData[item.structure!] = {
+          structure: item.structure,
+          structureName: item.structureName,
+          terms: {
+            [item.termName!]: item.quotes!.length > 0 && item.quotes![0],
+          },
+          sourceName: item.quotes!.length > 0 && item.quotes![0].sourceName,
+          sourceCode: item.quotes!.length > 0 && item.quotes![0].sourceCode,
+        };
+      }else {
+        filterData[item.structure!] = {
+          ...filterData[item.structure!],
+          terms: {
+            ...filterData[item.structure!].terms,
+            [item.termName!]: item.quotes!.length > 0 && item.quotes![0],
+          },
+        };
+      }
+    });
+
+    terms.value = Object.keys(filterData[Object.keys(filterData)[0]].terms);
+    results.value = Object.values(filterData)
+    console.log("filterData,", filterData)
+    console.log("terms,", terms.value)
+
+
+  }).catch((err: Error) => {
+    console.log("inquiryQuote error,", err)
+  }).finally(() => {
+    hideLoading()
+  })
+};
 
 </script>
 
@@ -131,19 +227,13 @@ const priceChange = ref("0.00%");
   border: 1px solid #eeeeee;
   padding: 9.5px 9px 11.5px;
   box-sizing: border-box;
+  width: 100%;
+  font-size: 14px;
 }
-.thText { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: lighter; font-size: 14px; line-height: 1.21em; color: #000000; text-align: center; }
-.thW66L { width: 66.53px; }
-.thW84 { width: 83.97px; }
-.thW66R { width: 66.56px; }
 
 .tableBody { width: 100%; }
-.tr { display: flex; justify-content: center; }
-.td { padding: 10px 9px; border-bottom: 1px solid #eeeeee; box-sizing: border-box; }
-.tdW66L { width: 66.53px; }
-.tdW84 { width: 83.97px; }
-.tdW66R { width: 66.56px; }
-.tdText { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 400; font-size: 14px; line-height: 1.21em; color: #000000; }
+.tr { width: 100%; display: flex; justify-content: space-between; }
+.td { padding: 10px 9px; border-bottom: 1px solid #eeeeee; box-sizing: border-box; font-size: 14px; text-align: center; border: 1px solid red;}
 .bold { font-weight: 700; }
 .red { color: #e63946; }
 

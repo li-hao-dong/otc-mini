@@ -5,6 +5,7 @@ import type {response} from "@/interfaces/response";
 import type {InquiryOptionsResp} from "@/interfaces/inquiry/inquiryOptions";
 import type {InquiryHistoryResp} from "@/interfaces/inquiry/inquiryHistory";
 import http from "@/utils/request/request";
+import type {loginReq, loginResp} from "@/interfaces/login";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -22,6 +23,26 @@ export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): InquiryResp => {
         }
     })
 }
+
+/**
+ * 登录
+ * */
+export const userLogin = (wechat_login_js_code: string):loginResp => {
+    return new Promise(async (resolve, reject) => {
+        const params: loginReq = {
+            password: '',
+            referrer_uuid: '',
+            user_name: '',
+            wechat_login_js_code,
+        }
+        const res: response = <response>await  http.post(`${BASE_URL}/users/login`, params)
+        console.log("login res", res);
+        if (res.code !== 200) {
+            resolve(res.data as loginResp)
+        }
+    })
+}
+
 /**
  * 获取询价选项配置
  * */

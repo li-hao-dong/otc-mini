@@ -36,6 +36,26 @@
 			}
 		},
 		{
+			"path": "pages/warehouseReceipts/warehouseReceipts",
+			"style": {
+				"navigationBarTitleText": "仓单",
+				"navigationBarTextStyle": "black",
+				"navigationBarTextWeight": "bold",
+				"navigationBarBackgroundColor": "#fff",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
+			"path": "pages/calculator/calculator",
+			"style": {
+				"navigationBarTitleText": "计算器",
+				"navigationBarTextStyle": "black",
+				"navigationBarTextWeight": "bold",
+				"navigationBarBackgroundColor": "#fff",
+				"enablePullDownRefresh": true
+			}
+		},
+		{
 			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "用户中心",
@@ -45,6 +65,38 @@
 			}
 		}
 	],
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#3cc51f",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [
+			{
+				"pagePath": "pages/inquiryHistory/inquiryHistory",
+				"iconPath": "static/logo.png",
+				"selectedIconPath": "static/logo.png",
+				"text": "询价历史"
+			},
+			{
+				"pagePath": "pages/warehouseReceipts/warehouseReceipts",
+				"iconPath": "static/logo.png",
+				"selectedIconPath": "static/logo.png",
+				"text": "仓单"
+			},
+			{
+				"pagePath": "pages/calculator/calculator",
+				"iconPath": "static/logo.png",
+				"selectedIconPath": "static/logo.png",
+				"text": "计算器"
+			},
+			{
+				"pagePath": "pages/user/user",
+				"iconPath": "static/logo.png",
+				"selectedIconPath": "static/logo.png",
+				"text": "我的"
+			}
+		]
+	},
 	"globalStyle": {
 		"navigationStyle": "default",
 		"navigationBarTextStyle": "black",

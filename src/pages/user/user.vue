@@ -33,6 +33,7 @@
 <script setup lang="ts">
 
 import {ref} from "vue";
+import {userLogin} from "@/api";
 
 const address = ref<string|undefined>()
 const idCard = ref<string|undefined>("320************1234")
@@ -46,17 +47,11 @@ const login = () => {
     success: function(event){
       const {code} = event
       //客户端成功获取授权临时票据（code）,向业务服务器发起登录请求。
+      console.log("event", event)
       console.log("code", code)
-      // uni.request({
-      //   url: 'https://www.example.com/loginByWeixin', //仅为示例，并非真实接口地址。
-      //   data: {
-      //     code: event.code
-      //   },
-      //   success: (res) => {
-      //     //获得token完成登录
-      //     uni.setStorageSync('token',res.token)
-      //   }
-      // });
+      // userLogin(code).then((res: loginResp) => {
+      //   console.log("login res:", res)
+      // })
     },
     fail: function (err) {
       // 登录授权失败

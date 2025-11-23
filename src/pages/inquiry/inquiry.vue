@@ -119,26 +119,33 @@ import {
   type Term
 } from "@/interfaces/inquiry/inquiryOptions";
 import type {InquiryQuoteReq, InquiryResp} from "@/interfaces/inquiry/inquiryQuote";
+import {onShow} from "@dcloudio/uni-app";
 
-type OptionTypeCode = "SNOWBALL" | "VANILLA";
+type OptionTypeCode = "SNOWBALL" | "CALL";
 
+// 标的
 const underlying = ref("");
+// 类型
 const optionTypes = ref<OptionType[]>([]);
-const selectedType = ref<Code>(Code.Snowball);
+const selectedType = ref<Code>(Code.Call);
 
+// 结构
 const structures = ref<StructureDefinition[]>();
-const selectedStructures = ref<string[]>(['ATM']);
+const selectedStructures = ref<string[]>([]);
 
+// 规模
 const nominalAmounts = ref<number[]>();
-const selectedNominal = ref<number>(100);
+const selectedNominal = ref<number>(0);
 
+// 期限
 const terms = ref<Term[]>();
-const selectedTerms = ref<string[]>(['1M']);
+const selectedTerms = ref<string[]>([]);
 
+// 报价方
 const sources = ref<Source[]>();
-const selectedSources = ref<string[]>(["GF"]);
+const selectedSources = ref<string[]>([]);
 
-onMounted(() => {
+onShow(() => {
   getOptions();
 })
 
@@ -150,7 +157,7 @@ const toggleStructure = (code: string) => {
   const i = selectedStructures.value.indexOf(code);
   if (i >= 0) {
     selectedStructures.value.splice(i, 1);
-  } else if (selectedStructures.value.length <= 3) {
+  } else if (selectedStructures.value.length < 3) {
     selectedStructures.value.push(code);
   }
 };
@@ -163,7 +170,7 @@ const toggleTerm = (code: string) => {
   const i = selectedTerms.value.indexOf(code);
   if (i >= 0) {
     selectedTerms.value.splice(i, 1);
-  } else if (selectedTerms.value.length <= 3) {
+  } else if (selectedTerms.value.length < 3) {
     selectedTerms.value.push(code);
   }
 };
@@ -193,14 +200,14 @@ const getOptions = () => {
 };
 
 const submit = () => {
-  if (!underlying.value || selectedStructures.value.length === 0 || selectedTerms.value.length === 0) {
+  if (!underlying.value || !selectedType.value || selectedStructures.value.length === 0 || !selectedNominal.value || selectedTerms.value.length === 0 || selectedSources.value.length === 0) {
     failToast("请完善必选项");
     return;
   }
   const payload: InquiryQuoteReq = {
     nominalAmount: selectedNominal.value,
     optionType: <Code>selectedType.value,
-    sources: selectedSources.value.includes("ALL") ? [] : selectedSources.value,
+    sources: selectedSources.value,
     structures: selectedStructures.value,
     terms: selectedTerms.value,
     underlying: underlying.value,

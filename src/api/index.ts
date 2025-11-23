@@ -9,7 +9,8 @@ import type {loginReq, loginResp} from "@/interfaces/login";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
-const BASE_URL: string = "http://backtest.sunsmicro.com:22901/api/v1"
+// const BASE_URL: string = "http://backtest.sunsmicro.com:22901/api/v1"
+const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
 
 /**
  * 发起询价
@@ -27,13 +28,13 @@ export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): InquiryResp => {
 /**
  * 登录
  * */
-export const userLogin = (wechat_login_js_code: string):loginResp => {
+export const userLogin = (code: string, nickname: string):loginResp => {
     return new Promise(async (resolve, reject) => {
         const params: loginReq = {
             password: '',
             referrer_uuid: '',
-            user_name: '',
-            wechat_login_js_code,
+            user_name: nickname,
+            wechat_login_js_code: code,
         }
         const res: response = <response>await  http.post(`${BASE_URL}/users/login`, params)
         console.log("login res", res);

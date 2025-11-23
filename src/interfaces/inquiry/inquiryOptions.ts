@@ -25,7 +25,7 @@ export interface OptionType {
 
 export enum Code {
     Snowball = "SNOWBALL",
-    Vanilla = "VANILLA",
+    Call = "CALL"
 }
 
 interface PopularUnderlying {

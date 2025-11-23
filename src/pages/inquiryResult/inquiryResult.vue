@@ -20,7 +20,7 @@
         <view class="para"><text class="labelBold">询价人:</text></view>
         <view class="para"><text class="labelBolder">询价规模: 待定</text></view>
       </view>
-<!-- 
+<!--
       <view class="table">
         <view class="tableHeader">
           <view class="th thW66L"><text class="thText">结构</text></view>
@@ -76,6 +76,7 @@ import {onMounted, ref} from "vue";
 import {hideLoading, loadingToast} from "@/utils/toast/toast";
 import {inquiryQuote} from "@/api";
 import type {InquiryResp, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
+import {onShow} from "@dcloudio/uni-app";
 const assetName = ref<string | undefined>();
 const assetCode = ref<string | undefined>();
 const currentPrice = ref<number | undefined>();
@@ -83,7 +84,7 @@ const priceChange = ref<string | undefined>();
 const terms = ref<string[] | undefined>();
 const results = ref<QuoteResult[] | undefined>([]);
 
-onMounted(() => {
+onShow(() => {
   getInquiryResults();
 })
 

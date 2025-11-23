@@ -35,9 +35,9 @@ const http = {
                 method: "GET",
                 timeout,
                 url,
-                // header: {
-                //     Authorization: useStore().token,
-                // },
+                header: {
+                    Authorization: `${useStore().user.token_type} ${useStore().user.token}`,
+                },
                 success: (res:response) => {
                     console.log("res@@@", res);
                     if (res.statusCode != 200) {
@@ -66,9 +66,9 @@ const http = {
                 method: "POST",
                 timeout,
                 url,
-                // header: {
-                //     Authorization: useStore().token,
-                // },
+                header: {
+                    Authorization: `${useStore().user.token_type} ${useStore().user.token}`,
+                },
                 data,
                 success: (res:response) => {
                     if (res.statusCode != 200) {

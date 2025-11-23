@@ -32,32 +32,54 @@
 
 <script setup lang="ts">
 
-import {ref} from "vue";
+import {onMounted, ref} from "vue";
 import {userLogin} from "@/api";
+import type {loginResp} from "@/interfaces/login";
+import {useStore} from "@/stores";
+import {onShow} from "@dcloudio/uni-app";
 
-const address = ref<string|undefined>()
-const idCard = ref<string|undefined>("320************1234")
-const username = ref<string|undefined>("张三丰")
-const tel = ref<string|undefined>("138****1234")
+const address = ref<string|undefined>("暂无")
+const idCard = ref<string|undefined>("暂无")
+const username = ref<string|undefined>("")
+const tel = ref<string|undefined>("暂无")
+
+onShow(() =>{
+  initUserInfo()
+})
+
+const initUserInfo = () => {
+  const userInfo = useStore().user;
+  if(userInfo){
+    username.value = userInfo.name;
+  }
+}
 
 const login = () => {
-  uni.login({
-    "provider": "weixin",
-    "onlyAuthorize": true, // 微信登录仅请求授权认证
-    success: function(event){
-      const {code} = event
-      //客户端成功获取授权临时票据（code）,向业务服务器发起登录请求。
-      console.log("event", event)
-      console.log("code", code)
-      // userLogin(code).then((res: loginResp) => {
-      //   console.log("login res:", res)
-      // })
-    },
-    fail: function (err) {
-      // 登录授权失败
-      // err.code是错误码
-    }
-  })
+  if(uni.getUserProfile){
+    uni.getUserProfile({desc: '用户登录'}).then((res) => {
+      console.log("res", res)
+      uni.login({
+        "provider": "weixin",
+        "onlyAuthorize": true, // 微信登录仅请求授权认证
+        success: function(event){
+          const {code} = event
+          //客户端成功获取授权临时票据（code）,向业务服务器发起登录请求。
+          username.value = res.userInfo.nickName;
+          userLogin(code, res.userInfo.nickName).then((res: loginResp) => {
+            // console.log("login res:", res)
+            if(res.status === 'success'){
+              useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type });
+            }
+          })
+        },
+        fail: function (err) {
+          // 登录授权失败
+          // err.code是错误码
+        }
+      })
+    })
+  }
+
 }
 
 const changePicker = <T>(e: T) => {

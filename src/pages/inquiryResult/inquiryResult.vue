@@ -20,69 +20,59 @@
         <view class="para"><text class="labelBold">询价人:</text></view>
         <view class="para"><text class="labelBolder">询价规模: 待定</text></view>
       </view>
-<!--
-      <view class="table">
-        <view class="tableHeader">
-          <view class="th thW66L"><text class="thText">结构</text></view>
-          <view class="th thW84" v-for="(term, index) in terms" :key="index"><text class="thText">{{ term }}</text></view>
-          <view class="th thW66R"><text class="thText">报价方</text></view>
+
+
+      <view style="font-size: 12px; margin-top: 10px; ">
+        <view class="grid_col" ref="gridCol" :style="`width: 100%; display: grid; grid-template-columns: ${gridCol}; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;`">
+          <view >结构</view>
+          <view v-for="(term, index) in terms" :key="index">{{ term }}</view>
+          <view >报价方</view>
         </view>
-        <view class="tableBody">
-          <view class="tr" v-for="(item, index) in results" :key="index">
-            <view class="td tdW66L"><text class="tdText">{{ item.structureName }}</text></view>
-            <view class="td tdW84" v-for="(term, i) in terms" :key="i"><view class="tdText" >{{ item.terms[term].price }}%</view></view>
-            <view class="td tdW66R" ><view class="tdText">{{ item.sourceCode }}</view></view>
+        <view class="grid_col" :style="`width: 100%; display: inline-grid; grid-template-columns: ${gridCol}; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;`"
+              v-for="(item, index) in results" :key="index">
+          <view>{{ item.structureName }}</view>
+          <view v-for="(term, i) in terms" :key="i">{{ item.terms[term].price }}%</view>
+          <view>
+            {{ item.sourceCode }}
           </view>
         </view>
       </view>
 
-      <view style="width: 100%;">
-        <view :style="`width:100%; display: inline-grid; grid-template-columns: repeat(${terms.length ? terms.length + 2 : 2 }, 1fr);`">
-          <view class="th"><text class="thText">结构</text></view>
-          <view class="th" v-for="(term, index) in terms" :key="index"><text class="thText">{{ term }}</text></view>
-          <view class="th"><text class="thText">报价方</text></view>
-        </view>
-        <view class="tr" v-for="(item, index) in results" :key="index" :style="`width:100%; display: inline-grid; grid-template-columns: repeat(${terms.length ? terms.length + 2 : 2 }, 1fr);`">
-          <view class="td"><text class="tdText">{{ item.structureName }}</text></view>
-          <view class="td" v-for="(term, i) in terms" :key="i"><view class="tdText" >{{ item.terms[term].price }}%</view></view>
-          <view class="td" ><view class="tdText">{{ item.sourceCode }}</view></view>
-        </view>
-      </view> -->
-
-      <uni-table ref="table" border stripe emptyText="暂无更多数据">
-        <uni-tr>
-          <uni-th align="center">结构</uni-th>
-          <uni-th align="center" v-for="(term, index) in terms" :key="index">{{ term }}</uni-th>
-          <uni-th align="center">报价方</uni-th>
-        </uni-tr>
-        <uni-tr v-for="(item, index) in results" :key="index">
-          <uni-td>{{ item.structureName }}</uni-td>
-          <uni-td v-for="(term, i) in terms" :key="i">{{ item.terms[term].price }}%</uni-td>
-          <uni-td>{{ item.sourceCode }}</uni-td>
-        </uni-tr>
-      </uni-table>
+<!--      <uni-table ref="table" border stripe emptyText="暂无更多数据">-->
+<!--        <uni-tr>-->
+<!--          <uni-th align="center">结构</uni-th>-->
+<!--          <uni-th align="center" v-for="(term, index) in terms" :key="index">{{ term }}</uni-th>-->
+<!--          <uni-th align="center">报价方</uni-th>-->
+<!--        </uni-tr>-->
+<!--        <uni-tr >-->
+<!--          <uni-td>{{ item.structureName }}</uni-td>-->
+<!--          <uni-td v-for="(term, i) in terms" :key="i">{{ item.terms[term].price }}%</uni-td>-->
+<!--          <uni-td>{{ item.sourceCode }}</uni-td>-->
+<!--        </uni-tr>-->
+<!--      </uni-table>-->
 
 
       <view class="row actions">
-        <view class="btn fixed" role="button" tabindex="0"><text class="btnText">客服</text></view>
-        <view class="btn grow" role="button" tabindex="0"><text class="btnText" @click="getInquiryResults">重新询价</text></view>
+<!--        <view class="btn fixed" role="button" tabindex="0"><text class="btnText">客服</text></view>-->
+        <view class="btn grow" role="button" tabindex="0"><text class="btnText" @click="toInquiry">重新询价</text></view>
       </view>
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from "vue";
+import {getCurrentInstance, onMounted, ref, watch} from "vue";
 import {hideLoading, loadingToast} from "@/utils/toast/toast";
 import {inquiryQuote} from "@/api";
 import type {InquiryResp, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
-import {onShow} from "@dcloudio/uni-app";
+import {onReady, onShow} from "@dcloudio/uni-app";
 const assetName = ref<string | undefined>();
 const assetCode = ref<string | undefined>();
 const currentPrice = ref<number | undefined>();
 const priceChange = ref<string | undefined>();
 const terms = ref<string[] | undefined>();
 const results = ref<QuoteResult[] | undefined>([]);
+const gridCol = ref<string>("");
 
 onShow(() => {
   getInquiryResults();
@@ -143,28 +133,35 @@ const getInquiryResults = () => {
     results.value = Object.values(filterData)
     console.log("filterData,", filterData)
     console.log("terms,", terms.value)
-
-
+    gridCol.value = `20% repeat(${terms.value?.length}, 1fr) 35%`;
   }).catch((err: Error) => {
     console.log("inquiryQuote error,", err)
   }).finally(() => {
     hideLoading()
   })
+
 };
 
+
+const toInquiry = () => {
+  uni.redirectTo({
+    url: '/pages/inquiry/inquiry'
+  });
+}
 </script>
 
 <style>
 .resultPage { background-color: #f5f5f5; }
 
 .card {
-  width: 95%;
+  width: 100%;
   margin: 0 auto;
   background-color: #ffffff;
-  padding: 10px 0;
   display: flex;
   flex-direction: column;
   gap: 1px;
+  padding: 10px 2.5%;
+  box-sizing: border-box;
 }
 
 .row { display: flex; align-items: center; }
@@ -249,7 +246,7 @@ const getInquiryResults = () => {
   padding: 11px 20px 12px;
 }
 .fixed { width: 120px; }
-.grow { flex: 1; margin-left: 20px; }
+.grow { flex: 1; }
 .btnText {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;

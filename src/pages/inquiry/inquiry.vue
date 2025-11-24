@@ -127,7 +127,7 @@ type OptionTypeCode = "SNOWBALL" | "CALL";
 const underlying = ref("");
 // 类型
 const optionTypes = ref<OptionType[]>([]);
-const selectedType = ref<Code>(Code.Call);
+const selectedType = ref<Code>();
 
 // 结构
 const structures = ref<StructureDefinition[]>();
@@ -190,10 +190,15 @@ const getOptions = () => {
     // Process response if needed
     console.log("res!!!!", res)
     optionTypes.value = <OptionType[]>res.optionTypes;
+    selectedType.value = res.optionTypes![0].code;
     structures.value = <StructureDefinition[]>res.structures;
+    selectedStructures.value = <string[]>[res.structures![0].code, res.structures![1].code, res.structures![2].code];
     nominalAmounts.value = <number[]>res.nominalAmounts;
+    selectedNominal.value = <number>res.nominalAmounts![0];
     terms.value = <Term[]>res.terms;
+    selectedTerms.value = <string[]>[res.terms![0].code, res.terms![1].code, res.terms![2].code];
     sources.value = <Source[]>res.sources;
+    selectedSources.value = <string[]>res.sources!.map((s: Source) => s.code);
   }).catch(() => {
     failToast("获取询价选项失败");
   });

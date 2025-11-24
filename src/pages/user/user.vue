@@ -1,11 +1,17 @@
 <template>
   <view class="container">
-    <view class="userPage">
-      <view class="signBox" @click="login">
-        <view class="avator"><uni-icons type="person" size="66" color="white"></uni-icons></view>
+    <view class="userPage" >
+      <view class="signBox" @click.stop="token?'':login">
+        <view class="avator">
+          <button v-if="!avatarUrl" class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+            <uni-icons type="person" size="66" color="white"></uni-icons>
+          </button>
+          <image v-else class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>
+        </view>
         <view class="userData">
           <view class="userName">
-            <input type="text" placeholder="请输入你的昵称" v-model="username">
+            <view v-if="username">{{username}}</view>
+            <input v-else type="nickname" v-model="username" class="nickname" placeholder="您还未登录" @click.stop="getUserProfile"/>
           </view>
           <view class="userTel">{{tel}}</view>
         </view>
@@ -32,31 +38,69 @@
 
 <script setup lang="ts">
 
-import {onMounted, ref} from "vue";
+import {onMounted, ref, watch} from "vue";
 import {userLogin} from "@/api";
 import type {loginResp} from "@/interfaces/login";
 import {useStore} from "@/stores";
 import {onShow} from "@dcloudio/uni-app";
+import {failToast} from "@/utils/toast/toast";
 
+const avatarUrl = ref<string|undefined>("")
 const address = ref<string|undefined>("暂无")
 const idCard = ref<string|undefined>("暂无")
 const username = ref<string|undefined>("")
+const token = ref<string|undefined>("")
 const tel = ref<string|undefined>("暂无")
+const ticket = ref<string|undefined>("")
 
 onShow(() =>{
   initUserInfo()
+})
+
+watch(username, (newVal) => {
+  if (newVal) {
+    // console.log("用户名已设置，执行登录操作", newVal)
+    login()
+  }
 })
 
 const initUserInfo = () => {
   const userInfo = useStore().user;
   if(userInfo){
     username.value = userInfo.name;
+    token.value = userInfo.token;
   }
 }
 
 const login = () => {
+  if(!username.value){
+    failToast("请先设置用户名!")
+    return;
+  }
+
+  if (!avatarUrl.value){
+    failToast("请先设置头像!")
+    return;
+  }
+
+  if (!ticket.value){
+    failToast("临时票据失效!")
+    return;
+  }
+
+  userLogin(ticket.value, username.value).then((res: loginResp) => {
+    if(res.status === 'success'){
+      useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type });
+    }
+  }).catch((err: Error) => {
+    console.log("login err:", err)
+  })
+
+}
+
+const getUserProfile = () => {
   if(uni.getUserProfile){
-    uni.getUserProfile({desc: '用户登录'}).then((res) => {
+    uni.getUserProfile({desc: '用于完善会员资料'}).then((res) => {
       console.log("res", res)
       uni.login({
         "provider": "weixin",
@@ -64,13 +108,8 @@ const login = () => {
         success: function(event){
           const {code} = event
           //客户端成功获取授权临时票据（code）,向业务服务器发起登录请求。
-          username.value = res.userInfo.nickName;
-          userLogin(code, res.userInfo.nickName).then((res: loginResp) => {
-            // console.log("login res:", res)
-            if(res.status === 'success'){
-              useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type });
-            }
-          })
+          // username.value = res.userInfo.nickName;
+          ticket.value = code;
         },
         fail: function (err) {
           // 登录授权失败
@@ -79,7 +118,14 @@ const login = () => {
       })
     })
   }
+}
 
+const onChooseAvatar = (e:any) => {
+  console.log("user avatar", e)
+  if(e.detail && e.detail.avatarUrl){
+    avatarUrl.value = e.detail.avatarUrl;
+    login()
+  }
 }
 
 const changePicker = <T>(e: T) => {
@@ -99,7 +145,8 @@ const changePicker = <T>(e: T) => {
   gap: 15px;
   color: white;
 }
-.avator{
+.avator,
+.avatar-wrapper{
   width: 70px;
   height: 70px;
   border-radius: 50%;
@@ -108,6 +155,10 @@ const changePicker = <T>(e: T) => {
   align-items: center;
   justify-content: center;
   overflow: hidden;
+}
+
+button{
+  padding: 0 !important;
 }
 
 .userName{

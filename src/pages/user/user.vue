@@ -44,7 +44,7 @@
 <script setup lang="ts">
 
 import {onMounted, ref, watch} from "vue";
-import {userLogin} from "@/api";
+import {getUserInfo, userLogin} from "@/api";
 import type {loginResp} from "@/interfaces/login";
 import {useStore} from "@/stores";
 import {onShow} from "@dcloudio/uni-app";
@@ -85,6 +85,7 @@ const initUserInfo = () => {
   if(userInfo){
     token.value = userInfo.token;
     username.value = userInfo.name;
+    getUserInfo()
   }
 }
 
@@ -107,6 +108,7 @@ const login = () => {
   userLogin(ticket.value, username.value).then((res: loginResp) => {
     if(res.status === 'success'){
       useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type });
+      getUserInfo()
     }
   }).catch((err: Error) => {
     console.log("login err:", err)

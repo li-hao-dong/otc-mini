@@ -6,6 +6,7 @@ import type {InquiryOptionsResp} from "@/interfaces/inquiry/inquiryOptions";
 import type {InquiryHistoryResp} from "@/interfaces/inquiry/inquiryHistory";
 import http from "@/utils/request/request";
 import type {loginReq, loginResp} from "@/interfaces/login";
+import type {UserResp} from "@/interfaces/user";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -15,56 +16,119 @@ const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
 /**
  * 发起询价
  * */
-export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): InquiryResp => {
+export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): Promise<InquiryResp> => {
     return new Promise(async (resolve, reject) => {
-        const res: response = <response>await  http.post(`${BASE_URL}/inquiry/quote`, inquiryQuoteReq)
-        console.log("InquiryResp res", res);
-        if (res.code !== 200) {
-            resolve(res.data as InquiryResp)
+        try {
+            const res: response = <response>await  http.post(`${BASE_URL}/inquiry/quote`, inquiryQuoteReq)
+            console.log("InquiryResp res", res);
+            if (res.code !== 200) {
+                resolve(res.data as InquiryResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch inquiryQuote info'));
+            }
+        } catch (error) {
+            reject(error);
         }
+
     })
 }
 
 /**
  * 登录
  * */
-export const userLogin = (code: string, nickname: string):loginResp => {
+export const userLogin = (code: string, nickname: string):Promise<loginResp> => {
     return new Promise(async (resolve, reject) => {
-        const params: loginReq = {
-            password: '',
-            referrer_uuid: '',
-            user_name: nickname,
-            wechat_login_js_code: code,
+        try {
+            const params: loginReq = {
+                password: '',
+                referrer_uuid: '',
+                user_name: nickname,
+                wechat_login_js_code: code,
+            }
+            const res: response = <response>await  http.post(`${BASE_URL}/users/login`, params)
+            console.log("login res", res);
+            if (res.code !== 200) {
+                resolve(res.data as loginResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch userLogin info'));
+            }
+        } catch (error) {
+            reject(error);
         }
-        const res: response = <response>await  http.post(`${BASE_URL}/users/login`, params)
-        console.log("login res", res);
-        if (res.code !== 200) {
-            resolve(res.data as loginResp)
-        }
+
     })
 }
 
 /**
  * 获取询价选项配置
  * */
-export const inquiryOptions = ():InquiryOptionsResp => {
+export const inquiryOptions = ():Promise<InquiryOptionsResp> => {
     return new Promise(async (resolve, reject) => {
-        const res: response = <response>await  http.get(`${BASE_URL}/inquiry/options`)
-        console.log("InquiryOptionsResp res", res);
-        if (res.code !== 200) {
-            resolve(res.data as InquiryOptionsResp)
+        try {
+            const res: response = <response>await  http.get(`${BASE_URL}/inquiry/options`)
+            console.log("InquiryOptionsResp res", res);
+            if (res.code !== 200) {
+                resolve(res.data as InquiryOptionsResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch inquiryOptions info'));
+            }
+        } catch (error) {
+            reject(error);
         }
     })
 }
 /**
  * 获取询价历史
  * */
-export const inquiryHistory = ():InquiryHistoryResp => {
+export const inquiryHistory = ():Promise<InquiryHistoryResp> => {
     return new Promise(async (resolve, reject) => {
-        const res: response = <response>await http.get(`${BASE_URL}/inquiry/history`)
-        console.log("inquiryHistory res", res);
-        if (res.code !== 200) {
-            resolve(res.data as InquiryHistoryResp)
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/inquiry/history`)
+            console.log("inquiryHistory res", res);
+            if (res.code !== 200) {
+                resolve(res.data as InquiryHistoryResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch inquiryHistory info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+
+    })
+}
+
+/**
+ * 获取用户信息
+ * */
+export const getUserInfo = ():Promise<UserResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/users/info`)
+            console.log("getUserInfo res", res);
+            if (res.code !== 200) {
+                resolve(res.data as UserResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch user info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+
+export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.pat(`${BASE_URL}/users/info`)
+            console.log("getUserInfo res", res);
+            if (res.code !== 200) {
+                resolve(res.data as UserResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch user info'));
+            }
+        } catch (error) {
+            reject(error);
         }
     })
 }

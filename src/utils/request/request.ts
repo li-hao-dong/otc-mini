@@ -85,6 +85,37 @@ const http = {
             });
         });
     },
+    /**
+     * @description http 请求 patch 方法
+     * @param {string} url
+     * @param {object} data
+     * */
+    patch(url: string) {
+        // 有网络
+        return new Promise((resolve, reject) => {
+            uni.request({
+                method: "PATCH",
+                timeout,
+                url,
+                header: {
+                    Authorization: `${useStore().user.token_type} ${useStore().user.token}`,
+                },
+                success: (res:response) => {
+                    console.log("res@@@", res);
+                    if (res.statusCode != 200) {
+                        // this.checkoutDataCode(res.data.code);
+                        failToast(res.data.msg);
+                        return;
+                    }
+                    resolve(res.data);
+                },
+                fail: (err) => {
+                    // this.checkoutStatusCode(err.statusCode);
+                    reject(err);
+                },
+            });
+        });
+    },
 
     /**
      * @param {number} code

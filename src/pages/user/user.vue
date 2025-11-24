@@ -19,7 +19,12 @@
 <!--      <view class="userTel">-->
 <!--        <view class="label">手机绑定</view>-->
 <!--      </view>-->
-      <view class="row idCard">
+      <view class="title">
+        <view>用户信息</view>
+        <view v-if="!userDataStatus"><uni-icons type="gear" size="20" @click="setUserDataStatus"></uni-icons></view>
+        <view v-else class="update_user_data" @click="updateUserData">更新用户信息</view>
+      </view>
+      <view class="row">
         <view class="label">身份号码</view>
         <view class="value">
           <input type="text" placeholder="请输入你的身份证号码" v-model="idCard">
@@ -52,23 +57,34 @@ const username = ref<string|undefined>("")
 const token = ref<string|undefined>("")
 const tel = ref<string|undefined>("暂无")
 const ticket = ref<string|undefined>("")
+const userDataStatus = ref<boolean>(false)
 
 onShow(() =>{
   initUserInfo()
 })
 
-watch(username, (newVal) => {
-  if (newVal) {
+watch(username, (newVal, oldValue) => {
+  if (newVal != oldValue && !token.value) {
     // console.log("用户名已设置，执行登录操作", newVal)
     login()
   }
 })
 
+const updateUserData = () => {
+  // Placeholder for updating user data
+  console.log("更新用户数据:", {idCard: idCard.value, address: address.value})
+  userDataStatus.value = false;
+}
+
+const setUserDataStatus = () => {
+  userDataStatus.value = true;
+}
+
 const initUserInfo = () => {
   const userInfo = useStore().user;
   if(userInfo){
-    username.value = userInfo.name;
     token.value = userInfo.token;
+    username.value = userInfo.name;
   }
 }
 
@@ -157,6 +173,23 @@ const changePicker = <T>(e: T) => {
   overflow: hidden;
 }
 
+.title{
+  width: 95%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 0;
+}
+
+.update_user_data{
+  font-size: 14px;
+  color: var(--color-primary-bg);
+  font-weight: lighter;
+}
+
 button{
   padding: 0 !important;
 }
@@ -181,7 +214,4 @@ button{
   text-align: right;
 }
 
-.idCard{
-  margin-top: 20px;
-}
 </style>

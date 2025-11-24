@@ -17,9 +17,10 @@ export const useUserStore = defineStore('user', {
                 this.name = userInfo.name;
                 this.token = userInfo.token;
                 this.token_type = userInfo.token_type;
-            }else {
-                uni.switchTab({url: '/pages/user/user'});
             }
+            // else {
+            //     uni.switchTab({url: '/pages/user/user'});
+            // }
         }
     }
 })

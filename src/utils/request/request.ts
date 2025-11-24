@@ -42,7 +42,7 @@ const http = {
                     console.log("res@@@", res);
                     if (res.statusCode != 200) {
                         // this.checkoutDataCode(res.data.code);
-                        failToast(res.data.msg);
+                        // failToast(res.data.msg);
                         return;
                     }
                     resolve(res.data);
@@ -73,7 +73,7 @@ const http = {
                 success: (res:response) => {
                     if (res.statusCode != 200) {
                         // this.checkoutDataCode(res.data.code);
-                        failToast(res.data.msg);
+                        // failToast(res.data.msg);
                         return;
                     }
                     resolve(res);
@@ -90,32 +90,32 @@ const http = {
      * @param {string} url
      * @param {object} data
      * */
-    patch(url: string) {
-        // 有网络
-        return new Promise((resolve, reject) => {
-            uni.request({
-                method: "PATCH",
-                timeout,
-                url,
-                header: {
-                    Authorization: `${useStore().user.token_type} ${useStore().user.token}`,
-                },
-                success: (res:response) => {
-                    console.log("res@@@", res);
-                    if (res.statusCode != 200) {
-                        // this.checkoutDataCode(res.data.code);
-                        failToast(res.data.msg);
-                        return;
-                    }
-                    resolve(res.data);
-                },
-                fail: (err) => {
-                    // this.checkoutStatusCode(err.statusCode);
-                    reject(err);
-                },
-            });
-        });
-    },
+    // patch(url: string) {
+    //     // 有网络
+    //     return new Promise((resolve, reject) => {
+    //         uni.request({
+    //             method: "PATCH",
+    //             timeout,
+    //             url,
+    //             header: {
+    //                 Authorization: `${useStore().user.token_type} ${useStore().user.token}`,
+    //             },
+    //             success: (res:response) => {
+    //                 console.log("res@@@", res);
+    //                 if (res.statusCode != 200) {
+    //                     // this.checkoutDataCode(res.data.code);
+    //                     failToast(res.data.msg);
+    //                     return;
+    //                 }
+    //                 resolve(res.data);
+    //             },
+    //             fail: (err) => {
+    //                 // this.checkoutStatusCode(err.statusCode);
+    //                 reject(err);
+    //             },
+    //         });
+    //     });
+    // },
 
     /**
      * @param {number} code

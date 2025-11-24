@@ -80,10 +80,10 @@ export const inquiryOptions = ():Promise<InquiryOptionsResp> => {
 /**
  * 获取询价历史
  * */
-export const inquiryHistory = ():Promise<InquiryHistoryResp> => {
+export const inquiryHistory = (page: number, pageSize: number):Promise<InquiryHistoryResp> => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res: response = <response>await http.get(`${BASE_URL}/inquiry/history`)
+            const res: response = <response>await http.get(`${BASE_URL}/inquiry/history?page=${page}&pageSize=${pageSize}`)
             console.log("inquiryHistory res", res);
             if (res.code !== 200) {
                 resolve(res.data as InquiryHistoryResp)

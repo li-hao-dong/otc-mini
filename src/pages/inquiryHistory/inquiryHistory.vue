@@ -8,7 +8,7 @@
       </view>
     </view>
     <view class="inquiryHistoryBox">
-      <view class="inquiryHistoryList" v-for="(item, index) in history" :key="item.inquiryId">
+      <view class="inquiryHistoryList" v-for="(item, index) in history" :key="item.inquiryId" @click="toDetail(item.inquiry_parameters)">
         <view class="fir_row">
           <view class="fir_br">
             <view class="fir_br_center">
@@ -28,60 +28,57 @@
 <!--          <view>询价规模：<text>1000万</text></view>-->
         </view>
 
-        <uni-table ref="table" border stripe emptyText="暂无更多数据">
-          <uni-tr>
-            <uni-th align="center" width="100px">结构</uni-th>
-            <uni-th align="center" width="60px">期限</uni-th>
-            <uni-th align="center" width="100px">最优报价</uni-th>
-            <uni-th align="center" width="100px">报价方</uni-th>
-          </uni-tr>
-          <uni-tr v-for="(res, key) in structureData[index]" :key="key">
-            <uni-td>{{ res.structureName }}</uni-td>
-            <uni-td><view v-for="(term, i) in Object.keys(res.terms)" :key="i">{{term}}</view></uni-td>
-            <uni-td><view v-for="(term, i) in Object.values(res.terms)" :key="i">{{term.price}}%</view></uni-td>
-            <uni-td><view v-for="(term, i) in Object.values(res.terms)" :key="i">{{term.sourceCode}}<uni-icons type="right" size="16" color="#c3c9d3"></uni-icons></view></uni-td>
-          </uni-tr>
-        </uni-table>
+        <view style="font-size: 12px; margin-top: 10px; ">
+          <view  style="width: 100%; display: grid; grid-template-columns: 25% 20% 20% 35%; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;">
+            <view align="center" >结构</view>
+            <view align="center" >期限</view>
+            <view align="center" >最优报价</view>
+            <view align="center" >报价方</view>
+          </view>
+          <view style="width: 100%; display: inline-grid; grid-template-columns: 25% 20% 20% 35%; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;"
+                v-for="(res, key) in structureData[index]" :key="key">
+            <view>{{ res.structureName }}</view>
+            <view><view v-for="(term, i) in Object.keys(res?.terms)" :key="i">{{term}}</view></view>
+            <view><view v-for="(term, i) in Object.values(res?.terms)" :key="i">{{term.price}}%</view></view>
+            <view>
+              <view v-for="(term, i) in Object.values(res?.terms)" :key="i">
+                {{term.sourceCode}}
+                <!--                <uni-icons type="right" size="16" color="#c3c9d3"></uni-icons>-->
+              </view>
+            </view>
+          </view>
+        </view>
 
-<!--        <view class="thr_row_title">-->
-<!--          <view class="sec_row_cont">-->
-<!--            <view class="sec_row_tit">结构</view>-->
-<!--&lt;!&ndash;            <view class="sec_row_value">{{ res.structureName }}</view>&ndash;&gt;-->
-<!--          </view>-->
-<!--          <view class="sec_row_cont">-->
-<!--            <view class="sec_row_tit">期限</view>-->
-<!--&lt;!&ndash;            <view class="sec_row_value">{{res.termName}}</view>&ndash;&gt;-->
-<!--          </view>-->
-<!--          <view class="sec_row_cont">-->
-<!--            <view class="sec_row_tit">最优报价</view>-->
-<!--&lt;!&ndash;            <view class="sec_row_value">3.40%</view>&ndash;&gt;-->
-<!--          </view>-->
-<!--          <view class="sec_row_cont">-->
-<!--            <view class="sec_row_tit">报价方</view>-->
-<!--&lt;!&ndash;            <view class="sec_row_value">{{ qutote.sourcecode }}<uni-icons type="right" size="16" color="#c3c9d3"></uni-icons></view>&ndash;&gt;-->
-<!--          </view>-->
-<!--        </view>-->
-<!--        <view class="thr_row" v-for="(res, key) in structureData[index]" :key="key">-->
-<!--          <view class="sec_row_cont">-->
-<!--            <view class="sec_row_value">{{ res.structureName }}</view>-->
-<!--          </view>-->
-<!--          <view v-for="(term, i) in Object.keys(res.terms)" :key="i" style="display: flex;">-->
-<!--            <view class="sec_row_cont">-->
-<!--              <view class="sec_row_value">{{term}}</view>-->
-<!--            </view>-->
-<!--            <view class="sec_row_cont">-->
-<!--              <view class="sec_row_value">{{ res.terms[term].price }}%</view>-->
-<!--            </view>-->
-<!--            <view class="sec_row_cont">-->
-<!--              <view class="sec_row_value">{{ res.terms[term].sourceCode }}<uni-icons type="right" size="16" color="#c3c9d3"></uni-icons></view>-->
-<!--            </view>-->
-<!--          </view>-->
-<!--        </view>-->
+<!--        <uni-table border stripe emptyText="暂无更多数据" style="width: 100%">-->
+<!--          <uni-tr>-->
+<!--            <uni-th align="center" style="width: calc(100% / 4);">结构</uni-th>-->
+<!--            <uni-th align="center" style="width: calc(100% / 4);">期限</uni-th>-->
+<!--            <uni-th align="center" style="width: calc(100% / 4);">最优报价</uni-th>-->
+<!--            <uni-th align="center" style="width: calc(100% / 4);">报价方</uni-th>-->
+<!--          </uni-tr>-->
+<!--          <uni-tr v-for="(res, key) in structureData[index]" :key="key">-->
+<!--            <uni-td>{{ res.structureName }}</uni-td>-->
+<!--            <uni-td><view v-for="(term, i) in Object.keys(res.terms)" :key="i">{{term}}</view></uni-td>-->
+<!--            <uni-td><view v-for="(term, i) in Object.values(res.terms)" :key="i">{{term.price}}%</view></uni-td>-->
+<!--            <uni-td>-->
+<!--              <view v-for="(term, i) in Object.values(res.terms)" :key="i">-->
+<!--                {{term.sourceCode}}-->
+<!--&lt;!&ndash;                <uni-icons type="right" size="16" color="#c3c9d3"></uni-icons>&ndash;&gt;-->
+<!--              </view>-->
+<!--            </uni-td>-->
+<!--          </uni-tr>-->
+<!--        </uni-table>-->
       </view>
     </view>
 
-    <view class="more_data_cont" v-if="moreDataStatus">加载更多</view>
-    <view class="more_data_cont" v-else>没有数据了</view>
+    <view v-if="store.user.token">
+      <view class="more_data_cont" v-if="moreDataStatus" @click="moreData">加载更多</view>
+      <view class="more_data_cont" v-else>没有数据了</view>
+    </view>
+    <view class="hint" v-else>
+      <view class="hint_sign">您还未登录，请先登录！</view>
+      <button class="to_sign" @click="uni.switchTab({url: '/pages/user/user'})">去登录</button>
+    </view>
   </view>
 </template>
 
@@ -91,22 +88,32 @@ import {useStore} from "@/stores";
 
 import type {InquiryHistoryResp} from "@/interfaces/inquiry/inquiryHistory";
 import {inquiryHistory} from "@/api";
-import type {InquiryResp, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
+import type {InquiryQuoteReq, InquiryResp, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
 import {onShow} from "@dcloudio/uni-app";
+import {failToast} from "@/utils/toast/toast";
 
 const store = useStore();
 const history = ref<InquiryHistoryResp[]|undefined>([]);
-const moreDataStatus = ref<boolean>(!true);
+const moreDataStatus = ref<boolean>(true);
 const structureData = ref<any>([]);
+const pageNum = ref<number>(1);
+const pageSize = ref<number>(20);
 
 onShow(() => {
   console.log("store.miniData1111", store.miniData)
   inquiryHistoryFun()
 })
 
+const moreData = () => {
+  if(!moreDataStatus.value) return failToast("没有更多数据了");
+  pageNum.value += 1;
+  inquiryHistoryFun()
+}
+
 const inquiryHistoryFun = async () => {
-  inquiryHistory().then((res:InquiryHistoryResp) => {
+  inquiryHistory(pageNum.value, pageSize.value).then((res:InquiryHistoryResp) => {
     console.log("res.inquiries", res.inquiries);
+    moreDataStatus.value = res.pagination?.total_pages! < pageNum.value;
 
     res.inquiries!.map((data:InquiryResp) => {
       const filterData: any = {};
@@ -147,6 +154,15 @@ const inquiryHistoryFun = async () => {
   });
 }
 
+const toDetail = (inquiry_parameters:InquiryQuoteReq) => {
+  // console.log("inquiry_parameters,", inquiry_parameters)
+  inquiry_parameters["optionType"]= (inquiry_parameters["option_type"]).toUpperCase()
+  inquiry_parameters["nominalAmount"]=inquiry_parameters["nominal_amount"]
+  delete inquiry_parameters["option_type"]
+  delete inquiry_parameters["nominal_amount"]
+  uni.setStorageSync('InquiryQuoteReqPayload', inquiry_parameters)
+  uni.navigateTo({url: '/pages/inquiryResult/inquiryResult'})
+}
 
 </script>
 
@@ -161,6 +177,9 @@ const inquiryHistoryFun = async () => {
   justify-content: space-between;
   background-color: var(--color-primary-bg);
   color: var(--color-primary-text);
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
 
 .inquiryBox{
@@ -200,9 +219,14 @@ const inquiryHistoryFun = async () => {
   padding-top: 0;
 }
 
+.uni-table-tr{
+  width: 100%;
+}
+
 .uni-table-th {
   font-size: 14px !important;
   font-weight: lighter !important;
+  width: 25% !important;
 }
 
 .uni-table-td {
@@ -268,5 +292,33 @@ const inquiryHistoryFun = async () => {
   width: 100%;
   padding: 10px 0;
   text-align: center;
+}
+
+.hint{
+  width: 100%;
+  margin-top: 50%;
+  margin-left: 50%;
+  position: absolute;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.hint_sign{
+  text-align: center;
+}
+
+.to_sign{
+  width: fit-content;
+  border-radius: 10px;
+  outline: unset;
+  border: unset;
+  background: var(--color-primary-bg);
+  color: white;
+  font-size: 14px;
+  margin-top: 15px;
+}
+
+.to_sign:after{
+  content: '';
+  border: unset;
 }
 </style>

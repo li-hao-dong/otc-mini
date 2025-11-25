@@ -1,12 +1,14 @@
 import {defineStore} from "pinia";
 import {getUserInfo} from "@/api";
 import type {UserResp} from "@/interfaces/user";
+import {warnToast} from "@/utils/toast/toast";
 
 interface userStore {
     uuid: string;
     name: string;
     token: string;
     token_type: string;
+    token_valid_until?: Date | undefined;
     address: string;
     city: string;
     country: string;
@@ -30,6 +32,7 @@ export const useUserStore = defineStore('user', {
         name: '',
         token: '',
         token_type:'',
+        token_valid_until: undefined,
         address: '',
         city: '',
         country: '',
@@ -47,39 +50,49 @@ export const useUserStore = defineStore('user', {
         user_type: '',
     }),
     actions: {
-        setUserInfo(userInfo: {uuid: string, name: string, token: string, token_type: string}) {
+        setUserInfo(userInfo: {uuid: string, name: string, token: string, token_type: string, token_valid_until: Date}) {
             this.uuid = userInfo.uuid;
             this.name = userInfo.name;
             this.token = userInfo.token;
             this.token_type = userInfo.token_type;
+            this.token_valid_until = userInfo.token_valid_until;
             uni.setStorageSync("userInfo", userInfo);
         },
         initUserInfo() {
             const userInfo = uni.getStorageSync("userInfo");
             if (userInfo) {
-                this.uuid = userInfo.uuid;
-                this.name = userInfo.name;
-                this.token = userInfo.token;
-                this.token_type = userInfo.token_type;
-                getUserInfo().then((res:UserResp) => {
-                    this.address = <string>res.address;
-                    this.city = <string>res.city;
-                    this.country = <string>res.country;
-                    this.email = <string>res.email;
-                    this.email_verified = <number>res.email_verified;
-                    this.first_name = <string>res.first_name;
-                    this.insert_timestamp = <Date>res.insert_timestamp;
-                    this.last_login = <Date>res.last_login;
-                    this.last_name = <string>res.last_name;
-                    this.phone = <string>res.phone;
-                    this.phone_verified = <number>res.phone_verified;
-                    this.postal_code = <string>res.postal_code;
-                    this.status = <string>res.status;
-                    this.update_timestamp = <Date>res.update_timestamp;
-                    this.user_type = <string>res.user_type;
-                }).catch(err => {
-                    console.error("Failed to fetch user info:", err);
-                })
+                if(new Date().getTime() < userInfo.token_valid_until){
+                    this.uuid = userInfo.uuid;
+                    this.name = userInfo.name;
+                    this.token = userInfo.token;
+                    this.token_type = userInfo.token_type;
+                    this.token_valid_until = userInfo.token_valid_until;
+                    getUserInfo().then((res:UserResp) => {
+                        this.address = <string>res.address;
+                        this.city = <string>res.city;
+                        this.country = <string>res.country;
+                        this.email = <string>res.email;
+                        this.email_verified = <number>res.email_verified;
+                        this.first_name = <string>res.first_name;
+                        this.insert_timestamp = <Date>res.insert_timestamp;
+                        this.last_login = <Date>res.last_login;
+                        this.last_name = <string>res.last_name;
+                        this.phone = <string>res.phone;
+                        this.phone_verified = <number>res.phone_verified;
+                        this.postal_code = <string>res.postal_code;
+                        this.status = <string>res.status;
+                        this.update_timestamp = <Date>res.update_timestamp;
+                        this.user_type = <string>res.user_type;
+                    }).catch(err => {
+                        console.error("Failed to fetch user info:", err);
+                    })
+                }else {
+                    warnToast("登录状态已过期，请重新登录");
+                    setTimeout(() => {
+                        uni.switchTab({url: '/pages/user/user'});
+                    }, 2000)
+                }
+
             }
             // else {
             //     uni.switchTab({url: '/pages/user/user'});

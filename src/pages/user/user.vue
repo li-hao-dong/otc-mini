@@ -107,7 +107,7 @@ const login = () => {
 
   userLogin(ticket.value, username.value).then((res: loginResp) => {
     if(res.status === 'success'){
-      useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type });
+      useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type, token_valid_until: new Date().getTime() + (60 * 60 * 24 * 1000)});
       getUserInfo()
     }
   }).catch((err: Error) => {

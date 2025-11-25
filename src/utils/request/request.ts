@@ -2,6 +2,8 @@ import { useStore } from "@/stores";
 import { failToast, warnToast } from "@/utils/toast/toast";
 import type {response} from "@/interfaces/response";
 const timeout = 6000; // 6s内未返回数据视为超时
+
+
 /**
  * @TODO
  * request 拦截器
@@ -12,14 +14,15 @@ export const interceptor = function () {
     uni.addInterceptor("request", {
         // 发请求前执行
         invoke(args) {
-            console.log("args", args);
-            return;
-
-            // if (useStore().validTime < new Date().getTime()) {
-            //     // 超出有效时间
-            //     warnToast("请重新登录");
-            //     return;
-            // }
+            if(!`${useStore().user.token_type} ${useStore().user.token}`){
+                warnToast("请先登录");
+                return;
+            }
+            if (useStore().user.token_valid_until < new Date().getTime()) {
+                // 超出有效时间
+                warnToast("请重新登录");
+                return;
+            }
         },
     });
 };
@@ -29,7 +32,6 @@ const http = {
      * @description http 请求 get 方法
      * */
     get(url: string) {
-        // 有网络
         return new Promise((resolve, reject) => {
             uni.request({
                 method: "GET",
@@ -41,7 +43,7 @@ const http = {
                 success: (res:response) => {
                     console.log("res@@@", res);
                     if (res.statusCode != 200) {
-                        // this.checkoutDataCode(res.data.code);
+                        this.checkoutDataCode(res.data.code);
                         // failToast(res.data.msg);
                         return;
                     }
@@ -72,7 +74,7 @@ const http = {
                 data,
                 success: (res:response) => {
                     if (res.statusCode != 200) {
-                        // this.checkoutDataCode(res.data.code);
+                        this.checkoutDataCode(res.data.code);
                         // failToast(res.data.msg);
                         return;
                     }
@@ -145,27 +147,23 @@ const http = {
      * */
     checkoutDataCode(code:  number) {
         switch (code) {
-            case 99: {
+            case 401: {
                 // token 失效
                 const routers = getCurrentPages();
                 if (routers && routers.length > 0) {
                     const currentPage = routers[routers.length - 1];
                     console.log("currentPage", currentPage.route);
-                    if (currentPage.route !== "pages/aUserLoginRegisterForgetpwd") {
-                        uni.redirectTo({ url: "aUserLoginRegisterForgetpwd" });
+                    if (currentPage.route !== "pages/user/user") {
+                        uni.switchTab({url: '/pages/user/user'});
                         warnToast("请重新登录");
                         return;
                     }
                 }
                 let pageRouter = window.location.pathname;
-                if (pageRouter !== "/pages/aUserLoginRegisterForgetpwd") {
-                    uni.redirectTo({ url: "aUserLoginRegisterForgetpwd" });
+                if (pageRouter !== "/pages/user/user") {
+                    uni.switchTab({url: '/pages/user/user'});
                     warnToast("请重新登录");
                 }
-                break;
-            }
-            case 101: {
-                warnToast("会员已过期");
                 break;
             }
         }

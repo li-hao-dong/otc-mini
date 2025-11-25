@@ -13,7 +13,7 @@
 				"navigationBarTitleText": "询价历史",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -23,7 +23,7 @@
 				"navigationBarTextStyle": "black",
 				"navigationBarTextWeight": "bold",
 				"navigationBarBackgroundColor": "#fff",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -32,7 +32,7 @@
 				"navigationBarTitleText": "询价结果",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -42,7 +42,7 @@
 				"navigationBarTextStyle": "black",
 				"navigationBarTextWeight": "bold",
 				"navigationBarBackgroundColor": "#fff",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -52,7 +52,7 @@
 				"navigationBarTextStyle": "black",
 				"navigationBarTextWeight": "bold",
 				"navigationBarBackgroundColor": "#fff",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -61,7 +61,7 @@
 				"navigationBarTitleText": "用户中心",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": true
+				"enablePullDownRefresh": false
 			}
 		}
 	],

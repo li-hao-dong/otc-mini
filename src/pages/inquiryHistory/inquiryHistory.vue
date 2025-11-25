@@ -25,7 +25,7 @@
         </view>
         <view class="sec_row">
           <view>询价机构：<text>模拟机构</text></view>
-<!--          <view>询价规模：<text>1000万</text></view>-->
+          <view>询价规模：<text>{{ item.nominal_amount }}万</text></view>
         </view>
 
         <view style="font-size: 12px; margin-top: 10px; ">
@@ -260,7 +260,7 @@ const toDetail = (inquiry_parameters:InquiryQuoteReq) => {
 
 .fir_br text{
   font-weight: bolder;
-  color: blue;
+  color: var(--color-primary-bg);
 }
 
 .fir_br_center{

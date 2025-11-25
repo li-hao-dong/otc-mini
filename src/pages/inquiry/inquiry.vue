@@ -25,12 +25,11 @@
           </view>
         </view>
       </view>
-
       <view class="section">
         <view class="label">结构 (最多三选)</view>
         <view class="chips">
           <view
-            v-for="s in structures"
+            v-for="s in currentTypeStructures"
             :key="s.code"
             class="chip"
             :class="{ active: selectedStructures.includes(s.code) }"
@@ -93,7 +92,7 @@
             :aria-pressed="selectedSources.includes(s.code)"
             @click="toggleSource(s.code)"
           >
-            <text class="chipText">{{ s.name || s.code }}</text>
+            <text class="chipText">{{ s.code }}</text>
           </view>
         </view>
       </view>
@@ -131,6 +130,7 @@ const selectedType = ref<Code>();
 
 // 结构
 const structures = ref<StructureDefinition[]>();
+const currentTypeStructures = ref<StructureDefinition[]>();
 const selectedStructures = ref<string[]>([]);
 
 // 规模
@@ -149,17 +149,29 @@ onShow(() => {
   getOptions();
 })
 
+const calcSameTypeStructure = ( structures: StructureDefinition[]) => {
+  return structures.filter((structure: StructureDefinition) => {
+    if (structure?.applicableOptionTypes!.some(s => s.toUpperCase() === selectedType.value?.toUpperCase())) {
+      return structure
+    }
+  })
+}
+
 const selectType = (code: OptionTypeCode) => {
   selectedType.value = <Code>code;
+  currentTypeStructures.value = calcSameTypeStructure(structures.value!)
+  selectedStructures.value = <string[]>[currentTypeStructures.value![0].code, currentTypeStructures.value![1].code,currentTypeStructures.value![2].code];
 };
 
 const toggleStructure = (code: string) => {
+  console.log("toggleStructure code", code)
   const i = selectedStructures.value.indexOf(code);
   if (i >= 0) {
     selectedStructures.value.splice(i, 1);
   } else if (selectedStructures.value.length < 3) {
     selectedStructures.value.push(code);
   }
+  console.log("selectedStructures", selectedStructures.value)
 };
 
 const selectNominal = (n: number) => {
@@ -177,9 +189,18 @@ const toggleTerm = (code: string) => {
 
 const toggleSource = (code: string) => {
   const i = selectedSources.value.indexOf(code);
+  // If "ALL" is selected, deselect it when another source is selected
+  const allKey = selectedSources.value.indexOf('ALL');
+  if(allKey >= 0) {
+    selectedSources.value.splice(allKey, 1);
+  }
+
   if (i >= 0) {
     selectedSources.value.splice(i, 1);
   } else {
+    if(code === 'ALL') {
+      selectedSources.value = [];
+    }
     selectedSources.value.push(code);
   }
 };
@@ -192,13 +213,14 @@ const getOptions = () => {
     optionTypes.value = <OptionType[]>res.optionTypes;
     selectedType.value = res.optionTypes![0].code;
     structures.value = <StructureDefinition[]>res.structures;
-    selectedStructures.value = <string[]>[res.structures![0].code, res.structures![1].code, res.structures![2].code];
+    currentTypeStructures.value = calcSameTypeStructure(structures.value!)
+    selectedStructures.value = <string[]>[currentTypeStructures.value![0].code, currentTypeStructures.value![1].code,currentTypeStructures.value![2].code];
     nominalAmounts.value = <number[]>res.nominalAmounts;
     selectedNominal.value = <number>res.nominalAmounts![0];
     terms.value = <Term[]>res.terms;
     selectedTerms.value = <string[]>[res.terms![0].code, res.terms![1].code, res.terms![2].code];
-    sources.value = <Source[]>res.sources;
-    selectedSources.value = <string[]>res.sources!.map((s: Source) => s.code);
+    sources.value = res.sources?.length == 0 ? <Source[]>[{ code: "ALL", name: "ALL", isActive: true }] : <Source[]>[{ code: "ALL", name: "ALL", isActive: true }, ...res!.sources];
+    selectedSources.value = <string[]>[sources.value![0].code];
   }).catch(() => {
     failToast("获取询价选项失败");
   });
@@ -209,10 +231,11 @@ const submit = () => {
     failToast("请完善必选项");
     return;
   }
+
   const payload: InquiryQuoteReq = {
     nominalAmount: selectedNominal.value,
     optionType: <Code>selectedType.value,
-    sources: selectedSources.value,
+    sources: selectedSources.value.filter(v=> v == "ALL").length > 0 ? <string[]>sources.value!.filter(s => s.code !== "ALL").map(s =>s.code) : selectedSources.value,
     structures: selectedStructures.value,
     terms: selectedTerms.value,
     underlying: underlying.value,
@@ -283,15 +306,13 @@ const submit = () => {
 
 .chip.active {
   padding: 11px 17px 12px;
-  border-width: 2px;
-  border-color: #e63946;
+  border: 2px solid #e63946;
+  box-sizing: content-box;
 }
 
 .chip.primary {
   padding: 9px 16px;
   background-color: #e63946;
-  border-color: #e63946;
-  border-width: 2px;
   color: #ffffff;
 }
 

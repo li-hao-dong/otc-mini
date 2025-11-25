@@ -58,6 +58,7 @@ export interface StructureDefinition {
     name?: string;
     // relativeStrike?: number;
     strikeType?: StrikeType;
+    applicableOptionTypes?: string[];
     [property: string]: any;
 }
 

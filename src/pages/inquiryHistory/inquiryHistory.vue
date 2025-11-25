@@ -29,13 +29,13 @@
         </view>
 
         <view style="font-size: 12px; margin-top: 10px; ">
-          <view  style="width: 100%; display: grid; grid-template-columns: 25% 20% 20% 35%; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;">
+          <view  style="width: 100%; display: grid; grid-template-columns: 25% 25% 25% 25%; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;">
             <view>结构</view>
             <view>期限</view>
             <view>最优报价</view>
             <view>报价方</view>
           </view>
-          <view style="width: 100%; display: inline-grid; grid-template-columns: 25% 20% 20% 35%; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;"
+          <view style="width: 100%; display: inline-grid; grid-template-columns: 25% 25% 25% 25%; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;"
                 v-for="(res, key) in structureData[index]" :key="key">
             <view>{{ res.structureName }}</view>
             <view><view v-for="(term, i) in Object.keys(res?.terms)" :key="i">{{term}}</view></view>

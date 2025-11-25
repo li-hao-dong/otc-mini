@@ -6,13 +6,13 @@ export interface UserResp {
     city?: string;
     country?: string;
     email?: string;
-    email_verified?: boolean;
+    email_verified?: number;
     first_name?: string;
     insert_timestamp?: Date;
     last_login?: Date;
     last_name?: string;
     phone?: string;
-    phone_verified?: boolean;
+    phone_verified?: number;
     postal_code?: string;
     registration_date?: Date;
     status: string;

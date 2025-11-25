@@ -18,7 +18,7 @@
 
       <view class="row rowMid">
         <view class="para"><text class="labelBold">询价人:</text></view>
-        <view class="para"><text class="labelBolder">询价规模: 待定</text></view>
+        <view class="para"><text class="labelBolder">询价规模: {{ nominalAmount }} 万</text></view>
       </view>
 
 
@@ -69,6 +69,7 @@ import {onReady, onShow} from "@dcloudio/uni-app";
 const assetName = ref<string | undefined>();
 const assetCode = ref<string | undefined>();
 const currentPrice = ref<number | undefined>();
+const nominalAmount = ref<number | undefined>();
 const priceChange = ref<string | undefined>();
 const terms = ref<string[] | undefined>();
 const results = ref<QuoteResult[] | undefined>([]);
@@ -94,6 +95,7 @@ const getInquiryResults = () => {
     assetCode.value = res.data.underlyingCode;
     currentPrice.value = res.data.currentPrice;
     priceChange.value = res.data.priceChange;
+    nominalAmount.value = res.data.nominalAmount;
     // interface QuoteItem {
     //   structure: string;
     //   structureName: string;
@@ -133,7 +135,7 @@ const getInquiryResults = () => {
     results.value = Object.values(filterData)
     console.log("filterData,", filterData)
     console.log("terms,", terms.value)
-    gridCol.value = `20% repeat(${terms.value?.length}, 1fr) 35%`;
+    gridCol.value = `25% repeat(${terms.value?.length}, 1fr) 25%`;
   }).catch((err: Error) => {
     console.log("inquiryQuote error,", err)
   }).finally(() => {

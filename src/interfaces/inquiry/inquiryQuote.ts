@@ -95,7 +95,7 @@ export interface QuoteResult {
     [property: string]: any;
 }
 
-interface Quote {
+export interface Quote {
     /**
      * 是否有报价
      */

@@ -31,9 +31,12 @@
         <view class="grid_col" :style="`width: 100%; display: inline-grid; grid-template-columns: ${gridCol}; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;`"
               v-for="(item, index) in results" :key="index">
           <view>{{ item.structureName }}</view>
-          <view v-for="(term, i) in terms" :key="i">{{ item.terms[term].price }}%</view>
+          <view v-for="(term, i) in terms" :key="i">
+<!--            {{Object.values(item.quotes)[0][term]}}-->
+            <view v-for="(quote, x) in Object.values(item.quotes)" :key="x">{{ `${quote[term] ? quote[term][0].price+'%' : '-'}` }}</view>
+          </view>
           <view>
-            {{ item.sourceCode }}
+            <view v-for="(quote, x) in Object.keys(item.quotes)" :key="x">{{ quote }}</view>
           </view>
         </view>
       </view>
@@ -64,7 +67,7 @@
 import {getCurrentInstance, onMounted, ref, watch} from "vue";
 import {hideLoading, loadingToast} from "@/utils/toast/toast";
 import {inquiryQuote} from "@/api";
-import type {InquiryResp, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
+import type {InquiryResp, Quote, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
 import {onReady, onShow} from "@dcloudio/uni-app";
 const assetName = ref<string | undefined>();
 const assetCode = ref<string | undefined>();
@@ -90,7 +93,7 @@ const getInquiryResults = () => {
 
   loadingToast("询价中");
   inquiryQuote(payload).then((res: InquiryResp) =>{
-    console.log("inquiryQuote res1111,", res)
+    console.log("inquiryQuote res1111,", res.data)
     assetName.value = res.data.underlying;
     assetCode.value = res.data.underlyingCode;
     currentPrice.value = res.data.currentPrice;
@@ -108,34 +111,7 @@ const getInquiryResults = () => {
     // }
     //
 
-    const filterData: any = {};
-    res.data.results.map((item:QuoteResult) => {
-      if(!filterData[item.structure!]){
-        filterData[item.structure!] = {
-          structure: item.structure,
-          structureName: item.structureName,
-          terms: {
-            [item.termName!]: item.quotes!.length > 0 && item.quotes![0],
-          },
-          sourceName: item.quotes!.length > 0 && item.quotes![0].sourceName,
-          sourceCode: item.quotes!.length > 0 && item.quotes![0].sourceCode,
-        };
-      }else {
-        filterData[item.structure!] = {
-          ...filterData[item.structure!],
-          terms: {
-            ...filterData[item.structure!].terms,
-            [item.termName!]: item.quotes!.length > 0 && item.quotes![0],
-          },
-        };
-      }
-    });
-
-    terms.value = Object.keys(filterData[Object.keys(filterData)[0]].terms);
-    results.value = Object.values(filterData)
-    console.log("filterData,", filterData)
-    console.log("terms,", terms.value)
-    gridCol.value = `25% repeat(${terms.value?.length}, 1fr) 25%`;
+    formatInquiryStruct(res.data.results)
   }).catch((err: Error) => {
     console.log("inquiryQuote error,", err)
   }).finally(() => {
@@ -144,6 +120,57 @@ const getInquiryResults = () => {
 
 };
 
+const formatInquiryStruct = (quoteResult:QuoteResult[]) =>　{
+  console.log("quoteResult", quoteResult)
+  const filterData: any = {};
+  quoteResult.map((item:QuoteResult) => {
+    // console.log("item", item)
+    // 处理结构与周期
+    if(!filterData[item.structure!]){
+      filterData[item.structure!] = {
+        structure: item.structure,
+        structureName: item.structureName,
+        terms: {
+          [item.termName!]: item.term,
+        },
+        quotes: {}
+      };
+    } else {
+      filterData[item.structure!] = {
+        ...filterData[item.structure!],
+        terms: {
+          ...filterData[item.structure!].terms,
+          [item.termName!]: item.term
+        },
+        quotes: {
+          ...filterData[item.structure!].quotes
+        }
+      };
+    }
+    // 处理 供应商 的周期数据
+    item.quotes?.map((quote:Quote) => {
+      filterData[item.structure!] = {
+        ...filterData[item.structure!],
+        quotes: {
+          ...filterData[item.structure!].quotes,
+          [quote.sourceCode!]: {
+            ...filterData[item.structure!].quotes[quote.sourceCode!],
+            [item.termName!]: filterData[item.structure!].quotes[quote.sourceCode!] && filterData[item.structure!].quotes[quote.sourceCode!][item.termName!]?.length > 0 ? filterData[item.structure!].quotes[quote.sourceCode!][item.termName!].push(quote) :[quote]
+            // [item.termName!]: quote
+          }
+        }
+      };
+      // console.log(item.structure, "|", quote.sourceCode, "|", item.termName, "|", filterData[item.structure!].quotes[quote.sourceCode!])
+
+    })
+  });
+
+  terms.value = Object.keys(filterData[Object.keys(filterData)[0]].terms);
+  results.value = Object.values(filterData)
+  console.log("filterData,", filterData)
+  console.log("terms,", terms.value)
+  gridCol.value = `25% repeat(${terms.value?.length}, 1fr) 25%`;
+}
 
 const toInquiry = () => {
   uni.redirectTo({

@@ -67,32 +67,32 @@
 	],
 	"tabBar": {
 		"color": "#7A7E83",
-		"selectedColor": "#3cc51f",
+		"selectedColor": "#d6423a",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [
 			{
 				"pagePath": "pages/inquiryHistory/inquiryHistory",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/menu/icon_inquiry_history.png",
+				"selectedIconPath": "static/menu/icon_inquiry_history_active.png",
 				"text": "询价历史"
 			},
 			{
 				"pagePath": "pages/warehouseReceipts/warehouseReceipts",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/menu/icon_cd.png",
+				"selectedIconPath": "static/menu/icon_cd_active.png",
 				"text": "仓单"
 			},
 			{
 				"pagePath": "pages/calculator/calculator",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/menu/icon_calc.png",
+				"selectedIconPath": "static/menu/icon_calc_active.png",
 				"text": "计算器"
 			},
 			{
 				"pagePath": "pages/user/user",
-				"iconPath": "static/logo.png",
-				"selectedIconPath": "static/logo.png",
+				"iconPath": "static/menu/icon_user.png",
+				"selectedIconPath": "static/menu/icon_user_active.png",
 				"text": "我的"
 			}
 		]

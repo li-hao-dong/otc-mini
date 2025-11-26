@@ -38,10 +38,10 @@
           <view style="width: 100%; display: inline-grid; grid-template-columns: 25% 25% 25% 25%; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;"
                 v-for="(res, key) in structureData[index]" :key="key">
             <view>{{ res.structureName }}</view>
-            <view><view v-for="(term, i) in Object.keys(res?.terms)" :key="i">{{term}}</view></view>
-            <view><view v-for="(term, i) in Object.values(res?.terms)" :key="i">{{term.price}}%</view></view>
+            <view><view style="line-height: 26px;" v-for="(term, i) in Object.keys(res?.terms)" :key="i">{{term}}</view></view>
+            <view><view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i">{{term.price}}%</view></view>
             <view>
-              <view v-for="(term, i) in Object.values(res?.terms)" :key="i">
+              <view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i">
                 {{term.sourceCode}}
                 <!--                <uni-icons type="right" size="16" color="#c3c9d3"></uni-icons>-->
               </view>

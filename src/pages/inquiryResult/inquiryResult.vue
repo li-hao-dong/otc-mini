@@ -17,7 +17,7 @@
       </view>
 
       <view class="row rowMid">
-        <view class="para"><text class="labelBold">询价人:</text></view>
+        <view class="para"><text class="labelBold">询价人:{{useStore().user.name ? useStore().user.name : null }}</text></view>
         <view class="para"><text class="labelBolder">询价规模: {{ nominalAmount }} 万</text></view>
       </view>
 
@@ -32,11 +32,10 @@
               v-for="(item, index) in results" :key="index">
           <view>{{ item.structureName }}</view>
           <view v-for="(term, i) in terms" :key="i">
-<!--            {{Object.values(item.quotes)[0][term]}}-->
-            <view v-for="(quote, x) in Object.values(item.quotes)" :key="x">{{ `${quote[term] ? quote[term][0].price+'%' : '-'}` }}</view>
+            <view style="line-height: 26px;" v-for="(quote, x) in Object.values(item.quotes)" :key="x">{{ `${quote[term] ? quote[term][0].price+'%' : '-'}` }}</view>
           </view>
           <view>
-            <view v-for="(quote, x) in Object.keys(item.quotes)" :key="x">{{ quote }}</view>
+            <view style="line-height: 26px;" v-for="(quote, x) in Object.keys(item.quotes)" :key="x">{{ quote }}</view>
           </view>
         </view>
       </view>
@@ -69,6 +68,7 @@ import {hideLoading, loadingToast} from "@/utils/toast/toast";
 import {inquiryQuote} from "@/api";
 import type {InquiryResp, Quote, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
 import {onReady, onShow} from "@dcloudio/uni-app";
+import {useStore} from "../../stores";
 const assetName = ref<string | undefined>();
 const assetCode = ref<string | undefined>();
 const currentPrice = ref<number | undefined>();

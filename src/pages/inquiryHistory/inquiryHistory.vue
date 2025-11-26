@@ -12,7 +12,7 @@
         <view class="fir_row">
           <view class="fir_br">
             <view class="fir_br_center">
-              <view>{{ item.underlying }}</view>
+              <view>{{index+1}}{{ item.underlying }}</view>
               <view style="color: #acacac; padding-top: 2px;">{{ item.underlying_code }}</view>
             </view>
           </view>
@@ -93,7 +93,7 @@ import {onShow} from "@dcloudio/uni-app";
 import {failToast} from "@/utils/toast/toast";
 
 const store = useStore();
-const history = ref<InquiryHistoryResp[]|undefined>([]);
+const history = ref<InquiryHistoryResp[]>([]);
 const moreDataStatus = ref<boolean>(true);
 const structureData = ref<any>([]);
 const pageNum = ref<number>(1);
@@ -113,7 +113,7 @@ const moreData = () => {
 const inquiryHistoryFun = async () => {
   inquiryHistory(pageNum.value, pageSize.value).then((res:InquiryHistoryResp) => {
     console.log("res.inquiries", res.inquiries);
-    moreDataStatus.value = res.pagination?.total_pages! < pageNum.value;
+    moreDataStatus.value = res.pagination?.total_pages! >= pageNum.value;
 
     res.inquiries!.map((data:InquiryResp) => {
       const filterData: any = {};
@@ -145,7 +145,11 @@ const inquiryHistoryFun = async () => {
     });
 
     // res.inquiries['filterData'] = filterData
-    history.value = res.inquiries;
+    if(history.value!.length > 0){
+      history.value = history.value?.concat(res.inquiries!)
+    }else {
+      history.value = res.inquiries;
+    }
     console.log("structureData,", structureData.value)
 
 

@@ -95,10 +95,10 @@ const login = () => {
     return;
   }
 
-  if (!avatarUrl.value){
-    failToast("请先设置头像!")
-    return;
-  }
+  // if (!avatarUrl.value){
+  //   failToast("请先设置头像!")
+  //   return;
+  // }
 
   if (!ticket.value){
     failToast("临时票据失效!")

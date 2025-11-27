@@ -1,9 +1,8 @@
 <template>
   <view class="container">
-    <view class="userPage" >
+    <view class="userPage">
       <view style="position: relative;">
-        <input v-if="!username" id="setName" type="nickname"
-               @focus="getUserProfile" v-model="username" class="nickname" placeholder=""/>
+        <input v-if="!username" id="setName" type="nickname" @focus="getUserProfile" v-model="username" class="nickname" placeholder=""/>
         <view class="signBox">
           <view class="avator">
             <!--          <button v-if="!avatarUrl" class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">-->
@@ -76,7 +75,14 @@ onShow(() =>{
 watch(username, (newVal, oldValue) => {
   if (newVal != oldValue && !token.value) {
     // console.log("用户名已设置，执行登录操作", newVal)
-    login()
+    uni.showLoading({title: '登录中...'})
+    const timer = setInterval(()=>{
+      if(ticket.value){
+        login()
+        clearInterval(timer)
+        uni.hideLoading()
+      }
+    }, 100)
   }
 })
 
@@ -182,7 +188,8 @@ const changePicker = <T>(e: T) => {
   position: absolute;
   width: 100vw;
   height: 100%;
-  background: #4caf50;
+  //background: #4caf50;
+  //z-index: 100;
   opacity: 0;
 }
 

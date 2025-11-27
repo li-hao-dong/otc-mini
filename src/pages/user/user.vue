@@ -2,7 +2,7 @@
   <view class="container">
     <view class="userPage">
       <view style="position: relative;">
-        <input v-if="!username" id="setName" type="nickname" @focus="getUserProfile" v-model="username" class="nickname" placeholder=""/>
+        <input v-if="!username" id="setName" type="nickname" @click="getUserProfile" v-model="username" class="nickname" placeholder=""/>
         <view class="signBox">
           <view class="avator">
             <!--          <button v-if="!avatarUrl" class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">-->

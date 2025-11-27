@@ -97,7 +97,7 @@ const results = reactive({
   profitLossRatio: 0, // 盈亏比例
 })
 
-onMounted(() => {
+onShow(() => {
   getOptions();
 })
 

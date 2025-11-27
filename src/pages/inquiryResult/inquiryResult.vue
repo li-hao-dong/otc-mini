@@ -79,7 +79,7 @@ const terms = ref<string[] | undefined>();
 const results = ref<QuoteResult[] | undefined>([]);
 const gridCol = ref<string>("");
 
-onMounted(() => {
+onShow(() => {
   getInquiryResults();
 })
 

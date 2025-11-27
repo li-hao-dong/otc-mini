@@ -6,24 +6,24 @@
           <text class="assetName">{{ assetName }}</text>
           <text class="assetCode">{{ assetCode }}</text>
         </view>
-        <view class="para">
+        <view class="para" :class="calcClassName(priceChange)">
           <text class="labelText">股价: </text>
           <text class="valueText">{{ currentPrice }}</text>
         </view>
         <view class="para">
-          <text class="labelText">涨幅: </text>
+          <text class="labelText" :class="calcClassName(priceChange)">涨幅: </text>
           <text class="valueText">{{ priceChange }}</text>
         </view>
       </view>
 
       <view class="row rowMid">
-        <view class="para"><text class="labelBold">询价人:{{useStore().user.name ? useStore().user.name : null }}</text></view>
+<!--        <view class="para"><text class="labelBold">询价人:{{useStore().user.name ? useStore().user.name : null }}</text></view>-->
         <view class="para"><text class="labelBolder">询价规模: {{ nominalAmount }} 万</text></view>
       </view>
 
 
       <view style="font-size: 12px; margin-top: 10px; ">
-        <view class="grid_col" ref="gridCol" :style="`width: 100%; display: grid; grid-template-columns: ${gridCol}; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;`">
+        <view class="grid_col" ref="gridCol" :style="`width: 100%; color: #777777; display: grid; grid-template-columns: ${gridCol}; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;`">
           <view >结构</view>
           <view v-for="(term, index) in terms" :key="index">{{ term }}</view>
           <view >报价方</view>
@@ -69,6 +69,7 @@ import {inquiryQuote} from "@/api";
 import type {InquiryResp, Quote, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
 import {onReady, onShow} from "@dcloudio/uni-app";
 import {useStore} from "../../stores";
+import {calcClassName} from "@/utils";
 const assetName = ref<string | undefined>();
 const assetCode = ref<string | undefined>();
 const currentPrice = ref<number | undefined>();
@@ -78,7 +79,7 @@ const terms = ref<string[] | undefined>();
 const results = ref<QuoteResult[] | undefined>([]);
 const gridCol = ref<string>("");
 
-onShow(() => {
+onMounted(() => {
   getInquiryResults();
 })
 
@@ -177,6 +178,8 @@ const toInquiry = () => {
     url: '/pages/inquiry/inquiry'
   });
 }
+
+
 </script>
 
 <style>
@@ -240,8 +243,6 @@ const toInquiry = () => {
 
 .labelBolder {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-weight: 700;
-  font-size: 15.5px;
   line-height: 1.21em;
   color: #000000;
 }

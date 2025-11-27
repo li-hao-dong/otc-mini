@@ -66,7 +66,7 @@
 </template>
 
 <script setup lang="ts">
-import {reactive} from "vue";
+import {onMounted, reactive} from "vue";
 import {calculatorData, inquiryOptions} from "@/api";
 import type {
   InquiryOptionsResp,
@@ -97,7 +97,7 @@ const results = reactive({
   profitLossRatio: 0, // 盈亏比例
 })
 
-onShow(() => {
+onMounted(() => {
   getOptions();
 })
 

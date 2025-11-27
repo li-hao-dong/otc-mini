@@ -28,4 +28,18 @@ page{
   font-size: var(--size-text);
 }
 
+.rise_color,
+.rise_color text{
+  color: #f44336;
+}
+
+.fall_color,
+.fall_color text{
+  color: #4caf50;
+}
+.normal_color,
+.normal_color text{
+  color: #bfbfbf;
+}
+
 </style>

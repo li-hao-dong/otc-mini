@@ -145,7 +145,7 @@ const selectedTerms = ref<string[]>([]);
 const sources = ref<Source[]>();
 const selectedSources = ref<string[]>([]);
 
-onShow(() => {
+onMounted(() => {
   getOptions();
 })
 

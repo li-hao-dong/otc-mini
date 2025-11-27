@@ -19,23 +19,29 @@
 <!--      <view class="userTel">-->
 <!--        <view class="label">手机绑定</view>-->
 <!--      </view>-->
-      <view class="title">
-        <view>用户信息</view>
-        <view v-if="!userDataStatus"><uni-icons type="gear" size="20" @click="setUserDataStatus"></uni-icons></view>
-        <view v-else class="update_user_data" @click="updateUserData">更新用户信息</view>
-      </view>
-      <view class="row">
-        <view class="label">身份号码</view>
-        <view class="value">
-          <input type="text" placeholder="请输入你的身份证号码" v-model="idCard">
-        </view>
-      </view>
-      <view class="row provinceCity">
-        <view class="label">省市区</view>
-        <view class="value">
-          <picker mode="region" @change="changePicker" :disabled="address">{{ address ? address : '请设置地址' }}</picker>
-        </view>
+<!--      <view class="title">-->
+<!--        <view>用户信息</view>-->
+<!--        <view v-if="!userDataStatus"><uni-icons type="gear" size="20" @click="setUserDataStatus"></uni-icons></view>-->
+<!--        <view v-else class="update_user_data" @click="updateUserData">更新用户信息</view>-->
+<!--      </view>-->
+<!--      <view class="row">-->
+<!--        <view class="label">身份号码</view>-->
+<!--        <view class="value">-->
+<!--          <input type="text" placeholder="请输入你的身份证号码" v-model="idCard">-->
+<!--        </view>-->
+<!--      </view>-->
+<!--      <view class="row provinceCity">-->
+<!--        <view class="label">省市区</view>-->
+<!--        <view class="value">-->
+<!--          <picker mode="region" @change="changePicker" :disabled="address">{{ address ? address : '请设置地址' }}</picker>-->
+<!--        </view>-->
+<!--      </view>-->
 
+      <view class="row" style="margin-top: 20px">
+        <view class="label">当前身份</view>
+        <view class="value">
+          普通用户
+        </view>
       </view>
     </view>
   </view>
@@ -59,7 +65,7 @@ const tel = ref<string|undefined>("暂无")
 const ticket = ref<string|undefined>("")
 const userDataStatus = ref<boolean>(false)
 
-onShow(() =>{
+onMounted(() =>{
   initUserInfo()
 })
 

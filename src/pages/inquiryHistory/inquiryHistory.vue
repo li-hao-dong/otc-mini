@@ -12,14 +12,14 @@
         <view class="fir_row">
           <view class="fir_br">
             <view class="fir_br_center">
-              <view>{{index+1}}{{ item.underlying }}</view>
+              <view>{{ item.underlying }}</view>
               <view style="color: #acacac; padding-top: 2px;">{{ item.underlying_code }}</view>
             </view>
           </view>
-          <view class="fir_br">
+          <view class="fir_br" :class="calcClassName(item.price_change)">
             股价: <text>{{ item.current_price }}</text>
           </view>
-          <view class="fir_br">
+          <view class="fir_br" :class="calcClassName(item.price_change)">
             涨幅: <text>{{ item.price_change }}</text>
           </view>
         </view>
@@ -28,8 +28,8 @@
           <view>询价规模：<text>{{ item.nominal_amount }}万</text></view>
         </view>
 
-        <view style="font-size: 12px; margin-top: 10px; ">
-          <view  style="width: 100%; display: grid; grid-template-columns: 25% 25% 25% 25%; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;">
+        <view style="font-size: 13px; margin-top: 10px; ">
+          <view  style="width: 100%; color: #777777; display: grid; grid-template-columns: 25% 25% 25% 25%; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;">
             <view>结构</view>
             <view>期限</view>
             <view>最优报价</view>
@@ -39,7 +39,7 @@
                 v-for="(res, key) in structureData[index]" :key="key">
             <view>{{ res.structureName }}</view>
             <view><view style="line-height: 26px;" v-for="(term, i) in Object.keys(res?.terms)" :key="i">{{term}}</view></view>
-            <view><view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i">{{term.price}}%</view></view>
+            <view><view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i" :class="calcClassName(term.price)">{{term.price}}%</view></view>
             <view>
               <view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i">
                 {{term.sourceCode}}
@@ -91,6 +91,7 @@ import {inquiryHistory} from "@/api";
 import type {InquiryQuoteReq, InquiryResp, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
 import {onShow} from "@dcloudio/uni-app";
 import {failToast} from "@/utils/toast/toast";
+import {calcClassName} from "@/utils";
 
 const store = useStore();
 const history = ref<InquiryHistoryResp[]>([]);
@@ -99,9 +100,8 @@ const structureData = ref<any>([]);
 const pageNum = ref<number>(1);
 const pageSize = ref<number>(20);
 
-onShow(() => {
-  console.log("store.miniData1111", store.miniData)
-  inquiryHistoryFun()
+onMounted(() => {
+  inquiryHistoryFun();
 })
 
 const moreData = () => {
@@ -159,11 +159,11 @@ const inquiryHistoryFun = async () => {
 }
 
 const toDetail = (inquiry_parameters:InquiryQuoteReq) => {
-  // console.log("inquiry_parameters,", inquiry_parameters)
-  inquiry_parameters["optionType"]= (inquiry_parameters["option_type"]).toUpperCase()
+  console.log("inquiry_parameters,", inquiry_parameters)
+  inquiry_parameters["optionType"]= (inquiry_parameters["option_type"])?.toUpperCase()
   inquiry_parameters["nominalAmount"]=inquiry_parameters["nominal_amount"]
-  delete inquiry_parameters["option_type"]
-  delete inquiry_parameters["nominal_amount"]
+  // delete inquiry_parameters["option_type"]
+  // delete inquiry_parameters["nominal_amount"]
   uni.setStorageSync('InquiryQuoteReqPayload', inquiry_parameters)
   uni.navigateTo({url: '/pages/inquiryResult/inquiryResult'})
 }
@@ -264,12 +264,10 @@ const toDetail = (inquiry_parameters:InquiryQuoteReq) => {
 
 .fir_br text{
   font-weight: bolder;
-  color: var(--color-primary-bg);
 }
 
 .fir_br_center{
   width: fit-content;
-  text-align: center;
 }
 
 .sec_row text{

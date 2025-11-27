@@ -3,7 +3,7 @@ export const calcClassName = (priceChange:string|number) => {
     if (typeof priceChange === 'number'){
         changePrice = priceChange;
     }else if (typeof priceChange === 'string'){
-        changePrice= Number(priceChange.replace('%',''));
+        changePrice = Number(priceChange.replace('%',''));
     }
     if(changePrice > 0){
         return 'rise_color'

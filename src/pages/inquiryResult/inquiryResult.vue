@@ -6,13 +6,13 @@
           <text class="assetName">{{ assetName }}</text>
           <text class="assetCode">{{ assetCode }}</text>
         </view>
-        <view class="para" :class="calcClassName(priceChange)">
+        <view class="para">
           <text class="labelText">股价: </text>
-          <text class="valueText">{{ currentPrice }}</text>
+          <text class="valueText" :class="calcClassName(priceChange)">{{ currentPrice }}</text>
         </view>
         <view class="para">
-          <text class="labelText" :class="calcClassName(priceChange)">涨幅: </text>
-          <text class="valueText">{{ priceChange }}</text>
+          <text class="labelText" >涨幅: </text>
+          <text class="valueText" :class="calcClassName(priceChange)">{{ priceChange }}</text>
         </view>
       </view>
 
@@ -213,9 +213,9 @@ const toInquiry = () => {
 
 .para { display: flex; align-items: center; gap: 4px; }
 
-.asset { display: flex; flex-direction: column; }
+.asset { display: flex; flex-direction: column; padding: 0 0 10px 0; }
 .assetName { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 700; font-size: 15.6px; line-height: 1.21em; color: #000000; }
-.assetCode { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 400; font-size: 16px; line-height: 1.21em; color: #999999; }
+.assetCode { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 400; font-size: 16px; line-height: 1.21em; color: #999999; padding-top: 2px;}
 
 .labelText {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -230,7 +230,6 @@ const toInquiry = () => {
   font-weight: 700;
   font-size: 15.6px;
   line-height: 1.21em;
-  color: #e63946;
 }
 
 .labelBold {

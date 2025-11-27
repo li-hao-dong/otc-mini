@@ -16,11 +16,11 @@
               <view style="color: #acacac; padding-top: 2px;">{{ item.underlying_code }}</view>
             </view>
           </view>
-          <view class="fir_br" :class="calcClassName(item.price_change)">
-            股价: <text>{{ item.current_price }}</text>
+          <view class="fir_br">
+            股价: <text :class="calcClassName(item.price_change)">{{ item.current_price }}</text>
           </view>
-          <view class="fir_br" :class="calcClassName(item.price_change)">
-            涨幅: <text>{{ item.price_change }}</text>
+          <view class="fir_br">
+            涨幅: <text :class="calcClassName(item.price_change)">{{ item.price_change }}</text>
           </view>
         </view>
         <view class="sec_row">

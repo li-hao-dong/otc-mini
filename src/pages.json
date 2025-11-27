@@ -10,7 +10,7 @@
 		{
 			"path": "pages/inquiryHistory/inquiryHistory",
 			"style": {
-				"navigationBarTitleText": "询价历史",
+				"navigationBarTitleText": "询价",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false
@@ -19,7 +19,7 @@
 		{
 			"path": "pages/inquiry/inquiry",
 			"style": {
-				"navigationBarTitleText": "询价",
+				"navigationBarTitleText": "询价信息",
 				"navigationBarTextStyle": "black",
 				"navigationBarTextWeight": "bold",
 				"navigationBarBackgroundColor": "#fff",
@@ -39,9 +39,8 @@
 			"path": "pages/warehouseReceipts/warehouseReceipts",
 			"style": {
 				"navigationBarTitleText": "仓单",
-				"navigationBarTextStyle": "black",
+				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
-				"navigationBarBackgroundColor": "#fff",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -49,16 +48,15 @@
 			"path": "pages/calculator/calculator",
 			"style": {
 				"navigationBarTitleText": "计算器",
-				"navigationBarTextStyle": "black",
+				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
-				"navigationBarBackgroundColor": "#fff",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/user/user",
 			"style": {
-				"navigationBarTitleText": "用户中心",
+				"navigationBarTitleText": "我的",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false
@@ -75,7 +73,7 @@
 				"pagePath": "pages/inquiryHistory/inquiryHistory",
 				"iconPath": "static/menu/icon_inquiry_history.png",
 				"selectedIconPath": "static/menu/icon_inquiry_history_active.png",
-				"text": "询价历史"
+				"text": "询价"
 			},
 			{
 				"pagePath": "pages/warehouseReceipts/warehouseReceipts",

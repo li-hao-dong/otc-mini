@@ -7,18 +7,18 @@
           <text class="assetCode">{{ assetCode }}</text>
         </view>
         <view class="para">
-          <text class="labelText">股价: </text>
+          <text class="labelText">股价：</text>
           <text class="valueText" :class="calcClassName(priceChange)">{{ currentPrice }}</text>
         </view>
         <view class="para">
-          <text class="labelText" >涨幅: </text>
+          <text class="labelText" >涨幅：</text>
           <text class="valueText" :class="calcClassName(priceChange)">{{ priceChange }}</text>
         </view>
       </view>
 
       <view class="row rowMid">
-<!--        <view class="para"><text class="labelBold">询价人:{{useStore().user.name ? useStore().user.name : null }}</text></view>-->
-        <view class="para"><text class="labelBolder">询价规模: {{ nominalAmount }} 万</text></view>
+<!--        <view class="para"><text class="labelBold">询价人：{{useStore().user.name ? useStore().user.name : null }}</text></view>-->
+        <view class="para"><text class="labelBolder">询价规模：{{ nominalAmount }} 万</text></view>
       </view>
 
 

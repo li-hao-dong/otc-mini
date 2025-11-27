@@ -1,19 +1,23 @@
 <template>
   <view class="container">
     <view class="userPage" >
-      <view class="signBox" @click.stop="token?'':login">
-        <view class="avator">
-          <button v-if="!avatarUrl" class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+      <view style="position: relative;">
+        <input v-if="!username" id="setName" type="nickname"
+               @focus="getUserProfile" v-model="username" class="nickname" placeholder=""/>
+        <view class="signBox">
+          <view class="avator">
+            <!--          <button v-if="!avatarUrl" class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">-->
             <uni-icons type="person" size="66" color="white"></uni-icons>
-          </button>
-          <image v-else class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>
-        </view>
-        <view class="userData">
-          <view class="userName">
-            <view v-if="username">{{username}}</view>
-            <input v-else type="nickname" v-model="username" class="nickname" placeholder="您还未登录" @click.stop="getUserProfile"/>
+            <!--          </button>-->
+            <!--          <image v-else class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>-->
           </view>
-          <view class="userTel">{{tel}}</view>
+          <view class="userData">
+            <view class="userName">
+              <view>{{username?username:'您还未登录'}}</view>
+            </view>
+            <view class="userTel">{{tel}}
+            </view>
+          </view>
         </view>
       </view>
 <!--      <view class="userTel">-->
@@ -54,13 +58,13 @@ import {getUserInfo, userLogin} from "@/api";
 import type {loginResp} from "@/interfaces/login";
 import {useStore} from "@/stores";
 import {onShow} from "@dcloudio/uni-app";
-import {failToast} from "@/utils/toast/toast";
+import {failToast, succToast} from "@/utils/toast/toast";
 
 const avatarUrl = ref<string|undefined>("")
 const address = ref<string|undefined>("暂无")
 const idCard = ref<string|undefined>("暂无")
 const username = ref<string|undefined>("")
-const token = ref<string|undefined>("")
+const token = ref<string|undefined>(undefined)
 const tel = ref<string|undefined>("暂无")
 const ticket = ref<string|undefined>("")
 const userDataStatus = ref<boolean>(false)
@@ -107,13 +111,15 @@ const login = () => {
   // }
 
   if (!ticket.value){
-    failToast("临时票据失效!")
+    failToast("临时票据失效,请再次登录!")
+    username.value = undefined;
     return;
   }
 
   userLogin(ticket.value, username.value).then((res: loginResp) => {
     if(res.status === 'success'){
       useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type, token_valid_until: new Date().getTime() + (60 * 60 * 24 * 1000)});
+      succToast("登录成功!")
       getUserInfo()
     }
   }).catch((err: Error) => {
@@ -123,6 +129,7 @@ const login = () => {
 }
 
 const getUserProfile = () => {
+  if (token.value) return
   if(uni.getUserProfile){
     uni.getUserProfile({desc: '用于完善会员资料'}).then((res) => {
       console.log("res", res)
@@ -160,6 +167,7 @@ const changePicker = <T>(e: T) => {
 
 
 <style scoped>
+
 .signBox{
   width: 100%;
   background: var(--color-primary-bg);
@@ -169,6 +177,15 @@ const changePicker = <T>(e: T) => {
   gap: 15px;
   color: white;
 }
+
+#setName{
+  position: absolute;
+  width: 100vw;
+  height: 100%;
+  background: #4caf50;
+  opacity: 0;
+}
+
 .avator,
 .avatar-wrapper{
   width: 70px;

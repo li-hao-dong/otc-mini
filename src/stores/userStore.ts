@@ -6,7 +6,7 @@ import {warnToast} from "@/utils/toast/toast";
 interface userStore {
     uuid: string;
     name: string;
-    token: string;
+    token: string | undefined;
     token_type: string;
     token_valid_until?: Date | undefined;
     address: string;
@@ -30,7 +30,7 @@ export const useUserStore = defineStore('user', {
     state: ():userStore => ({
         uuid: '',
         name: '',
-        token: '',
+        token: undefined,
         token_type:'',
         token_valid_until: undefined,
         address: '',

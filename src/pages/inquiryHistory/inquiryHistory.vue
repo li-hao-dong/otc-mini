@@ -101,6 +101,7 @@ const pageNum = ref<number>(1);
 const pageSize = ref<number>(20);
 
 onShow(() => {
+  resetDate();
   inquiryHistoryFun();
 })
 
@@ -166,6 +167,13 @@ const toDetail = (inquiry_parameters:InquiryQuoteReq) => {
   // delete inquiry_parameters["nominal_amount"]
   uni.setStorageSync('InquiryQuoteReqPayload', inquiry_parameters)
   uni.navigateTo({url: '/pages/inquiryResult/inquiryResult'})
+}
+
+const resetDate = () => {
+  history.value = [];
+  structureData.value = [];
+  pageNum.value = 1;
+  moreDataStatus.value = true;
 }
 
 </script>

@@ -28,7 +28,7 @@
           <view>询价规模：<text>{{ item.nominal_amount }}万</text></view>
         </view>
 
-        <view style="font-size: 13px; margin-top: 10px; ">
+        <view style="margin-top: 10px; ">
           <view  style="width: 100%; color: #777777; display: grid; grid-template-columns: 25% 25% 25% 25%; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;">
             <view>结构</view>
             <view>期限</view>

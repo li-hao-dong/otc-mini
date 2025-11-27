@@ -22,7 +22,7 @@
       </view>
 
 
-      <view style="font-size: 12px; margin-top: 10px; ">
+      <view style=" margin-top: 10px; ">
         <view class="grid_col" ref="gridCol" :style="`width: 100%; color: #777777; display: grid; grid-template-columns: ${gridCol}; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;`">
           <view >结构</view>
           <view v-for="(term, index) in terms" :key="index">{{ term }}</view>

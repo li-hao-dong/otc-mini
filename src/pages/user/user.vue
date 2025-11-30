@@ -12,7 +12,7 @@
           </view>
           <view class="userData">
             <view class="userName">
-              <view>{{username?username:'您还未登录'}}</view>
+              <view>{{username?username:'点击此处进行登录'}}</view>
             </view>
             <view class="userTel">{{tel}}
             </view>

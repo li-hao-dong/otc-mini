@@ -8,6 +8,15 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/orderPlacement/orderPlacement",
+			"style": {
+				"navigationBarTitleText": "下单操作",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			"path": "pages/inquiryHistory/inquiryHistory",
 			"style": {
 				"navigationBarTitleText": "询价",

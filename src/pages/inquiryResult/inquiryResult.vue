@@ -32,7 +32,9 @@
               v-for="(item, index) in results" :key="index">
           <view>{{ item.structureName }}</view>
           <view v-for="(term, i) in terms" :key="i">
-            <view style="line-height: 26px;" v-for="(quote, x) in Object.values(item.quotes)" :key="x" :class="quote[term] && quote[term][0].isRecommended?'rise_color':''">{{ `${quote[term] ? quote[term][0].price+'%' : '-'}` }}</view>
+            <view style="line-height: 26px;" v-for="(quote, x) in Object.values(item.quotes)" :key="x" :class="quote[term] && quote[term][0].isRecommended?'rise_color':''" @click="">
+              {{ `${quote[term] ? quote[term][0].price+'%' : '-'}` }}<uni-icons v-if="quote[term]" type="right" size="15"></uni-icons>
+            </view>
           </view>
           <view>
             <view style="line-height: 26px;" v-for="(quote, x) in Object.keys(item.quotes)" :key="x">{{ quote }}</view>

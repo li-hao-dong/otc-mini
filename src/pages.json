@@ -8,15 +8,14 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/orderPlacement/orderPlacement",
+			"path": "pages/warehouseReceipts/warehouseReceipts",
 			"style": {
-				"navigationBarTitleText": "下单操作",
+				"navigationBarTitleText": "仓单",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false
 			}
-		},
-		{
+		},{
 			"path": "pages/inquiryHistory/inquiryHistory",
 			"style": {
 				"navigationBarTitleText": "询价",
@@ -44,15 +43,7 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		{
-			"path": "pages/warehouseReceipts/warehouseReceipts",
-			"style": {
-				"navigationBarTitleText": "仓单",
-				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": false
-			}
-		},
+		
 		{
 			"path": "pages/calculator/calculator",
 			"style": {
@@ -66,6 +57,15 @@
 			"path": "pages/user/user",
 			"style": {
 				"navigationBarTitleText": "我的",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/orderPlacement/orderPlacement",
+			"style": {
+				"navigationBarTitleText": "下单操作",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false

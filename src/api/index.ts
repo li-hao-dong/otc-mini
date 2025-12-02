@@ -9,6 +9,7 @@ import type {loginReq, loginResp} from "@/interfaces/login";
 import type {UserResp} from "@/interfaces/user";
 import type {calculatorReq, EquityOptionCalculatorResult} from "@/interfaces/calculator";
 import type { orderPayloadReq, orderPayloadResp, PriceType } from "@/interfaces/inquiry/orderPayload";
+import type { OrderRespone, userOrderResp } from "@/interfaces/orders";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -168,7 +169,26 @@ export const calculatorData = (payload: calculatorReq):EquityOptionCalculatorRes
     })
 }
 
+/**
+ * 获取用户订单信息
+ * */
+export const getUserOrderInfo = (page: number, size: number, status: string):Promise<userOrderResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/users/orders?page=${page}&size=${size}&status=${status}`)
+            console.log("getUserOrderInfo res", res);
+            if (res.code !== 200) {
+                resolve(res.data as userOrderResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch user order info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
 
+// TODO 废弃
 export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {
     return new Promise(async (resolve, reject) => {
         try {

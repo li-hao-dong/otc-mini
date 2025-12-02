@@ -76,7 +76,7 @@ import type {
   Term
 } from "@/interfaces/inquiry/inquiryOptions";
 import {failToast} from "@/utils/toast/toast";
-import {onShow} from "@dcloudio/uni-app";
+import {onLoad, onShow} from "@dcloudio/uni-app";
 import type {calculatorReq} from "@/interfaces/calculator";
 
 const structures = reactive({
@@ -97,7 +97,7 @@ const results = reactive({
   profitLossRatio: 0, // 盈亏比例
 })
 
-onShow(() => {
+onLoad(() => {
   getOptions();
 })
 

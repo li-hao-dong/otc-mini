@@ -56,7 +56,7 @@ import {onMounted, ref, watch} from "vue";
 import {getUserInfo, userLogin} from "@/api";
 import type {loginResp} from "@/interfaces/login";
 import {useStore} from "@/stores";
-import {onShow} from "@dcloudio/uni-app";
+import {onLoad, onShow} from "@dcloudio/uni-app";
 import {failToast, succToast} from "@/utils/toast/toast";
 
 const avatarUrl = ref<string|undefined>("")
@@ -68,7 +68,7 @@ const tel = ref<string|undefined>("暂无")
 const ticket = ref<string|undefined>("")
 const userDataStatus = ref<boolean>(false)
 
-onShow(() =>{
+onLoad(() =>{
   initUserInfo()
 })
 

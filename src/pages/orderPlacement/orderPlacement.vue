@@ -3,18 +3,18 @@
         <view class="pageWrap">
             <view class="card cardHeader">
                 <view class="row assetRowName">
-                    <text class="assetName">五粮液</text>
+                    <text class="assetName">{{orderPayload?.assetName}}</text>
                 </view>
                 <view class="row assetRowCode">
-                    <text class="assetCode">000858.SZ</text>
+                    <text class="assetCode">{{ orderPayload?.assetCode }}</text>
                 </view>
                 <view class="row rowPrice">
                     <view class="para"><text class="labelGray">股价：</text></view>
-                    <view class="para"><text class="valueRed">117.89</text></view>
+                    <view class="para"><text class="valueRed">{{ orderPayload?.currentPrice }}</text></view>
                 </view>
                 <view class="row rowChange">
                     <view class="para"><text class="labelGray">涨幅：</text></view>
-                    <view class="para"><text class="valueGreen">-0.04%</text></view>
+                    <view class="para"><text class="valueGreen">{{ orderPayload?.priceChange }}</text></view>
                 </view>
                 <view class="row rowInquirer">
                     <view class="para"><text class="labelGray">询价人：</text></view>
@@ -22,11 +22,11 @@
                 </view>
                 <view class="row rowScale">
                     <view class="para"><text class="labelGray">询价规模：</text></view>
-                    <view class="para"><text class="valueDark">100万</text></view>
+                    <view class="para"><text class="valueDark">{{ orderPayload?.nominalAmount }}万</text></view>
                 </view>
                 <view class="row rowStruct">
-                    <view class="para"><text class="labelGray">平值100</text></view>
-                    <view class="para"><text class="valueDark">2个月 8.00% ZQSY</text></view>
+                    <view class="para"><text class="labelGray">{{ orderPayload?.structureName }}</text></view>
+                    <view class="para"><text class="valueDark">{{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text></view>
                 </view>
             </view>
 
@@ -35,17 +35,17 @@
                     <text class="sectionTitle">下单价格</text>
                 </view>
                 <view class="priceType">
-                    <view class="optionRow" role="button" tabindex="0" @click="selectPriceType('market')">
+                    <view class="optionRow" role="button" tabindex="0" @click="selectPriceType(PriceType.MARKET)">
                         <view class="radioDot"
-                            :class="selectedPriceType === 'market' ? 'radioPrimary' : 'radioSecondary'"></view>
+                            :class="selectedPriceType === PriceType.MARKET ? 'radioPrimary' : 'radioSecondary'"></view>
                         <text class="pillText">市价</text>
                     </view>
-                    <view class="optionRow" role="button" tabindex="0" @click="selectPriceType('limit')">
+                    <view class="optionRow" role="button" tabindex="0" @click="selectPriceType(PriceType.LIMIT)">
                         <view class="radioDot"
-                            :class="selectedPriceType === 'limit' ? 'radioPrimary' : 'radioSecondary'"></view>
+                            :class="selectedPriceType === PriceType.LIMIT ? 'radioPrimary' : 'radioSecondary'"></view>
                         <text class="pillText">限价</text>
                         <view class="limitInput">
-                            <input class="inputBox" placeholder="" />
+                            <input type="number" class="inputBox" :disabled="selectedPriceType !== PriceType.LIMIT" placeholder="" v-model="limitPrice" />
                             <text class="unit">元</text>
                         </view>
                     </view>
@@ -55,12 +55,12 @@
                     <text class="sectionTitle">下单规模</text>
                 </view>
                 <view class="quantityRow">
-                    <text class="quantityStrong">1</text>
-                    <text class="quantitySuffix">× 100万</text>
+                    <view class="quantityStrong"><input type="number" class="inputBox" placeholder="" v-model="quantity" /></view>
+                    <text class="quantitySuffix">× {{ orderPayload?.nominalAmount }}</text>
                 </view>
             </view>
 
-            <view class="card">
+            <!-- <view class="card">
                 <view class="row">
                     <text class="sectionTitle">上传附件</text>
                 </view>
@@ -75,9 +75,9 @@
                 <view class="tip">
                     <text class="tipText">特别提示：上传的图片大小控制在 1M 以内，超出请压缩或者裁剪。</text>
                 </view>
-            </view>
+            </view> -->
 
-            <view class="cta" role="button" tabindex="0">
+            <view class="cta" role="button" tabindex="0" @click="placeOrder">
                 <text class="ctaText">模拟下单</text>
             </view>
         </view>
@@ -85,9 +85,48 @@
 </template>
 
 <script setup lang="ts">
+import { buyProduct } from '@/api';
+import { PriceType, type orderPayloadReq } from '@/interfaces/inquiry/orderPayload';
+import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
-const selectedPriceType = ref<'market' | 'limit'>('market');
-const selectPriceType = (t: 'market' | 'limit') => { selectedPriceType.value = t; };
+const selectedPriceType = ref<PriceType>(PriceType.MARKET);
+const orderPayload = ref<any>(null);
+const quantity = ref<number>(1);
+const limitPrice = ref<number>(0);
+
+onLoad(() => { initData(); });
+
+const selectPriceType = (t: PriceType.MARKET | PriceType.LIMIT) => { selectedPriceType.value = t; };
+
+
+const initData = () => {
+    orderPayload.value = uni.getStorageSync('OrderPayload');
+    if(!orderPayload.value) uni.switchTab ({ url: '/pages/inquiry/inquiry' });
+};
+
+const placeOrder = () => {
+    if (!orderPayload.value) return;
+    else if (!orderPayload.value?.inquiryId || !orderPayload.value?.quote?.productCode) return  uni.showToast({ title: '询价单号或产品代码不存在', icon: 'none' });
+    else if (!quantity.value) return uni.showToast({ title: '下单数量不存在', icon: 'none' });
+    else if (!limitPrice.value && selectedPriceType.value === PriceType.LIMIT) return uni.showToast({ title: '限价不存在', icon: 'none' });
+
+    uni.showModal({ title: '提示', content: '确定要下单吗？' })
+        .then(res => {
+            if (res.confirm) {
+                buyProduct(orderPayload.value?.inquiryId, orderPayload.value?.quote?.productCode, selectedPriceType.value, Number(quantity.value), Number(limitPrice.value)).then(res => {
+                    // console.log('buyProduct res', res);
+                    if (res.status === 'success'){
+                         uni.showToast({ title: '下单成功', icon: 'success' });
+                         setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+                    }
+                    else uni.showToast({ title: res.message || '下单失败', icon: 'none' });
+                });
+            } else if (res.cancel) {
+                console.log('用户点击取消');
+            }
+        });
+};
+
 </script>
 
 <style>
@@ -116,7 +155,7 @@ const selectPriceType = (t: 'market' | 'limit') => { selectedPriceType.value = t
 
 .row {
     display: flex;
-    width: 95%;
+    width: 100%;
 }
 
 .assetRowName {
@@ -237,6 +276,18 @@ const selectPriceType = (t: 'market' | 'limit') => { selectedPriceType.value = t
     height: 15.6px;
     border-radius: 50%;
     background-color: #ffffff;
+    position: relative;
+}
+
+.radioPrimary::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: 70%;
+    height: 70%;
+    border-radius: 50%;
+    background-color: #0075FF;
 }
 
 .radioPrimary {

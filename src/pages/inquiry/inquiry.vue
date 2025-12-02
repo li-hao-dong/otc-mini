@@ -118,7 +118,7 @@ import {
   type Term
 } from "@/interfaces/inquiry/inquiryOptions";
 import type {InquiryQuoteReq, InquiryResp} from "@/interfaces/inquiry/inquiryQuote";
-import {onShow} from "@dcloudio/uni-app";
+import {onLoad, onShow} from "@dcloudio/uni-app";
 
 type OptionTypeCode = "SNOWBALL" | "CALL";
 
@@ -145,7 +145,7 @@ const selectedTerms = ref<string[]>([]);
 const sources = ref<Source[]>();
 const selectedSources = ref<string[]>([]);
 
-onShow(() => {
+onLoad(() => {
   getOptions();
 })
 

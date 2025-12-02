@@ -32,7 +32,7 @@
               v-for="(item, index) in results" :key="index">
           <view>{{ item.structureName }}</view>
           <view v-for="(term, i) in terms" :key="i">
-            <view style="line-height: 26px;" v-for="(quote, x) in Object.values(item.quotes)" :key="x" :class="quote[term] && quote[term][0].isRecommended?'rise_color':''" @click="">
+            <view style="line-height: 26px;" v-for="(quote, x) in Object.values(item.quotes)" :key="x" :class="quote[term] && quote[term][0].isRecommended?'rise_color':''" @click="placeAnOrder(quote[term][0], term, results[x])">
               {{ `${quote[term] ? quote[term][0].price+'%' : '-'}` }}<uni-icons v-if="quote[term]" type="right" size="15"></uni-icons>
             </view>
           </view>
@@ -69,9 +69,11 @@ import {getCurrentInstance, onMounted, ref, watch} from "vue";
 import {hideLoading, loadingToast} from "@/utils/toast/toast";
 import {inquiryQuote} from "@/api";
 import type {InquiryResp, Quote, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
-import {onReady, onShow} from "@dcloudio/uni-app";
+import {onLoad, onReady, onShow} from "@dcloudio/uni-app";
 import {useStore} from "../../stores";
 import {calcClassName} from "@/utils";
+
+const inquiryId = ref<string | undefined>();
 const assetName = ref<string | undefined>();
 const assetCode = ref<string | undefined>();
 const currentPrice = ref<number | undefined>();
@@ -81,7 +83,7 @@ const terms = ref<string[] | undefined>();
 const results = ref<QuoteResult[] | undefined>([]);
 const gridCol = ref<string>("");
 
-onShow(() => {
+onLoad(() => {
   getInquiryResults();
 })
 
@@ -97,6 +99,7 @@ const getInquiryResults = () => {
   loadingToast("询价中");
   inquiryQuote(payload).then((res: InquiryResp) =>{
     console.log("inquiryQuote res1111,", res.data)
+    inquiryId.value = res.data.inquiryId;
     assetName.value = res.data.underlying;
     assetCode.value = res.data.underlyingCode;
     currentPrice.value = res.data.currentPrice;
@@ -181,6 +184,29 @@ const toInquiry = () => {
   });
 }
 
+const placeAnOrder = (quote: any, term: string, result: any) => {
+  // console.log("placeAnOrder", quote)
+  // console.log("assetName:", assetName.value)
+  // console.log("assetCode:", assetCode.value)
+  // console.log("priceChange:", priceChange.value)
+  // console.log("currentPrice:", currentPrice.value)
+  // console.log("nominalAmount:", nominalAmount.value)
+  const payload = {
+    inquiryId: inquiryId.value,
+    assetName: assetName.value,
+    assetCode: assetCode.value,
+    priceChange: priceChange.value,
+    currentPrice: currentPrice.value,
+    nominalAmount: nominalAmount.value,
+    quote: quote,
+    term: term,
+    structure: result.structure,
+    structureName: result.structureName
+  };
+  uni.setStorageSync('OrderPayload', payload)
+
+  uni.navigateTo({url: '/pages/orderPlacement/orderPlacement'});
+}
 
 </script>
 

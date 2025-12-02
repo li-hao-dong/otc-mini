@@ -89,7 +89,7 @@ import {useStore} from "@/stores";
 import type {InquiryHistoryResp} from "@/interfaces/inquiry/inquiryHistory";
 import {inquiryHistory} from "@/api";
 import type {InquiryQuoteReq, InquiryResp, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
-import {onShow} from "@dcloudio/uni-app";
+import {onLoad, onShow} from "@dcloudio/uni-app";
 import {failToast} from "@/utils/toast/toast";
 import {calcClassName} from "@/utils";
 
@@ -100,7 +100,7 @@ const structureData = ref<any>([]);
 const pageNum = ref<number>(1);
 const pageSize = ref<number>(20);
 
-onShow(() => {
+onLoad(() => {
   resetDate();
   inquiryHistoryFun();
 })

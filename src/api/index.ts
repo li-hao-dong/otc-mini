@@ -8,7 +8,7 @@ import http from "@/utils/request/request";
 import type {loginReq, loginResp} from "@/interfaces/login";
 import type {UserResp} from "@/interfaces/user";
 import type {calculatorReq, EquityOptionCalculatorResult} from "@/interfaces/calculator";
-import type { orderPayloadReq, PriceType } from "@/interfaces/inquiry/orderPayload";
+import type { orderPayloadReq, orderPayloadResp, PriceType } from "@/interfaces/inquiry/orderPayload";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -64,7 +64,7 @@ export const userLogin = (code: string, nickname: string):Promise<loginResp> => 
 /**
  * 用户下单
  * */
-export const buyProduct = ( inquiryId: string, productCode: string, priceType: PriceType, quantity: number, limitPrice: number ):Promise<loginResp> => {
+export const buyProduct = ( inquiryId: string, productCode: string, priceType: PriceType, quantity: number, limitPrice: number ):Promise<orderPayloadResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const payload:orderPayloadReq = {
@@ -79,7 +79,7 @@ export const buyProduct = ( inquiryId: string, productCode: string, priceType: P
             const res: response = <response>await  http.post(`${BASE_URL}/inquiry/INQ_20251201075147/order`, payload)
             console.log("buyProduct res", res);
             if (res.code !== 200) {
-                resolve(res.data as loginResp)
+                resolve(res.data as orderPayloadResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch buyProduct info'));
             }

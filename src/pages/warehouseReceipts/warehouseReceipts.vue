@@ -8,10 +8,10 @@
     <view class="segTabs">
       <view class="segItem" style="width: 100%;" v-for="(item, index) in orderType" :key="index" @click="orderTypeKey = index">
         <text :class="`${orderTypeKey === index ? 'segActive' : 'segText'}`" >
-          {{item}} 
+          {{item}}
           <text>({{ index + 1 }})</text>
         </text>
-        
+
         <view v-show="orderTypeKey === index" class="segUnderline"></view>
       </view>
     </view>
@@ -40,7 +40,7 @@
             <view class="subLabel">预计回款</view>
             <view class="subValueBlue">{{ordersSummary?.estimatedPayout}}元</view>
           </view>
-         
+
           <view class="sumSub">
             <view class="subLabel">预计盈亏</view>
             <view class="subValueGreen">{{ordersSummary?.estimatedProfit}}元</view>
@@ -69,35 +69,35 @@
       </view>
 
       <view class="rowBorder">
-        <text class="dataText">开仓时间：{{order?.startDate}}</text>
-        <text class="dataText">到期时间：{{order?.maturityDate}}</text>
+        <text class="dataText"><text>开仓时间：</text>{{order?.startDate}}</text>
+        <text class="dataText"><text>到期时间：</text>{{order?.maturityDate}}</text>
       </view>
       <view class="rowBorder">
-        <text class="dataText">期权代码：{{order?.optionCode}}</text>
-        <text class="dataText">名义本金：{{order?.nominalAmount}}万</text>
+        <text class="dataText"><text>期权代码：</text>{{order?.optionCode}}</text>
+        <text class="dataText"><text>名义本金：</text>{{order?.nominalAmount}}万</text>
       </view>
       <view class="rowBorder">
-        <text class="dataText">期限：{{order?.termName}}</text>
-        <text class="dataText">剩余天数：{{order?.daysToExpiry}}天</text>
+        <text class="dataText"><text>期限：</text>{{order?.termName}}</text>
+        <text class="dataText"><text>剩余天数：</text>{{order?.daysToExpiry}}天</text>
       </view>
       <view class="rowBorder">
-        <text class="dataText">开仓价格：{{order?.underlyingPrice}}元</text>
-        <text class="dataText">行权价格：{{order?.strikePrice}}元</text>
+        <text class="dataText"><text>开仓价格：</text>{{order?.underlyingPrice}}元</text>
+        <text class="dataText"><text>行权价格：</text>{{order?.strikePrice}}元</text>
       </view>
       <view class="rowBorder">
-        <text class="dataText">预计回款：<text class="linkBlue">{{order?.estimatedPayout ? order.estimatedPayout : '-'}}元</text></text>
-        <text class="dataText">预计盈亏：<text class="valueGreen">{{order?.estimatedProfit}}元</text></text>
+        <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{order?.estimatedPayout ? order.estimatedPayout : '-'}}元</text></text>
+        <text class="dataText"><text>预计盈亏：</text><text class="valueGreen">{{order?.estimatedProfit}}元</text></text>
       </view>
       <view class="rowBorder">
-        <text class="dataText">期权费：{{order?.upstreamFee || order?.optionFee}}元</text>
-        <text class="dataText">盈亏比例：<text class="valueGreen">{{order?.profitRate ? order.profitRate * 100 : 0}}%</text></text>
+        <text class="dataText"><text>期权费：</text>{{order?.upstreamFee || order?.optionFee}}元</text>
+        <text class="dataText"><text>盈亏比例：</text><text class="valueGreen">{{order?.profitRate ? order.profitRate * 100 : 0}}%</text></text>
       </view>
       <view class="rowBorder">
-        <text class="dataText">交易商：{{order?.sourceShortName}}</text>
-        <text class="dataText">期权费率：{{order?.optionFeeRate ? order.optionFeeRate * 100 : 0}}%</text>
+        <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>
+        <text class="dataText"><text>期权费率：</text>{{order?.optionFeeRate ? order.optionFeeRate * 100 : 0}}%</text>
       </view>
       <view class="rowBorder">
-        <text class="dataText">手续费：{{order?.transactionFee}}元</text>
+        <text class="dataText"><text>手续费：</text>{{order?.transactionFee}}元</text>
       </view>
 
       <!-- <view class="actions">
@@ -390,16 +390,21 @@ const getUserOrder = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 0;
+  padding: 3px 0;
   /* border-top: 1px solid #EEEEEE; */
 }
 
 .dataText {
+  width: 50%;
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
   font-size: 13px;
   line-height: 1.21em;
   color: #000000;
+}
+
+.dataText text{
+  color: #999999;
 }
 
 .valueGreen {

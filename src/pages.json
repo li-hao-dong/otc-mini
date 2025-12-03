@@ -70,6 +70,42 @@
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/warehouseReceiptDetail",
+			"style": {
+				"navigationBarTitleText": "仓单详情",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/paddingQuote",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/waitingForAQuote",
+			"style": {
+				"navigationBarTitleText": "订单支付",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/paid",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"tabBar": {

@@ -9,7 +9,9 @@ import type {loginReq, loginResp} from "@/interfaces/login";
 import type {UserResp} from "@/interfaces/user";
 import type {calculatorReq, EquityOptionCalculatorResult} from "@/interfaces/calculator";
 import type { orderPayloadReq, orderPayloadResp, PriceType } from "@/interfaces/inquiry/orderPayload";
-import type { OrderRespone, userOrderResp } from "@/interfaces/orders";
+import type { userOrderResp } from "@/interfaces/orders";
+import type {OrderDetail} from "@/interfaces/orderDetail";
+import type {BankAccountInfoResp} from "@/interfaces/bankData";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -180,13 +182,52 @@ export const getUserOrderInfo = (page: number, size: number, status: string):Pro
             if (res.code !== 200) {
                 resolve(res.data as userOrderResp)
             } else {
-                reject(new Error(res.message || 'Failed to fetch user order info'));
+                reject(new Error(res.message || 'Failed to fetch getUserOrderInfo info'));
             }
         } catch (error) {
             reject(error);
         }
     })
 }
+
+/**
+ * 获取订单详情
+ * */
+export const orderDetail = (orderId: string):Promise<OrderDetail> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/users/orders/${orderId}`)
+            console.log("orderDetail res", res);
+            if (res.code !== 200) {
+                resolve(res.data as OrderDetail)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch order detail info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取银行收款信息
+ * */
+export const bankReceiptInfo = (orderId: string):Promise<BankAccountInfoResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/users/orders/${orderId}/bank-info`)
+            console.log("bankReceiptInfo res", res);
+            if (res.code !== 200) {
+                resolve(res.data as BankAccountInfoResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch bank receipt info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 
 // TODO 废弃
 export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {

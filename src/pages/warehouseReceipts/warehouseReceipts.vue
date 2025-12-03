@@ -53,7 +53,7 @@
       </view>
     </view>
 
-    <view class="card" v-for="order in orderList" :key="order.orderId">
+    <view class="card" v-for="order in orderList" :key="order.orderId" @click="toDetail(order)">
       <view class="assetInfo">
         <view>
           <view class="assetName">{{order?.underlyingAssetName}}</view>
@@ -150,6 +150,13 @@ watch(() => orderTypeKey.value, () => {
   resetData()
   getUserOrder()
 })
+
+const toDetail = (order:OrderSummary) => {
+  // console.log("order", order.orderNo)
+  uni.navigateTo({
+    url: '/pages/warehouseReceiptDetail/warehouseReceiptDetail?id='+order.orderNo,
+  });
+}
 
 const resetData = () => {
   orderList.value = []

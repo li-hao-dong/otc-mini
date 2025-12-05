@@ -2,7 +2,36 @@
 
 import {ref} from "vue";
 
+
+import {ref} from "vue";
+import type {OrderDetail} from "@/interfaces/orderDetail";
+import {onLoad} from "@dcloudio/uni-app";
+import {bankReceiptInfo, orderDetail} from "@/api";
+import type {BankAccountInfoResp} from "@/interfaces/bankData";
+
 const voucher = ref<string | string[]>()
+const detail = ref<OrderDetail | null>(null);
+const bankReceiptInfoData = ref<BankAccountInfoResp>();
+
+onLoad((option) =>{
+  console.log("option", option)
+  getDetail(option?.id)
+  getBankReceiptInfo(option?.id)
+})
+
+const getDetail = (orderId: string) => {
+  orderDetail(orderId).then(res => {
+    console.log("订单详情", res)
+    detail.value = res
+  })
+}
+
+const getBankReceiptInfo = (orderId: string) => {
+  bankReceiptInfo(orderId).then(res => {
+    console.log("银行收款信息", res)
+    bankReceiptInfoData.value = res;
+  })
+}
 
 const upImage = () => {
   uni.chooseMedia({
@@ -31,14 +60,14 @@ const upImage = () => {
   <view class="container">
     <!-- 订单状态 -->
     <view class="card">
-      <view class="fir_title" style="color: #2ECC71;">支付已确认</view>
+      <view class="fir_title" style="color: #2ECC71;">｛｛detail.orderStatus｝｝</view>
       <view class="row">
         <view class="row_cont" style="color: #999999; font-size: 12px;">
           我们已确认收到您的汇款，产品将按约定条款进行后续处理（建仓 / 持有 / 到期结算等）。
         </view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>本次实付金额：</text>¥ 99,800.00</view>
+        <view class="row_cont"><text>本次实付金额：</text>¥ {{ detail.paymentAmount }}</view>
       </view>
     </view>
 
@@ -46,16 +75,16 @@ const upImage = () => {
     <view class="card">
       <view class="fir_title">产品信息</view>
       <view class="row">
-        <view class="row_cont">中国铝业 601600.SH · 平值100看涨</view>
+        <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>订单号：</text>ORD2025-1101-0001</view>
+        <view class="row_cont"><text>订单号：</text>{{detail.orderNo}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>下单时间：</text>2025-11-01 14:55</view>
+        <view class="row_cont"><text>下单时间：</text>{{ detail.createdTime }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>订单类型：</text>个股场外期权</view>
+        <view class="row_cont"><text>订单类型：</text>个股场外期权(写死？)</view>
       </view>
     </view>
 
@@ -63,19 +92,19 @@ const upImage = () => {
     <view class="card">
       <view class="fir_title">费用明细</view>
       <view class="row">
-        <view class="row_cont"><text>名义本金：</text>¥ 1,000,000.00</view>
-        <view class="row_cont"><text>期权费率：</text>9.38%</view>
+        <view class="row_cont"><text>名义本金：</text>¥ {{ detail.nominalAmount }}</view>
+        <view class="row_cont"><text>期权费率：</text>{{ detail.optionFeeRate }}%</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>期权费：</text>¥ 93,800.00</view>
+        <view class="row_cont"><text>期权费：</text>¥ {{ detail.optionFee }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>手续费：</text>¥ 6,000.00</view>
+        <view class="row_cont"><text>手续费：</text>¥ {{ detail.transactionFee }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
       </view>
       <view class="row">
-        <view class="row_cont"><text>合计应付：</text>¥ 99,800.00</view>
+        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.optionFee + detail.transactionFee }}</view>
       </view>
     </view>
 
@@ -83,22 +112,25 @@ const upImage = () => {
     <view class="card">
       <view class="fir_title">支付信息</view>
       <view class="row">
-        <view class="row_cont"><text>支付状态：</text>已确认</view>
+        <view class="row_cont"><text>支付状态：</text>已确认（写死？）</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>实际支付金额：</text>¥ 99,800.00</view>
+        <view class="row_cont"><text>实际支付金额：</text>¥ {{detail.paymentAmount}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>支付时间：</text>2025-11-01 15:02</view>
+        <view class="row_cont"><text>支付时间：</text>
+          {{ detail.paymentTime }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>汇款银行：</text>中国工商银行</view>
+        <view class="row_cont"><text>汇款银行：</text>
+          {{ bankReceiptInfoData.bankName }}(无)</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>汇款账号：</text>6222 **** **** 0123</view>
+        <view class="row_cont"><text>汇款账号：</text>{{bankReceiptInfoData.bankAccount}}(无)</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>转账备注：</text>12cfe2566119 0000</view>
+        <view class="row_cont"><text>转账备注：</text>
+          {{ bankReceiptInfoData.notes }}(无)</view>
       </view>
     </view>
 
@@ -106,13 +138,14 @@ const upImage = () => {
     <view class="card">
       <view class="fir_title">收款信息</view>
       <view class="row">
-        <view class="row_cont"><text>收款户名：</text>北京某某科技有限公司</view>
+        <view class="row_cont"><text>收款户名：</text>
+          {{ bankReceiptInfoData.accountName }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>收款银行：</text>中国银行 北京中关村支行</view>
+        <view class="row_cont"><text>收款银行：</text>{{ bankReceiptInfoData.bankName }} {{ bankReceiptInfoData.branchName }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>银行账号：</text>1234 5678 9012 3456</view>
+        <view class="row_cont"><text>银行账号：</text>{{ bankReceiptInfoData.bankAccount }}</view>
       </view>
     </view>
 
@@ -227,7 +260,7 @@ const upImage = () => {
   overflow: hidden;
 }
 
-.upload-placeholder img, 
+.upload-placeholder img,
 .upload-placeholder image{
   width: 100%;
   object-fit: contain;

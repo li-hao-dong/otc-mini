@@ -53,7 +53,7 @@ const getBankReceiptInfo = (orderId: string) => {
 
     <!-- 订单进度 -->
     <view class="card">
-      <view class="fir_title">订单进度(待开发)</view>
+      <view class="fir_title">订单进度(待开发？？？)</view>
       <view class="row"><view class="row_cont">✓ 订单已提交</view></view>
       <view class="row"><view class="row_cont">✓ 支付凭证已上传</view></view>
       <view class="row"><view class="row_cont">✓ 平台已确认收款</view></view>

@@ -72,7 +72,7 @@ const getDetail = (orderId: string) => {
         <view class="row_cont"><text>期限：</text>{{ detail.termName }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>交易类型：</text>个股场外期权(写死？)</view>
+        <view class="row_cont"><text>交易类型：</text>{{detail.optionType}}</view>
       </view>
     </view>
 

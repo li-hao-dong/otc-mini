@@ -80,7 +80,7 @@ const upImage = () => {
         <view class="row_cont"><text>下单时间：</text>{{ detail.createdTime }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>订单类型：</text>个股场外期权(写死？)</view>
+        <view class="row_cont"><text>订单类型：</text>{{detail.optionType}}</view>
       </view>
     </view>
 

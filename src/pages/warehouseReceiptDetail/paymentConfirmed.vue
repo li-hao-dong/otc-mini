@@ -1,19 +1,47 @@
 <script setup lang="ts">
+import {ref} from "vue";
+import type {OrderDetail} from "@/interfaces/orderDetail";
+import {onLoad} from "@dcloudio/uni-app";
+import {bankReceiptInfo, orderDetail} from "@/api";
+import type {BankAccountInfoResp} from "@/interfaces/bankData";
+
+const detail = ref<OrderDetail | null>(null);
+const bankReceiptInfoData = ref<BankAccountInfoResp>();
+
+onLoad((option) =>{
+  console.log("option", option)
+  getDetail(option?.id)
+  getBankReceiptInfo(option?.id)
+})
+
+const getDetail = (orderId: string) => {
+  orderDetail(orderId).then(res => {
+    console.log("订单详情", res)
+    detail.value = res
+  })
+}
+
+const getBankReceiptInfo = (orderId: string) => {
+  bankReceiptInfo(orderId).then(res => {
+    console.log("银行收款信息", res)
+    bankReceiptInfoData.value = res;
+  })
+}
 </script>
 
 <template>
   <view class="container">
     <!-- 状态概览 -->
     <view class="card">
-      <view class="fir_title" style="color: #FF9800;">支付已确认 · 待购买</view>
+      <view class="fir_title" style="color: #FF9800;">{{detail.orderStatus}} · 待购买</view>
       <view class="row">
-        <view class="row_cont"><text>本次已支付金额：</text><text style="color:#E8473A">¥ 99,800.00</text></view>
+        <view class="row_cont"><text>本次已支付金额：</text><text style="color:#E8473A">¥ {{ detail.paymentAmount }}</text></view>
       </view>
       <view class="row">
-        <view class="row_cont">中国铝业 601600.SH · 平值100看涨</view>
+        <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>
       </view>
       <view class="row">
-        <view class="row_cont" style="color:#999999; font-size:12px;">订单号：ORD2025-1101-0001</view>
+        <view class="row_cont" style="color:#999999; font-size:12px;">订单号：{{detail.orderNo}}</view>
       </view>
       <view class="row">
         <view class="row_cont" style="color:#999999; font-size:12px;">
@@ -25,7 +53,7 @@
 
     <!-- 订单进度 -->
     <view class="card">
-      <view class="fir_title">订单进度</view>
+      <view class="fir_title">订单进度(待开发)</view>
       <view class="row"><view class="row_cont">✓ 订单已提交</view></view>
       <view class="row"><view class="row_cont">✓ 支付凭证已上传</view></view>
       <view class="row"><view class="row_cont">✓ 平台已确认收款</view></view>
@@ -41,22 +69,24 @@
     <!-- 产品要素 -->
     <view class="card">
       <view class="fir_title">产品信息</view>
-      <view class="row"><view class="row_cont"><text>产品名称：</text>中国铝业 601600.SH · 平值100看涨</view></view>
-      <view class="row"><view class="row_cont"><text>合约结构：</text>平值100看涨（ATM_100）</view></view>
-      <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（Call）</view></view>
-      <view class="row"><view class="row_cont"><text>期限：</text>1M</view></view>
+      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view></view>
+      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}（{{ detail.optionCode }}）</view></view>
+      <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{detail.optionType}}）</view></view>
+      <view class="row"><view class="row_cont"><text>期限：</text>
+        {{ detail.termName }}</view></view>
     </view>
 
     <!-- 支付信息（已确认） -->
     <view class="card">
       <view class="fir_title">支付信息（已确认）</view>
-      <view class="row"><view class="row_cont"><text>支付状态：</text>已确认收款</view></view>
-      <view class="row"><view class="row_cont"><text>实际支付金额：</text>¥ 99,800.00</view></view>
+      <view class="row"><view class="row_cont"><text>支付状态：</text>已确认收款(写死？)</view></view>
+      <view class="row"><view class="row_cont"><text>实际支付金额：</text>¥ {{paymentAmount}}</view></view>
       <view class="row"><view class="row_cont"><text>支付方式：</text>银行转账</view></view>
-      <view class="row"><view class="row_cont"><text>付款银行：</text>中国工商银行（示例）</view></view>
-      <view class="row"><view class="row_cont"><text>付款账号：</text>尾号 0123</view></view>
-      <view class="row"><view class="row_cont"><text>支付时间：</text>2025-11-01 15:02</view></view>
-      <view class="row"><view class="row_cont"><text>转账备注：</text>12cfe2566119 0000</view></view>
+      <view class="row"><view class="row_cont"><text>付款银行：</text>
+        {{ detail.bankName }}</view></view>
+      <view class="row"><view class="row_cont"><text>付款账号：</text>尾号 {{ detail.bankAccount }}</view></view>
+      <view class="row"><view class="row_cont"><text>支付时间：</text>{{detail.paymentTime}}</view></view>
+      <view class="row"><view class="row_cont"><text>转账备注：</text>12cfe2566119 0000（没看到？？）</view></view>
       <view class="row">
         <view class="row_cont" style="color:#999999; font-size:12px;">如支付信息与您实际转账不符，请尽快联系客服核对。</view></view>
     </view>

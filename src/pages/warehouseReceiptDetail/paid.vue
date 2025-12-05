@@ -1,8 +1,4 @@
 <script setup lang="ts">
-
-import {ref} from "vue";
-
-
 import {ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";

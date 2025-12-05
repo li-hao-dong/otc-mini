@@ -181,7 +181,7 @@ const getUserOrder = () => {
       orderList.value = res.orders || [];
     }
     pagination.value = res.pagination
-    ordersSummary.value = res.ordersSummary
+    ordersSummary.value = res.summary
   })
 }
 

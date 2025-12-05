@@ -38,7 +38,7 @@ const getDetail = (orderId: string) => {
     <view class="card">
       <view class="fir_title">金额摘要（预估）</view>
       <view class="row">
-        <view class="row_cont"><text>预估应付金额：</text>¥ 99,800.00</view>
+        <view class="row_cont"><text>预估应付金额：</text>¥ {{detail.estimatedPayout}}</view>
       </view>
       <view class="row">
         <view class="row_cont" style="color: #999999; font-size: 12px;">(以渠道最终确认结果为准)</view>

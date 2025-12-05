@@ -121,7 +121,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { getUserOrderInfo } from "@/api"
-import { onLoad } from "@dcloudio/uni-app"
+import {onLoad, onShow} from "@dcloudio/uni-app"
 import type { OrdersSummary, OrderSummary, Pagination } from "@/interfaces/orders"
 import { useStore } from "@/stores"
 import { failToast } from "@/utils/toast/toast"
@@ -141,7 +141,7 @@ const ordersSummary = ref<OrdersSummary>()
 const pagination = ref<Pagination>()
 const moreDataStatus = ref<boolean>(true);
 
-onLoad(() => {
+onShow(() => {
   getUserOrder()
 })
 

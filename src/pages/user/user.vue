@@ -68,7 +68,7 @@ const tel = ref<string|undefined>("暂无")
 const ticket = ref<string|undefined>("")
 const userDataStatus = ref<boolean>(false)
 
-onLoad(() =>{
+onShow(() =>{
   initUserInfo()
 })
 

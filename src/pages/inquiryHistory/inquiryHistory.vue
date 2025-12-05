@@ -100,7 +100,7 @@ const structureData = ref<any>([]);
 const pageNum = ref<number>(1);
 const pageSize = ref<number>(20);
 
-onLoad(() => {
+onShow(() => {
   resetDate();
   inquiryHistoryFun();
 })

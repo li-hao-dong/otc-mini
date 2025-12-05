@@ -105,6 +105,7 @@
         <text class="actionLink">设置到期提醒</text>
         <view class="outlineBtn" role="button" tabindex="0"><text class="outlineText">行权</text></view>
       </view> -->
+      <view>{{order?.orderStatus}}</view>
     </view>
 
     <view v-if="store.user.token">
@@ -153,9 +154,41 @@ watch(() => orderTypeKey.value, () => {
 
 const toDetail = (order:OrderSummary) => {
   // console.log("order", order.orderNo)
+  let path;
+  switch (order.orderStatus) {
+    case "待渠道确认":
+      path = "/pages/warehouseReceiptDetail/pendingChannel"
+      break;
+    case "已报价":
+    case "待支付":
+      path = "/pages/warehouseReceiptDetail/quotedWithPaddingPayment"
+      break;
+    case "已支付":
+      path = "/pages/warehouseReceiptDetail/paid"
+      break;
+    case "支付已确认":
+      path = "/pages/warehouseReceiptDetail/paymentConfirmed"
+      break;
+    case "已购买":
+      path = "/pages/warehouseReceiptDetail/purchased"
+      break;
+    case "已到期":
+      path = "/pages/warehouseReceiptDetail/matured"
+      break;
+    case "已行权":
+      path = "/pages/warehouseReceiptDetail/exercised"
+      break;
+    case "已结算":
+      path = "/pages/warehouseReceiptDetail/settled"
+      break;
+    case "已取消":
+      path = "/pages/warehouseReceiptDetail/cancelled"
+      break;
+  }
   uni.navigateTo({
-    url: '/pages/warehouseReceiptDetail/warehouseReceiptDetail?id='+order.orderNo,
+    url: `${path}?id=${order.orderNo}`
   });
+
 }
 
 const resetData = () => {

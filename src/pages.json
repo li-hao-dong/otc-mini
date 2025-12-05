@@ -8,54 +8,6 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
-			"path": "pages/warehouseReceiptDetail/purchased",
-			"style": {
-				"navigationBarTitleText": "订单详情-已购买5",
-				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/warehouseReceiptDetail/paymentConfirmed",
-			"style": {
-				"navigationBarTitleText": "订单详情-支付已确认4",
-				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": false
-			}
-		},
-
-		{
-			"path": "pages/warehouseReceiptDetail/pendingChannel",
-			"style": {
-				"navigationBarTitleText": "订单详情-待渠道确认1",
-				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/warehouseReceiptDetail/quotedWithPaddingPayment",
-			"style": {
-				"navigationBarTitleText": "订单支付-已报价-待支付2",
-				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": false
-			}
-		},
-		{
-			"path": "pages/warehouseReceiptDetail/paid",
-			"style": {
-				"navigationBarTitleText": "订单详情-已支付3",
-				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": false
-			}
-		},
-
-
-		{
 			"path": "pages/inquiryHistory/inquiryHistory",
 			"style": {
 				"navigationBarTitleText": "询价",
@@ -123,6 +75,51 @@
 			"path": "pages/warehouseReceiptDetail/warehouseReceiptDetail",
 			"style": {
 				"navigationBarTitleText": "仓单详情",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/pendingChannel",
+			"style": {
+				"navigationBarTitleText": "订单详情-待渠道确认1",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/quotedWithPaddingPayment",
+			"style": {
+				"navigationBarTitleText": "订单支付-已报价-待支付2",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/paid",
+			"style": {
+				"navigationBarTitleText": "订单详情-已支付3",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/purchased",
+			"style": {
+				"navigationBarTitleText": "订单详情-已购买5",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/paymentConfirmed",
+			"style": {
+				"navigationBarTitleText": "订单详情-支付已确认4",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false

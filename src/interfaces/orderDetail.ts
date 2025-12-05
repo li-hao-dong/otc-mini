@@ -3,123 +3,111 @@
  */
 export interface OrderDetail {
     /**
-     * 创建时间
+     * 银行账号（脱敏）
+     */
+    bankAccount?: string;
+    /**
+     * 银行名称
+     */
+    bankName?: string;
+    /**
+     * 渠道提交时间
+     */
+    channelSubmitTime?: Date;
+    /**
+     * 订单创建时间
      */
     createdTime?: Date;
     /**
-     * 剩余天数
-     */
-    daysToExpiry?: number | null;
-    /**
-     * 预计盈亏
-     */
-    estimatedProfit?: number | null;
-    /**
-     * 到期日期
-     */
-    maturityDate?: Date | null;
-    /**
-     * 名义本金
-     */
-    nominalAmount?: number;
-    /**
-     * 期权费
-     */
-    optionFee?: number | null;
-    /**
-     * 期权类型
-     */
-    optionType: string;
-    /**
-     * 订单编号
-     */
-    orderNo: string;
-    /**
-     * 订单状态
-     */
-    orderStatus: string;
-    /**
-     * 盈亏比例
-     */
-    profitRate?: number | null;
-    /**
-     * 行权价类型
-     */
-    strikeType: string;
-    /**
-     * 期限名称
-     */
-    termName: string;
-    /**
-     * 标的代码
-     */
-    underlyingAssetCode: string;
-    /**
-     * 标的名称
-     */
-    underlyingAssetName: string;
-    /**
-     * 汇款账号
-     */
-    bankAccount?: null | string;
-    /**
-     * 汇款银行
-     */
-    bankName?: null | string;
-    /**
-     * 报送通道商时间
-     */
-    channelSubmitTime?: Date | null;
-    /**
      * 客户姓名
      */
-    customerName?: null | string;
+    customerName?: string;
     /**
-     * 客户手机号
+     * 客户电话
      */
-    customerPhone?: null | string;
+    customerPhone?: string;
     /**
-     * 预计回款
+     * 剩余到期天数
      */
-    estimatedPayout?: number | null;
+    daysToExpiry?: number;
+    /**
+     * 预计支付金额
+     */
+    estimatedPayout?: number;
+    /**
+     * 预计收益
+     */
+    estimatedProfit?: number;
     /**
      * 行权时间
      */
     exerciseTime?: Date | null;
     /**
-     * 是否价内
+     * 是否为价内期权
      */
-    isInTheMoney?: boolean | null;
+    isInTheMoney?: boolean;
+    /**
+     * 到期日
+     */
+    maturityDate?: Date;
+    /**
+     * 名义本金
+     */
+    nominalAmount?: number;
     /**
      * 期权代码
      */
-    optionCode?: null | string;
+    optionCode?: string;
     /**
-     * 实际支付金额
+     * 期权费
      */
-    paymentAmount?: number | null;
+    optionFee?: number;
+    /**
+     * 期权费率
+     */
+    optionFeeRate?: number;
+    /**
+     * 期权类型
+     */
+    optionType?: OptionType;
+    /**
+     * 订单唯一标识
+     */
+    orderNo?: string;
+    /**
+     * 订单状态
+     */
+    orderStatus?: string;
+    /**
+     * 支付金额
+     */
+    paymentAmount?: number;
     /**
      * 支付时间
      */
-    paymentTime?: Date | null;
+    paymentTime?: Date;
     /**
      * 支付凭证URL
      */
     paymentVoucherUrl?: null | string;
     /**
-     * 开仓时涨跌幅
+     * 价格变化百分比
      */
     priceChange?: string;
     /**
-     * 上游购买时间
+     * 收益率
      */
-    purchaseTime?: Date | null;
+    profitRate?: number;
     /**
-     * 报价价格
+     * 购买时间
+     */
+    purchaseTime?: Date;
+    /**
+     * 报价
      */
     quotedPrice?: number;
     /**
-     * 相对行权价
+     * 相对行权价百分比
      */
     relativeStrike?: number;
     /**
@@ -127,50 +115,82 @@ export interface OrderDetail {
      */
     settlementAmount?: number | null;
     /**
-     * 结算价
+     * 结算价格
      */
     settlementPrice?: number | null;
     /**
-     * 数据源名称
+     * 报价方名称
      */
     sourceName?: string;
     /**
+     * 报价方简称
+     */
+    sourceShortName?: string;
+    /**
      * 起始日期
      */
-    startDate?: Date | null;
+    startDate?: Date;
     /**
-     * 状态时间线
+     * 订单状态时间线
      */
-    statusTimeline?: StatusTimelineItem[] | null;
+    statusTimeline?: StatusTimelineItem[];
     /**
-     * 实际行权价
+     * 行权价格
      */
     strikePrice?: number;
+    /**
+     * 行权价类型
+     */
+    strikeType?: string;
     /**
      * 结构显示名称
      */
     structureDisplayName?: string;
     /**
-     * 开仓时标的价格
+     * 期限名称
+     */
+    termName?: string;
+    /**
+     * 交易手续费
+     */
+    transactionFee?: number;
+    /**
+     * 标的资产代码
+     */
+    underlyingAssetCode?: string;
+    /**
+     * 标的资产名称
+     */
+    underlyingAssetName?: string;
+    /**
+     * 标的资产当前价格
      */
     underlyingPrice?: number;
     /**
-     * 上游期权费
+     * 上游费用
      */
-    upstreamFee?: number | null;
+    upstreamFee?: number;
     /**
-     * 上游报价价格
+     * 上游报价
      */
-    upstreamQuote?: number | null;
+    upstreamQuote?: number;
     /**
      * 上游报价时间
      */
-    upstreamQuoteTime?: Date | null;
+    upstreamQuoteTime?: Date;
     /**
      * 波动率百分比
      */
     volatilityPercent?: number;
     [property: string]: any;
+}
+
+/**
+ * 期权类型
+ */
+export enum OptionType {
+    Call = "Call",
+    Put = "Put",
 }
 
 /**
@@ -186,12 +206,20 @@ export interface StatusTimelineItem {
      */
     operator?: string;
     /**
-     * 状态
+     * 状态代码
      */
     status?: string;
     /**
-     * 时间戳
+     * 状态变更时间
      */
     timestamp?: Date;
     [property: string]: any;
+}
+
+/**
+ * 请求状态
+ */
+export enum Status {
+    Error = "error",
+    Success = "success",
 }

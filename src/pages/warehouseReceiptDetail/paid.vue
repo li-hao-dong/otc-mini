@@ -56,7 +56,7 @@ const upImage = () => {
   <view class="container">
     <!-- 订单状态 -->
     <view class="card">
-      <view class="fir_title" style="color: #2ECC71;">｛｛detail.orderStatus｝｝</view>
+      <view class="fir_title" style="color: #2ECC71;">{{detail.orderStatus}}</view>
       <view class="row">
         <view class="row_cont" style="color: #999999; font-size: 12px;">
           我们已确认收到您的汇款，产品将按约定条款进行后续处理（建仓 / 持有 / 到期结算等）。

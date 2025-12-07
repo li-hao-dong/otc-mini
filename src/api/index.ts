@@ -12,6 +12,7 @@ import type { orderPayloadReq, orderPayloadResp, PriceType } from "@/interfaces/
 import type { userOrderResp } from "@/interfaces/orders";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
+import type {UploadImageReq, UploadImageResp} from "@/interfaces/uploadImage";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -172,6 +173,33 @@ export const calculatorData = (payload: calculatorReq):EquityOptionCalculatorRes
 }
 
 /**
+ * 上传支付凭证
+ * */
+export const uploadPaymentProof = (orderId: string, imageUrl: string, bankName: string, bankAccount: string):Promise<UploadImageResp> => {
+    const payload:UploadImageReq = {
+        voucherImage: imageUrl,
+        bankName,
+        bankAccount
+    }
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await  http.post(`${BASE_URL}/users/orders/${orderId}/payment-proof`, payload, 'application/x-www-form-urlencoded')
+            console.log("calculator res", res);
+            if (res.code !== 200) {
+                resolve(res.data as UploadImageResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch calculator info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+
+    })
+}
+
+
+/**
  * 获取用户订单信息
  * */
 export const getUserOrderInfo = (page: number, size: number, status: string):Promise<userOrderResp> => {
@@ -227,7 +255,6 @@ export const bankReceiptInfo = (orderId: string):Promise<BankAccountInfoResp> =>
         }
     })
 }
-
 
 // TODO 废弃
 export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {

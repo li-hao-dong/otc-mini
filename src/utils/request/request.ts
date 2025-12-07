@@ -62,13 +62,14 @@ const http = {
      * @param {string} url
      * @param {object} data
      * */
-    post(url: string, data: any) {
+    post(url: string, data: any, contentType: string) {
         return new Promise((resolve, reject) => {
             uni.request({
                 method: "POST",
                 timeout,
                 url,
                 header: {
+                    ContentType: contentType ? contentType : "application/json",
                     Authorization: `${useStore().user.token_type} ${useStore().user.token}`,
                 },
                 data,

@@ -154,6 +154,7 @@ watch(() => orderTypeKey.value, () => {
 
 const toDetail = (order:OrderSummary) => {
   // console.log("order", order.orderNo)
+  order.orderStatus = "已支付"
   let path;
   switch (order.orderStatus) {
     case "待渠道确认":

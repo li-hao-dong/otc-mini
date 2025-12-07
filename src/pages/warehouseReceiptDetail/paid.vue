@@ -89,7 +89,7 @@ const upImage = () => {
       <view class="fir_title">费用明细</view>
       <view class="row">
         <view class="row_cont"><text>名义本金：</text>¥ {{ detail.nominalAmount }}</view>
-        <view class="row_cont"><text>期权费率：</text>{{ detail.optionFeeRate }}%</view>
+        <view class="row_cont"><text>期权费率：</text>{{ detail.optionFeeRate * 100}}%</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>期权费：</text>¥ {{ detail.optionFee }}</view>

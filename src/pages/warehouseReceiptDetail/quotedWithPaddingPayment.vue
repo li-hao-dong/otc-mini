@@ -131,55 +131,55 @@ const uploadImage = () => {
   <view class="container">
 <!--    OrderStatus::Quoted => "已报价",-->
 <!--    OrderStatus::PendingPayment => "待支付",-->
-<!--    <view class="card">-->
-<!--      <view class="fir_title">金额摘要</view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ detail.paymentAmount }}</view>-->
-<!--      </view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>-->
-<!--      </view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont"><text>订单号：</text>{{detail.orderNo}}</view>-->
-<!--      </view>-->
-<!--    </view>-->
+    <view class="card">
+      <view class="fir_title">金额摘要</view>
+      <view class="row">
+        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ detail.paymentAmount }}</view>
+      </view>
+      <view class="row">
+        <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>
+      </view>
+      <view class="row">
+        <view class="row_cont"><text>订单号：</text>{{detail.orderNo}}</view>
+      </view>
+    </view>
 
-<!--    <view class="card">-->
-<!--      <view class="fir_title">费用明细</view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont"><text>名义本金：</text>¥ {{ detail.nominalAmount }}</view>-->
-<!--        <view class="row_cont"><text>期权费率：</text>-->
-<!--          {{ detail.optionFeeRate }}%</view>-->
-<!--      </view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont"><text>期权费：</text>¥ {{ detail.optionFee }}</view>-->
-<!--      </view>-->
-<!--      <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">-->
-<!--        <view class="row_cont"><text>手续费：</text>¥ {{ detail.transactionFee }}</view>-->
-<!--      </view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.optionFee + detail.transactionFee }}</view>-->
-<!--      </view>-->
-<!--    </view>-->
+    <view class="card">
+      <view class="fir_title">费用明细</view>
+      <view class="row">
+        <view class="row_cont"><text>名义本金：</text>¥ {{ detail.nominalAmount }}</view>
+        <view class="row_cont"><text>期权费率：</text>
+          {{ detail.optionFeeRate * 100 }}%</view>
+      </view>
+      <view class="row">
+        <view class="row_cont"><text>期权费：</text>¥ {{ detail.optionFee }}</view>
+      </view>
+      <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
+        <view class="row_cont"><text>手续费：</text>¥ {{ detail.transactionFee }}</view>
+      </view>
+      <view class="row">
+        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.optionFee + detail.transactionFee }}</view>
+      </view>
+    </view>
 
-<!--    <view class="card">-->
-<!--      <view class="fir_title">收款信息</view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont"><text>收款户名：</text>-->
-<!--          {{ bankReceiptInfoData.accountName }}</view>-->
-<!--      </view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont"><text>收款银行：</text>-->
-<!--          {{ bankReceiptInfoData.bankName }} {{ bankReceiptInfoData.branchName }}</view>-->
-<!--      </view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont"><text>银行账号：</text>{{bankReceiptInfoData.bankAccount}}</view>-->
-<!--      </view>-->
-<!--      <view class="row">-->
-<!--        <view class="row_cont"><text>转账备注：</text>-->
-<!--          {{ bankReceiptInfoData.notes }}</view>-->
-<!--      </view>-->
-<!--    </view>-->
+    <view class="card">
+      <view class="fir_title">收款信息</view>
+      <view class="row">
+        <view class="row_cont"><text>收款户名：</text>
+          {{ bankReceiptInfoData.accountName }}</view>
+      </view>
+      <view class="row">
+        <view class="row_cont"><text>收款银行：</text>
+          {{ bankReceiptInfoData.bankName }} {{ bankReceiptInfoData.branchName }}</view>
+      </view>
+      <view class="row">
+        <view class="row_cont"><text>银行账号：</text>{{bankReceiptInfoData.bankAccount}}</view>
+      </view>
+      <view class="row">
+        <view class="row_cont"><text>转账备注：</text>
+          {{ bankReceiptInfoData.notes }}</view>
+      </view>
+    </view>
 
     <view class="card">
       <view class="fir_title">汇款信息</view>

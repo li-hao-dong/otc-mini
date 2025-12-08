@@ -9,7 +9,7 @@
       <view class="segItem" style="width: 100%;" v-for="(item, index) in orderType" :key="index" @click="orderTypeKey = index">
         <text :class="`${orderTypeKey === index ? 'segActive' : 'segText'}`" >
           {{item}}
-          <text>({{ index + 1 }})</text>
+<!--          <text>({{ index + 1 }})</text>-->
         </text>
 
         <view v-show="orderTypeKey === index" class="segUnderline"></view>
@@ -154,7 +154,7 @@ watch(() => orderTypeKey.value, () => {
 
 const toDetail = (order:OrderSummary) => {
   // console.log("order", order.orderNo)
-  // order.orderStatus = "已支付"
+  // order.orderStatus = "待支付"
   let path;
   switch (order.orderStatus) {
     case "待渠道确认":

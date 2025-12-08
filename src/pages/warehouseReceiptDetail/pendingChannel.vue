@@ -103,9 +103,9 @@ const getDetail = (orderId: string) => {
     <!-- 渠道处理进度 -->
     <view class="card">
       <view class="fir_title">渠道处理进度</view>
-      <view class="row">
-        <view class="row_cont"><text>下单成功：</text>{{ detail.channelSubmitTime }}</view>
-      </view>
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>下单成功：</text>{{ detail.channelSubmitTime ? detail.channelSubmitTime : '' }}</view>-->
+<!--      </view>-->
       <view class="row">
         <view class="row_cont"><text>当前状态：</text>{{ detail.orderStatus }}</view>
       </view>

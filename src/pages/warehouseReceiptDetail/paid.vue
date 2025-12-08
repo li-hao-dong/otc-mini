@@ -2,10 +2,11 @@
 import {ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
-import {bankReceiptInfo, orderDetail} from "@/api";
+import {bankReceiptInfo, BASE_URL, getImage, orderDetail, paymentProofInfo} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
+import {useStore} from "@/stores";
 
-const voucher = ref<string | string[]>()
+const voucher = ref<string>()
 const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 
@@ -13,12 +14,25 @@ onLoad((option) =>{
   console.log("option", option)
   getDetail(option?.id)
   getBankReceiptInfo(option?.id)
+  // getPaymentProofInfo(option?.id)
 })
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
     console.log("订单详情", res)
     detail.value = res
+    uni.downloadFile({
+      url: `${BASE_URL}${res.paymentVoucherUrl}`,
+      header:{
+        'Authorization': `Bearer ${useStore().user.token}`
+      },
+      success: res => {
+        console.log("下载支付凭证结果", res)
+        if(res.statusCode === 200){
+          voucher.value = res.tempFilePath;
+        }
+      }
+    })
   })
 }
 
@@ -29,26 +43,17 @@ const getBankReceiptInfo = (orderId: string) => {
   })
 }
 
-const upImage = () => {
-  uni.chooseMedia({
-    count: 1, // 可选数量
-    mediaType: ['image'], // 仅选择图片
-    success(res) {
-      console.log("res", res)
-      const tempFiles = res.tempFiles; // 获取临时文件路径
-      voucher.value = tempFiles[0].tempFilePath;
-      // 后续上传逻辑
-      // uni.uploadFile({
-      //   url: 'YOUR_SERVER_URL',
-      //   filePath: tempFiles[0].tempFilePath,
-      //   name: 'file',
-      //   success(uploadRes) {
-      //     console.log(uploadRes.data);
-      //   }
-      // });
-    }
-  });
+const getPaymentProofInfo = (orderId:string) => {
+  paymentProofInfo(orderId).then(res => {
+    console.log("支付凭证信息", res)
+    // voucher.value = res.paymentVoucherUrl;
+    getImage(res.voucherUrl as string).then(res => {
+      console.log("支付凭证图片地址", res)
+      voucher.value = res;
+    })
+  })
 }
+
 </script>
 
 <template>
@@ -119,14 +124,14 @@ const upImage = () => {
       </view>
       <view class="row">
         <view class="row_cont"><text>汇款银行：</text>
-          {{ bankReceiptInfoData.bankName }}(无)</view>
+          {{ detail.bankName ? detail.bankName : '(无)' }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>汇款账号：</text>{{bankReceiptInfoData.bankAccount}}(无)</view>
+        <view class="row_cont"><text>汇款账号：</text>{{detail.bankAccount ? detail.bankAccount:'(无)'}}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>转账备注：</text>
-          {{ bankReceiptInfoData.notes }}(无)</view>
+          {{ detail.notes ? detail.notes: '(无)' }}</view>
       </view>
     </view>
 

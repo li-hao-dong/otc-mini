@@ -13,11 +13,12 @@ import type { userOrderResp } from "@/interfaces/orders";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import type {UploadImageReq, UploadImageResp} from "@/interfaces/uploadImage";
+import type {PaymentProofInfoResp} from "@/interfaces/paymentProofInfo";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
 // const BASE_URL: string = "http://backtest.sunsmicro.com:22901/api/v1"
-const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
+export const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
 
 /**
  * 发起询价
@@ -35,7 +36,6 @@ export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): Promise<InquiryR
         } catch (error) {
             reject(error);
         }
-
     })
 }
 
@@ -175,9 +175,9 @@ export const calculatorData = (payload: calculatorReq):EquityOptionCalculatorRes
 /**
  * 上传支付凭证
  * */
-export const uploadPaymentProof = (orderId: string, imageUrl: string, bankName: string, bankAccount: string):Promise<UploadImageResp> => {
+export const uploadPaymentProof = (orderId: string, imgFile: File, bankName: string, bankAccount: string):Promise<UploadImageResp> => {
     const payload:UploadImageReq = {
-        voucherImage: imageUrl,
+        voucherImage: imgFile,
         bankName,
         bankAccount
     }
@@ -249,6 +249,45 @@ export const bankReceiptInfo = (orderId: string):Promise<BankAccountInfoResp> =>
                 resolve(res.data as BankAccountInfoResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch bank receipt info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取支付凭证信息
+ */
+export const paymentProofInfo = (orderId: string):Promise<PaymentProofInfoResp> => {
+
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/users/orders/${orderId}/payment-proof`)
+            console.log("paymentProofInfo res", res);
+            if (res.code !== 200) {
+                resolve(res.data as PaymentProofInfoResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch payment Proof Info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取图片
+ * */
+export const getImage = (paymentVoucherUrl: string):Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: any = <response>await http.get(`${BASE_URL}${paymentVoucherUrl}?timestamp=${new Date().getTime()}`)
+            console.log("getImage res", res);
+            if (res.code !== 200) {
+                resolve(res as any)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch image'));
             }
         } catch (error) {
             reject(error);

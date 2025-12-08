@@ -3,11 +3,13 @@
 import {reactive, ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
-import {bankReceiptInfo, orderDetail, uploadPaymentProof} from "@/api";
+import {bankReceiptInfo, BASE_URL, orderDetail, uploadPaymentProof} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
+import {useStore} from "@/stores";
 
 const orderId = ref<string>("")
-const voucher = ref<string>()
+const voucher = ref<File>()
+const voucherUrl = ref<string>()
 const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const remitData = reactive<{accountName: string | null, bankName: string | null, bankAccount: string | null}>({
@@ -38,7 +40,6 @@ const getBankReceiptInfo = (orderId: string) => {
 }
 // 上传支付凭证
 const uploadPaymentVoucher = () => {
-  console.log("11111")
   uni.chooseImage({
     count: 1,
     sizeType: ['compressed'],
@@ -63,7 +64,8 @@ const uploadPaymentVoucher = () => {
       }
 
       if (tempFilePaths && tempFilePaths.length > 0) {
-        voucher.value = tempFilePaths[0];
+        voucherUrl.value = tempFilePaths[0];
+        voucher.value = res.tempFiles[0] as File;
       }
 
     },
@@ -108,22 +110,55 @@ const uploadImage = () => {
     return;
   }
 
-  uploadPaymentProof(orderId.value, voucher.value, remitData.bankName, remitData.bankAccount).then(res => {
-    console.log("上传支付凭证结果", res)
-    uni.showToast({
-      title: '支付凭证上传成功',
-      icon: 'success'
-    });
-    setTimeout(()=>{
-      uni.redirectTo({url: `/pages/warehouseReceiptDetail/paid?id=${orderId.value}`});
-    }, 1500)
-  }).catch(err => {
-    console.error('上传支付凭证失败:', err);
-    uni.showToast({
-      title: '上传支付凭证失败',
-      icon: 'none'
-    });
+  uni.uploadFile({
+    url: `${BASE_URL}/users/orders/${orderId.value}/payment-proof`,
+    header: {
+      'Authorization': `Bearer ${useStore().user.token}`, // 如果需要身份验证，添加此行
+      'Content-Type': 'multipart/form-data',
+    },
+    filePath: voucherUrl.value,
+    name: 'file',
+    formData: {
+      voucherImage: voucher.value,
+      bankName: remitData.bankName,
+      bankAccount: remitData.bankAccount,
+    },
+    success: (res) => {
+      console.log('uploadImage success, res is:', res)
+      if(res.statusCode === 200){
+        // voucherUrl.value = `${BASE_URL}${JSON.parse(res.data).data.paymentVoucherUrl}`;
+        uni.showToast({
+          title: '上传成功',
+          icon: 'success',
+          duration: 1000
+        })
+        setTimeout(() => {
+          uni.redirectTo({url: `/pages/warehouseReceiptDetail/paid?id=${orderId.value}`})
+        }, 2000)
+      }
+      uni.hideLoading();
+
+
+    },
+    fail: (err) => {
+      console.log('uploadImage fail', err);
+      uni.hideLoading();
+      uni.showModal({
+        content: err.errMsg,
+        showCancel: false
+      });
+    },
   });
+}
+
+const convertToFile = (tempFilePath:any, fileInfo:any) => {
+  return {
+    name: fileInfo.fileName || 'image.png',
+    path: tempFilePath, // 核心：上传时用这个路径
+    size: fileInfo.size,
+    type: fileInfo.type || 'image/png',
+    tempFilePath: tempFilePath
+  };
 }
 </script>
 
@@ -134,7 +169,7 @@ const uploadImage = () => {
     <view class="card">
       <view class="fir_title">金额摘要</view>
       <view class="row">
-        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ detail.paymentAmount }}</view>
+        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ detail?.paymentAmount }}</view>
       </view>
       <view class="row">
         <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>
@@ -213,8 +248,8 @@ const uploadImage = () => {
 <!--        <view class="card-title">支付凭证图片 + 上传支付凭证</view>-->
 
         <view class="upload-area">
-          <view v-if="voucher"  class="upload-placeholder">
-            <img :src="voucher" alt="" srcset="" />
+          <view v-if="voucherUrl"  class="upload-placeholder">
+            <img :src="voucherUrl" alt="" srcset="" />
           </view>
           <view v-else class="upload-placeholder" @click="uploadPaymentVoucher">
             <view class="camera-icon">📷</view>

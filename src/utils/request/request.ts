@@ -69,8 +69,8 @@ const http = {
                 timeout,
                 url,
                 header: {
-                    ContentType: contentType ? contentType : "application/json",
-                    Authorization: `${useStore().user.token_type} ${useStore().user.token}`,
+                    'content-type': contentType ? contentType : "application/json",
+                    'Authorization': `${useStore().user.token_type} ${useStore().user.token}`,
                 },
                 data,
                 success: (res:response) => {

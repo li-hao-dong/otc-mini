@@ -3,6 +3,7 @@ import {ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {orderDetail} from "@/api";
+import {formatLocalTime, truncToTwo} from "../../utils";
 
 const detail = ref<OrderDetail | null>(null);
 
@@ -25,6 +26,7 @@ const getDetail = (orderId: string) => {
   <view class="container">
     <!-- 订单状态 -->
     <view class="card">
+      <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color: #FF9800;">{{ detail.orderStatus }}</view>
       <view class="row">
         <view class="row_cont" style="color: #999999; font-size: 12px;">
@@ -36,13 +38,13 @@ const getDetail = (orderId: string) => {
 
     <!-- 金额摘要 -->
     <view class="card">
-      <view class="fir_title">金额摘要（预估）</view>
-      <view class="row">
-        <view class="row_cont"><text>预估应付金额：</text>¥ {{detail.estimatedPayout}}</view>
-      </view>
-      <view class="row">
-        <view class="row_cont" style="color: #999999; font-size: 12px;">(以渠道最终确认结果为准)</view>
-      </view>
+<!--      <view class="fir_title">金额摘要（预估）</view>-->
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>预估应付金额：</text>¥ {{truncToTwo(detail.estimatedPayout)}}</view>-->
+<!--      </view>-->
+<!--      <view class="row">-->
+<!--        <view class="row_cont" style="color: #999999; font-size: 12px;">(以渠道最终确认结果为准)</view>-->
+<!--      </view>-->
       <view class="row">
         <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>
       </view>
@@ -51,7 +53,7 @@ const getDetail = (orderId: string) => {
       </view>
       <view class="row">
         <view class="row_cont"><text>下单时间：</text>
-          {{ detail.createdTime }}</view>
+          {{ formatLocalTime(new Date(detail.createdTime)) }}</view>
       </view>
     </view>
 
@@ -80,20 +82,20 @@ const getDetail = (orderId: string) => {
     <view class="card">
       <view class="fir_title">费用概览</view>
       <view class="row">
-        <view class="row_cont"><text>名义本金：</text>¥ {{detail.nominalAmount}}</view>
+        <view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(detail.nominalAmount)}}</view>
         <view class="row_cont"><text>期权费率：</text>
           {{ detail.optionFeeRate * 100 }}%</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>期权费（预估）：</text>¥ {{detail.optionFee}}</view>
+        <view class="row_cont"><text>期权费（预估）：</text>¥ {{truncToTwo(detail.optionFee)}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>手续费（预估）：</text>¥ {{ detail.transactionFee }}</view>
+        <view class="row_cont"><text>手续费（预估）：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
       </view>
       <view class="row">
-        <view class="row_cont"><text>预估合计：</text>¥ {{ detail.optionFee + detail.transactionFee }}</view>
+        <view class="row_cont"><text>预估合计：</text>¥ {{ truncToTwo(detail.optionFee + detail.transactionFee) }}</view>
       </view>
       <view class="row">
         <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>

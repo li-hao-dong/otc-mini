@@ -1,20 +1,29 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {reactive, ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, BASE_URL, getImage, orderDetail, paymentProofInfo} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {useStore} from "@/stores";
+import {formatLocalTime, truncToTwo} from "@/utils";
 
 const voucher = ref<string>()
 const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
+const remitData = reactive({
+  bankAccount: null,
+  bankName: null,
+  paymentAmount: 0,
+  paymentTime: null,
+  uploadTime: null,
+  voucherUrl: null
+})
 
 onLoad((option) =>{
   console.log("option", option)
   getDetail(option?.id)
   getBankReceiptInfo(option?.id)
-  // getPaymentProofInfo(option?.id)
+  getPaymentProofInfo(option?.id)
 })
 
 const getDetail = (orderId: string) => {
@@ -47,11 +56,27 @@ const getPaymentProofInfo = (orderId:string) => {
   paymentProofInfo(orderId).then(res => {
     console.log("支付凭证信息", res)
     // voucher.value = res.paymentVoucherUrl;
-    getImage(res.voucherUrl as string).then(res => {
-      console.log("支付凭证图片地址", res)
-      voucher.value = res;
-    })
+    remitData.bankAccount = res.bankAccount;
+    remitData.bankName = res.bankName;
+    remitData.paymentAmount = res.paymentAmount;
+    remitData.paymentTime = res.paymentTime;
+    remitData.uploadTime = res.uploadTime;
+    remitData.voucherUrl = res.voucherUrl;
   })
+}
+
+const previewImage = () =>  {
+  uni.previewImage({
+    current: voucher.value, // 当前预览的图片链接
+    urls: [voucher.value],  // 预览列表（单图仅需自身）
+    indicator: "number", // 显示数字指示器
+    success: (res) => {
+      console.log("预览成功", res);
+    },
+    fail: (err) => {
+      console.error("预览失败", err);
+    }
+  });
 }
 
 </script>
@@ -61,6 +86,7 @@ const getPaymentProofInfo = (orderId:string) => {
   <view class="container">
     <!-- 订单状态 -->
     <view class="card">
+      <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color: #2ECC71;">{{detail.orderStatus}}</view>
       <view class="row">
         <view class="row_cont" style="color: #999999; font-size: 12px;">
@@ -68,7 +94,7 @@ const getPaymentProofInfo = (orderId:string) => {
         </view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>本次实付金额：</text>¥ {{ detail.paymentAmount }}</view>
+        <view class="row_cont"><text>本次实付金额：</text>¥ {{ truncToTwo(detail.paymentAmount) }}</view>
       </view>
     </view>
 
@@ -82,7 +108,7 @@ const getPaymentProofInfo = (orderId:string) => {
         <view class="row_cont"><text>订单号：</text>{{detail.orderNo}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>下单时间：</text>{{ detail.createdTime }}</view>
+        <view class="row_cont"><text>下单时间：</text>{{ formatLocalTime(new Date(detail.createdTime)) }}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>订单类型：</text>{{detail.optionType}}</view>
@@ -93,19 +119,19 @@ const getPaymentProofInfo = (orderId:string) => {
     <view class="card">
       <view class="fir_title">费用明细</view>
       <view class="row">
-        <view class="row_cont"><text>名义本金：</text>¥ {{ detail.nominalAmount }}</view>
+        <view class="row_cont"><text>名义本金：</text>¥ {{ truncToTwo(detail.nominalAmount) }}</view>
         <view class="row_cont"><text>期权费率：</text>{{ detail.optionFeeRate * 100}}%</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>期权费：</text>¥ {{ detail.optionFee }}</view>
+        <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>手续费：</text>¥ {{ detail.transactionFee }}</view>
+        <view class="row_cont"><text>手续费：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
       </view>
       <view class="row">
-        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.optionFee + detail.transactionFee }}</view>
+        <view class="row_cont"><text>合计应付：</text>¥ {{ truncToTwo(detail.optionFee + detail.transactionFee) }}</view>
       </view>
     </view>
 
@@ -113,31 +139,31 @@ const getPaymentProofInfo = (orderId:string) => {
     <view class="card">
       <view class="fir_title">支付信息</view>
       <view class="row">
-        <view class="row_cont"><text>支付状态：</text>已确认（写死？）</view>
+        <view class="row_cont"><text>支付状态：</text>已确认</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>实际支付金额：</text>¥ {{detail.paymentAmount}}</view>
+        <view class="row_cont"><text>实际支付金额：</text>¥ {{truncToTwo(remitData.paymentAmount)}}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>支付时间：</text>
-          {{ detail.paymentTime }}</view>
+          {{ formatLocalTime(new Date(remitData.paymentTime)) }}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>汇款银行：</text>
-          {{ detail.bankName ? detail.bankName : '(无)' }}</view>
+          {{ remitData.bankName ? remitData.bankName : '(无)' }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>汇款账号：</text>{{detail.bankAccount ? detail.bankAccount:'(无)'}}</view>
+        <view class="row_cont"><text>汇款账号：</text>{{remitData.bankAccount ? remitData.bankAccount:'(无)'}}</view>
       </view>
-      <view class="row">
-        <view class="row_cont"><text>转账备注：</text>
-          {{ detail.notes ? detail.notes: '(无)' }}</view>
-      </view>
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>转账备注：</text>-->
+<!--          {{ remitData.notes ? remitData.notes: '(无)' }}</view>-->
+<!--      </view>-->
     </view>
 
     <!-- 收款信息 -->
     <view class="card">
-      <view class="fir_title">收款信息</view>
+<!--      <view class="fir_title">收款信息</view>-->
       <view class="row">
         <view class="row_cont"><text>收款户名：</text>
           {{ bankReceiptInfoData.accountName }}</view>
@@ -154,17 +180,17 @@ const getPaymentProofInfo = (orderId:string) => {
     <view class="card">
       <view class="fir_title">支付凭证</view>
       <view class="upload-card">
-        <view class="upload-area">
-          <view v-if="voucher"  class="upload-placeholder">
-            <img :src="voucher" alt="" srcset="" />
-          </view>
-          <view v-else class="upload-placeholder" @click="upImage">
-            <view class="camera-icon">📷</view>
-            <text class="upload-text">支付凭证图片</text>
-          </view>
-        </view>
+<!--        <view class="upload-area">-->
+<!--          <view v-if="voucher"  class="upload-placeholder">-->
+<!--            <img :src="voucher" alt="" srcset="" />-->
+<!--          </view>-->
+<!--          <view v-else class="upload-placeholder" @click="upImage">-->
+<!--            <view class="camera-icon">📷</view>-->
+<!--            <text class="upload-text">支付凭证图片</text>-->
+<!--          </view>-->
+<!--        </view>-->
         <view class="row">
-          <view class="row_cont" style="color: #5E8ED6; font-size: 13px;">[ 放大查看 ]</view>
+          <view class="row_cont" style="color: #5E8ED6; font-size: 13px;" @click="previewImage">[ 放大查看 ]</view>
         </view>
       </view>
     </view>
@@ -211,7 +237,7 @@ const getPaymentProofInfo = (orderId:string) => {
     justify-content: space-between;
 
     .row_cont{
-      white-space: nowrap;
+      //white-space: nowrap;
 
       text{
         color: #999999;

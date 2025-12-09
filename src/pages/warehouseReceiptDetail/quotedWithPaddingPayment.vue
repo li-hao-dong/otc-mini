@@ -6,16 +6,19 @@ import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, BASE_URL, orderDetail, uploadPaymentProof} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {useStore} from "@/stores";
+import {formatLocalTime, truncToTwo} from "@/utils";
 
 const orderId = ref<string>("")
 const voucher = ref<File>()
 const voucherUrl = ref<string>()
 const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
-const remitData = reactive<{accountName: string | null, bankName: string | null, bankAccount: string | null}>({
+const remitData = reactive<{accountName: string | null, bankName: string | null, bankAccount: string | null, paymentAmount: number | null, paymentTime: string | null}>({
   accountName: null,
   bankName: null,
-  bankAccount: null
+  bankAccount: null,
+  paymentAmount: null,
+  paymentTime: null,
 })
 
 onLoad((option) =>{
@@ -65,7 +68,7 @@ const uploadPaymentVoucher = () => {
 
       if (tempFilePaths && tempFilePaths.length > 0) {
         voucherUrl.value = tempFilePaths[0];
-        voucher.value = res.tempFiles[0] as File;
+        voucher.value = res.tempFiles[0];
       }
 
     },
@@ -109,19 +112,33 @@ const uploadImage = () => {
     })
     return;
   }
+  if (!remitData.paymentAmount) {
+    uni.showToast({
+      title: '请输入实际支付金额',
+      icon: "none"
+    })
+    return;
+  }
+  if (!remitData.paymentTime) {
+    uni.showToast({
+      title: '请输入支付时间',
+      icon: "none"
+    })
+    return;
+  }
 
   uni.uploadFile({
     url: `${BASE_URL}/users/orders/${orderId.value}/payment-proof`,
     header: {
       'Authorization': `Bearer ${useStore().user.token}`, // 如果需要身份验证，添加此行
-      'Content-Type': 'multipart/form-data',
     },
     filePath: voucherUrl.value,
-    name: 'file',
+    name: 'voucherImage',
     formData: {
-      voucherImage: voucher.value,
       bankName: remitData.bankName,
       bankAccount: remitData.bankAccount,
+      paymentAmount: remitData.paymentAmount,
+      paymentTime: remitData.paymentTime
     },
     success: (res) => {
       console.log('uploadImage success, res is:', res)
@@ -137,8 +154,6 @@ const uploadImage = () => {
         }, 2000)
       }
       uni.hideLoading();
-
-
     },
     fail: (err) => {
       console.log('uploadImage fail', err);
@@ -160,6 +175,10 @@ const convertToFile = (tempFilePath:any, fileInfo:any) => {
     tempFilePath: tempFilePath
   };
 }
+
+const bindDayDateChange = (e: any) => {
+  remitData.paymentTime = e.detail.value as string
+}
 </script>
 
 <template>
@@ -169,7 +188,7 @@ const convertToFile = (tempFilePath:any, fileInfo:any) => {
     <view class="card">
       <view class="fir_title">金额摘要</view>
       <view class="row">
-        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ detail?.paymentAmount }}</view>
+        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ truncToTwo(detail?.paymentAmount) }}</view>
       </view>
       <view class="row">
         <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>
@@ -182,18 +201,18 @@ const convertToFile = (tempFilePath:any, fileInfo:any) => {
     <view class="card">
       <view class="fir_title">费用明细</view>
       <view class="row">
-        <view class="row_cont"><text>名义本金：</text>¥ {{ detail.nominalAmount }}</view>
+        <view class="row_cont"><text>名义本金：</text>¥ {{ truncToTwo(detail.nominalAmount) }}</view>
         <view class="row_cont"><text>期权费率：</text>
           {{ detail.optionFeeRate * 100 }}%</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>期权费：</text>¥ {{ detail.optionFee }}</view>
+        <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
-        <view class="row_cont"><text>手续费：</text>¥ {{ detail.transactionFee }}</view>
+        <view class="row_cont"><text>手续费：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.optionFee + detail.transactionFee }}</view>
+        <view class="row_cont"><text>合计应付：</text>¥ {{ truncToTwo(detail.optionFee + detail.transactionFee) }}</view>
       </view>
     </view>
 
@@ -210,10 +229,10 @@ const convertToFile = (tempFilePath:any, fileInfo:any) => {
       <view class="row">
         <view class="row_cont"><text>银行账号：</text>{{bankReceiptInfoData.bankAccount}}</view>
       </view>
-      <view class="row">
-        <view class="row_cont"><text>转账备注：</text>
-          {{ bankReceiptInfoData.notes }}</view>
-      </view>
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>转账备注：</text>-->
+<!--          {{ bankReceiptInfoData.notes }}</view>-->
+<!--      </view>-->
     </view>
 
     <view class="card">
@@ -237,11 +256,14 @@ const convertToFile = (tempFilePath:any, fileInfo:any) => {
     <view class="card">
       <view class="fir_title">上传支付凭证</view>
       <view class="row">
-        <view class="row_cont"><text>实际支付金额：</text>¥ {{ detail.paymentAmount }}</view>
+        <view class="row_cont remittance"><text>实际支付金额：</text>￥<input type="number" v-model="remitData.paymentAmount" placeholder="请输入实际支付金额"></view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>支付时间：</text>
-          {{ detail.paymentTime }}</view>
+        <view class="row_cont remittance"><text>支付时间：</text>
+          <picker class="picker-date-day" mode="date" :value="dayDate" :start="startDate" :end="endDate" @change="bindDayDateChange">
+            <view class="uni-input">{{remitData.paymentTime ? remitData.paymentTime : '请输入银行支付时间'}}</view>
+          </picker>
+        </view>
       </view>
       <!-- 上传支付凭证卡片 -->
       <view class="upload-card">
@@ -307,6 +329,13 @@ const convertToFile = (tempFilePath:any, fileInfo:any) => {
     }
 
     .remittance input{
+      width: 100%;
+      border: 1px solid #999999;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+
+    .remittance .picker-date-day{
       width: 100%;
       border: 1px solid #999999;
       padding: 5px 10px;

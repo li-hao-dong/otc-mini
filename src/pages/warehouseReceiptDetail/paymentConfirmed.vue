@@ -4,6 +4,7 @@ import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, orderDetail} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
+import {formatLocalTime, truncToTwo} from "../../utils";
 
 const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
@@ -33,9 +34,10 @@ const getBankReceiptInfo = (orderId: string) => {
   <view class="container">
     <!-- 状态概览 -->
     <view class="card">
+      <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color: #FF9800;">{{detail.orderStatus}} · 待购买</view>
       <view class="row">
-        <view class="row_cont"><text>本次已支付金额：</text><text style="color:#E8473A">¥ {{ detail.paymentAmount }}</text></view>
+        <view class="row_cont"><text>本次已支付金额：</text><text style="color:#E8473A">¥ {{ truncToTwo(detail.paymentAmount) }}</text></view>
       </view>
       <view class="row">
         <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>
@@ -53,7 +55,7 @@ const getBankReceiptInfo = (orderId: string) => {
 
     <!-- 订单进度 -->
     <view class="card">
-      <view class="fir_title">订单进度(待开发？？？)</view>
+      <view class="fir_title">订单进度</view>
       <view class="row"><view class="row_cont">✓ 订单已提交</view></view>
       <view class="row"><view class="row_cont">✓ 支付凭证已上传</view></view>
       <view class="row"><view class="row_cont">✓ 平台已确认收款</view></view>
@@ -79,14 +81,14 @@ const getBankReceiptInfo = (orderId: string) => {
     <!-- 支付信息（已确认） -->
     <view class="card">
       <view class="fir_title">支付信息（已确认）</view>
-      <view class="row"><view class="row_cont"><text>支付状态：</text>已确认收款(写死？)</view></view>
-      <view class="row"><view class="row_cont"><text>实际支付金额：</text>¥ {{paymentAmount}}</view></view>
+      <view class="row"><view class="row_cont"><text>支付状态：</text>已确认收款</view></view>
+      <view class="row"><view class="row_cont"><text>实际支付金额：</text>¥ {{truncToTwo(detail.paymentAmount)}}</view></view>
       <view class="row"><view class="row_cont"><text>支付方式：</text>银行转账</view></view>
-      <view class="row"><view class="row_cont"><text>付款银行：</text>
+      <view class="row"><view class="row_cont"><text>汇款银行：</text>
         {{ detail.bankName }}</view></view>
-      <view class="row"><view class="row_cont"><text>付款账号：</text>尾号 {{ detail.bankAccount }}</view></view>
-      <view class="row"><view class="row_cont"><text>支付时间：</text>{{detail.paymentTime}}</view></view>
-      <view class="row"><view class="row_cont"><text>转账备注：</text>12cfe2566119 0000（没看到？？）</view></view>
+      <view class="row"><view class="row_cont"><text>汇款账号：</text>尾号 {{ detail.bankAccount.substr(-4) }}</view></view>
+      <view class="row"><view class="row_cont"><text>支付时间：</text>{{formatLocalTime(new Date(detail.paymentTime))}}</view></view>
+<!--      <view class="row"><view class="row_cont"><text>转账备注：</text>12cfe2566119 0000</view></view>-->
       <view class="row">
         <view class="row_cont" style="color:#999999; font-size:12px;">如支付信息与您实际转账不符，请尽快联系客服核对。</view></view>
     </view>

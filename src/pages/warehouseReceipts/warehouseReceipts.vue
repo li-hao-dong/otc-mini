@@ -2,7 +2,7 @@
   <view class="container wrPage">
     <view class="topBar">
       <text class="topText">模拟机构</text>
-      <text class="topText">录入 +</text>
+<!--      <text class="topText">录入 +</text>-->
     </view>
 
     <view class="segTabs">
@@ -143,6 +143,7 @@ const pagination = ref<Pagination>()
 const moreDataStatus = ref<boolean>(true);
 
 onShow(() => {
+  resetData()
   getUserOrder()
 })
 

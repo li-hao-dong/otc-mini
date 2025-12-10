@@ -1,4 +1,84 @@
 <script setup lang="ts">
+import {reactive, ref} from "vue";
+import type {OrderDetail} from "@/interfaces/orderDetail";
+import {onLoad} from "@dcloudio/uni-app";
+import {bankReceiptInfo, BASE_URL, orderDetail, paymentProofInfo} from "@/api";
+import {formatLocalTime, truncToTwo} from "@/utils";
+import {useStore} from "@/stores";
+import type {BankAccountInfoResp} from "@/interfaces/bankData";
+
+const voucher = ref<string>()
+const detail = ref<OrderDetail | null>(null);
+const bankReceiptInfoData = ref<BankAccountInfoResp>();
+const remitData = reactive({
+  bankAccount: null,
+  bankName: null,
+  paymentAmount: 0,
+  paymentTime: null,
+  uploadTime: null,
+  voucherUrl: null
+})
+
+
+onLoad((option) =>{
+  console.log("option", option)
+  getDetail(option?.id)
+  getBankReceiptInfo(option?.id)
+  getPaymentProofInfo(option?.id)
+})
+
+const getDetail = (orderId: string) => {
+  orderDetail(orderId).then(res => {
+    console.log("订单详情", res)
+    detail.value = res
+    uni.downloadFile({
+      url: `${BASE_URL}${res.paymentVoucherUrl}`,
+      header:{
+        'Authorization': `Bearer ${useStore().user.token}`
+      },
+      success: res => {
+        console.log("下载支付凭证结果", res)
+        if(res.statusCode === 200){
+          voucher.value = res.tempFilePath;
+        }
+      }
+    })
+  })
+}
+
+const getBankReceiptInfo = (orderId: string) => {
+  bankReceiptInfo(orderId).then(res => {
+    console.log("银行收款信息", res)
+    bankReceiptInfoData.value = res;
+  })
+}
+
+const getPaymentProofInfo = (orderId:string) => {
+  paymentProofInfo(orderId).then(res => {
+    console.log("支付凭证信息", res)
+    // voucher.value = res.paymentVoucherUrl;
+    remitData.bankAccount = res.bankAccount;
+    remitData.bankName = res.bankName;
+    remitData.paymentAmount = res.paymentAmount;
+    remitData.paymentTime = res.paymentTime;
+    remitData.uploadTime = res.uploadTime;
+    remitData.voucherUrl = res.voucherUrl;
+  })
+}
+
+const previewImage = () =>  {
+  uni.previewImage({
+    current: voucher.value, // 当前预览的图片链接
+    urls: [voucher.value],  // 预览列表（单图仅需自身）
+    indicator: "number", // 显示数字指示器
+    success: (res) => {
+      console.log("预览成功", res);
+    },
+    fail: (err) => {
+      console.error("预览失败", err);
+    }
+  });
+}
 
 </script>
 
@@ -7,42 +87,42 @@
     <view class="card">
       <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color:#2ECC71;">已结算 · 订单已完成</view>
-      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">+ ¥ 5,320.00（+5.33%）</text></view></view>
-      <view class="row"><view class="row_cont"><text>结算净入账金额：</text>¥ 105,120.00</view></view>
-      <view class="row"><view class="row_cont"><text>总投入（期权费 + 手续费）：</text>¥ 99,800.00</view></view>
+      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">+ ¥ 5,320.00（+5.33%）？？？</text></view></view>
+      <view class="row"><view class="row_cont"><text>结算净入账金额：</text>¥ 105,120.00 ？？？</view></view>
+      <view class="row"><view class="row_cont"><text>总投入（期权费 + 手续费）：</text>¥ {{truncToTwo(detail.transactionFee + detail.optionFee)}}</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">本单已完成全部结算，资金方向与盈亏结果已最终确定。上述数据基于合作机构结算结果，已不再变动，仅供对账与历史查询使用。</view></view>
     </view>
 
     <view class="card">
       <view class="fir_title">结算结果信息</view>
       <view class="row"><view class="row_cont"><text>结算状态：</text>已完成</view></view>
-      <view class="row"><view class="row_cont"><text>结算日期：</text>2025-12-05 10:15</view></view>
+      <view class="row"><view class="row_cont"><text>结算日期：</text>{{ formatLocalTime(new Date(detail?.maturityDate)) }}</view></view>
       <view class="row"><view class="row_cont"><text>结算方式：</text>现金结算</view></view>
       <view class="row"><view class="row_cont"><text>结算说明：</text>标的价格高于行权价，行权产生正收益，扣除相关费用后形成本单净收益。</view></view>
     </view>
 
     <view class="card">
       <view class="fir_title">资金结算明细</view>
-      <view class="row"><view class="row_cont"><text>总投入：</text>¥ 99,800.00</view></view>
-      <view class="row"><view class="row_cont"><text>期权费：</text>¥ 93,800.00</view></view>
-      <view class="row"><view class="row_cont"><text>手续费：</text>¥ 6,000.00</view></view>
-      <view class="row"><view class="row_cont"><text>结算资金流入：</text>¥ 105,120.00</view></view>
-      <view class="row"><view class="row_cont"><text>行权/到期结算金额：</text>¥ 105,620.00</view></view>
-      <view class="row"><view class="row_cont"><text>结算手续费：</text>¥ 500.00</view></view>
-      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">+ ¥ 5,320.00（+5.33%）</text></view></view>
+      <view class="row"><view class="row_cont"><text>总投入：</text>¥ 99,800.00???</view></view>
+      <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view></view>
+      <view class="row"><view class="row_cont"><text>手续费：</text>¥ {{truncToTwo(detail.transactionFee)}}</view></view>
+      <view class="row"><view class="row_cont"><text>结算资金流入：</text>¥ 105,120.00???</view></view>
+      <view class="row"><view class="row_cont"><text>行权/到期结算金额：</text>¥ 105,620.00???</view></view>
+      <view class="row"><view class="row_cont"><text>结算手续费：</text>¥ 500.00???</view></view>
+      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">+ ¥ 5,320.00（+5.33%）???</text></view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">资金结算明细用于帮助您理解本单的投入、结算及最终盈亏构成，如对具体金额有疑问，请以结算单及银行流水为准，并及时联系客服核对。</view></view>
     </view>
 
     <view class="card">
       <view class="fir_title">产品与合约要素</view>
-      <view class="row"><view class="row_cont"><text>产品名称：</text>中国铝业 601600.SH · 平值100看涨</view></view>
-      <view class="row"><view class="row_cont"><text>订单号：</text>ORD2025-1101-0001</view></view>
+      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view></view>
+      <view class="row"><view class="row_cont"><text>订单号：</text>{{ detail.orderNo }}</view></view>
       <view class="row"><view class="row_cont"><text>订单类型：</text>个股场外期权</view></view>
-      <view class="row"><view class="row_cont"><text>生效日期：</text>2025-11-01</view></view>
-      <view class="row"><view class="row_cont"><text>到期日期：</text>2025-12-02</view></view>
-      <view class="row"><view class="row_cont"><text>期限：</text>1M</view></view>
-      <view class="row"><view class="row_cont"><text>合约结构：</text>平值100看涨（ATM_100）</view></view>
-      <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（Call）</view></view>
+      <view class="row"><view class="row_cont"><text>生效日期：</text>{{ formatLocalTime(new Date(detail.createdTime)) }}</view></view>
+      <view class="row"><view class="row_cont"><text>到期日期：</text>{{ formatLocalTime(new Date(detail?.maturityDate)) }}</view></view>
+      <view class="row"><view class="row_cont"><text>期限：</text>{{ detail.termName }}</view></view>
+      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}（{{ detail.optionCode }}）</view></view>
+      <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{ detail.optionType }}）</view></view>
       <view class="row"><view class="row_cont"><text>行权方式：</text>欧式，到期一次性现金结算</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">本模块为合约核心要素摘要，完整条款与定义以《产品说明书》《交易确认书》及《风险揭示书》等正式文件为准。</view></view>
     </view>
@@ -54,34 +134,39 @@
         <view class="row_cont" style="color:#999999; font-size:12px;">（默认收起；主要用于事后对账，不干扰主信息）</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>下单时间：</text>2025-11-01 14:55</view>
+        <view class="row_cont"><text>下单时间：</text>
+          {{ formatLocalTime(new Date(detail.createdTime)) }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>支付时间：</text>2025-11-01 15:02</view>
+        <view class="row_cont"><text>支付时间：</text>{{remitData.paymentTime}}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>支付方式：</text>银行转账</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>付款银行：</text>中国工商银行</view>
+        <view class="row_cont"><text>汇款银行：</text>
+          {{ remitData.bankName }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>付款账号：</text>尾号 0123</view>
+        <view class="row_cont"><text>汇款账号：</text>尾号 {{ remitData.bankAccount }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>转账备注：</text>12cfe2566119 0000</view>
+<!--        <view class="row_cont"><text>转账备注：</text>12cfe2566119 0000</view>-->
       </view>
       <view class="row">
-        <view class="row_cont"><text>收款户名：</text>北京某某科技有限公司</view>
+        <view class="row_cont"><text>收款户名：</text>
+          {{ bankReceiptInfoData.accountName }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>收款银行：</text>中国银行 北京中关村支行</view>
+        <view class="row_cont"><text>收款银行：</text>{{ bankReceiptInfoData.bankName }} {{ bankReceiptInfoData.branchName }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>收款账号：</text>1234 5678 9012 3456</view>
+        <view class="row_cont"><text>收款账号：</text>{{ bankReceiptInfoData.bankAccount }}</view>
       </view>
       <view class="row">
-        <view class="row_cont" style="color:#5E8ED6; font-size:12px;">支付凭证：[ 缩略图 ] [ 放大查看 ]</view>
+        <view class="row_cont" style="color:#5E8ED6; font-size:12px;"><text>支付凭证：</text>
+          <text @click="previewImage">点击查看</text>
+        </view>
       </view>
     </view>
 

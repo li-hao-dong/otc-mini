@@ -8,6 +8,35 @@
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
 		{
+			"path": "pages/warehouseReceiptDetail/settled",
+			"style": {
+				"navigationBarTitleText": "订单详情-已结算8",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/warehouseReceiptDetail/exercised",
+			"style": {
+				"navigationBarTitleText": "订单详情-已行权7",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+
+		{
+			"path": "pages/warehouseReceiptDetail/matured",
+			"style": {
+				"navigationBarTitleText": "订单详情-已到期6",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+
+		{
 			"path": "pages/inquiryHistory/inquiryHistory",
 			"style": {
 				"navigationBarTitleText": "询价",

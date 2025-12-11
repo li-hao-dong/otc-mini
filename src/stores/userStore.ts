@@ -8,7 +8,7 @@ interface userStore {
     name: string;
     token: string | undefined;
     token_type: string;
-    token_valid_until?: Date | undefined;
+    token_valid_until?: number | undefined;
     address: string;
     city: string;
     country: string;
@@ -50,7 +50,7 @@ export const useUserStore = defineStore('user', {
         user_type: '',
     }),
     actions: {
-        setUserInfo(userInfo: {uuid: string, name: string, token: string, token_type: string, token_valid_until: Date}) {
+        setUserInfo(userInfo: {uuid: string, name: string, token: string, token_type: string, token_valid_until: number}) {
             this.uuid = userInfo.uuid;
             this.name = userInfo.name;
             this.token = userInfo.token;

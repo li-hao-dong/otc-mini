@@ -108,18 +108,18 @@
 			}
 		},
 		{
-			"path": "pages/warehouseReceiptDetail/purchased",
+			"path": "pages/warehouseReceiptDetail/paymentConfirmed",
 			"style": {
-				"navigationBarTitleText": "订单详情-已购买5",
+				"navigationBarTitleText": "订单详情-支付已确认4",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
-			"path": "pages/warehouseReceiptDetail/paymentConfirmed",
+			"path": "pages/warehouseReceiptDetail/purchased",
 			"style": {
-				"navigationBarTitleText": "订单详情-支付已确认4",
+				"navigationBarTitleText": "订单详情-已购买5",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false

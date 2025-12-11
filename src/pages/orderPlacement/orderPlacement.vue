@@ -10,7 +10,7 @@
                 </view>
                 <view class="row rowPrice">
                     <view class="para"><text class="labelGray">股价：</text></view>
-                    <view class="para"><text class="valueRed">{{ orderPayload?.currentPrice }}</text></view>
+                    <view class="para"><text class="valueRed">￥{{ orderPayload?.currentPrice }}</text></view>
                 </view>
                 <view class="row rowChange">
                     <view class="para"><text class="labelGray">涨幅：</text></view>
@@ -56,7 +56,7 @@
                 </view>
                 <view class="quantityRow">
                     <view class="quantityStrong"><input type="number" class="inputBox" placeholder="" v-model="quantity" /></view>
-                    <text class="quantitySuffix">× {{ orderPayload?.nominalAmount }}</text>
+                    <text class="quantitySuffix">× 100万</text>
                 </view>
             </view>
 
@@ -113,9 +113,9 @@ const placeOrder = () => {
     uni.showModal({ title: '提示', content: '确定要下单吗？' })
         .then(res => {
             if (res.confirm) {
-                buyProduct(orderPayload.value?.inquiryId, orderPayload.value?.quote?.productCode, selectedPriceType.value, Number(quantity.value), Number(limitPrice.value)).then(res => {
+                buyProduct(orderPayload.value?.inquiryId, orderPayload.value?.quote?.productCode, selectedPriceType.value, Number(quantity.value * 1000000), Number(limitPrice.value)).then(res => {
                     // console.log('buyProduct res', res);
-                    if (res.status === 'success'){
+                    if (res.status && res.status === 'success'){
                          uni.showToast({ title: '下单成功', icon: 'success' });
                          setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
                     }

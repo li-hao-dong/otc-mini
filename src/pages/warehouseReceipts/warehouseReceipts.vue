@@ -28,26 +28,26 @@
         <view class="sumCol">
           <view class="sumMain">
             <view class="sumLabel">名义本金</view>
-            <view class="sumValueRed">{{ordersSummary?.nominalAmount}}万</view>
+            <view class="sumValueRed">{{truncToTwo(ordersSummary?.nominalAmount / 10000)}}万</view>
           </view>
           <view class="sumMain">
             <view class="sumLabel">期权费</view>
-            <view class="sumValueRed">{{ordersSummary?.optionFee}}元</view>
+            <view class="sumValueRed">{{truncToTwo(ordersSummary?.optionFee)}}元</view>
           </view>
         </view>
         <view class="sumCol">
            <view class="sumSub">
             <view class="subLabel">预计回款</view>
-            <view class="subValueBlue">{{ordersSummary?.estimatedPayout}}元</view>
+            <view class="subValueBlue">{{truncToTwo(ordersSummary?.estimatedPayout)}}元</view>
           </view>
 
           <view class="sumSub">
             <view class="subLabel">预计盈亏</view>
-            <view class="subValueGreen">{{ordersSummary?.estimatedProfit}}元</view>
+            <view class="subValueGreen">{{truncToTwo(ordersSummary?.estimatedProfit)}}元</view>
           </view>
           <view class="sumSub">
             <view class="subLabel">盈亏比例</view>
-            <view class="subValueGreen">{{ordersSummary?.profitRate ? ordersSummary.profitRate * 100 : 0}}%</view>
+            <view class="subValueGreen">{{ordersSummary?.profitRate ? truncToTwo(ordersSummary.profitRate * 100) : 0}}%</view>
           </view>
         </view>
       </view>
@@ -74,19 +74,19 @@
       </view>
       <view class="rowBorder">
         <text class="dataText"><text>期权代码：</text>{{order?.optionCode}}</text>
-        <text class="dataText"><text>名义本金：</text>{{order?.nominalAmount}}万</text>
+        <text class="dataText"><text>名义本金：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</text>
       </view>
       <view class="rowBorder">
         <text class="dataText"><text>期限：</text>{{order?.termName}}</text>
         <text class="dataText"><text>剩余天数：</text>{{order?.daysToExpiry}}天</text>
       </view>
       <view class="rowBorder">
-        <text class="dataText"><text>开仓价格：</text>{{order?.underlyingPrice}}元</text>
-        <text class="dataText"><text>行权价格：</text>{{order?.strikePrice}}元</text>
+        <text class="dataText"><text>开仓价格：</text>{{truncToTwo(order?.strikePrice)}}元</text>
+        <text class="dataText"><text>行权价格：</text>{{truncToTwo(order?.strikePrice)}}元</text>
       </view>
       <view class="rowBorder">
-        <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{order?.estimatedPayout ? order.estimatedPayout : '-'}}元</text></text>
-        <text class="dataText"><text>预计盈亏：</text><text class="valueGreen">{{order?.estimatedProfit}}元</text></text>
+        <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{order?.estimatedPayout ? truncToTwo(order.estimatedPayout) : '-'}}元</text></text>
+        <text class="dataText"><text>预计盈亏：</text><text class="valueGreen">{{truncToTwo(order?.estimatedProfit)}}元</text></text>
       </view>
       <view class="rowBorder">
         <text class="dataText"><text>期权费：</text>{{order?.upstreamFee || order?.optionFee}}元</text>
@@ -94,10 +94,10 @@
       </view>
       <view class="rowBorder">
         <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>
-        <text class="dataText"><text>期权费率：</text>{{order?.optionFeeRate ? order.optionFeeRate * 100 : 0}}%</text>
+        <text class="dataText"><text>期权费率：</text>{{order?.optionFeeRate ? truncToTwo(order.optionFeeRate * 100) : 0}}%</text>
       </view>
       <view class="rowBorder">
-        <text class="dataText"><text>手续费：</text>{{order?.transactionFee}}元</text>
+        <text class="dataText"><text>手续费：</text>{{truncToTwo(order?.transactionFee)}}元</text>
       </view>
 
       <!-- <view class="actions">
@@ -126,6 +126,7 @@ import {onLoad, onShow} from "@dcloudio/uni-app"
 import type { OrdersSummary, OrderSummary, Pagination } from "@/interfaces/orders"
 import { useStore } from "@/stores"
 import { failToast } from "@/utils/toast/toast"
+import {truncToTwo} from "@/utils";
 
 
 const store = useStore()

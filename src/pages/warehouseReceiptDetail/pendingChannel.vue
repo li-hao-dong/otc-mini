@@ -84,7 +84,7 @@ const getDetail = (orderId: string) => {
       <view class="row">
         <view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(detail.nominalAmount)}}</view>
         <view class="row_cont"><text>期权费率：</text>
-          {{ detail.optionFeeRate * 100 }}%</view>
+          {{ truncToTwo(detail.optionFeeRate * 100) }}%</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>期权费（预估）：</text>¥ {{truncToTwo(detail.optionFee)}}</view>

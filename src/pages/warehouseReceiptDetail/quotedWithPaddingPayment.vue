@@ -138,7 +138,7 @@ const uploadImage = () => {
       bankName: remitData.bankName,
       bankAccount: remitData.bankAccount,
       paymentAmount: remitData.paymentAmount,
-      paymentTime: remitData.paymentTime
+      paymentTime: new Date(remitData.paymentTime).toISOString().split('.')[0] + 'Z'
     },
     success: (res) => {
       console.log('uploadImage success, res is:', res)
@@ -203,7 +203,7 @@ const bindDayDateChange = (e: any) => {
       <view class="row">
         <view class="row_cont"><text>名义本金：</text>¥ {{ truncToTwo(detail.nominalAmount) }}</view>
         <view class="row_cont"><text>期权费率：</text>
-          {{ detail.optionFeeRate * 100 }}%</view>
+          {{ truncToTwo(detail.optionFeeRate * 100) }}%</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view>

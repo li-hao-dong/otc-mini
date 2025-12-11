@@ -29,7 +29,7 @@
         <view class="label">结构 (最多三选)</view>
         <view class="chips">
           <view
-            v-for="s in currentTypeStructures"
+            v-for="s in currentTypeStructures.slice(0, 1)"
             :key="s.code"
             class="chip"
             :class="{ active: selectedStructures.includes(s.code) }"
@@ -214,7 +214,8 @@ const getOptions = () => {
     selectedType.value = res.optionTypes![0].code;
     structures.value = <StructureDefinition[]>res.structures;
     currentTypeStructures.value = calcSameTypeStructure(structures.value!)
-    selectedStructures.value = <string[]>[currentTypeStructures.value![0].code, currentTypeStructures.value![1].code,currentTypeStructures.value![2].code];
+    // selectedStructures.value = <string[]>[currentTypeStructures.value![0].code, currentTypeStructures.value![1].code,currentTypeStructures.value![2].code];
+    selectedStructures.value = <string[]>[currentTypeStructures.value![0].code];
     nominalAmounts.value = <number[]>res.nominalAmounts;
     selectedNominal.value = <number>res.nominalAmounts![0];
     terms.value = <Term[]>res.terms;

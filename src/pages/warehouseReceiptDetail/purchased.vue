@@ -2,16 +2,19 @@
 import {ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
-import {bankReceiptInfo, orderDetail} from "@/api";
+import {bankReceiptInfo, exerciseHandler, orderDetail} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {formatLocalTime, truncToTwo} from "@/utils";
+import {type ExerciseReq, ExerciseType} from "@/interfaces/exercise";
 
 const voucher = ref<string | string[]>()
 const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
+const orderId = ref<string>("");
 
 onLoad((option) =>{
   console.log("option", option)
+  orderId.value = option?.id || "";
   getDetail(option?.id)
   getBankReceiptInfo(option?.id)
 })
@@ -29,6 +32,37 @@ const getBankReceiptInfo = (orderId: string) => {
     bankReceiptInfoData.value = res;
   })
 }
+
+const exexercise = () => {
+  if(!orderId.value){
+    return;
+  }
+  const payload: ExerciseReq = {
+    exerciseQuantity: 1,
+    exerciseType: ExerciseType.Manual,
+    remarks: undefined
+  }
+  exerciseHandler(orderId.value, payload).then(res => {
+    // console.log("行权结果", res)
+    if (res.staatus !== "success") {
+      uni.showToast({
+        title: res.message || '行权申请提交失败',
+        duration: 2000,
+        icon: 'error'
+      });
+      return;
+    }
+    uni.showToast({
+      title: '行权申请已提交',
+      duration: 2000
+    });
+    setTimeout(() => {
+      uni.redirectTo({
+        url: `/pages/warehouseReceiptDetail/exercised?id=${orderId.value}`
+      });
+    }, 2000)
+  })
+}
 </script>
 
 <template>
@@ -36,7 +70,7 @@ const getBankReceiptInfo = (orderId: string) => {
     <!-- 持仓概览 -->
     <view class="card">
       <view class="fir_title">订单状态</view>
-      <view class="fir_title" style="color:#E8473A;">已购买 · 持有中 · 可行权(写死？？)</view>
+      <view class="fir_title" style="color:#E8473A;">已购买 · 持有中 · 可行权</view>
       <view class="row">
         <view class="row_cont"><text>当前参考盈亏：</text><text style="color:#E8473A">+ ¥ {{truncToTwo(detail.estimatedProfit)}} ({{detail.profitRate}}%)</text></view>
       </view>
@@ -79,7 +113,7 @@ const getBankReceiptInfo = (orderId: string) => {
     <view class="card">
       <view class="fir_title">资金投入与成本</view>
       <view class="row"><view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(detail.nominalAmount)}}</view></view>
-      <view class="row"><view class="row_cont"><text>期权费率：</text>{{ detail.optionFeeRate * 100 }}%</view></view>
+      <view class="row"><view class="row_cont"><text>期权费率：</text>{{ truncToTwo(detail.optionFeeRate * 100) }}%</view></view>
       <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{truncToTwo(detail.optionFee)}}</view></view>
       <view class="row"><view class="row_cont"><text>手续费：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view></view>
       <view class="row"><view class="row_cont"><text>总计支出：</text>¥ {{ truncToTwo(detail.optionFee + detail.transactionFee) }}</view></view>
@@ -113,7 +147,7 @@ const getBankReceiptInfo = (orderId: string) => {
     </view>
 
     <!-- 底部按钮 -->
-<!--    <view class="submit">行权</view>-->
+    <view class="submit" @click="exexercise">行权</view>
 <!--    <view class="card">-->
 <!--      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看收益试算</view></view>-->
 <!--      <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">行权申请提交后，可能无法撤销，请在充分理解产品及风险的前提下谨慎操作。如需其他操作（提前终止、特殊安排等），请联系客服。</view></view>-->

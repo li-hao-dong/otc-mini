@@ -14,6 +14,7 @@ import type {OrderDetail} from "@/interfaces/orderDetail";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import type {UploadImageReq, UploadImageResp} from "@/interfaces/uploadImage";
 import type {PaymentProofInfoResp} from "@/interfaces/paymentProofInfo";
+import type {ExerciseReq, ExerciseResp} from "@/interfaces/exercise";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -86,6 +87,26 @@ export const buyProduct = ( inquiryId: string, productCode: string, priceType: P
                 resolve(res.data as orderPayloadResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch buyProduct info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+
+    })
+}
+
+/**
+ * 用户行权（All）
+ * */
+export const exerciseHandler = (orderId: string, payload: ExerciseReq):Promise<ExerciseResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.post(`${BASE_URL}/users/orders/${orderId}/exercise`, payload)
+            console.log("exerciseHandler res", res);
+            if (res.code !== 200) {
+                resolve(res.data as ExerciseResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch exerciseHandler info'));
             }
         } catch (error) {
             reject(error);

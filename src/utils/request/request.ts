@@ -61,6 +61,7 @@ const http = {
      * @description http 请求 post 方法
      * @param {string} url
      * @param {object} data
+     * @param {string} [contentType]
      * */
     post(url: string, data: any, contentType: string) {
         return new Promise((resolve, reject) => {

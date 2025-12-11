@@ -28,6 +28,8 @@ export const formatLocalTime = (date: Date) => {
 
 // 截断两位小数（不四舍五入）
 export const truncToTwo = (num: number) => {
+    if (num === null || num === undefined) return '0.00';
+
     if (isNaN(num)) return '0.00';
 
     const str = String(num);

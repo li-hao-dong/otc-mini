@@ -22,7 +22,7 @@ const remitData = reactive({
 onLoad((option) =>{
   console.log("option", option)
   getDetail(option?.id)
-  getBankReceiptInfo(option?.id)
+  // getBankReceiptInfo(option?.id)
   getPaymentProofInfo(option?.id)
 })
 
@@ -120,7 +120,7 @@ const previewImage = () =>  {
       <view class="fir_title">费用明细</view>
       <view class="row">
         <view class="row_cont"><text>名义本金：</text>¥ {{ truncToTwo(detail.nominalAmount) }}</view>
-        <view class="row_cont"><text>期权费率：</text>{{ detail.optionFeeRate * 100}}%</view>
+        <view class="row_cont"><text>期权费率：</text>{{ truncToTwo(detail.optionFeeRate * 100) }}%</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view>
@@ -162,19 +162,18 @@ const previewImage = () =>  {
     </view>
 
     <!-- 收款信息 -->
-    <view class="card">
-<!--      <view class="fir_title">收款信息</view>-->
-      <view class="row">
-        <view class="row_cont"><text>收款户名：</text>
-          {{ bankReceiptInfoData.accountName }}</view>
-      </view>
-      <view class="row">
-        <view class="row_cont"><text>收款银行：</text>{{ bankReceiptInfoData.bankName }} {{ bankReceiptInfoData.branchName }}</view>
-      </view>
-      <view class="row">
-        <view class="row_cont"><text>银行账号：</text>{{ bankReceiptInfoData.bankAccount }}</view>
-      </view>
-    </view>
+<!--    <view class="card">-->
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>收款户名：</text>-->
+<!--          {{ bankReceiptInfoData.accountName }}</view>-->
+<!--      </view>-->
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>收款银行：</text>{{ bankReceiptInfoData.bankName }} {{ bankReceiptInfoData.branchName }}</view>-->
+<!--      </view>-->
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>银行账号：</text>{{ bankReceiptInfoData.bankAccount }}</view>-->
+<!--      </view>-->
+<!--    </view>-->
 
     <!-- 支付凭证 -->
     <view class="card">

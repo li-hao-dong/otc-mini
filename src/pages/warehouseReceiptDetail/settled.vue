@@ -23,7 +23,7 @@ const remitData = reactive({
 onLoad((option) =>{
   console.log("option", option)
   getDetail(option?.id)
-  getBankReceiptInfo(option?.id)
+  // getBankReceiptInfo(option?.id)
   getPaymentProofInfo(option?.id)
 })
 
@@ -87,8 +87,8 @@ const previewImage = () =>  {
     <view class="card">
       <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color:#2ECC71;">已结算 · 订单已完成</view>
-      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">+ ¥ 5,320.00（+5.33%）？？？</text></view></view>
-      <view class="row"><view class="row_cont"><text>结算净入账金额：</text>¥ 105,120.00 ？？？</view></view>
+      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{(detail.settlement_amount - detail.option_fee - detail.transaction_fee) >= 0 ? '+' : '-'}} ¥ {{Math.abs(truncToTwo(detail.settlement_amount - detail.option_fee - detail.transaction_fee))}}（{{ truncToTwo(detail.profitRate * 100)}}%）</text></view></view>
+      <view class="row"><view class="row_cont"><text>结算金额：</text>¥ {{ detail.settlement_amount }} </view></view>
       <view class="row"><view class="row_cont"><text>总投入（期权费 + 手续费）：</text>¥ {{truncToTwo(detail.transactionFee + detail.optionFee)}}</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">本单已完成全部结算，资金方向与盈亏结果已最终确定。上述数据基于合作机构结算结果，已不再变动，仅供对账与历史查询使用。</view></view>
     </view>
@@ -96,20 +96,19 @@ const previewImage = () =>  {
     <view class="card">
       <view class="fir_title">结算结果信息</view>
       <view class="row"><view class="row_cont"><text>结算状态：</text>已完成</view></view>
-      <view class="row"><view class="row_cont"><text>结算日期：</text>{{ formatLocalTime(new Date(detail?.maturityDate)) }}</view></view>
+<!--      <view class="row"><view class="row_cont"><text>结算日期：</text>{{ formatLocalTime(new Date(detail?.maturityDate)) }}</view></view>-->
       <view class="row"><view class="row_cont"><text>结算方式：</text>现金结算</view></view>
       <view class="row"><view class="row_cont"><text>结算说明：</text>标的价格高于行权价，行权产生正收益，扣除相关费用后形成本单净收益。</view></view>
     </view>
 
     <view class="card">
       <view class="fir_title">资金结算明细</view>
-      <view class="row"><view class="row_cont"><text>总投入：</text>¥ 99,800.00???</view></view>
+      <view class="row"><view class="row_cont"><text>总投入：</text>¥ {{truncToTwo(detail.transactionFee + detail.optionFee)}}</view></view>
       <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view></view>
       <view class="row"><view class="row_cont"><text>手续费：</text>¥ {{truncToTwo(detail.transactionFee)}}</view></view>
-      <view class="row"><view class="row_cont"><text>结算资金流入：</text>¥ 105,120.00???</view></view>
-      <view class="row"><view class="row_cont"><text>行权/到期结算金额：</text>¥ 105,620.00???</view></view>
-      <view class="row"><view class="row_cont"><text>结算手续费：</text>¥ 500.00???</view></view>
-      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">+ ¥ 5,320.00（+5.33%）???</text></view></view>
+      <view class="row"><view class="row_cont"><text>结算金额：</text>¥ {{ detail.settlement_amount }}</view></view>
+<!--      <view class="row"><view class="row_cont"><text>结算手续费：</text>¥ 500.00???</view></view>-->
+      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{(detail.settlement_amount - detail.option_fee - detail.transaction_fee) >= 0 ? '+' : '-'}} ¥ {{Math.abs(truncToTwo(detail.settlement_amount - detail.option_fee - detail.transaction_fee))}}（{{ truncToTwo(detail.profitRate * 100)}}%）</text></view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">资金结算明细用于帮助您理解本单的投入、结算及最终盈亏构成，如对具体金额有疑问，请以结算单及银行流水为准，并及时联系客服核对。</view></view>
     </view>
 
@@ -153,16 +152,16 @@ const previewImage = () =>  {
       <view class="row">
 <!--        <view class="row_cont"><text>转账备注：</text>12cfe2566119 0000</view>-->
       </view>
-      <view class="row">
-        <view class="row_cont"><text>收款户名：</text>
-          {{ bankReceiptInfoData.accountName }}</view>
-      </view>
-      <view class="row">
-        <view class="row_cont"><text>收款银行：</text>{{ bankReceiptInfoData.bankName }} {{ bankReceiptInfoData.branchName }}</view>
-      </view>
-      <view class="row">
-        <view class="row_cont"><text>收款账号：</text>{{ bankReceiptInfoData.bankAccount }}</view>
-      </view>
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>收款户名：</text>-->
+<!--          {{ bankReceiptInfoData.accountName }}</view>-->
+<!--      </view>-->
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>收款银行：</text>{{ bankReceiptInfoData.bankName }} {{ bankReceiptInfoData.branchName }}</view>-->
+<!--      </view>-->
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text>收款账号：</text>{{ bankReceiptInfoData.bankAccount }}</view>-->
+<!--      </view>-->
       <view class="row">
         <view class="row_cont" style="color:#5E8ED6; font-size:12px;"><text>支付凭证：</text>
           <text @click="previewImage">点击查看</text>
@@ -172,7 +171,7 @@ const previewImage = () =>  {
 
     <view class="card">
       <view class="fir_title">文档与风险提示</view>
-      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看/下载《结算单》</view></view>
+<!--      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看/下载《结算单》</view></view>-->
       <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《交易确认书》</view></view>
       <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《产品说明书》</view></view>
       <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《风险揭示书》</view></view>

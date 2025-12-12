@@ -72,7 +72,8 @@ const exexercise = () => {
       <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color:#E8473A;">已购买 · 持有中 · 可行权</view>
       <view class="row">
-        <view class="row_cont"><text>当前参考盈亏：</text><text style="color:#E8473A">+ ¥ {{truncToTwo(detail.estimatedProfit)}} ({{detail.profitRate}}%)</text></view>
+        <view class="row_cont"><text>当前参考盈亏：</text><text :class="Number(detail.estimatedProfit) >= 0 ? 'valueRed' : 'valueGreen'">
+          {{ Number(detail.estimatedProfit) >=0 ? '+':'-' }} ¥ {{truncToTwo(Math.abs(detail.estimatedProfit))}} ({{detail.profitRate}}%)</text></view>
       </view>
 <!--      <view class="row">-->
 <!--        <view class="row_cont" style="color:#999999; font-size:12px;">参考数据更新时间：{{ formatLocalTime(new Date()) }}</view>-->
@@ -116,7 +117,7 @@ const exexercise = () => {
       <view class="row"><view class="row_cont"><text>期权费率：</text>{{ truncToTwo(detail.optionFeeRate * 100) }}%</view></view>
       <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{truncToTwo(detail.optionFee)}}</view></view>
       <view class="row"><view class="row_cont"><text>手续费：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view></view>
-      <view class="row"><view class="row_cont"><text>总计支出：</text>¥ {{ truncToTwo(detail.optionFee + detail.transactionFee) }}</view></view>
+      <view class="row"><view class="row_cont"><text>总计支出：</text>¥ {{ truncToTwo(Number(detail.optionFee) + Number(detail.transactionFee)) }}</view></view>
     </view>
 
     <!-- 支付信息 -->
@@ -179,6 +180,18 @@ const exexercise = () => {
 
       text{
         color: #999999;
+      }
+
+      .valueRed {
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-weight: 400;
+        font-size: 13px;
+        line-height: 1.21em;
+        color: #E8473A;
+      }
+
+      .valueGreen {
+        color: #2ECC71;
       }
     }
   }

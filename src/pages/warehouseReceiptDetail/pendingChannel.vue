@@ -95,7 +95,7 @@ const getDetail = (orderId: string) => {
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
       </view>
       <view class="row">
-        <view class="row_cont"><text>预估合计：</text>¥ {{ truncToTwo(detail.optionFee + detail.transactionFee) }}</view>
+        <view class="row_cont"><text>预估合计：</text>¥ {{ truncToTwo(Number(detail.optionFee) + Number(detail.transactionFee)) }}</view>
       </view>
       <view class="row">
         <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>

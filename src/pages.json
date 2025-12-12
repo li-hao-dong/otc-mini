@@ -191,6 +191,8 @@
 		"navigationBarTitleText": "uni-app",
 		"navigationBarTextSize": "uni-app",
 		"navigationBarBackgroundColor": "#d6423a",
-		"backgroundColor": "#f5f5f5"
+		"backgroundColor": "#f5f5f5",
+		"enableShareAppMessage": true,
+		"enableShareTimeline": true
 	}
 }

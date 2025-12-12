@@ -1,9 +1,9 @@
 <template>
   <view class="container wrPage">
-    <view class="topBar">
-      <text class="topText">模拟机构</text>
-<!--      <text class="topText">录入 +</text>-->
-    </view>
+<!--    <view class="topBar">-->
+<!--      <text class="topText">模拟机构</text>-->
+<!--&lt;!&ndash;      <text class="topText">录入 +</text>&ndash;&gt;-->
+<!--    </view>-->
 
     <view class="segTabs">
       <view class="segItem" style="width: 100%;" v-for="(item, index) in orderType" :key="index" @click="orderTypeKey = index">
@@ -28,26 +28,26 @@
         <view class="sumCol">
           <view class="sumMain">
             <view class="sumLabel">名义本金</view>
-            <view class="sumValueRed">{{truncToTwo(ordersSummary?.nominalAmount / 10000)}}万</view>
+            <view :class="ordersSummary?.nominalAmount / 10000 >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.nominalAmount / 10000)}}万</view>
           </view>
           <view class="sumMain">
             <view class="sumLabel">期权费</view>
-            <view class="sumValueRed">{{truncToTwo(ordersSummary?.optionFee)}}元</view>
+            <view :class="ordersSummary?.optionFee >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.optionFee)}}元</view>
           </view>
         </view>
         <view class="sumCol">
            <view class="sumSub">
             <view class="subLabel">预计回款</view>
-            <view class="subValueBlue">{{truncToTwo(ordersSummary?.estimatedPayout)}}元</view>
+            <view :class="ordersSummary?.estimatedPayout >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.estimatedPayout)}}元</view>
           </view>
 
           <view class="sumSub">
             <view class="subLabel">预计盈亏</view>
-            <view class="subValueGreen">{{truncToTwo(ordersSummary?.estimatedProfit)}}元</view>
+            <view :class="ordersSummary?.estimatedProfit >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.estimatedProfit)}}元</view>
           </view>
           <view class="sumSub">
             <view class="subLabel">盈亏比例</view>
-            <view class="subValueGreen">{{ordersSummary?.profitRate ? truncToTwo(ordersSummary.profitRate * 100) : 0}}%</view>
+            <view :class="ordersSummary?.profitRate * 100 >=0 ? 'sumValueRed':'subValueGreen'">{{ordersSummary?.profitRate ? truncToTwo(ordersSummary.profitRate * 100) : 0}}%</view>
           </view>
         </view>
       </view>
@@ -61,10 +61,10 @@
         </view>
         <view class="row priceRow">
           <view class="para"><text class="label">股价：</text></view>
-          <view class="para"><text class="valueRed">{{order?.underlyingPrice}}</text></view>
+          <view class="para"><text :class="order?.underlyingPrice >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.underlyingPrice)}}</text></view>
         </view>
         <view class="row changeRow">
-          <text class="label">涨幅：{{order?.priceChange}}</text>
+          <text class="label" :class="Number(order?.priceChange.slice(0, -1)) >= 0 ? 'valueRed' : 'valueGreen'">涨幅：{{order?.priceChange}}</text>
         </view>
       </view>
 
@@ -105,7 +105,7 @@
         <text class="actionLink">设置到期提醒</text>
         <view class="outlineBtn" role="button" tabindex="0"><text class="outlineText">行权</text></view>
       </view> -->
-      <view>{{order?.orderStatus}}</view>
+      <view class="orderStatus">{{order?.orderStatus}}</view>
     </view>
 
     <view v-if="store.user.token">
@@ -448,6 +448,12 @@ const getUserOrder = () => {
 
 .dataText text{
   color: #999999;
+}
+
+.orderStatus{
+  border-top: 1px solid #EEEEEE;
+  padding-top: 10px;
+  margin-top: 10px;
 }
 
 .valueGreen {

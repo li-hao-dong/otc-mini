@@ -55,7 +55,7 @@ const getDetail = (orderId: string) => {
       <view class="row"><view class="row_cont"><text>期权费率：</text>{{ truncToTwo(detail.optionFeeRate * 100) }}%</view></view>
       <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view></view>
       <view class="row"><view class="row_cont"><text>手续费：</text>¥ {{truncToTwo(detail.transactionFee)}}</view></view>
-      <view class="row"><view class="row_cont"><text>总计支出：</text>¥ {{truncToTwo(detail.transactionFee + detail.optionFee)}}</view></view>
+      <view class="row"><view class="row_cont"><text>总计支出：</text>¥ {{truncToTwo(Number(detail.transactionFee) + Number(detail.optionFee))}}</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">上述为您在本笔订单中的历史投入与费用情况，并不代表最终结算金额，实际盈亏请以「已结算」状态页面及结算单为准。</view></view>
     </view>
 

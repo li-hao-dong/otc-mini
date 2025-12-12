@@ -175,7 +175,7 @@ const formatInquiryStruct = (quoteResult:QuoteResult[]) =>　{
   results.value = Object.values(filterData)
   console.log("filterData,", filterData)
   console.log("terms,", terms.value)
-  gridCol.value = `25% repeat(${terms.value?.length}, 1fr) 25%`;
+  gridCol.value = `20% repeat(${terms.value?.length}, 1fr) 20%`;
 }
 
 const toInquiry = () => {

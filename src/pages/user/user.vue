@@ -5,17 +5,17 @@
         <input v-if="!username" id="setName" type="nickname" @click="getUserProfile" v-model="username" class="nickname" placeholder=""/>
         <view class="signBox">
           <view class="avator">
-            <!--          <button v-if="!avatarUrl" class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">-->
-            <uni-icons type="person" size="66" color="white"></uni-icons>
-            <!--          </button>-->
-            <!--          <image v-else class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>-->
+            <button v-if="!avatarUrl" class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+              <uni-icons type="person" size="66" color="white"></uni-icons>
+            </button>
+            <image v-else open-type="chooseAvatar" @chooseavatar="onChooseAvatar" class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>
           </view>
           <view class="userData">
             <view class="userName">
               <view>{{username?username:'点击此处进行登录'}}</view>
             </view>
-            <view class="userTel">{{tel}}
-            </view>
+<!--            <view class="userTel">{{tel}}-->
+<!--            </view>-->
           </view>
         </view>
       </view>
@@ -101,6 +101,7 @@ const initUserInfo = () => {
   if(userInfo){
     token.value = userInfo.token;
     username.value = userInfo.name;
+    avatarUrl.value = userInfo.avatarUrl;
     getUserInfo()
   }
 }
@@ -166,7 +167,7 @@ const onChooseAvatar = (e:any) => {
   console.log("user avatar", e)
   if(e.detail && e.detail.avatarUrl){
     avatarUrl.value = e.detail.avatarUrl;
-    login()
+    useStore().user.setAvatarUrl(e.detail.avatarUrl)
   }
 }
 

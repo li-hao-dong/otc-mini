@@ -131,7 +131,7 @@ const previewImage = () =>  {
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
       </view>
       <view class="row">
-        <view class="row_cont"><text>合计应付：</text>¥ {{ truncToTwo(detail.optionFee + detail.transactionFee) }}</view>
+        <view class="row_cont"><text>合计应付：</text>¥ {{ truncToTwo(Number(detail.optionFee) + Number(detail.transactionFee)) }}</view>
       </view>
     </view>
 
@@ -139,7 +139,7 @@ const previewImage = () =>  {
     <view class="card">
       <view class="fir_title">支付信息</view>
       <view class="row">
-        <view class="row_cont"><text>支付状态：</text>已确认</view>
+        <view class="row_cont"><text>支付状态：</text>{{detail.orderStatus}}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>实际支付金额：</text>¥ {{truncToTwo(remitData.paymentAmount)}}</view>

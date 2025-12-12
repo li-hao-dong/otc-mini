@@ -5,6 +5,7 @@ import {warnToast} from "@/utils/toast/toast";
 
 interface userStore {
     uuid: string;
+    avatarUrl: string,
     name: string;
     token: string | undefined;
     token_type: string;
@@ -29,6 +30,7 @@ interface userStore {
 export const useUserStore = defineStore('user', {
     state: ():userStore => ({
         uuid: '',
+        avatarUrl: '',
         name: '',
         token: undefined,
         token_type:'',
@@ -63,6 +65,7 @@ export const useUserStore = defineStore('user', {
             if (userInfo) {
                 if(new Date().getTime() < userInfo.token_valid_until){
                     this.uuid = userInfo.uuid;
+                    this.avatarUrl = uni.getStorageSync('avatarUrl') || '';
                     this.name = userInfo.name;
                     this.token = userInfo.token;
                     this.token_type = userInfo.token_type;
@@ -98,8 +101,14 @@ export const useUserStore = defineStore('user', {
             //     uni.switchTab({url: '/pages/user/user'});
             // }
         },
+        setAvatarUrl(avatarUrl: string) {
+            this.avatarUrl = avatarUrl;
+            uni.setStorageSync('avatarUrl', avatarUrl)
+
+        },
         clearUserInfo() {
             this.uuid = '';
+            this.avatarUrl = '';
             this.name = '';
             this.token = '';
             this.token_type = '';

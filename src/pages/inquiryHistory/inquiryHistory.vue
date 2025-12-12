@@ -1,13 +1,13 @@
 <template>
   <view class="container">
     <view class="hitBox">
-      <view class="name">{{ store.miniData.name }}</view>
+<!--      <view class="name">{{ store.miniData.name }}</view>-->
       <view class="inquiryBox" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">
         <view class="inquiryTitle">询价</view>
         <view class="inquiryIcon"><uni-icons type="search" size="20" color="#ffffff"></uni-icons></view>
       </view>
     </view>
-    <view class="inquiryHistoryBox">
+    <view class="inquiryHistoryBox" v-if="history.length > 0 && store.user.token">
       <view class="inquiryHistoryList" v-for="(item, index) in history" :key="item.inquiryId" @click="toDetail(item.inquiry_parameters)">
         <view class="fir_row">
           <view class="fir_br">
@@ -69,6 +69,11 @@
 <!--          </uni-tr>-->
 <!--        </uni-table>-->
       </view>
+    </view>
+
+    <view class="hint" v-else-if="store.user.token">
+      <view class="hint_sign">您还没有询价记录，请先询价！</view>
+      <button class="to_sign" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">去询价</button>
     </view>
 
     <view v-if="store.user.token">

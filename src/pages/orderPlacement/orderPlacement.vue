@@ -332,7 +332,6 @@ const placeOrder = () => {
 .quantityRow {
     display: flex;
     align-items: center;
-    justify-content: space-between;
 }
 
 .quantityStrong {
@@ -349,6 +348,7 @@ const placeOrder = () => {
     font-size: 13px;
     line-height: 1.21em;
     color: #333333;
+    padding-left: 10px;
 }
 
 .uploadBox {

@@ -126,7 +126,7 @@ const uploadImage = () => {
     })
     return;
   }
-
+  uni.showLoading("上传中...")
   uni.uploadFile({
     url: `${BASE_URL}/users/orders/${orderId.value}/payment-proof`,
     header: {
@@ -142,6 +142,7 @@ const uploadImage = () => {
     },
     success: (res) => {
       console.log('uploadImage success, res is:', res)
+      uni.hideLoading();
       if(res.statusCode === 200){
         // voucherUrl.value = `${BASE_URL}${JSON.parse(res.data).data.paymentVoucherUrl}`;
         uni.showToast({
@@ -153,7 +154,6 @@ const uploadImage = () => {
           uni.redirectTo({url: `/pages/warehouseReceiptDetail/paid?id=${orderId.value}`})
         }, 2000)
       }
-      uni.hideLoading();
     },
     fail: (err) => {
       console.log('uploadImage fail', err);
@@ -212,7 +212,10 @@ const bindDayDateChange = (e: any) => {
         <view class="row_cont"><text>手续费：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>合计应付：</text>¥ {{ truncToTwo(detail.optionFee + detail.transactionFee) }}</view>
+<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.optionFee  }}</view>-->
+<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.transactionFee }}</view>-->
+<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ Number(detail.optionFee) + Number(detail.transactionFee) }}</view>-->
+            <view class="row_cont"><text>合计应付：</text>¥ {{ truncToTwo(Number(detail.optionFee) + Number(detail.transactionFee)) }}</view>
       </view>
     </view>
 

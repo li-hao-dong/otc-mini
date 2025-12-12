@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-    <view class="row">
+    <view class="row" style="padding-top: 20px;">
       <view class="cell title">类型：</view>
       <view class="cell content">香草看涨期权</view>
     </view>

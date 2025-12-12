@@ -1,10 +1,10 @@
 <template>
   <view class="container">
-    <view class="hitBox">
+    <view class="hitBox"  @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">
 <!--      <view class="name">{{ store.miniData.name }}</view>-->
-      <view class="inquiryBox" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">
+      <view class="inquiryBox">
+        <view class="inquiryIcon"><uni-icons type="search" size="20" color="#000"></uni-icons></view>
         <view class="inquiryTitle">询价</view>
-        <view class="inquiryIcon"><uni-icons type="search" size="20" color="#ffffff"></uni-icons></view>
       </view>
     </view>
     <view class="inquiryHistoryBox" v-if="history.length > 0 && store.user.token">
@@ -185,29 +185,36 @@ const resetDate = () => {
 
 <style>
 .hitBox {
-  box-sizing: content-box;
-  padding: 0 20rpx;
-  width: auto;
+  width: 100%;
+  margin: auto;
   height: 80rpx;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: var(--color-primary-bg);
-  color: var(--color-primary-text);
+  background: #f5f5f5;
+  padding: 10px 0;
   position: sticky;
   top: 0;
   z-index: 999;
+  box-sizing: content-box;
 }
 
 .inquiryBox{
+  width: 95%;
+  margin: auto;
   display: flex;
   gap: 10rpx;
+  border: 1px solid #cacaca;
+  background: #EEEEEE;
+  padding: 10px 20rpx;
+  box-sizing: border-box;
+  border-radius: 10px;
 }
 
 .inquiryHistoryBox{
   width: 95%;
   margin: auto;
-  padding-top: 10px;
+  /*padding-top: 10px;*/
 }
 
 .inquiryHistoryList{

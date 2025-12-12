@@ -5,10 +5,11 @@
         <input v-if="!username" id="setName" type="nickname" @click="getUserProfile" v-model="username" class="nickname" placeholder=""/>
         <view class="signBox">
           <view class="avator">
-            <button v-if="!avatarUrl" class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
-              <uni-icons type="person" size="66" color="white"></uni-icons>
+            <button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
+              <uni-icons v-if="!avatarUrl" type="person" size="66" color="white"></uni-icons>
+              <image v-else open-type="chooseAvatar" @chooseavatar="onChooseAvatar" class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>
             </button>
-            <image v-else open-type="chooseAvatar" @chooseavatar="onChooseAvatar" class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>
+<!--            <image v-else class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>-->
           </view>
           <view class="userData">
             <view class="userName">

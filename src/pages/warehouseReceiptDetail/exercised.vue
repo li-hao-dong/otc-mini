@@ -26,6 +26,7 @@ const getDetail = (orderId: string) => {
 <template>
   <view class="container">
     <view class="card">
+      <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color:#FF9800;">已行权 · 待结算</view>
       <view class="row"><view class="row_cont">您已成功提交行权申请，并由平台与合作机构确认受理。当前订单正在进行资金结算与对账，请耐心等待。</view></view>
       <view class="row"><view class="row_cont"><text>本次行权比例：</text>100%</view></view>

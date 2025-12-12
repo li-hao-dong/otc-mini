@@ -44,4 +44,8 @@ page{
   color: #bfbfbf;
 }
 
+.uni-tabbar__label {
+  font-size: 20upx !important; /* 使用upx单位适配不同屏幕 */
+}
+
 </style>

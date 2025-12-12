@@ -27,6 +27,7 @@ const getDetail = (orderId: string) => {
 <template>
   <view class="container">
     <view class="card">
+      <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color:#FF9800;">已到期 · 待结算</view>
       <view class="row"><view class="row_cont">合约已于 {{ formatLocalTime(new Date(detail?.maturityDate)) }} 到期。我们正在与合作机构进行对账和资金结算确认，请耐心等待。</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">本页面仅说明合约已到期，相关收益与结算金额将在订单状态更新为「已结算」后展示，当前不展示具体盈亏数字。</view></view>

@@ -10,7 +10,7 @@
 		{
 			"path": "pages/inquiryHistory/inquiryHistory",
 			"style": {
-				"navigationBarTitleText": "询价",
+				"navigationBarTitleText": "询价记录",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false

@@ -78,7 +78,7 @@
             </view> -->
 
             <view class="cta" role="button" tabindex="0" @click="placeOrder">
-                <text class="ctaText">模拟下单</text>
+                <text class="ctaText">下单</text>
             </view>
         </view>
     </view>
@@ -213,7 +213,7 @@ const placeOrder = () => {
 .assetCode {
     font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
     font-weight: 400;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.21em;
     color: #999999;
 }

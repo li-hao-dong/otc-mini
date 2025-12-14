@@ -78,7 +78,7 @@
             </view> -->
 
             <view class="cta" role="button" tabindex="0" @click="placeOrder">
-                <text class="ctaText">下单</text>
+                <text class="ctaText">模拟下单</text>
             </view>
         </view>
     </view>

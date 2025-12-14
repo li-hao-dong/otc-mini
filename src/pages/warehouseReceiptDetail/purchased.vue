@@ -138,7 +138,7 @@ const exexercise = () => {
       <view class="row"><view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(detail?.nominalAmount)}}</view></view>
       <view class="row"><view class="row_cont"><text>期权费率：</text>{{ truncToTwo(detail?.optionFeeRate * 100) }}%</view></view>
       <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{truncToTwo(detail?.optionFee)}}</view></view>
-      <view class="row"><view class="row_cont"><text>手续费：</text>¥ {{ truncToTwo(detail?.transactionFee) }}</view></view>
+      <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{ truncToTwo(detail?.transactionFee) }}</view></view>
       <view class="row"><view class="row_cont"><text>总计支出：</text>¥ {{ truncToTwo(Number(detail?.optionFee) + Number(detail?.transactionFee)) }}</view></view>
     </view>
 

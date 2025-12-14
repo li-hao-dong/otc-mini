@@ -151,7 +151,7 @@ export interface OrderDetail {
      */
     termName?: string;
     /**
-     * 交易手续费
+     * 交易通道费
      */
     transactionFee?: number;
     /**

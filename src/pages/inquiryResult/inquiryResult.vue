@@ -308,7 +308,7 @@ const placeAnOrder = (quote: any, term: string, result: any) => {
 .btnText {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
-  font-size: 13.3px;
+  font-size: 16px;
   line-height: 1.21em;
   color: #ffffff;
 }

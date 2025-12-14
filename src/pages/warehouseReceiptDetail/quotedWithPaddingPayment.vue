@@ -209,7 +209,7 @@ const bindDayDateChange = (e: any) => {
         <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
-        <view class="row_cont"><text>手续费：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
+        <view class="row_cont"><text>通道费：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
       </view>
       <view class="row">
 <!--        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.optionFee  }}</view>-->

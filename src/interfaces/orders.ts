@@ -98,7 +98,7 @@ export interface OrderSummary {
      */
     termName?: string;
     /**
-     * 手续费
+     * 通道费
      */
     transactionFee?: number | null;
     /**
@@ -157,7 +157,7 @@ export interface OrdersSummary {
      */
     optionFee?: number;
     /**
-     * 汇总盈亏比例，estimatedProfit / (期权费 + 手续费) 之和，返回小数形式
+     * 汇总盈亏比例，estimatedProfit / (期权费 + 通道费) 之和，返回小数形式
      */
     profitRate?: number | null;
     [property: string]: any;

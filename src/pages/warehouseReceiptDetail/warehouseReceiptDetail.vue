@@ -86,52 +86,52 @@ const uploadPaymentVoucher = () => {
           <text class="label">涨幅：{{ detail?.priceChange}}</text>
         </view>
       </view>
-      
+
       <!-- 详细信息列表 -->
       <view class="rowBorder">
         <text class="dataText"><text>开仓时间：</text>{{ formatDate(detail?.startDate) }}</text>
         <text class="dataText"><text>到期时间：</text>{{ formatDate(detail?.maturityDate) }}</text>
       </view>
-      
+
       <view class="rowBorder">
         <text class="dataText"><text>期权代码：</text>{{ detail?.optionCode}}</text>
         <text class="dataText"><text>名义本金：</text>{{ detail?.nominalAmount ? (detail.nominalAmount / 10000).toFixed(0) : 0 }}万</text>
       </view>
-      
+
       <view class="rowBorder">
         <text class="dataText"><text>期限：</text>{{ detail?.termName }}</text>
         <text class="dataText"><text>剩余天数：</text>{{ detail?.daysToExpiry }}天</text>
       </view>
-      
+
       <view class="rowBorder">
         <text class="dataText"><text>开仓价格：</text>{{ formatAmount(detail?.underlyingPrice) }}</text>
         <text class="dataText"><text>行权价格：</text>{{ formatAmount(detail?.strikePrice) }}</text>
       </view>
-      
+
       <view class="rowBorder">
         <text class="dataText"><text>预计回款：</text>{{ formatAmount(detail?.estimatedPayout) }}</text>
         <text class="dataText"><text>预计盈亏：</text>{{ formatAmount(detail?.estimatedProfit) }}</text>
       </view>
-      
+
       <view class="rowBorder">
         <text class="dataText"><text>期权费：</text>{{ formatAmount(detail?.optionFee) }}</text>
         <text class="dataText"><text>盈亏比例：</text>{{ detail?.profitRate ? (detail.profitRate * 100).toFixed(2) : 0 }}%</text>
       </view>
-      
+
       <view class="rowBorder">
         <text class="dataText"><text>交易商：</text>{{ detail?.sourceName }}</text>
         <text class="dataText"><text>期权费率：</text>{{ detail?.optionFee && detail?.nominalAmount ? ((detail.optionFee / detail.nominalAmount) * 100).toFixed(2) : 0 }}%</text>
       </view>
-      
+
       <view class="rowBorder">
-        <text class="dataText"><text>手续费：</text>{{ formatAmount(detail?.transactionFee) }}</text>
+        <text class="dataText"><text>通道费：</text>{{ formatAmount(detail?.transactionFee) }}</text>
       </view>
     </view>
-    
+
     <!-- 收款信息卡片 -->
     <view class="card payment-card">
       <view class="card-title">收款信息</view>
-      
+
       <view class="payment-info">
         <view class="payment-row">
           <text class="payment-label">收款银行名称</text>
@@ -163,11 +163,11 @@ const uploadPaymentVoucher = () => {
         </view>
       </view>
     </view>
-    
+
     <!-- 上传支付凭证卡片 -->
     <view class="card upload-card">
       <view class="card-title">上传支付凭证</view>
-      
+
       <view class="upload-area" @tap="uploadPaymentVoucher">
         <view v-if="!paymentVoucherImage" class="upload-placeholder">
           <view class="camera-icon">📷</view>
@@ -175,7 +175,7 @@ const uploadPaymentVoucher = () => {
         </view>
         <image v-else :src="paymentVoucherImage" class="uploaded-image" mode="aspectFit" />
       </view>
-      
+
       <view class="upload-tips">
         <text>特别提示：上传的图片大小控制在 1M 以内，超出请压缩或者裁剪。</text>
       </view>

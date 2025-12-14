@@ -90,7 +90,7 @@ const getDetail = (orderId: string) => {
         <view class="row_cont"><text>期权费（预估）：</text>¥ {{truncToTwo(detail.optionFee)}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>手续费（预估）：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
+        <view class="row_cont"><text>通道费（预估）：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
       </view>

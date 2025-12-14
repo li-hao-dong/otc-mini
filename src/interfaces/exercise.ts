@@ -49,7 +49,7 @@ export interface ExerciseResp {
      */
     settlementAmount?: number;
     /**
-     * 行权手续费
+     * 行权通道费
      */
     settlementFee?: number;
     [property: string]: any;

@@ -97,7 +97,7 @@
         <text class="dataText"><text>期权费率：</text>{{order?.optionFeeRate ? truncToTwo(order.optionFeeRate * 100) : 0}}%</text>
       </view>
       <view class="rowBorder">
-        <text class="dataText"><text>手续费：</text>{{truncToTwo(order?.transactionFee)}}元</text>
+        <text class="dataText"><text>通道费：</text>{{truncToTwo(order?.transactionFee)}}元</text>
       </view>
 
       <!-- <view class="actions">

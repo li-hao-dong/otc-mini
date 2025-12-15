@@ -113,7 +113,8 @@
       <view class="more_data_cont" v-else>没有数据了</view>
     </view>
     <view class="hint" v-else>
-      <view class="hint_sign">暂无数据</view>
+      <view class="hint_sign">订单服务，需要登录后才能提供。</view>
+<!--      <view class="hint_sign">“暂无数据</view>-->
 <!--      <view class="hint_sign">您还未登录，请先登录！</view>-->
 <!--      <button class="to_sign" @click="uni.switchTab({url: '/pages/user/user'})">去登录</button>-->
     </view>

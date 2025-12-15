@@ -77,7 +77,7 @@ import type {
 } from "@/interfaces/inquiry/inquiryOptions";
 import {failToast} from "@/utils/toast/toast";
 import {onLoad, onShow} from "@dcloudio/uni-app";
-import type {calculatorReq} from "@/interfaces/calculator";
+import type {calculatorReq, EquityOptionCalculatorResult} from "@/interfaces/calculator";
 
 const structures = reactive({
   range: [],
@@ -140,8 +140,12 @@ const calculatorHandler = () => {
     settlementPrice: calculator.settlementPrice,
     structureCode: calculator.structuresCode
   } as calculatorReq;
-  calculatorData(payload).then((res) => {
+  calculatorData(payload).then((res:EquityOptionCalculatorResult) => {
     console.log("calculatorData res", res);
+    uni.showToast({
+      title: '计算成功',
+      duration: 2000
+    })
     results.expectedPayment = res.expectedPayout.toFixed(2) || res.expectedPayout;
     results.actualProfitLoss = res.netProfit.toFixed(2) || res.netProfit;
     results.profitLossRatio = res.profitRate;

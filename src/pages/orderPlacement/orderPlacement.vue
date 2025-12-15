@@ -89,6 +89,7 @@ import { buyProduct } from '@/api';
 import { PriceType, type orderPayloadReq } from '@/interfaces/inquiry/orderPayload';
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
+import {useStore} from "@/stores";
 const selectedPriceType = ref<PriceType>(PriceType.MARKET);
 const orderPayload = ref<any>(null);
 const quantity = ref<number>(1);
@@ -105,6 +106,12 @@ const initData = () => {
 };
 
 const placeOrder = () => {
+    if (!useStore().user.token){
+      uni.showToast({ title: '请先登录', icon: 'none' });
+      setTimeout(() => { uni.switchTab ({ url: '/pages/user/user' }); }, 1500);
+      return;
+    }
+
     if (!orderPayload.value) return;
     else if (!orderPayload.value?.inquiryId || !orderPayload.value?.quote?.productCode) return  uni.showToast({ title: '询价单号或产品代码不存在', icon: 'none' });
     else if (!quantity.value) return uni.showToast({ title: '下单数量不存在', icon: 'none' });

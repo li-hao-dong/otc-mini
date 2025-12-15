@@ -31,7 +31,9 @@ export const interceptor = function () {
 };
 
 const beforeRequest = (url:string) => {
-    if(url.includes("/users/login") || url.includes("/inquiry/history") || url.includes("/inquiry/options") || url.includes("/tools/equity-option/calculate") || url.includes("/users/orders?page=")) return true;
+    if(url.includes("/users/login") || url.includes("/inquiry/history") ||
+        url.includes("/inquiry/options") || url.includes("/inquiry/quote") ||
+        url.includes("/tools/equity-option/calculate") || url.includes("/users/orders?page=")) return true;
 
     if(!useStore().user.token){
         warnToast("请先登录");

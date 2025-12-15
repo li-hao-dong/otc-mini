@@ -23,7 +23,7 @@
     <view class="row">
       <view class="cell title">期权费率：</view>
       <view class="cell content">
-        <input type="number" v-model="calculator.optionRate" placeholder="请输入规模" /> <text> %</text>
+        <input type="digit" v-model="calculator.optionRate" placeholder="请输入规模" /> <text> %</text>
       </view>
     </view>
     <view class="row">

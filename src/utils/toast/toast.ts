@@ -31,6 +31,7 @@ export const failToast = function (title: string) {
     uni.showToast({
         title,
         // image: failImg,
+        icon: "error",
         mask: true,
         position: "center",
         duration,
@@ -41,6 +42,7 @@ export const warnToast = function (title: string) {
     uni.showToast({
         title,
         // image: warnImg,
+        icon: "error",
         mask: true,
         position: "center",
         duration,

@@ -24,8 +24,8 @@
           </view>
         </view>
         <view class="sec_row">
-<!--          <view>询价机构：<text>模拟机构</text></view>-->
           <view>询价规模：<text>{{ item.nominal_amount }}万</text></view>
+          <view>询价机构：<text>模拟机构</text></view>
         </view>
 
         <view style="margin-top: 10px; ">

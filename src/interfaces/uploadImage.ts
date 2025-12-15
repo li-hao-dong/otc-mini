@@ -19,11 +19,15 @@ export interface UploadImageReq {
      * 支付凭证图片文件
      */
     voucherImage: string;
+    /**
+     * 汇款人姓名
+     * */
+    bankUserName: string;
     [property: string]: any;
 }
 
 export interface UploadImageResp {
-    orderId?: string;
+    orderNo?: string;
     orderStatus?: string;
     paymentVoucherUrl?: string;
     [property: string]: any;

@@ -55,8 +55,11 @@
 <!--        </uni-tr>-->
 <!--      </uni-table>-->
 
+      <view class="hint_text actions">
+        请点击报价查看详情并下单
+      </view>
 
-      <view class="row actions">
+      <view class="row">
 <!--        <view class="btn fixed" role="button" tabindex="0"><text class="btnText">客服</text></view>-->
         <view class="btn grow" role="button" tabindex="0"><text class="btnText" @click="toInquiry">重新询价</text></view>
       </view>
@@ -311,5 +314,13 @@ const placeAnOrder = (quote: any, term: string, result: any) => {
   font-size: 16px;
   line-height: 1.21em;
   color: #ffffff;
+}
+
+.hint_text{
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 1.21em;
+  color: #999999;
 }
 </style>

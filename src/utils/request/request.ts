@@ -14,18 +14,34 @@ export const interceptor = function () {
     uni.addInterceptor("request", {
         // 发请求前执行
         invoke(args) {
-            if(!`${useStore().user.token_type} ${useStore().user.token}`){
+            if(!`${useStore().user.token}`){
                 warnToast("请先登录");
+                setTimeout(() => {
+                    uni.switchTab({url: '/pages/user/user'})
+                }, 2000)
                 return;
             }
-            if (useStore().user.token_valid_until < new Date().getTime()) {
-                // 超出有效时间
-                warnToast("请重新登录");
-                return;
-            }
+            // if (useStore().user.token_valid_until < new Date().getTime()) {
+            //     // 超出有效时间
+            //     warnToast("请重新登录");
+            //     return;
+            // }
         },
     });
 };
+
+const beforeRequest = (url:string) => {
+    if(url.includes("/users/login")) return true;
+
+    if(!useStore().user.token){
+        warnToast("请先登录");
+        setTimeout(() => {
+            uni.switchTab({url: '/pages/user/user'})
+        }, 2000)
+        return false;
+    }
+    return true;
+}; // 执行拦截器
 
 const http = {
     /**
@@ -33,6 +49,10 @@ const http = {
      * */
     get(url: string) {
         return new Promise((resolve, reject) => {
+            if(!beforeRequest(url)){
+                reject(false)
+                return
+            }
             uni.request({
                 method: "GET",
                 timeout,
@@ -65,6 +85,10 @@ const http = {
      * */
     post(url: string, data: any, contentType: string) {
         return new Promise((resolve, reject) => {
+            if(!beforeRequest(url)){
+                reject(false)
+                return
+            }
             uni.request({
                 method: "POST",
                 timeout,

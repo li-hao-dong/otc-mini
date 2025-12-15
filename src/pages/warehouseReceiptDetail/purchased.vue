@@ -149,7 +149,7 @@ const exexercise = () => {
       <view class="row"><view class="row_cont"><text>实际支付金额：</text>¥ {{ truncToTwo(detail?.paymentAmount) }}</view></view>
       <view class="row"><view class="row_cont"><text>支付方式：</text>银行转账</view></view>
       <view class="row"><view class="row_cont"><text>付款银行：</text>{{ detail?.bankName }}</view></view>
-      <view class="row"><view class="row_cont"><text>付款账号：</text>尾号 {{ detail?.bankAccount }}</view></view>
+      <view class="row"><view class="row_cont"><text>付款账号：</text>尾号 {{ detail?.bankAccount.substr(-4) }}</view></view>
       <view class="row"><view class="row_cont"><text>支付时间：</text>{{formatLocalTime(new Date(detail?.paymentTime))}}</view></view>
 <!--      <view class="row"><view class="row_cont"><text>转账备注：</text>12cfe2566119 0000（没看到）</view></view>-->
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">如支付信息与您实际转账不符，请尽快联系客服核对。</view></view>

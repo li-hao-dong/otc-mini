@@ -219,7 +219,7 @@ const getOptions = () => {
     nominalAmounts.value = <number[]>res.nominalAmounts;
     selectedNominal.value = <number>res.nominalAmounts![0];
     terms.value = <Term[]>res.terms;
-    selectedTerms.value = <string[]>[res.terms![0].code, res.terms![1].code, res.terms![2].code];
+    selectedTerms.value = <string[]>[res.terms![3].code, res.terms![1].code, res.terms![2].code];
     sources.value = res.sources?.length == 0 ? <Source[]>[{ code: "ALL", name: "ALL", isActive: true }] : <Source[]>[{ code: "ALL", name: "ALL", isActive: true }, ...res!.sources];
     selectedSources.value = <string[]>[sources.value![0].code];
   }).catch(() => {

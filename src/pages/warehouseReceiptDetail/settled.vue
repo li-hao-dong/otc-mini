@@ -147,7 +147,7 @@ const previewImage = () =>  {
           {{ remitData.bankName }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>汇款账号：</text>尾号 {{ remitData.bankAccount }}</view>
+        <view class="row_cont"><text>汇款账号：</text>尾号 {{ remitData.bankAccount.substr(-4) }}</view>
       </view>
       <view class="row">
 <!--        <view class="row_cont"><text>转账备注：</text>12cfe2566119 0000</view>-->

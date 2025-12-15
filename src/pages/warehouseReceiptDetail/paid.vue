@@ -139,7 +139,7 @@ const previewImage = () =>  {
     <view class="card">
       <view class="fir_title">支付信息</view>
       <view class="row">
-        <view class="row_cont"><text>支付状态：</text>{{detail.orderStatus}}</view>
+        <view class="row_cont"><text>支付状态：</text>{{detail?.orderStatus}}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>实际支付金额：</text>¥ {{truncToTwo(remitData.paymentAmount)}}</view>

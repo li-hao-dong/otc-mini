@@ -3,7 +3,7 @@
 import {reactive, ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
-import {bankReceiptInfo, BASE_URL, orderDetail, uploadPaymentProof} from "@/api";
+import {bankReceiptInfo, BASE_URL, orderDetail} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {useStore} from "@/stores";
 import {formatLocalTime, truncToTwo} from "@/utils";
@@ -13,12 +13,13 @@ const voucher = ref<File>()
 const voucherUrl = ref<string>()
 const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
-const remitData = reactive<{accountName: string | null, bankName: string | null, bankAccount: string | null, paymentAmount: number | null, paymentTime: string | null}>({
+const remitData = reactive<{accountName: string | null, bankName: string | null, bankAccount: string | null, paymentAmount: number | null, paymentTime: string | null, bankUserName: string | null}>({
   accountName: null,
   bankName: null,
   bankAccount: null,
   paymentAmount: null,
   paymentTime: null,
+  bankUserName: null
 })
 
 onLoad((option) =>{
@@ -126,7 +127,16 @@ const uploadImage = () => {
     })
     return;
   }
-  uni.showLoading("上传中...")
+
+  if (!remitData.bankUserName) {
+    uni.showToast({
+      title: '请输入汇款人名称',
+      icon: "none"
+    })
+    return;
+  }
+
+  uni.showLoading({title: "上传中..."})
   uni.uploadFile({
     url: `${BASE_URL}/users/orders/${orderId.value}/payment-proof`,
     header: {
@@ -138,7 +148,8 @@ const uploadImage = () => {
       bankName: remitData.bankName,
       bankAccount: remitData.bankAccount,
       paymentAmount: remitData.paymentAmount,
-      paymentTime: new Date(remitData.paymentTime).toISOString().split('.')[0] + 'Z'
+      paymentTime: new Date(remitData.paymentTime).toISOString().split('.')[0] + 'Z',
+      bankUserName: remitData.bankUserName
     },
     success: (res) => {
       console.log('uploadImage success, res is:', res)
@@ -240,6 +251,11 @@ const bindDayDateChange = (e: any) => {
 
     <view class="card">
       <view class="fir_title">汇款信息</view>
+
+      <view class="row">
+        <view class="row_cont remittance"><text>汇款人姓名：</text>
+          <input type="text" v-model="remitData.bankUserName" placeholder="请输入汇款人姓名"></view>
+      </view>
       <view class="row">
         <view class="row_cont remittance"><text>汇款户名：</text>
           <input type="text" v-model="remitData.accountName" placeholder="请输入汇款户名"></view>

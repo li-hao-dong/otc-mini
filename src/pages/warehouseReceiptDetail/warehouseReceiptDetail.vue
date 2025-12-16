@@ -11,8 +11,10 @@ const bankReceiptInfoData = ref<BankAccountInfoResp>();
 
 onLoad((option) =>{
   console.log("option", option)
-  getDetail(option?.id)
-  getBankReceiptInfo(option?.id)
+  // orderId 从 option 中获取 订单 ID
+  // orderStatus 从 option 中获取 订单状态
+  // getDetail(option?.orderId)
+  // getBankReceiptInfo(option?.orderId)
 })
 
 const getDetail = (orderId: string) => {

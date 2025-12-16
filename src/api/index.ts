@@ -15,6 +15,7 @@ import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import type {UploadImageReq, UploadImageResp} from "@/interfaces/uploadImage";
 import type {PaymentProofInfoResp} from "@/interfaces/paymentProofInfo";
 import type {ExerciseReq, ExerciseResp} from "@/interfaces/exercise";
+import type {subscribeMessageResp} from "@/interfaces/subscribeMessage";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -114,6 +115,28 @@ export const exerciseHandler = (orderId: string, payload: ExerciseReq):Promise<E
 
     })
 }
+
+/**
+ * 用户订阅消息
+ * */
+export const subscribeMessage = (templateIds: string[]):Promise<subscribeMessageResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const payload = {
+                template_ids: templateIds
+            }
+            const res: response = <response>await http.post(`${BASE_URL}/wechat/subscriptions/subscribe`, payload)
+            console.log("subscribeMessage res", res);
+            if (res.code !== 200) {
+                resolve(res.data as subscribeMessageResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch subscribeMessage info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    }
+})
 
 /**
  * 获取询价选项配置

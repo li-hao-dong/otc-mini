@@ -69,7 +69,7 @@
 
 <script setup lang="ts">
 import {getCurrentInstance, onMounted, ref, watch} from "vue";
-import {hideLoading, loadingToast} from "@/utils/toast/toast";
+import {failToast, hideLoading, loadingToast} from "@/utils/toast/toast";
 import {inquiryQuote} from "@/api";
 import type {InquiryResp, Quote, QuoteResult} from "@/interfaces/inquiry/inquiryQuote";
 import {onLoad, onReady, onShow} from "@dcloudio/uni-app";
@@ -122,9 +122,8 @@ const getInquiryResults = () => {
 
     formatInquiryStruct(res.data.results)
   }).catch((err: Error) => {
+    failToast("询价失败，请稍后重试");
     console.log("inquiryQuote error,", err)
-  }).finally(() => {
-    hideLoading()
   })
 
 };
@@ -174,10 +173,19 @@ const formatInquiryStruct = (quoteResult:QuoteResult[]) =>　{
     })
   });
 
-  terms.value = Object.keys(filterData[Object.keys(filterData)[0]].terms);
+
+  Object.keys(filterData[Object.keys(filterData)[0]].terms).map((termKey) => {
+    filterData[Object.keys(filterData)[0]].terms[termKey] = {
+      term: termKey,
+      termName: filterData[Object.keys(filterData)[0]].terms[termKey],
+      days: Number(filterData[Object.keys(filterData)[0]].terms[termKey].replace("W", "")) * 7 || Number(filterData[Object.keys(filterData)[0]].terms[termKey].replace("M", "")) * 30 || 0
+    }
+  })
+
+  terms.value = Object.values(filterData[Object.keys(filterData)[0]].terms).sort((a,b) => a.days - b.days).map(termObj => termObj.term);
   results.value = Object.values(filterData)
-  console.log("filterData,", filterData)
-  console.log("terms,", terms.value)
+  // console.log("filterData,", filterData)
+  // console.log("terms,", terms.value)
   gridCol.value = `20% repeat(${terms.value?.length}, 1fr) 20%`;
 }
 

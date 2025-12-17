@@ -124,28 +124,29 @@ const placeOrder = () => {
                     // console.log('buyProduct res', res);
                     if (res.status && res.status === 'success'){
                       uni.showToast({ title: '下单成功', icon: 'success' });
-                      const messageIds = ['vRe7yXMLbcmLgExmZkMuH5zaAk1Nh7X9gh9cmwndsr4']
-                      uni.requestSubscribeMessage(
-                          {
-                            tmplIds: messageIds, // 替换为你的模板ID
-                            success(res) {
-                              if (res[messageIds[0]] === 'accept'){
-                                console.log('订阅消息授权成功：', res);
-                                subscribeMessage(messageIds).then(res => {
-                                  console.log('订阅消息接口调用结果：', res);
-                                });
-                              }else {
-                                console.log('订阅消息被拒绝：', res);
-                              }
-                            },
-                            fail(err) {
-                              console.error('订阅消息授权失败：', err);
-                            },
-                            complete() {
-                              setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
-                            }
-                          }
-                      )
+                      // const messageIds = ['vRe7yXMLbcmLgExmZkMuH5zaAk1Nh7X9gh9cmwndsr4']
+                      // uni.requestSubscribeMessage(
+                      //     {
+                      //       tmplIds: messageIds, // 替换为你的模板ID
+                      //       success(res) {
+                      //         if (res[messageIds[0]] === 'accept'){
+                      //           console.log('订阅消息授权成功：', res);
+                      //           subscribeMessage(messageIds).then(res => {
+                      //             console.log('订阅消息接口调用结果：', res);
+                      //           });
+                      //         }else {
+                      //           console.log('订阅消息被拒绝：', res);
+                      //         }
+                      //       },
+                      //       fail(err) {
+                      //         console.error('订阅消息授权失败：', err);
+                      //       },
+                      //       complete() {
+                      //         setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+                      //       }
+                      //     }
+                      // )
+                      setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
                     }
                     else uni.showToast({ title: res.message || '下单失败', icon: 'none' });
                 });

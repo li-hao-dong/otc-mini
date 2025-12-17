@@ -29,7 +29,7 @@
         <view class="label">结构 (最多三选)</view>
         <view class="chips">
           <view
-            v-for="s in currentTypeStructures.slice(0, 1)"
+            v-for="s in currentTypeStructures?.slice(0, 1)"
             :key="s.code"
             class="chip"
             :class="{ active: selectedStructures.includes(s.code) }"
@@ -218,7 +218,8 @@ const getOptions = () => {
     selectedStructures.value = <string[]>[currentTypeStructures.value![0].code];
     nominalAmounts.value = <number[]>res.nominalAmounts;
     selectedNominal.value = <number>res.nominalAmounts![0];
-    terms.value = <Term[]>res.terms;
+    // console.log("res.terms.sort((termA, termB) => return termB.days > termA.days ? termA:termB);", res.terms.sort((termA, termB) => return termB.days > termA.days ? termA:termB))
+    terms.value = <Term[]>res.terms.sort((a, b) => a.days - b.days);
     selectedTerms.value = <string[]>[res.terms![3].code, res.terms![1].code, res.terms![2].code];
     sources.value = res.sources?.length == 0 ? <Source[]>[{ code: "ALL", name: "ALL", isActive: true }] : <Source[]>[{ code: "ALL", name: "ALL", isActive: true }, ...res!.sources];
     selectedSources.value = <string[]>[sources.value![0].code];

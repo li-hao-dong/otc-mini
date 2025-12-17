@@ -122,8 +122,15 @@ const inquiryHistoryFun = async () => {
     console.log("res.inquiries", res.inquiries);
     moreDataStatus.value = res.pagination?.total_pages! >= pageNum.value;
 
-    res.inquiries!.map((data:InquiryResp) => {
+    res.inquiries!.map((data:InquiryResp, key: number) => {
       const filterData: any = {};
+
+      data.inquiry_results.map((item: QuoteResult, index: number) => {
+        console.log("item.structure", item.structure)
+        data.inquiry_results[index].days = item.term?.replace("W", '') * 7 || item.term?.replace('M', '') * 30 || 0;
+      })
+
+      data.inquiry_results.sort((a,b) => a.days! - b.days!);
 
       data.inquiry_results.map((item: QuoteResult, index: number) => {
         if(!filterData[item.structure!]){

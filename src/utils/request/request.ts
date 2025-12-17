@@ -65,8 +65,9 @@ const http = {
                 success: (res:response) => {
                     console.log("res@@@", res);
                     if (res.statusCode != 200) {
-                        this.checkoutDataCode(res.data.code);
+                        this.checkoutDataCode(res.data.code, res.message);
                         // failToast(res.data.msg);
+                        reject(new Error(res.msg));
                         return;
                     }
                     resolve(res.data);
@@ -75,6 +76,9 @@ const http = {
                     // this.checkoutStatusCode(err.statusCode);
                     reject(err);
                 },
+                complete: () => {
+                    uni.hideLoading()
+                }
             });
         });
     },
@@ -102,8 +106,9 @@ const http = {
                 data,
                 success: (res:response) => {
                     if (res.statusCode != 200) {
-                        this.checkoutDataCode(res.data.code);
+                        this.checkoutDataCode(res.data.code, res.msg);
                         // failToast(res.data.msg);
+                        reject(new Error(res.msg));
                         return;
                     }
                     resolve(res);
@@ -112,6 +117,9 @@ const http = {
                     // this.checkoutStatusCode(err.statusCode);
                     reject(err);
                 },
+                complete: () => {
+                    uni.hideLoading()
+                }
             });
         });
     },
@@ -173,7 +181,7 @@ const http = {
     /**
      * 校验data中自定义的code
      * */
-    checkoutDataCode(code:  number) {
+    checkoutDataCode(code: number, msg?: string) {
         switch (code) {
             case 401: {
                 // token 失效
@@ -182,18 +190,20 @@ const http = {
                     const currentPage = routers[routers.length - 1];
                     console.log("currentPage", currentPage.route);
                     if (currentPage.route !== "pages/user/user") {
-                        uni.switchTab({url: '/pages/user/user'});
                         warnToast("请重新登录");
+                        setTimeout(() => uni.switchTab({url: '/pages/user/user'}), 2000);
                         return;
                     }
                 }
                 let pageRouter = window.location.pathname;
                 if (pageRouter !== "/pages/user/user") {
-                    uni.switchTab({url: '/pages/user/user'});
                     warnToast("请重新登录");
+                    setTimeout(() => uni.switchTab({url: '/pages/user/user'}), 2000);
                 }
                 break;
             }
+            // default:
+            //     warnToast(msg || "请求出错，请稍后重试");
         }
     },
 };

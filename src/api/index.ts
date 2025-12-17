@@ -135,8 +135,8 @@ export const subscribeMessage = (templateIds: string[]):Promise<subscribeMessage
         } catch (error) {
             reject(error);
         }
-    }
-})
+    })
+}
 
 /**
  * 获取询价选项配置

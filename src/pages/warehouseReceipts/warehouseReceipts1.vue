@@ -5,7 +5,6 @@
 <!--&lt;!&ndash;      <text class="topText">录入 +</text>&ndash;&gt;-->
 <!--    </view>-->
 
-    <!--  菜单部分  -->
     <view class="segTabs">
       <view class="segItem" style="width: 100%;" v-for="(item, index) in orderType" :key="index" @click="orderTypeKey = index">
         <text :class="`${orderTypeKey === index ? 'segActive' : 'segText'}`" >
@@ -24,7 +23,6 @@
       </view>
     </view>
 
-    <!--  合计部分  -->
     <view class="card sumCard">
       <view class="sumRow">
         <view class="sumCol">
@@ -55,71 +53,59 @@
       </view>
     </view>
 
-    <!--  列表部分  -->
     <view class="card" v-for="order in orderList" :key="order.orderId" @click="toDetail(order)">
-      <view class="row">
+      <view class="assetInfo">
         <view>
-          <view class="row">
-            <view class="fir_row_text">{{order?.underlyingAssetName}}</view>
-            <view class="fir_row_text">{{order?.optionCode}} {{order?.optionType}}</view>
-            <view class="fir_row_text">{{order?.termName}}</view>
-          </view>
-          <view style="margin-top: 4px; padding: 0 0 10px 0;">
-            <view class="para"><text class="label">名义金额：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</view>
-          </view>
+          <view class="assetName">{{order?.underlyingAssetName}}</view>
+          <view class="assetCode">{{order?.underlyingAssetCode}}</view>
         </view>
-        <view></view>
-      </view>
-
-      <view class="sec_middle_row">
-        <view class="para_1">
-          <view>{{truncToTwo(order?.strikePrice)}}元</view>
-          <view style="color: #6d7075;">行权价格</view>
+        <view class="row priceRow">
+          <view class="para"><text class="label">股价：</text></view>
+          <view class="para"><text :class="order?.underlyingPrice >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.underlyingPrice)}}</text></view>
         </view>
-        <view class="para_2">
-          <view style="width: fit-content;">
-            <view>{{truncToTwo(order?.estimatedProfit)}}元</view>
-            <view style="color: #6d7075;">预计盈亏</view>
-          </view>
-        </view>
-        <view class="para_3">
-          <view style="width: fit-content;">
-            <view>{{order?.profitRate ? order.profitRate * 100 : 0}}%</view>
-            <view style="color: #6d7075;">盈亏比例</view>
-          </view>
+        <view class="row changeRow">
+          <text class="label" :class="Number(order?.priceChange.slice(0, -1)) >= 0 ? 'valueRed' : 'valueGreen'">涨幅：{{order?.priceChange}}</text>
         </view>
       </view>
 
-      <view class="row bottom_row" @click.stop="order['showDetail'] = !order['showDetail']">
-        <view class="orderStatus">{{order?.orderStatus}}</view>
-        <view class="para"><text class="label">股价：</text><text :class="order?.underlyingPrice >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.underlyingPrice)}}</text></view>
-        <view class="para"><text class="label">涨幅：</text><text :class="Number(order?.priceChange.slice(0, -1)) >= 0 ? 'valueRed' : 'valueGreen'">{{order?.priceChange}}</text></view>
-        <view v-show="!order['showDetail']"><uni-icons type="down" size="16"></uni-icons></view>
-        <view v-show="order['showDetail']"><uni-icons type="up" size="16"></uni-icons></view>
+      <view class="rowBorder">
+        <text class="dataText"><text>开仓时间：</text>{{order?.startDate}}</text>
+        <text class="dataText"><text>到期时间：</text>{{order?.maturityDate}}</text>
+      </view>
+      <view class="rowBorder">
+        <text class="dataText"><text>期权代码：</text>{{order?.optionCode}}</text>
+        <text class="dataText"><text>名义本金：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</text>
+      </view>
+      <view class="rowBorder">
+        <text class="dataText"><text>期限：</text>{{order?.termName}}</text>
+        <text class="dataText"><text>剩余天数：</text>{{order?.daysToExpiry}}天</text>
+      </view>
+      <view class="rowBorder">
+        <text class="dataText"><text>开仓价格：</text>{{truncToTwo(order?.strikePrice)}}元</text>
+        <text class="dataText"><text>行权价格：</text>{{truncToTwo(order?.strikePrice)}}元</text>
+      </view>
+      <view class="rowBorder">
+        <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{order?.estimatedPayout ? truncToTwo(order.estimatedPayout) : '-'}}元</text></text>
+        <text class="dataText"><text>预计盈亏：</text><text class="valueGreen">{{truncToTwo(order?.estimatedProfit)}}元</text></text>
+      </view>
+      <view class="rowBorder">
+        <text class="dataText"><text>期权费：</text>{{order?.upstreamFee || order?.optionFee}}元</text>
+        <text class="dataText"><text>盈亏比例：</text><text class="valueGreen">{{order?.profitRate ? order.profitRate * 100 : 0}}%</text></text>
+      </view>
+      <view class="rowBorder">
+        <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>
+        <text class="dataText"><text>期权费率：</text>{{order?.optionFeeRate ? truncToTwo(order.optionFeeRate * 100) : 0}}%</text>
+      </view>
+      <view class="rowBorder">
+        <text class="dataText"><text>通道费：</text>{{truncToTwo(order?.transactionFee)}}元</text>
       </view>
 
-      <view style="padding-top: 10px;" v-show="order['showDetail']">
-          <view class="rowBorder">
-            <text class="dataText"><text>开仓时间：</text>{{order?.startDate}}</text>
-            <text class="dataText"><text>到期时间：</text>{{order?.maturityDate}}</text>
-          </view>
-          <view class="rowBorder">
-            <text class="dataText"><text>期限：</text>{{order?.termName}}</text>
-            <text class="dataText"><text>剩余天数：</text>{{order?.daysToExpiry}}天</text>
-          </view>
-          <view class="rowBorder">
-            <text class="dataText"><text>开仓价格：</text>{{truncToTwo(order?.strikePrice)}}元</text>
-            <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{order?.estimatedPayout ? truncToTwo(order.estimatedPayout) : '-'}}元</text></text>
-          </view>
-          <view class="rowBorder">
-            <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>
-            <text class="dataText"><text>期权费率：</text>{{order?.optionFeeRate ? truncToTwo(order.optionFeeRate * 100) : 0}}%</text>
-          </view>
-          <view class="rowBorder">
-            <text class="dataText"><text>期权费：</text>{{order?.upstreamFee || order?.optionFee}}元</text>
-            <text class="dataText"><text>通道费：</text>{{truncToTwo(order?.transactionFee)}}元</text>
-          </view>
-      </view>
+      <!-- <view class="actions">
+        <text class="actionLink">设置目标价</text>
+        <text class="actionLink">设置到期提醒</text>
+        <view class="outlineBtn" role="button" tabindex="0"><text class="outlineText">行权</text></view>
+      </view> -->
+      <view class="orderStatus">{{order?.orderStatus}}</view>
     </view>
 
     <view v-if="store.user.token">
@@ -240,6 +226,26 @@ const getUserOrder = () => {
 </script>
 
 <style>
+.wrPage {
+  /* background-color: #F7F7F7; */
+}
+
+.topBar {
+  background-color: var(--color-primary-bg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 2.5%;
+  box-sizing: content-box;
+}
+
+.topText {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  line-height: 1.21em;
+  color: #FFFFFF;
+}
+
 .segTabs {
   width: 100%;
   text-align: center;
@@ -382,48 +388,27 @@ const getUserOrder = () => {
   display: flex;
 }
 
-.fir_row_text {
-  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
-  font-weight: lighter;
-  font-size: 16px;
-  line-height: 1.21em;
-  color: #000000;
-  margin-right: 15px;
-  padding: 0 0 10px 0;
-}
-
-.fir_row_text:first-child{
-  font-weight: bold;
-}
-
-.sec_middle_row{
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.para_1{
-  /*border: 1px solid red;*/
-}
-
-.para_2{
-  /*border: 1px solid red;*/
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.para_3{
-  /*border: 1px solid red;*/
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
 .para {
   display: flex;
   align-items: center;
   gap: 6px;
-  font-size: 14px;
+}
+
+.assetName {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.21em;
+  color: #000000;
+}
+
+.assetCode {
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 400;
+  font-size: 13px;
+  /* line-height: 1.21em; */
+  color: #999999;
+  padding-top: 5px;
 }
 
 .label {
@@ -431,7 +416,7 @@ const getUserOrder = () => {
   font-weight: 400;
   font-size: 13px;
   line-height: 1.21em;
-  color: #8c929b;
+  color: #000000;
 }
 
 .valueRed {
@@ -440,6 +425,10 @@ const getUserOrder = () => {
   font-size: 13px;
   line-height: 1.21em;
   color: #E8473A;
+}
+
+.changeRow {
+  padding: 6px 0 8px;
 }
 
 .rowBorder {
@@ -459,22 +448,14 @@ const getUserOrder = () => {
   color: #000000;
 }
 
-
 .dataText text{
   color: #999999;
 }
 
 .orderStatus{
-  color: var(--color-primary-bg);
-}
-
-.bottom_row{
   border-top: 1px solid #EEEEEE;
   padding-top: 10px;
   margin-top: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .valueGreen {

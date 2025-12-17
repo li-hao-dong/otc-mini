@@ -92,13 +92,21 @@ const uploadImage = () => {
     return;
   }
 
-  if (!remitData.accountName) {
+  if (!remitData.bankUserName) {
     uni.showToast({
       title: '请输入汇款人名称',
       icon: "none"
     })
     return;
   }
+
+  // if (!remitData.accountName) {
+  //   uni.showToast({
+  //     title: '请输入汇款人名称',
+  //     icon: "none"
+  //   })
+  //   return;
+  // }
   if (!remitData.bankName) {
     uni.showToast({
       title: '请输入汇款银行名称',
@@ -123,14 +131,6 @@ const uploadImage = () => {
   if (!remitData.paymentTime) {
     uni.showToast({
       title: '请输入支付时间',
-      icon: "none"
-    })
-    return;
-  }
-
-  if (!remitData.bankUserName) {
-    uni.showToast({
-      title: '请输入汇款人名称',
       icon: "none"
     })
     return;
@@ -251,14 +251,9 @@ const bindDayDateChange = (e: any) => {
 
     <view class="card">
       <view class="fir_title">汇款信息</view>
-
-      <view class="row">
-        <view class="row_cont remittance"><text>汇款人姓名：</text>
-          <input type="text" v-model="remitData.bankUserName" placeholder="请输入汇款人姓名"></view>
-      </view>
       <view class="row">
         <view class="row_cont remittance"><text>汇款户名：</text>
-          <input type="text" v-model="remitData.accountName" placeholder="请输入汇款户名"></view>
+          <input type="text" v-model="remitData.bankUserName" placeholder="请输入汇款户名"></view>
       </view>
       <view class="row">
         <view class="row_cont remittance"><text>汇款银行：</text>

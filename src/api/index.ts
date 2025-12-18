@@ -119,13 +119,13 @@ export const exerciseHandler = (orderId: string, payload: ExerciseReq):Promise<E
 /**
  * 用户订阅消息
  * */
-export const subscribeMessage = (templateIds: string[]):Promise<subscribeMessageResp> => {
+export const subscribeMessage = (templateIds: string):Promise<subscribeMessageResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const payload = {
-                template_ids: templateIds
+                template_id: templateIds
             }
-            const res: response = <response>await http.post(`${BASE_URL}/wechat/subscriptions/subscribe`, payload)
+            const res: response = <response>await http.post(`${BASE_URL}/user-wechat-subscriptions/user/subscribe`, payload)
             console.log("subscribeMessage res", res);
             if (res.code !== 200) {
                 resolve(res.data as subscribeMessageResp)

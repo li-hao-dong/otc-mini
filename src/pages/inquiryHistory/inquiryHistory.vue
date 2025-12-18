@@ -82,7 +82,7 @@
       <view class="more_data_cont" v-else>询价历史</view>
     </view>
     <view class="hint" v-else>
-          <view class="hint_sign">暂无数据</view>
+          <view class="hint_sign">询价历史，需要登录后才能提供。</view>
 <!--      <view class="hint_sign">您还未登录，请先登录！</view>-->
 <!--      <button class="to_sign" @click="uni.switchTab({url: '/pages/user/user'})">去登录</button>-->
     </view>

@@ -61,7 +61,7 @@
 
       <view class="row">
 <!--        <view class="btn fixed" role="button" tabindex="0"><text class="btnText">客服</text></view>-->
-        <view class="btn grow" role="button" tabindex="0"><text class="btnText" @click="toInquiry">重新询价</text></view>
+        <view class="btn grow" role="button" tabindex="0" @click="toInquiry"><text class="btnText">重新询价</text></view>
       </view>
     </view>
   </view>
@@ -121,12 +121,14 @@ const getInquiryResults = () => {
     //
 
     formatInquiryStruct(res.data.results)
+    uni.hideLoading()
   }).catch((err) => {
     // failToast("询价失败，请稍后重试");
-    console.log(err)
     uni.showToast({title: "未匹配到标的", duration: 2000, icon: "error"})
     console.log("inquiryQuote error,", err)
-    uni.hideLoading()
+     setTimeout(() => {
+       uni.hideLoading()
+     }, 2000);
   })
 
 };

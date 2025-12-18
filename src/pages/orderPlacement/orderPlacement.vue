@@ -124,29 +124,30 @@ const placeOrder = () => {
                     // console.log('buyProduct res', res);
                     if (res.status && res.status === 'success'){
                       uni.showToast({ title: '下单成功', icon: 'success' });
-                      // const messageIds = ['vRe7yXMLbcmLgExmZkMuH5zaAk1Nh7X9gh9cmwndsr4']
-                      // uni.requestSubscribeMessage(
-                      //     {
-                      //       tmplIds: messageIds, // 替换为你的模板ID
-                      //       success(res) {
-                      //         if (res[messageIds[0]] === 'accept'){
-                      //           console.log('订阅消息授权成功：', res);
-                      //           subscribeMessage(messageIds).then(res => {
-                      //             console.log('订阅消息接口调用结果：', res);
-                      //           });
-                      //         }else {
-                      //           console.log('订阅消息被拒绝：', res);
-                      //         }
-                      //       },
-                      //       fail(err) {
-                      //         console.error('订阅消息授权失败：', err);
-                      //       },
-                      //       complete() {
-                      //         setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
-                      //       }
-                      //     }
-                      // )
-                      setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+                      // applySubscribeMessage()
+                      const messageIds = ['vRe7yXMLbcmLgExmZkMuH5zaAk1Nh7X9gh9cmwndsr4']
+                      uni.requestSubscribeMessage(
+                          {
+                            tmplIds: messageIds, // 替换为你的模板ID
+                            success(res) {
+                              if (res[messageIds[0]] === 'accept'){
+                                console.log('订阅消息授权成功：', res);
+                                subscribeMessage(messageIds[0]).then(res => {
+                                  console.log('订阅消息接口调用结果：', res);
+                                });
+                              }else {
+                                console.log('订阅消息被拒绝：', res);
+                              }
+                            },
+                            fail(err) {
+                              console.error('订阅消息授权失败：', err);
+                            },
+                            complete() {
+                              setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+                            }
+                          }
+                      )
+                      // setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
                     }
                     else uni.showToast({ title: res.message || '下单失败', icon: 'none' });
                 });
@@ -157,7 +158,7 @@ const placeOrder = () => {
 };
 
 const applySubscribeMessage = () => {
-    const messageIds = ['vRe7yXMLbcmLgExmZkMuH5zaAk1Nh7X9gh9cmwndsr4']
+    const messageIds = 'vRe7yXMLbcmLgExmZkMuH5zaAk1Nh7X9gh9cmwndsr4'
     uni.getSetting({
       withSubscriptions: true,
       success(res) {
@@ -167,10 +168,13 @@ const applySubscribeMessage = () => {
           return;
         }
         // 检查特定模板的订阅状态
-        const tmplId = messageIds[0];
+        const tmplId = messageIds;
         const tmplStatus = res.subscriptionsSetting[tmplId];
         if (tmplStatus === 'accept') {
           console.log('用户已授权订阅该模板消息');
+          subscribeMessage(messageIds).then(res => {
+            console.log('订阅消息接口调用结果：', res);
+          });
           setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
           return;
         } else if (tmplStatus === 'reject') {
@@ -183,7 +187,7 @@ const applySubscribeMessage = () => {
           {
             tmplIds: messageIds, // 替换为你的模板ID
             success(res) {
-              if (res[messageIds[0]] === 'accept'){
+              if (res.subscriptionsSetting[tmplId] === 'accept'){
                 console.log('订阅消息授权成功：', res);
                 subscribeMessage(messageIds).then(res => {
                   console.log('订阅消息接口调用结果：', res);

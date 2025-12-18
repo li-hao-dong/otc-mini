@@ -69,7 +69,7 @@
           </view>
         </view>
         <view>
-          {{ calcLeftDay(order?.maturityDate) }} 天
+          距离结束 {{ calcLeftDay(order?.maturityDate) }} 天
         </view>
       </view>
 
@@ -131,7 +131,8 @@
       询价历史
     </view>
     <view class="hint" v-else>
-      <view class="hint_sign">订单服务，需要登录后才能提供。</view>
+      <view class="hint_sign">仓单记录</view>
+<!--      <view class="hint_sign">订单服务，需要登录后才能提供。</view>-->
 <!--      <view class="hint_sign">“暂无数据</view>-->
 <!--      <view class="hint_sign">您还未登录，请先登录！</view>-->
 <!--      <button class="to_sign" @click="uni.switchTab({url: '/pages/user/user'})">去登录</button>-->

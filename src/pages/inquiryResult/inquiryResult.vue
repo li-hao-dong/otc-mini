@@ -124,11 +124,19 @@ const getInquiryResults = () => {
     uni.hideLoading()
   }).catch((err) => {
     // failToast("询价失败，请稍后重试");
-    uni.showToast({title: "未匹配到标的", duration: 2000, icon: "error"})
+    // uni.showToast({title: "未匹配到标的", duration: 2000, icon: "error"})
     console.log("inquiryQuote error,", err)
-     setTimeout(() => {
-       uni.hideLoading()
-     }, 2000);
+    uni.showModal({
+      title: '询价失败',
+      content: err?.message || '系统未匹配到标的，请确认代码/名称是否正确',
+      showCancel: false,
+      success: () => {
+        uni.hideLoading()
+        uni.redirectTo({
+          url: '/pages/inquiry/inquiry'
+        });
+      }
+    })
   })
 
 };

@@ -57,7 +57,7 @@
 
     <!--  列表部分  -->
     <view class="card" v-for="order in orderList" :key="order.orderId" @click="toDetail(order)">
-      <view class="row">
+      <view class="row" style="display: flex; justify-content: space-between">
         <view>
           <view class="row">
             <view class="fir_row_text">{{order?.underlyingAssetName}}</view>
@@ -68,7 +68,9 @@
             <view class="para"><text class="label">名义金额：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</view>
           </view>
         </view>
-        <view></view>
+        <view>
+          {{ calcLeftDay(order?.maturityDate) }} 天
+        </view>
       </view>
 
       <view class="sec_middle_row">
@@ -84,7 +86,7 @@
         </view>
         <view class="para_3">
           <view style="width: fit-content;">
-            <view>{{order?.profitRate ? order.profitRate * 100 : 0}}%</view>
+            <view>{{order?.profitRate ? truncToTwo(order.profitRate * 100) : 0}}%</view>
             <view style="color: #6d7075;">盈亏比例</view>
           </view>
         </view>
@@ -124,7 +126,9 @@
 
     <view v-if="store.user.token">
       <view class="more_data_cont" v-if="moreDataStatus" @click="moreData">加载更多</view>
-      <view class="more_data_cont" v-else>没有数据了</view>
+      <view class="more_data_cont" v-else>订单记录</view>
+<!--      <view class="more_data_cont" v-else>没有数据了</view>-->
+      询价历史
     </view>
     <view class="hint" v-else>
       <view class="hint_sign">订单服务，需要登录后才能提供。</view>
@@ -169,6 +173,14 @@ watch(() => orderTypeKey.value, () => {
   resetData()
   getUserOrder()
 })
+
+const calcLeftDay = (endDate: string): number => {
+  const now = new Date();
+  const end = new Date(endDate);
+  const diffTime = end.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  return diffDays > 0 ? diffDays : 0;
+}
 
 const toDetail = (order:OrderSummary) => {
   // console.log("order", order.orderNo)

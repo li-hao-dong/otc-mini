@@ -121,9 +121,12 @@ const getInquiryResults = () => {
     //
 
     formatInquiryStruct(res.data.results)
-  }).catch((err: Error) => {
-    failToast("询价失败，请稍后重试");
+  }).catch((err) => {
+    // failToast("询价失败，请稍后重试");
+    console.log(err)
+    uni.showToast({title: "未匹配到标的", duration: 2000, icon: "error"})
     console.log("inquiryQuote error,", err)
+    uni.hideLoading()
   })
 
 };

@@ -67,7 +67,7 @@ const http = {
                     if (res.statusCode != 200) {
                         this.checkoutDataCode(res.data.code, res.message);
                         // failToast(res.data.msg);
-                        reject(new Error(res.msg));
+                        reject(res.msg);
                         return;
                     }
                     resolve(res.data);
@@ -76,9 +76,6 @@ const http = {
                     // this.checkoutStatusCode(err.statusCode);
                     reject(err);
                 },
-                complete: () => {
-                    uni.hideLoading()
-                }
             });
         });
     },
@@ -108,7 +105,7 @@ const http = {
                     if (res.statusCode != 200) {
                         this.checkoutDataCode(res.data.code, res.msg);
                         // failToast(res.data.msg);
-                        reject(new Error(res.msg));
+                        reject(res.msg);
                         return;
                     }
                     resolve(res);
@@ -116,9 +113,6 @@ const http = {
                 fail: (err) => {
                     // this.checkoutStatusCode(err.statusCode);
                     reject(err);
-                },
-                complete: () => {
-                    uni.hideLoading()
                 }
             });
         });

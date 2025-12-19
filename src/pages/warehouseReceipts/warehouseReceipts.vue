@@ -80,13 +80,13 @@
         </view>
         <view class="para_2">
           <view style="width: fit-content;">
-            <view>{{truncToTwo(order?.estimatedProfit)}}元</view>
+            <view :class="order?.estimatedProfit >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.estimatedProfit)}}元</view>
             <view style="color: #6d7075;">预计盈亏</view>
           </view>
         </view>
         <view class="para_3">
           <view style="width: fit-content;">
-            <view>{{order?.profitRate ? truncToTwo(order.profitRate * 100) : 0}}%</view>
+            <view :class="order?.profitRate >= 0 ? 'valueRed' : 'valueGreen'">{{order?.profitRate ? truncToTwo(order.profitRate * 100) : 0}}%</view>
             <view style="color: #6d7075;">盈亏比例</view>
           </view>
         </view>
@@ -128,7 +128,6 @@
       <view class="more_data_cont" v-if="moreDataStatus" @click="moreData">加载更多</view>
       <view class="more_data_cont" v-else>订单记录</view>
 <!--      <view class="more_data_cont" v-else>没有数据了</view>-->
-      询价历史
     </view>
     <view class="hint" v-else>
       <view class="hint_sign">仓单记录</view>

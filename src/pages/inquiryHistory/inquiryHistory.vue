@@ -77,9 +77,9 @@
     </view>
 
     <view v-if="store.user.token">
-      <view class="more_data_cont" v-if="moreDataStatus" @click="moreData">加载更多</view>
+<!--      <view class="more_data_cont" v-if="moreDataStatus" @click="moreData">加载更多</view>-->
 <!--      <view class="more_data_cont" v-else>没有数据了</view>-->
-      <view class="more_data_cont" v-else>询价历史</view>
+<!--      <view class="more_data_cont" v-else>询价历史</view>-->
     </view>
     <view class="hint" v-else>
       <view class="hint_sign">询价历史</view>

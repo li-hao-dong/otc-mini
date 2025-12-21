@@ -79,91 +79,117 @@ const onSubmit = () => {
 
 <template>
   <view class="container">
-    <view class="brand">
-      <text class="brand-title">{{ mode === 'login' ? '登录' : '注册' }}</text>
-      <text class="brand-sub">欢迎使用场外期权服务</text>
-    </view>
-
-<!--    <view class="switcher">-->
-<!--      <view class="switch-btn" :class="{ active: mode==='login' }" @click="switchMode('login')">登录</view>-->
-<!--      <view class="switch-btn" :class="{ active: mode==='register' }" @click="switchMode('register')">注册</view>-->
-<!--&lt;!&ndash;      <view class="switch-btn" @click="switchMode(`login`)">登录</view>&ndash;&gt;-->
-<!--&lt;!&ndash;      <view class="switch-btn" @click="switchMode(`register`)">注册</view>&ndash;&gt;-->
-<!--    </view>-->
-
-    <view class="card">
-<!--      <view class="fir_title">{{ mode === 'login' ? '登录账户' : '创建账户' }}</view>-->
-
-      <view class="form-row">
-        <text class="label">用户名</text>
-        <view v-if="mode==='login'" class="input-wrap">
-          <view class="icon-left">👤</view>
-          <input class="input" v-model="loginForm.userName" placeholder="请输入用户名" />
-        </view>
-        <view v-else class="input-wrap">
-          <view class="icon-left">👤</view>
-          <input class="input" v-model="registerForm.userName" placeholder="请输入用户名" />
-        </view>
+    <view style="position: relative; z-index: 2; width: 90%; margin: 0 auto;">
+      <view class="brand">
+        <text class="brand-title">{{ mode === 'login' ? '登录' : '注册' }}</text>
+        <text class="brand-sub">欢迎使用场外期权服务</text>
       </view>
 
-      <view class="form-row">
-        <text class="label">手机号码（选填）</text>
-        <view v-if="mode!=='login'" class="input-wrap">
-          <view class="icon-left">📱</view>
-          <input class="input" v-model="registerForm.telephone" placeholder="请输入手机号码" />
-        </view>
-      </view>
+      <!--    <view class="switcher">-->
+      <!--      <view class="switch-btn" :class="{ active: mode==='login' }" @click="switchMode('login')">登录</view>-->
+      <!--      <view class="switch-btn" :class="{ active: mode==='register' }" @click="switchMode('register')">注册</view>-->
+      <!--&lt;!&ndash;      <view class="switch-btn" @click="switchMode(`login`)">登录</view>&ndash;&gt;-->
+      <!--&lt;!&ndash;      <view class="switch-btn" @click="switchMode(`register`)">注册</view>&ndash;&gt;-->
+      <!--    </view>-->
 
-      <view class="form-row">
-        <text class="label">密码</text>
-        <view v-if="mode==='login'" class="input-wrap">
-          <view class="icon-left">🔒</view>
-          <input class="input" v-model="loginForm.password" :password="!showLoginPwd" placeholder="请输入密码" />
-          <view class="eye" @click="showLoginPwd = !showLoginPwd">{{ showLoginPwd ? '🙈' : '👁️' }}</view>
-        </view>
-        <view v-else class="input-wrap">
-          <view class="icon-left">🔒</view>
-          <input class="input" v-model="registerForm.password" :password="!showRegisterPwd" placeholder="请输入密码" />
-          <view class="eye" @click="showRegisterPwd = !showRegisterPwd">{{ showRegisterPwd ? '🙈' : '👁️' }}</view>
-        </view>
-      </view>
+      <view class="card">
+        <!--      <view class="fir_title">{{ mode === 'login' ? '登录账户' : '创建账户' }}</view>-->
 
-      <view v-if="mode==='register'" class="form-row">
-        <text class="label">确认密码</text>
-        <view class="input-wrap">
-          <view class="icon-left">🔒</view>
-          <input class="input" v-model="registerForm.confirmPassword" :password="!showRegisterConfirmPwd" placeholder="请再次输入密码" />
-          <view class="eye" @click="showRegisterConfirmPwd = !showRegisterConfirmPwd">{{ showRegisterConfirmPwd ? '🙈' : '👁️' }}</view>
+        <view class="form-row">
+          <text class="label">用户名</text>
+          <view v-if="mode==='login'" class="input-wrap">
+            <view class="icon-left">👤</view>
+            <input class="input" v-model="loginForm.userName" placeholder="请输入用户名" />
+          </view>
+          <view v-else class="input-wrap">
+            <view class="icon-left">👤</view>
+            <input class="input" v-model="registerForm.userName" placeholder="请输入用户名" />
+          </view>
         </view>
-      </view>
 
-      <view v-if="mode==='register'" class="form-row">
-        <text class="label">推荐人（选填）</text>
-        <view class="input-wrap">
-          <view class="icon-left">🏷️</view>
-          <input class="input" v-model="registerForm.referrerUuid" placeholder="请输入推荐人ID" />
+        <view class="form-row" v-if="mode!=='login'">
+          <text class="label">手机号码（选填）</text>
+          <view class="input-wrap">
+            <view class="icon-left">📱</view>
+            <input class="input" v-model="registerForm.telephone" placeholder="请输入手机号码" />
+          </view>
         </view>
-      </view>
 
-      <view class="submit" @click="onSubmit">{{ mode==='login' ? '登录' : '注册' }}</view>
-
-      <view class="row">
-        <view class="row_cont" style="color:#5E8ED6; font-size:12px;">
-          <text @click="switchMode(mode==='login' ? 'register' : 'login')" style="color: var(--color-primary-bg)">{{ mode==='login' ? '没有账号？去注册' : '已有账号？去登录' }}</text>
+        <view class="form-row">
+          <text class="label">密码</text>
+          <view v-if="mode==='login'" class="input-wrap">
+            <view class="icon-left">🔒</view>
+            <input class="input" v-model="loginForm.password" :password="!showLoginPwd" placeholder="请输入密码" />
+            <view class="eye" @click="showLoginPwd = !showLoginPwd">{{ showLoginPwd ? '🙈' : '👁️' }}</view>
+          </view>
+          <view v-else class="input-wrap">
+            <view class="icon-left">🔒</view>
+            <input class="input" v-model="registerForm.password" :password="!showRegisterPwd" placeholder="请输入密码" />
+            <view class="eye" @click="showRegisterPwd = !showRegisterPwd">{{ showRegisterPwd ? '🙈' : '👁️' }}</view>
+          </view>
         </view>
-      </view>
 
-      <view class="upload-tips">
-        <text>为保障账户安全，请使用复杂密码并妥善保管。登录或注册即表示已阅读并同意相关服务条款与隐私政策。</text>
+        <view v-if="mode==='register'" class="form-row">
+          <text class="label">确认密码</text>
+          <view class="input-wrap">
+            <view class="icon-left">🔒</view>
+            <input class="input" v-model="registerForm.confirmPassword" :password="!showRegisterConfirmPwd" placeholder="请再次输入密码" />
+            <view class="eye" @click="showRegisterConfirmPwd = !showRegisterConfirmPwd">{{ showRegisterConfirmPwd ? '🙈' : '👁️' }}</view>
+          </view>
+        </view>
+
+        <view v-if="mode==='register'" class="form-row">
+          <text class="label">推荐人（选填）</text>
+          <view class="input-wrap">
+            <view class="icon-left">🏷️</view>
+            <input class="input" v-model="registerForm.referrerUuid" placeholder="请输入推荐人ID" />
+          </view>
+        </view>
+
+        <view class="submit" @click="onSubmit">{{ mode==='login' ? '登录' : '注册' }}</view>
+
+        <view class="row">
+          <view class="row_cont" style="color:#5E8ED6; font-size:12px;">
+            <text @click="switchMode(mode==='login' ? 'register' : 'login')" style="color: var(--color-primary-bg)">{{ mode==='login' ? '没有账号？去注册' : '已有账号？去登录' }}</text>
+          </view>
+        </view>
+
+        <view class="upload-tips">
+          <text>为保障账户安全，请使用复杂密码并妥善保管。登录或注册即表示已阅读并同意相关服务条款与隐私政策。</text>
+        </view>
       </view>
     </view>
   </view>
 </template>
 
 <style scoped lang="scss">
-.container{ min-height: 100vh; background-color: #F7F7F7; background: url("@/static/login_bg.png") no-repeat contain/100%; padding: 0;}
-.brand{ width: 90%; margin: 0 auto 10px; text-align: left; padding-top: 25%;
-  .brand-title{ font-size: 22px; font-weight: 600; color: #000; }
+.container{
+  width: 100%;
+  height: 100vh;
+  min-width: 100vw;
+  min-height: 100vh;
+  background-color: #F7F7F7;
+  background: url("../../static/login_bg.png") no-repeat 100%/cover;
+  padding: 0;
+  position: relative;
+  display: table-cell;
+  vertical-align: middle;
+
+  &:before{
+    content: "";
+    width: 100%;
+    height: 100%;
+    min-width: 100vw;
+    min-height: 100vh;
+    background: rgba(0,0,0,0.6);
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+}
+
+}
+.brand{ width: 90%; margin: 0 auto 10px; text-align: left;
+  .brand-title{ font-size: 22px; font-weight: 600; color: #fff; }
   .brand-sub{ display: block; margin-top: 6px; font-size: 12px; color: #999; }
 }
 .switcher{ width: 90%; margin: 0 auto 12px; display: flex; gap: 8px; }

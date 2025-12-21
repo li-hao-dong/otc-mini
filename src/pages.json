@@ -7,6 +7,18 @@
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		// #ifdef H5
+		{
+			"path": "pages/reLogin/reLogin",
+			"style": {
+				"navigationBarTitleText": "登录/注册",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom"
+			}
+		},
+		// #endif
 		{
 			"path": "pages/inquiryHistory/inquiryHistory",
 			"style": {

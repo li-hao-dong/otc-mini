@@ -16,11 +16,20 @@ import type {UploadImageReq, UploadImageResp} from "@/interfaces/uploadImage";
 import type {PaymentProofInfoResp} from "@/interfaces/paymentProofInfo";
 import type {ExerciseReq, ExerciseResp} from "@/interfaces/exercise";
 import type {subscribeMessageResp} from "@/interfaces/subscribeMessage";
+import type {loginH5Resp} from "@/interfaces/loginH5";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
 // const BASE_URL: string = "http://backtest.sunsmicro.com:22901/api/v1"
+
+// #ifdef MP-WEIXIN
 export const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
+// #endif
+
+// #ifdef H5
+export const BASE_URL: string = "/apiAgent"
+// export const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
+// #endif
 
 /**
  * 发起询价
@@ -28,9 +37,9 @@ export const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
 export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): Promise<InquiryResp> => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res: response = <response>await  http.post(`${BASE_URL}/inquiry/quote`, inquiryQuoteReq)
+            const res: response = <response>await http.post(`${BASE_URL}/inquiry/quote`, inquiryQuoteReq)
             console.log("InquiryResp res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as InquiryResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch inquiryQuote info'));
@@ -55,7 +64,7 @@ export const userLogin = (code: string, nickname: string):Promise<loginResp> => 
             }
             const res: response = <response>await  http.post(`${BASE_URL}/users/login`, params)
             console.log("login res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as loginResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch userLogin info'));
@@ -84,7 +93,7 @@ export const buyProduct = ( inquiryId: string, productCode: string, priceType: P
             };
             const res: response = <response>await  http.post(`${BASE_URL}/inquiry/INQ_20251201075147/order`, payload)
             console.log("buyProduct res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as orderPayloadResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch buyProduct info'));
@@ -104,7 +113,7 @@ export const exerciseHandler = (orderId: string, payload: ExerciseReq):Promise<E
         try {
             const res: response = <response>await http.post(`${BASE_URL}/users/orders/${orderId}/exercise`, payload)
             console.log("exerciseHandler res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as ExerciseResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch exerciseHandler info'));
@@ -127,7 +136,7 @@ export const subscribeMessage = (templateIds: string):Promise<subscribeMessageRe
             }
             const res: response = <response>await http.post(`${BASE_URL}/user-wechat-subscriptions/user/subscribe`, payload)
             console.log("subscribeMessage res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as subscribeMessageResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch subscribeMessage info'));
@@ -139,6 +148,57 @@ export const subscribeMessage = (templateIds: string):Promise<subscribeMessageRe
 }
 
 /**
+ * 用户注册 H5
+ * */
+export const userRegister = (userName: string, password: string, telephone: string, referrerUuid: string):Promise<any> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const params = {
+                user_name: userName,
+                password: password,
+                telephone: telephone,
+                referrer_uuid: referrerUuid
+            }
+            const res: response = <response>await  http.post(`${BASE_URL}/users/register`, params)
+            console.log("userRegister res", res);
+            if (res.data.id) {
+                resolve(res.data as any)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch userRegister info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 用户登录 H5
+ * */
+export const userLoginH5 = (userName: string, password: string, wechatLoginJsCode: string, referrerUuid: string):Promise<loginH5Resp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const params = {
+                user_name: userName,
+                password: password,
+                wechat_login_js_code: wechatLoginJsCode ? wechatLoginJsCode : null,
+                referrer_uuid: referrerUuid
+            }
+            const res: response = <response>await http.post(`${BASE_URL}/users/login`, params)
+            console.log("userLogin res", res);
+            if (res.statusCode == 200) {
+                resolve(res.data as loginH5Resp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch userLogin info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+
+/**
  * 获取询价选项配置
  * */
 export const inquiryOptions = ():Promise<InquiryOptionsResp> => {
@@ -146,7 +206,7 @@ export const inquiryOptions = ():Promise<InquiryOptionsResp> => {
         try {
             const res: response = <response>await  http.get(`${BASE_URL}/inquiry/options`)
             console.log("InquiryOptionsResp res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as InquiryOptionsResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch inquiryOptions info'));
@@ -164,7 +224,7 @@ export const inquiryHistory = (page: number, pageSize: number):Promise<InquiryHi
         try {
             const res: response = <response>await http.get(`${BASE_URL}/inquiry/history?page=${page}&pageSize=${pageSize}`)
             console.log("inquiryHistory res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as InquiryHistoryResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch inquiryHistory info'));
@@ -184,7 +244,7 @@ export const getUserInfo = ():Promise<UserResp> => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/info`)
             console.log("getUserInfo res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as UserResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch user info'));
@@ -204,7 +264,7 @@ export const calculatorData = (payload: calculatorReq):EquityOptionCalculatorRes
         try {
             const res: response = <response>await  http.post(`${BASE_URL}/tools/equity-option/calculate`, payload)
             console.log("calculator res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data.data as EquityOptionCalculatorResult)
             } else {
                 reject(new Error(res.message || 'Failed to fetch calculator info'));
@@ -230,7 +290,7 @@ export const uploadPaymentProof = (orderId: string, imgFile: File, bankName: str
         try {
             const res: response = <response>await  http.post(`${BASE_URL}/users/orders/${orderId}/payment-proof`, payload, 'application/x-www-form-urlencoded')
             console.log("calculator res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as UploadImageResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch calculator info'));
@@ -251,7 +311,7 @@ export const getUserOrderInfo = (page: number, size: number, status: string):Pro
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/orders?page=${page}&size=${size}&status=${status}`)
             console.log("getUserOrderInfo res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as userOrderResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch getUserOrderInfo info'));
@@ -270,7 +330,7 @@ export const orderDetail = (orderId: string):Promise<OrderDetail> => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/orders/${orderId}`)
             console.log("orderDetail res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as OrderDetail)
             } else {
                 reject(new Error(res.message || 'Failed to fetch order detail info'));
@@ -289,7 +349,7 @@ export const bankReceiptInfo = (orderId: string):Promise<BankAccountInfoResp> =>
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/orders/${orderId}/bank-info`)
             console.log("bankReceiptInfo res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as BankAccountInfoResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch bank receipt info'));
@@ -309,7 +369,7 @@ export const paymentProofInfo = (orderId: string):Promise<PaymentProofInfoResp> 
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/orders/${orderId}/payment-proof`)
             console.log("paymentProofInfo res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as PaymentProofInfoResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch payment Proof Info'));
@@ -328,7 +388,7 @@ export const getImage = (paymentVoucherUrl: string):Promise<any> => {
         try {
             const res: any = <response>await http.get(`${BASE_URL}${paymentVoucherUrl}?timestamp=${new Date().getTime()}`)
             console.log("getImage res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res as any)
             } else {
                 reject(new Error(res.message || 'Failed to fetch image'));
@@ -345,7 +405,7 @@ export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {
         try {
             const res: response = <response>await http.pat(`${BASE_URL}/users/info`)
             console.log("getUserInfo res", res);
-            if (res.code !== 200) {
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as UserResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch user info'));

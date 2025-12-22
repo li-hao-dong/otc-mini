@@ -121,9 +121,11 @@ const placeOrder = () => {
         .then(res => {
             if (res.confirm) {
                 buyProduct(orderPayload.value?.inquiryId, orderPayload.value?.quote?.productCode, selectedPriceType.value, Number(quantity.value * 1000000), Number(limitPrice.value)).then(res => {
-                    // console.log('buyProduct res', res);
+                    console.log('buyProduct res', res);
                     if (res.status && res.status === 'success'){
                       uni.showToast({ title: '下单成功', icon: 'success' });
+
+                      // #ifdef MP-WEIXIN
                       // applySubscribeMessage()
                       const messageIds = ['vRe7yXMLbcmLgExmZkMuH5zaAk1Nh7X9gh9cmwndsr4']
                       uni.requestSubscribeMessage(
@@ -147,7 +149,12 @@ const placeOrder = () => {
                             }
                           }
                       )
-                      // setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+                      // #endif
+
+                      // #ifdef H5
+                      setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+                      // #endif
+
                     }
                     else uni.showToast({ title: res.message || '下单失败', icon: 'none' });
                 });

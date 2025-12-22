@@ -161,7 +161,7 @@ const status = ref<string>('')
 const orderList = ref<OrderSummary[]>([])
 const ordersSummary = ref<OrdersSummary>()
 const pagination = ref<Pagination>()
-const moreDataStatus = ref<boolean>(true);
+const moreDataStatus = ref<boolean>(false);
 
 onShow(() => {
   resetData()

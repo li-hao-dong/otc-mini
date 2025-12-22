@@ -16,5 +16,7 @@ export interface response {
      */
     timestamp?: Date;
     data?: any;
+    statusCode?: number;
+
     [property: string]: any;
 }

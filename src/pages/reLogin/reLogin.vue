@@ -1,19 +1,21 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import {userLoginH5, userRegister} from "@/api";
+import {useStore} from "@/stores";
 
 type Mode = 'login' | 'register'
 const mode = ref<Mode>('login')
 
 const loginForm = reactive({
-  userName: '',
-  password: ''
+  userName: '13089118936',
+  password: '123456'
 })
 
 const registerForm = reactive({
-  userName: '',
+  userName: '13089118936',
   telephone: '',
-  password: '',
-  confirmPassword: '',
+  password: '123456',
+  confirmPassword: '123456',
   referrerUuid: ''
 })
 
@@ -27,6 +29,7 @@ const switchMode = (m: Mode) => {
 
 const onSubmit = () => {
   if (mode.value === 'login') {
+    // 登录
     if (!loginForm.userName || loginForm.userName.trim() === '') {
       uni.showToast({ title: '请输入用户名', icon: 'none' })
       return
@@ -35,13 +38,9 @@ const onSubmit = () => {
       uni.showToast({ title: '请输入密码', icon: 'none' })
       return
     }
-    uni.showToast({ title: '登录中...', icon: 'none' })
-    console.log("登录表单", loginForm)
-    setTimeout(() => {
-      uni.showToast({ title: '登录成功', icon: 'none' })
-      uni.reLaunch({ url: '/pages/inquiryResult/inquiryResult' })
-    }, 2000)
+    userLoggedIn()
   } else {
+    // 注册
     if (!registerForm.userName || registerForm.userName.trim() === '') {
       uni.showToast({ title: '请输入用户名', icon: 'none' })
       return
@@ -67,14 +66,51 @@ const onSubmit = () => {
       uni.showToast({ title: '两次密码不一致', icon: 'none' })
       return
     }
-    console.log("注册表单", registerForm)
-    uni.showToast({ title: '注册中...', icon: 'none' })
-    setTimeout(() => {
-      uni.showToast({ title: '注册成功', icon: 'none' })
-      switchMode('login')
-    }, 2000)
+    userRegistered()
   }
 }
+
+const userRegistered = () => {
+  console.log("注册表单", registerForm)
+  uni.showToast({ title: '注册中...', icon: 'none' })
+
+  userRegister(registerForm.userName, registerForm.password, registerForm.telephone, registerForm.referrerUuid)
+    .then(res => {
+      console.log("注册结果", res)
+      if(res.id){
+        uni.showToast({ title: '注册成功，请登录', icon: 'none' })
+        switchMode('login')
+      } else {
+        uni.showToast({ title: res.message || '注册失败', icon: 'none' })
+      }
+    })
+    .catch(err => {
+      console.log("注册异常", err)
+      uni.showToast({ title: err, icon: 'none' })
+    })
+}
+
+const userLoggedIn = () => {
+  userLoginH5(loginForm.userName, loginForm.password, "", "")
+    .then(res => {
+      console.log("登录结果", res)
+      if(res.status == "success"){
+        uni.showToast({ title: '登录成功', icon: 'none' })
+        uni.setStorageSync('authToken', res.data.access_token)
+        // uni.setStorageSync('userInfo', res.data.userInfo)
+        useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type, token_valid_until: new Date().getTime() + (60 * 60 * 24 * 1000)});
+
+        uni.reLaunch({ url: '/pages/inquiryHistory/inquiryHistory' })
+      } else {
+        uni.showToast({ title: res.message || '登录失败', icon: 'none' })
+      }
+    })
+    .catch(err => {
+      console.log("登录异常", err)
+      uni.showToast({ title: err, icon: 'none' })
+    })
+}
+
 </script>
 
 <template>

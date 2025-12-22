@@ -23,12 +23,12 @@
 
 
       <view style=" margin-top: 10px; ">
-        <view class="grid_col" ref="gridCol" :style="`width: 100%; color: #777777; display: grid; grid-template-columns: ${gridCol}; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;`">
+        <view :class="`grid_col ${calcColNum(terms.length)}`" ref="gridCol" :style="`width: 100%; color: #777777; display: grid; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;`">
           <view >结构</view>
           <view v-for="(term, index) in terms" :key="index">{{ term }}</view>
           <view >报价方</view>
         </view>
-        <view class="grid_col" :style="`width: 100%; display: inline-grid; grid-template-columns: ${gridCol}; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;`"
+        <view :class="`grid_col ${calcColNum(terms.length)}`" :style="`width: 100%; display: inline-grid; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;`"
               v-for="(item, index) in results" :key="index">
           <view>{{ item.structureName }}</view>
           <view v-for="(term, i) in terms" :key="i">
@@ -89,6 +89,11 @@ const gridCol = ref<string>("");
 onLoad(() => {
   getInquiryResults();
 })
+
+const calcColNum = (num: number | undefined) => {
+  if(!num || num <=0) return "";
+  return `grid_col_${num}`;
+}
 
 const getInquiryResults = () => {
   // Placeholder for fetching inquiry results
@@ -265,6 +270,18 @@ const placeAnOrder = (quote: any, term: string, result: any) => {
 }
 
 .para { display: flex; align-items: center; gap: 4px; }
+
+.grid_col_1{
+  grid-template-columns: 20% repeat(1, 1fr) 20%;
+}
+
+.grid_col_2{
+  grid-template-columns: 20% repeat(2, 1fr) 20%;
+}
+
+.grid_col_3{
+  grid-template-columns: 20% repeat(3, 1fr) 20%;
+}
 
 .asset { display: flex; flex-direction: column; padding: 0 0 10px 0; }
 .assetName { font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif; font-weight: 700; font-size: 15.6px; line-height: 1.21em; color: #000000; }

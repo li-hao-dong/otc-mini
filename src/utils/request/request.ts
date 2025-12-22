@@ -31,14 +31,21 @@ export const interceptor = function () {
 };
 
 const beforeRequest = (url:string) => {
-    if(url.includes("/users/login") || url.includes("/inquiry/history") ||
+    // 对 不需要 token 的接口 直接放行
+    if(url.includes("/users/register") || url.includes("/users/login") || url.includes("/inquiry/history") ||
         url.includes("/inquiry/options") || url.includes("/inquiry/quote") ||
         url.includes("/tools/equity-option/calculate") || url.includes("/users/orders?page=")) return true;
 
     if(!useStore().user.token){
         warnToast("请先登录");
         setTimeout(() => {
+            // #ifdef MP-WEIXIN
             uni.switchTab({url: '/pages/user/user'})
+            // #endif
+
+            // #ifdef H5
+            uni.switchTab({url: '/pages/reLogin/reLogin'})
+            // #endif
         }, 2000)
         return false;
     }
@@ -65,9 +72,9 @@ const http = {
                 success: (res:response) => {
                     console.log("res@@@", res);
                     if (res.statusCode != 200) {
-                        this.checkoutDataCode(res.data.code, res.message);
+                        this.checkoutDataCode(res.data.code||res.statusCode, res.msg || res.data);
                         // failToast(res.data.msg);
-                        reject(res.msg);
+                        setTimeout(() => {reject(res.msg || res.data);}, 2000)
                         return;
                     }
                     resolve(res.data);
@@ -102,10 +109,11 @@ const http = {
                 },
                 data,
                 success: (res:response) => {
+                    console.log("res@@@", res);
                     if (res.statusCode != 200) {
-                        this.checkoutDataCode(res.data.code, res.msg);
+                        this.checkoutDataCode(res.data.code||res.statusCode, res.msg || res.data);
                         // failToast(res.data.msg);
-                        reject(res.msg);
+                        setTimeout(() => {reject(res.msg || res.data);}, 2000)
                         return;
                     }
                     resolve(res);
@@ -183,19 +191,41 @@ const http = {
                 if (routers && routers.length > 0) {
                     const currentPage = routers[routers.length - 1];
                     console.log("currentPage", currentPage.route);
+                    // #ifdef MP-WEIXIN
                     if (currentPage.route !== "pages/user/user") {
                         warnToast("请重新登录");
                         setTimeout(() => uni.switchTab({url: '/pages/user/user'}), 2000);
                         return;
                     }
+                    // #endif
+
+                    // #ifdef H5
+                    if (currentPage.route !== "pages/reLogin/reLogin") {
+                        warnToast("请重新登录");
+                        setTimeout(() => uni.switchTab({url: '/pages/reLogin/reLogin'}), 2000);
+                        return;
+                    }
+                    // #endif
                 }
                 let pageRouter = window.location.pathname;
+                // #ifdef MP-WEIXIN
                 if (pageRouter !== "/pages/user/user") {
                     warnToast("请重新登录");
                     setTimeout(() => uni.switchTab({url: '/pages/user/user'}), 2000);
                 }
+                // #endif
+
+                // #ifdef H5
+                if (pageRouter !== "/pages/reLogin/reLogin") {
+                    warnToast("请重新登录");
+                    setTimeout(() => uni.switchTab({url: '/pages/reLogin/reLogin'}), 2000);
+                }
+                // #endif
                 break;
             }
+            case 409:
+                warnToast("用户已存在");
+                break;
             // default:
             //     warnToast(msg || "请求出错，请稍后重试");
         }

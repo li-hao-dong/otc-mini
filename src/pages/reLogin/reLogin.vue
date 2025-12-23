@@ -205,7 +205,7 @@ const userLoggedIn = () => {
   min-width: 100vw;
   min-height: 100vh;
   background-color: #F7F7F7;
-  background: url("../../static/login_bg.png") no-repeat 100%/cover;
+  background: url("../../static/login_bg.jpg") no-repeat 100%/cover;
   padding: 0;
   position: relative;
   display: table-cell;

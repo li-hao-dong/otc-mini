@@ -7,15 +7,15 @@ type Mode = 'login' | 'register'
 const mode = ref<Mode>('login')
 
 const loginForm = reactive({
-  userName: '13089118936',
-  password: '123456'
+  userName: '',
+  password: ''
 })
 
 const registerForm = reactive({
-  userName: '13089118936',
+  userName: '',
   telephone: '',
-  password: '123456',
-  confirmPassword: '123456',
+  password: '',
+  confirmPassword: '',
   referrerUuid: ''
 })
 

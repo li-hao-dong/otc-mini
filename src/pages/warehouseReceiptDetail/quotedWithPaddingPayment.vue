@@ -342,6 +342,10 @@ const bindDayDateChange = (e: any) => {
       align-items: center;
     }
 
+    .remittance text{
+      white-space: nowrap;
+    }
+
     .remittance input{
       width: 100%;
       border: 1px solid #999999;

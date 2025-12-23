@@ -109,7 +109,7 @@ const getDetail = (orderId: string) => {
 <!--        <view class="row_cont"><text>下单成功：</text>{{ detail.channelSubmitTime ? detail.channelSubmitTime : '' }}</view>-->
 <!--      </view>-->
       <view class="row">
-        <view class="row_cont"><text>当前状态：</text>{{ detail.orderStatus }}</view>
+        <view class="row_cont"><text>当前状态：</text>{{ detail?.orderStatus }}</view>
       </view>
       <view class="row">
         <view class="row_cont" style="color: #999999; font-size: 12px;">

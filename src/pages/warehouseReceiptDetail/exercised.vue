@@ -66,7 +66,7 @@ const getDetail = (orderId: string) => {
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">场外个股期权属于高风险复杂金融产品，可能发生全部期权费损失。本订单已完成行权申请，当前处于资金结算与交收阶段，具体收益及资金到账情况以合作机构最终结算结果和实际入账为准。</view></view>
     </view>
 
-    <view class="submit">刷新订单状态</view>
+<!--    <view class="submit">刷新订单状态</view>-->
     <view class="card"><view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">我有疑问，联系客服</view></view></view>
   </view>
 </template>

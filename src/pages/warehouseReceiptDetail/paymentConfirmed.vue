@@ -108,7 +108,7 @@ const getBankReceiptInfo = (orderId: string) => {
     </view>
 
     <!-- 底部按钮 -->
-    <view class="submit">刷新订单状态</view>
+<!--    <view class="submit">刷新订单状态</view>-->
     <view class="card">
       <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">我有疑问，联系客服</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">

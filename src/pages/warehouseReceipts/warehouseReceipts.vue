@@ -213,7 +213,7 @@ const toDetail = (order:OrderSummary) => {
       path = "/pages/warehouseReceiptDetail/settled"
       break;
     case "已取消":
-      path = "/pages/warehouseReceiptDetail/cancelled"
+      // path = "/pages/warehouseReceiptDetail/cancelled"
       break;
   }
   uni.navigateTo({
@@ -251,7 +251,7 @@ const getUserOrder = () => {
 
 </script>
 
-<style>
+<style scoped>
 .segTabs {
   width: 100%;
   text-align: center;

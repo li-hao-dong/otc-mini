@@ -10,7 +10,7 @@
         <uni-data-select
             v-model="calculator.structuresCode"
             :localdata="structures.range"
-            @change="change""
+            @change="change"
         ></uni-data-select>
       </view>
     </view>

@@ -2,7 +2,9 @@
   <view class="container">
     <view class="userPage">
       <view style="position: relative;">
+        <!-- #ifdef MP-WEIXIN -->
         <input v-if="!username" id="setName" type="nickname" @click="getUserProfile" v-model="username" class="nickname" placeholder=""/>
+        <!-- #endif -->
         <view class="signBox">
           <view class="avator">
             <button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
@@ -195,8 +197,6 @@ const changePicker = <T>(e: T) => {
   position: absolute;
   width: 100vw;
   height: 100%;
-  //background: #4caf50;
-  //z-index: 100;
   opacity: 0;
 }
 

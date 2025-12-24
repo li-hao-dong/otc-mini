@@ -90,9 +90,15 @@ export const useUserStore = defineStore('user', {
                         console.error("Failed to fetch user info:", err);
                     })
                 }else {
+
                     warnToast("登录状态已过期，请重新登录");
                     setTimeout(() => {
+                        // #ifdef MP-WEIXIN
                         uni.switchTab({url: '/pages/user/user'});
+                        // #endif
+                        // #ifdef H5
+                        uni.redirectTo({url: '/pages/reLogin/reLogin'});
+                        // #endif
                     }, 2000)
                 }
 

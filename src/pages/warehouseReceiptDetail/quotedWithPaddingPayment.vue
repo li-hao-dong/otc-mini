@@ -199,7 +199,9 @@ const bindDayDateChange = (e: any) => {
     <view class="card">
       <view class="fir_title">金额摘要</view>
       <view class="row">
-        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ truncToTwo(detail?.paymentAmount) }}</view>
+<!--        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ truncToTwo(detail?.paymentAmount) }}</view>-->
+        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ truncToTwo(Number(detail.optionFee) + Number(detail.transactionFee)) }}</view>
+
       </view>
       <view class="row">
         <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>

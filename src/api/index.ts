@@ -192,7 +192,8 @@ export const userLoginH5 = (userName: string, password: string, wechatLoginJsCod
                 reject(new Error(res.message || 'Failed to fetch userLogin info'));
             }
         } catch (error) {
-            reject(error);
+            console.error("err", error)
+            reject(error?.message);
         }
     })
 }

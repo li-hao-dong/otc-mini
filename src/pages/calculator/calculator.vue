@@ -29,13 +29,13 @@
     <view class="row">
       <view class="cell title">开仓价：</view>
       <view class="cell content">
-        <input type="number" v-model="calculator.openingPrice" placeholder="请输入规模" /> <text> 元</text>
+        <input type="digit" v-model="calculator.openingPrice" placeholder="请输入规模" /> <text> 元</text>
       </view>
     </view>
     <view class="row">
       <view class="cell title">结算价：</view>
       <view class="cell content">
-        <input type="number" v-model="calculator.settlementPrice" placeholder="请输入规模" /> <text> 元</text>
+        <input type="digit" v-model="calculator.settlementPrice" placeholder="请输入规模" /> <text> 元</text>
       </view>
     </view>
 

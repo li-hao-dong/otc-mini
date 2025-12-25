@@ -90,7 +90,7 @@ const previewImage = () =>  {
       <view class="fir_title" style="color: #2ECC71;">{{detail.orderStatus}}</view>
       <view class="row">
         <view class="row_cont" style="color: #999999; font-size: 12px;">
-          我们已确认收到您的汇款，产品将按约定条款进行后续处理（建仓 / 持有 / 到期结算等）。
+          我们已接收您的支付凭证，正在核对银行到账情况。资金尚未最终确认，请以“支付已确认”状态为准。
         </view>
       </view>
       <view class="row">

@@ -200,7 +200,7 @@ const http = {
                     // #endif
 
                     // #ifdef H5
-                    if (currentPage.route !== "pages/reLogin/reLogin") {
+                    if (currentPage.route !== "pages/reLogin/reLogin" && currentPage.route !== "/") {
                         warnToast("请重新登录");
                         setTimeout(() => uni.redirectTo({url: '/pages/reLogin/reLogin'}), 2000);
                         return;
@@ -216,7 +216,7 @@ const http = {
                 // #endif
 
                 // #ifdef H5
-                if (pageRouter !== "/pages/reLogin/reLogin") {
+                if (pageRouter !== "/pages/reLogin/reLogin" && pageRouter !== "/") {
                     warnToast("请重新登录");
                     setTimeout(() => uni.redirectTo({url: '/pages/reLogin/reLogin'}), 2000);
                 }

@@ -133,7 +133,7 @@ const getInquiryResults = () => {
     console.log("inquiryQuote error,", err)
     uni.showModal({
       title: '询价失败',
-      content: err?.message || '系统未匹配到标的，请确认代码/名称是否正确',
+      content: err?.message.includes('Underlying asset not found') ? '系统未匹配到标的，请确认代码/名称是否正确' : err?.message,
       showCancel: false,
       success: () => {
         uni.hideLoading()

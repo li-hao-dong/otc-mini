@@ -14,7 +14,6 @@ onHide(() => {
 });
 </script>
 <style>
-
 page{
   --color-primary-bg: #d6423a;
   --color-secondary-bg: #f5f5f5;
@@ -24,7 +23,7 @@ page{
 
 .container{
   width: 100%;
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--color-secondary-bg);
   font-size: var(--size-text);
   padding-bottom: 20px;

@@ -187,7 +187,7 @@ const uploadPaymentVoucher = () => {
 
 <style scoped>
 .container {
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: #F7F7F7;
   padding: 10px 0;
 }

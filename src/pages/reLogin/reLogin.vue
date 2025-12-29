@@ -201,9 +201,9 @@ const userLoggedIn = () => {
 <style scoped lang="scss">
 .container{
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
   min-width: 100vw;
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: #F7F7F7;
   background: url("../../static/login_bg.jpg") no-repeat 100%/cover;
   padding: 0;
@@ -216,7 +216,7 @@ const userLoggedIn = () => {
     width: 100%;
     height: 100%;
     min-width: 100vw;
-    min-height: 100vh;
+    min-height: 100dvh;
     background: rgba(0,0,0,0.6);
     position: absolute;
     inset: 0;

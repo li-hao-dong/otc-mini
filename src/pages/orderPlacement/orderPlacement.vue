@@ -1,8 +1,5 @@
 <template>
     <view class="container orderPage">
-
-
-
         <view class="pageWrap">
 
           <view class="sub_tabs">
@@ -138,9 +135,55 @@
 
           <view class="group_buy_btns" v-show="activeTab === 1">
             <view class="own_buy_btn">单独购买</view>
-            <view class="group_buy_btn">发起拼单</view>
+            <view class="group_buy_btn" @click="openConvenedBland">发起拼单</view>
           </view>
         </view>
+        <uni-popup ref="popup" type="bottom">
+          <view class="bottom_popup">
+            <view class="card_popup">
+              <text class="popup_title">拼单基本信息</text>
+              <view class="popup_card_row">
+                <view class="popup_card_row_title">产品名称</view>
+                <view class="popup_card_row_cont">中国铝业 601600.SH · 平值100看涨</view>
+              </view>
+              <view class="popup_card_row">
+                <view class="popup_card_row_title">期权费总额</view>
+                <view class="popup_card_row_cont">¥ 93,800.00</view>
+              </view>
+              <view class="popup_card_row">
+                <view class="popup_card_row_title">拼单模式</view>
+                <view class="popup_card_row_cont">官方推荐标的拼单</view>
+              </view>
+              <view class="popup_card_row">
+                <view class="popup_card_row_title">拼单服务费</view>
+                <view class="popup_card_row_cont">盈利部分的 15%（仅在盈利时收取）</view>
+              </view>
+            </view>
+
+            <view class="card_popup">
+              <text class="popup_title">选择拼单人数</text>
+              <view class="popup_card_row">
+                <view :class='`choose_people ${choosePeople == num ? "choose_people_active" : ""} `' v-for="(num,key) in 5" :key="key" @click="choosePeople=num">{{num}}人</view>
+              </view>
+              <view class="popup_card_row">
+                <view class="popup_card_row_title"></view>
+                <view class="popup_card_row_cont">单人期权费： ¥ 46,900.00 / 人</view>
+              </view>
+              <view>
+                <view class="pd_hint">• 请在拼单创建后 24 小时内完成邀请并支付</view>
+                <view class="pd_hint">• 所有成员支付成功后，系统才会统一向通道侧申请购买</view>
+                <view class="pd_hint">• 拼单未成团或超时，将按平台规则取消订单</view>
+                <view class="pd_hint">• 如订单最终盈利，平台将按约定从盈利部分中收取 15% 拼单服务费； 如订单亏损，则不收取该项费用。</view>
+                <view class="pd_hint">示例：若最终盈利 10,000 元，则拼单服务费为 1,500 元， 剩余收益 8,500 元。</view>
+              </view>
+            </view>
+
+            <view class="popup_card_btns">
+              <view class="cancel_btn" @click="popup.close()">取消</view>
+              <view class="confirm_btn">确认发起拼单</view>
+            </view>
+          </view>
+        </uni-popup>
     </view>
 </template>
 
@@ -150,12 +193,14 @@ import { PriceType, type orderPayloadReq } from '@/interfaces/inquiry/orderPaylo
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 import {useStore} from "@/stores";
-const activeTab = ref<number>(0);
+const activeTab = ref<number>(1);
 const subTabs = ref<Array<string>>(['单独购买', '拼单购买']);
 const selectedPriceType = ref<PriceType>(PriceType.MARKET);
 const orderPayload = ref<any>(null);
 const quantity = ref<number>(1);
 const limitPrice = ref<number>(0);
+const popup = ref<any>(null);
+const choosePeople = ref<number>(1);
 
 onLoad(() => { initData(); });
 
@@ -280,6 +325,10 @@ const applySubscribeMessage = () => {
     })
 
 
+};
+
+const openConvenedBland = () => {
+  popup.value.open()
 };
 
 </script>
@@ -643,6 +692,104 @@ const applySubscribeMessage = () => {
   margin: 0 auto;
   color: #999999;
   font-size: 14px;
+}
+
+.bottom_popup{
+  width: 100%;
+  min-height: 50vh;
+  background: #f5f5f5;
+  border-radius: 15px 15px 0 0;
+  padding: 10px 2.5% 0 2.5%;
+  box-sizing: border-box;
+}
+
+.card_popup{
+  width: 100%;
+  margin: 0 auto;
+  background: #FFFFFF;
+  border-radius: 12px;
+  padding: 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.card_popup:last-child{
+  margin-bottom: unset;
+}
+
+.popup_title{
+  font-size: 16px;
+  font-weight: bold;
+  color: #333333;
+}
+
+.popup_card_row{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.popup_card_row_title{
+  font-size: 14px;
+  color: #999;
+}
+
+.popup_card_row_cont{
+  font-size: 14px;
+  color: #333333;
+}
+
+.choose_people{
+  padding: 5px 15px;
+  border: 1px solid #CCCCCC;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+}
+
+.choose_people_active{
+  border: 1px solid var(--color-primary-bg);
+  color: var(--color-primary-bg);
+}
+
+.pd_hint{
+  font-size: 12px;
+  color: #999999;
+  padding-top: 4px;
+}
+
+.popup_card_btns{
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 10px;
+}
+
+.cancel_btn{
+  width: 50%;
+  text-align: center;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 12px 0;
+  border-radius: 20px;
+}
+
+.confirm_btn{
+  width: 50%;
+  text-align: center;
+  background: #e53935;
+  color: #fff;
+  border: none;
+  padding: 12px 0;
+  border-radius: 20px;
 }
 
 </style>

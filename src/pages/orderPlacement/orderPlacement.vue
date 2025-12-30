@@ -1,12 +1,24 @@
 <template>
     <view class="container orderPage">
+
+
+
         <view class="pageWrap">
+
+          <view class="sub_tabs">
+            <view class="tab_btn "
+                  v-for="(tab,k) in subTabs" :class="activeTab == k ? 'tab_btn_avtive': ''"
+                  @click="activeTab = k"
+            >{{ tab }}</view>
+          </view>
+
             <view class="card cardHeader">
                 <view class="row assetRowName">
                     <text class="assetName">{{orderPayload?.assetName}}</text>
                 </view>
                 <view class="row assetRowCode">
-                    <text class="assetCode">{{ orderPayload?.assetCode }}</text>
+                  <text class="assetCode">{{ orderPayload?.assetCode }}</text> ·
+                  <text class="assetCode">{{ orderPayload?.structureName }}{{orderPayload?.optionType}} {{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text>
                 </view>
                 <view class="row rowPrice">
                     <view class="para"><text class="labelGray">股价：</text></view>
@@ -24,10 +36,10 @@
                     <view class="para"><text class="labelGray">询价规模：</text></view>
                     <view class="para"><text class="valueDark">{{ orderPayload?.nominalAmount }}万</text></view>
                 </view>
-                <view class="row rowStruct">
-                    <view class="para"><text class="labelGray">{{ orderPayload?.structureName }}</text></view>
-                    <view class="para"><text class="valueDark">{{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text></view>
-                </view>
+<!--                <view class="row rowStruct">-->
+<!--                    <view class="para"><text class="labelGray">{{ orderPayload?.structureName }}</text></view>-->
+<!--                    <view class="para"><text class="valueDark">{{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text></view>-->
+<!--                </view>-->
             </view>
 
             <view class="card">
@@ -36,18 +48,16 @@
                 </view>
                 <view class="priceType">
                     <view class="optionRow" role="button" tabindex="0" @click="selectPriceType(PriceType.MARKET)">
-                        <view class="radioDot"
-                            :class="selectedPriceType === PriceType.MARKET ? 'radioPrimary' : 'radioSecondary'"></view>
+                        <view class="radioDot" :class="selectedPriceType === PriceType.MARKET ? 'radioPrimary' : 'radioSecondary'"></view>
                         <text class="pillText">市价</text>
                     </view>
                     <view class="optionRow" role="button" tabindex="0" @click="selectPriceType(PriceType.LIMIT)">
-                        <view class="radioDot"
-                            :class="selectedPriceType === PriceType.LIMIT ? 'radioPrimary' : 'radioSecondary'"></view>
+                        <view class="radioDot" :class="selectedPriceType === PriceType.LIMIT ? 'radioPrimary' : 'radioSecondary'"></view>
                         <text class="pillText">限价</text>
-                        <view class="limitInput">
-                            <input type="number" class="inputBox" :disabled="selectedPriceType !== PriceType.LIMIT" placeholder="" v-model="limitPrice" />
-                            <text class="unit">元</text>
-                        </view>
+                    </view>
+                    <view class="limitInput" v-if="selectedPriceType === PriceType.LIMIT">
+                        <input type="number" class="inputBox" placeholder="请输入限价" v-model="limitPrice" />
+                        <text class="unit">元</text>
                     </view>
                 </view>
 
@@ -55,9 +65,54 @@
                     <text class="sectionTitle">下单规模</text>
                 </view>
                 <view class="quantityRow">
-                    <view class="quantityStrong"><input type="number" class="inputBox" placeholder="" v-model="quantity" /></view>
+                    <view class="quantityStrong"><input type="number" class="inputBox" placeholder="请输入下单规模" v-model="quantity" /></view>
                     <text class="quantitySuffix">× 100万</text>
                 </view>
+                <view class="group_buy_hint1" v-show="activeTab === 1">
+                  如通过拼单方式购买，拼单服务费将在订单盈利结算时，从您的
+                  实际收益中按约定比例扣除，不增加亏损金额。
+                </view>
+            </view>
+
+            <view class="card" v-show="activeTab === 1">
+              <view class="row">
+                <text class="sectionTitle">拼单购买</text>
+              </view>
+              <view class="group_buy_hint2">
+                <view style="border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px;">
+                  <view>· 支持 2–5 人拼单购买同一产品</view>
+                  <view>· 拼单人数达到目标且全部完成支付后，系统统一向通道侧下单</view>
+                  <view>· 拼单未成团或超时，将按规则自动取消相关订单</view>
+                </view>
+                <view>
+                  <view>· 本产品支持：官方推荐标的拼单</view>
+                  <view>· 拼单服务费：订单盈利部分的 15%，仅在订单最终盈利时收取</view>
+                  <view>· 服务费将在「已结算」时从实际收益中自动扣除</view>
+                </view>
+              </view>
+            </view>
+
+            <view class="card" v-show="activeTab === 1">
+              <view class="row">
+                <text class="sectionTitle">其他正在拼单</text>
+              </view>
+              <view class="group_buy_hint2">
+                <view v-for="item in 2" style="border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px;">
+                  <view class="row" style="display: flex; justify-content: space-between; align-items: center;">
+                    <view>
+                      <view class="small_title">拼单{{ item }}</view>
+                      <view class="group_buy_data">3人拼单 · 已有 2/3 人</view>
+                      <view class="group_buy_data">剩余时间 03:21:15</view>
+                    </view>
+                    <view>
+                      <view class="add_group_buy">加入拼单</view>
+                    </view>
+                  </view>
+                </view>
+              </view>
+              <view class="show_more">
+                查看全部拼单 >
+              </view>
             </view>
 
             <!-- <view class="card">
@@ -77,9 +132,14 @@
                 </view>
             </view> -->
 
-            <view class="cta" role="button" tabindex="0" @click="placeOrder">
-                <text class="ctaText">模拟下单</text>
+            <view class="cta" role="button" tabindex="0" @click="placeOrder" v-show="activeTab === 0">
+                <text class="ctaText">下单</text>
             </view>
+
+          <view class="group_buy_btns" v-show="activeTab === 1">
+            <view class="own_buy_btn">单独购买</view>
+            <view class="group_buy_btn">发起拼单</view>
+          </view>
         </view>
     </view>
 </template>
@@ -90,6 +150,8 @@ import { PriceType, type orderPayloadReq } from '@/interfaces/inquiry/orderPaylo
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 import {useStore} from "@/stores";
+const activeTab = ref<number>(0);
+const subTabs = ref<Array<string>>(['单独购买', '拼单购买']);
 const selectedPriceType = ref<PriceType>(PriceType.MARKET);
 const orderPayload = ref<any>(null);
 const quantity = ref<number>(1);
@@ -222,23 +284,50 @@ const applySubscribeMessage = () => {
 
 </script>
 
-<style>
+<style scoped>
 /* .orderPage { background-color: #ffffff; } */
+
+.sub_tabs{
+  width: 95%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  background: #FFFFFF;
+  border-radius: 12px;
+}
+
+.tab_btn{
+  width: 50%;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.tab_btn_avtive{
+  color: #FFFFFF;
+  background: var(--color-primary-bg);
+  border-radius: 12px;
+}
+
 .pageWrap {
     margin: 0 auto;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 10px;
+    padding-top: 10px;
 }
 
 .card {
+    width: 95%;
+    margin: 0 auto;
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
     padding: 30px 20px 20px;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
 }
 
 .cardHeader {
@@ -257,36 +346,17 @@ const applySubscribeMessage = () => {
 
 .assetRowCode {
     padding: 0 0 1px;
+    display: flex;
+    align-items: center;
 }
 
-.rowPrice {
-    justify-content: space-between;
-    gap: 231.11px;
-    padding-top: 12px;
-}
-
-.rowChange {
-    justify-content: space-between;
-    gap: 229.47px;
-    padding-top: 12px;
-}
-
-.rowInquirer {
-    justify-content: space-between;
-    gap: 257px;
-    padding-top: 12px;
-}
-
-.rowScale {
-    justify-content: space-between;
-    gap: 206.97px;
-    padding-top: 12px;
-}
-
+.rowPrice,
+.rowChange,
+.rowInquirer,
+.rowScale,
 .rowStruct {
     justify-content: space-between;
-    gap: 128.58px;
-    padding-top: 12px;
+    padding-top: 6px;
 }
 
 .para {
@@ -361,7 +431,7 @@ const applySubscribeMessage = () => {
     display: flex;
     align-items: center;
     gap: 10px;
-    height: 33px;
+    height: 25px;
 }
 
 .radioDot {
@@ -491,14 +561,14 @@ const applySubscribeMessage = () => {
 }
 
 .cta {
-    width: 95%;
-    margin: 4px auto 15px auto;
-    background-color: #E63946;
-    border-radius: 35px;
+    width: 90%;
+    margin: 8px auto 20px auto;
+    background: var(--color-primary-bg);
+    border-radius: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 18px 0 16px;
+    padding: 14px 0;
 }
 
 .ctaText {
@@ -508,4 +578,71 @@ const applySubscribeMessage = () => {
     line-height: 1.21em;
     color: #FFFFFF;
 }
+
+.group_buy_hint1{
+  color: #c0c0c0;
+  font-size: 12px;
+}
+
+.group_buy_hint2{
+  color: #666666;
+  font-size: 13px;
+  line-height: 22px;
+}
+
+.small_title{
+  font-weight: bold;
+  font-size: 16px;
+  padding-bottom: 5px;
+}
+.group_buy_data{
+  color: #c0c0c0;
+
+}
+.add_group_buy{
+  width: fit-content;
+  padding: 0 15px;
+  line-height: 35px;
+  color: var(--color-primary-bg);
+  border: 1px solid var(--color-primary-bg);
+  border-radius: 20px;
+}
+
+.group_buy_btns{
+  width: 100%;
+  margin: 0 auto ;
+  display: flex;
+  gap: 20px;
+  background: #FFFFFF;
+  padding: 10px 2.5%;
+  box-sizing: border-box;
+}
+
+.own_buy_btn,
+.group_buy_btn{
+  width: 50%;
+  text-align: center;
+  border-radius: 20px;
+}
+
+.own_buy_btn{
+  border: 1px solid #CCCCCC;
+  box-sizing: content-box;
+  padding: 10px 0;
+}
+
+.group_buy_btn{
+  box-sizing: content-box;
+  padding: 10px 0;
+  background: var(--color-primary-bg);
+  color: #FFFFFF;
+}
+
+.show_more{
+  width: fit-content;
+  margin: 0 auto;
+  color: #999999;
+  font-size: 14px;
+}
+
 </style>

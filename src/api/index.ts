@@ -19,6 +19,7 @@ import type {subscribeMessageResp} from "@/interfaces/subscribeMessage";
 import type {loginH5Resp} from "@/interfaces/loginH5";
 import type {CreateGroupOrderReq, CreateGroupOrderResp} from "@/interfaces/groupOrders/createGroupOrders";
 import type {GetGroupOrdersReq, GetGroupOrdersResp} from "@/interfaces/groupOrders/getGroupOrders";
+import type {GroupOrderDetailResp} from "@/interfaces/groupOrders/groupOrderDetail";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -445,6 +446,25 @@ export const getGroupOrders = (payload:GetGroupOrdersReq|undefined):Promise<GetG
                 resolve(res.data as GetGroupOrdersResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch getGroupOrders info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取拼单详情
+ * */
+export const getGroupOrderDetail = (groupOrderNo:string):Promise<GroupOrderDetailResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/group-orders/${groupOrderNo}`)
+            console.log("getGroupOrderDetail res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as GroupOrderDetailResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getGroupOrderDetail info'));
             }
         } catch (error) {
             reject(error);

@@ -1,7 +1,7 @@
 <template>
     <view>
       <view class="container" v-if="groupOrderDatas.length > 0">
-        <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key">
+        <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
           <view class="bd">{{key}}{{ groupOrder.underlyingAssetName }} <text>601600.SH？？ · 平值100？？？{{groupOrder.optionType == "CALL" ? '看涨':'看跌'}}</text></view>
           <view class="row">
@@ -85,6 +85,13 @@ const getPlatGroupOrders = async () => {
     console.log('err', err)
   })
 };
+
+const toDetail = (groupOrder: Group) => {
+  uni.navigateTo({
+    url: `/pages/groupOrders/groupOrderDetail?groupOrderNo=${groupOrder.groupOrderNo}`
+  })
+}
+
 </script>
 
 <style scoped>

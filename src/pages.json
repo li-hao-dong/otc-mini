@@ -181,6 +181,16 @@
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			/* 拼单详情 */
+			"path": "pages/groupOrders/groupOrderDetail",
+			"style": {
+				"navigationBarTitleText": "拼单详情",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"tabBar": {

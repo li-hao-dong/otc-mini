@@ -90,7 +90,7 @@
       <!--   我尚未⽀付   -->
       <view class="operation_btn">去支付?? 如何寻找的支付状态</view>
       <!--   我已⽀付，拼单未满员   -->
-      <view class="operation_btn" v-if="orderDetail.currentSize<orderDetail.targetSize">分享给好友拼单?? 如何寻找的支付状态</view>
+      <view class="operation_btn" v-if="orderDetail.currentSize<orderDetail.targetSize" @click="copyUrl">分享给好友拼单?? 如何寻找的支付状态</view>
       <!--   我已⽀付，拼单已满且组状态为 PAID   -->
       <view class="operation_btn" v-if="orderDetail.groupStatus.toUpperCase() === 'PAID' ">查看订单</view>
       <view class="hint_cont">
@@ -191,6 +191,25 @@ const initOrderDetail = (groupOrderNo) => {
   })
 };
 
+const copyUrl = () => {
+  // 复制链接的逻辑
+  const url = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+  uni.setClipboardData({
+    data: url,
+    success: () => {
+      uni.showToast({
+        title: '复制链接成功',
+        icon: 'success'
+      });
+    },
+    fail: () => {
+      uni.showToast({
+        title: '复制链接失败',
+        icon: 'none'
+      });
+    }
+  });
+}
 </script>
 
 <style lang="scss" scoped>

@@ -20,8 +20,8 @@ export interface orderPayloadReq {
 }
 
 export enum PriceType {
-    MARKET = "MARKET",
-    LIMIT = "LIMIT"
+    MARKET = "Market",
+    LIMIT = "Limit"
 }
 
 export interface SelectedQuote {

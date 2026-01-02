@@ -17,6 +17,8 @@ import type {PaymentProofInfoResp} from "@/interfaces/paymentProofInfo";
 import type {ExerciseReq, ExerciseResp} from "@/interfaces/exercise";
 import type {subscribeMessageResp} from "@/interfaces/subscribeMessage";
 import type {loginH5Resp} from "@/interfaces/loginH5";
+import type {CreateGroupOrderReq, CreateGroupOrderResp} from "@/interfaces/groupOrders/createGroupOrders";
+import type {GetGroupOrdersReq, GetGroupOrdersResp} from "@/interfaces/groupOrders/getGroupOrders";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -399,6 +401,45 @@ export const getImage = (paymentVoucherUrl: string):Promise<any> => {
         }
     })
 }
+
+/**
+ * 创建拼单（发起拼单）
+ * */
+export const createGroupOrder = (payload: CreateGroupOrderReq):Promise<CreateGroupOrderResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.post(`${BASE_URL}/group-orders`, payload, 'application/json')
+            console.log("createGroupOrder res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as CreateGroupOrderResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch createGroupOrder info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取拼单列表
+ * */
+export const getGroupOrders = (payload:GetGroupOrdersReq):Promise<GetGroupOrdersResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/group-orders?page=${payload?.page || null}&pageSize=${payload?.pageSize || null}&status=${payload?.status || null}&optionType=${payload?.optionType || null}&productCode=${payload?.productCode || null}&underlyingAssetName=${payload?.underlyingAssetName || null}`)
+            console.log("getGroupOrders res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as GetGroupOrdersResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getGroupOrders info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 
 // TODO 废弃
 export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {

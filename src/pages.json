@@ -171,6 +171,16 @@
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			/* 拼单列表 */
+			"path": "pages/groupOrders/groupOrders",
+			"style": {
+				"navigationBarTitleText": "拼单列表",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"tabBar": {

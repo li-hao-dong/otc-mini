@@ -94,20 +94,25 @@
                 <text class="sectionTitle">其他正在拼单</text>
               </view>
               <view class="group_buy_hint2">
-                <view v-for="item in 2" style="border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px;">
-                  <view class="row" style="display: flex; justify-content: space-between; align-items: center;">
-                    <view>
-                      <view class="small_title">拼单{{ item }}</view>
-                      <view class="group_buy_data">3人拼单 · 已有 2/3 人</view>
-                      <view class="group_buy_data">剩余时间 03:21:15</view>
-                    </view>
-                    <view>
-                      <view class="add_group_buy">加入拼单</view>
+                <view v-show="groupOrders.length > 0">
+                  <view v-for="(item, key) in 2" :key="key" style="border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px;">
+                    <view class="row" style="display: flex; justify-content: space-between; align-items: center;">
+                      <view>
+                        <view class="small_title">拼单{{ item }}</view>
+                        <view class="group_buy_data">3人拼单 · 已有 2/3 人</view>
+                        <view class="group_buy_data">剩余时间 03:21:15</view>
+                      </view>
+                      <view>
+                        <view class="add_group_buy">加入拼单</view>
+                      </view>
                     </view>
                   </view>
                 </view>
+                <view v-show="groupOrders.length === 0">
+                  暂无其他拼单，快来发起拼单吧！
+                </view>
               </view>
-              <view class="show_more">
+              <view class="show_more" @click="uni.navigateTo({ url: '/pages/groupOrders/groupOrders' })">
                 查看全部拼单 >
               </view>
             </view>
@@ -134,7 +139,7 @@
             </view>
 
           <view class="group_buy_btns" v-show="activeTab === 1">
-            <view class="own_buy_btn">单独购买</view>
+            <view class="own_buy_btn" @click="activeTab = 0">单独购买</view>
             <view class="group_buy_btn" @click="openConvenedBland">发起拼单</view>
           </view>
         </view>
@@ -144,11 +149,11 @@
               <text class="popup_title">拼单基本信息</text>
               <view class="popup_card_row">
                 <view class="popup_card_row_title">产品名称</view>
-                <view class="popup_card_row_cont">中国铝业 601600.SH · 平值100看涨</view>
+                <view class="popup_card_row_cont">{{orderPayload?.assetName}} {{ orderPayload?.assetCode }} · {{ orderPayload?.structureName }}{{orderPayload?.optionType}}</view>
               </view>
               <view class="popup_card_row">
                 <view class="popup_card_row_title">期权费总额</view>
-                <view class="popup_card_row_cont">¥ 93,800.00</view>
+                <view class="popup_card_row_cont">¥ {{truncToTwo(quantity * 1000000)}}</view>
               </view>
               <view class="popup_card_row">
                 <view class="popup_card_row_title">拼单模式</view>
@@ -167,7 +172,7 @@
               </view>
               <view class="popup_card_row">
                 <view class="popup_card_row_title"></view>
-                <view class="popup_card_row_cont">单人期权费： ¥ 46,900.00 / 人</view>
+                <view class="popup_card_row_cont">单人期权费： ¥ {{truncToTwo(quantity * 1000000 / choosePeople)}} / 人</view>
               </view>
               <view>
                 <view class="pd_hint">• 请在拼单创建后 24 小时内完成邀请并支付</view>
@@ -180,7 +185,7 @@
 
             <view class="popup_card_btns">
               <view class="cancel_btn" @click="popup.close()">取消</view>
-              <view class="confirm_btn">确认发起拼单</view>
+              <view class="confirm_btn" @click="createGroupOrders">确认发起拼单</view>
             </view>
           </view>
         </uni-popup>
@@ -188,11 +193,19 @@
 </template>
 
 <script setup lang="ts">
-import {buyProduct, subscribeMessage} from '@/api';
+import {buyProduct, createGroupOrder, getGroupOrders, subscribeMessage} from '@/api';
 import { PriceType, type orderPayloadReq } from '@/interfaces/inquiry/orderPayload';
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 import {useStore} from "@/stores";
+import {truncToTwo} from "@/utils";
+import type {CreateGroupOrderReq} from "@/interfaces/groupOrders/createGroupOrders";
+import {
+  type GetGroupOrdersReq,
+  type GetGroupOrdersResp, type Group,
+  OptionType,
+  Status
+} from "@/interfaces/groupOrders/getGroupOrders";
 const activeTab = ref<number>(1);
 const subTabs = ref<Array<string>>(['单独购买', '拼单购买']);
 const selectedPriceType = ref<PriceType>(PriceType.MARKET);
@@ -201,6 +214,7 @@ const quantity = ref<number>(1);
 const limitPrice = ref<number>(0);
 const popup = ref<any>(null);
 const choosePeople = ref<number>(1);
+const groupOrders = ref<Array<Group>>([]);
 
 onLoad(() => { initData(); });
 
@@ -209,8 +223,30 @@ const selectPriceType = (t: PriceType.MARKET | PriceType.LIMIT) => { selectedPri
 
 const initData = () => {
     orderPayload.value = uni.getStorageSync('OrderPayload');
+    getGroupOrderData()
     if(!orderPayload.value) uni.switchTab ({ url: '/pages/inquiry/inquiry' });
 };
+
+const getGroupOrderData = () => {
+  const payload: GetGroupOrdersReq = {
+    optionType: orderPayload?.value.optionType || 'Call',
+    page: 1,
+    pageSize: 2,
+    productCode: '',
+    status: Status.Open,
+    underlyingAssetName: orderPayload?.value.assetName,
+  }
+
+  getGroupOrders(payload).then(res => {
+    console.log('getGroupOrders res', res);
+    if(res.groups && res.groups.length > 0){
+      // 有拼单数据
+      groupOrders.value = res.groups;
+    }
+  }).catch(error => {
+    console.log('getGroupOrders error', error);
+  })
+}
 
 const placeOrder = () => {
     if (!useStore().user.token){
@@ -330,6 +366,29 @@ const applySubscribeMessage = () => {
 const openConvenedBland = () => {
   popup.value.open()
 };
+
+const createGroupOrders = () => {
+  const payload: CreateGroupOrderReq = {
+    inquiryId: orderPayload.value?.inquiryId,
+    productCode: orderPayload.value?.quote?.productCode,
+    priceType: selectedPriceType.value,
+    nominalAmount: Number(quantity.value * 1000000),
+    limitPrice: Number(limitPrice.value),
+    targetSize: choosePeople.value
+  };
+  createGroupOrder(payload).then(res => {
+    console.log('createGroupOrders res', res);
+    if(res.status && res.status === 'success'){
+      uni.showToast({ title: '拼单创建成功', icon: 'success' });
+      popup.value.close();
+      setTimeout(() => { uni.reLaunch({ url: '/pages/groupOrders/groupOrders' }); }, 1500);
+    } else {
+      uni.showToast({ title: res.message || '拼单创建失败', icon: 'none' });
+    }
+  }).catch(err => {
+    console.log('createGroupOrders err', err);
+  })
+}
 
 </script>
 

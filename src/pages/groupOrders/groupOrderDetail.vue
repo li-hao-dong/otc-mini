@@ -5,7 +5,6 @@
         <view>{{ orderDetail.underlyingAssetName }} <text>{{orderDetail.underlyingAssetCode}} · {{orderDetail.strikeType}}{{orderDetail.optionType == "CALL" ? '看涨':'看跌'}}</text></view>
         <view>{{calcStatus(orderDetail.groupStatus)}}</view>
       </view>
-
       <view class="row">
         <view class="small_tit">拼单进度：</view>
         <view class="group_order_data">{{ orderDetail.currentSize }} / {{ orderDetail.targetSize }} ⼈ </view>
@@ -16,7 +15,11 @@
         </view>
       </view>
       <view class="time_hint">截止于 {{ formatLocalTime(new Date(orderDetail.expireTime)) }}</view>
-      <view  class="hint_cont">
+      <view class="row">
+        <view class="small_tit">拼单编号：</view>
+        <view class="group_order_data">{{ orderDetail.groupOrderNo }}</view>
+      </view>
+      <view class="hint_cont">
         <view>拼单模式与费⽤</view>
         <view>◦ 拼单模式：官⽅推荐标的拼单</view>
         <view>◦ 拼单服务费：订单盈利部分的 15%，仅在盈利时收取</view>
@@ -92,9 +95,9 @@
       <!--   我已⽀付，拼单未满员   -->
       <view class="operation_btn" v-if="orderDetail.currentSize<orderDetail.targetSize" @click="copyUrl">分享给好友拼单?? 如何寻找的支付状态</view>
       <!--   我已⽀付，拼单已满且组状态为 PAID   -->
-      <view class="operation_btn" v-if="orderDetail.groupStatus.toUpperCase() === 'PAID' ">查看订单</view>
+      <view class="operation_btn" v-if="orderDetail.groupStatus.toUpperCase() === 'PAID' " @click="toOrderDetail">查看订单</view>
       <view class="hint_cont">
-            “拼单已成团，系统将为所有成员统⼀申请购买期权产品。若订单最终盈利，将按 本拼单模式约定，从收益中⾃动扣除拼单服务费。”
+            拼单已成团，系统将为所有成员统⼀申请购买期权产品。若订单最终盈利，将按 本拼单模式约定，从收益中⾃动扣除拼单服务费。
       </view>
     </view>
   </view>
@@ -210,6 +213,14 @@ const copyUrl = () => {
     }
   });
 }
+
+const toOrderDetail = () => {
+  // 跳转到订单详情页的逻辑
+  uni.navigateTo({
+    url: `/pages/orderDetail/orderDetail?groupOrderNo=${orderDetail.groupOrderNo}&orderNo=${orderDetail.value.members[0].orderNo}`
+  });
+}
+
 </script>
 
 <style lang="scss" scoped>

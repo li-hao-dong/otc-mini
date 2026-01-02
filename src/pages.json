@@ -212,6 +212,12 @@
 				"text": "仓单"
 			},
 			{
+				"pagePath": "pages/groupOrders/groupOrders",
+				"iconPath": "static/menu/icon_cd.png",
+				"selectedIconPath": "static/menu/icon_cd_active.png",
+				"text": "拼单"
+			},
+			{
 				"pagePath": "pages/calculator/calculator",
 				"iconPath": "static/menu/icon_calc.png",
 				"selectedIconPath": "static/menu/icon_calc_active.png",

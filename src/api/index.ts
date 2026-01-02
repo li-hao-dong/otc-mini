@@ -424,10 +424,22 @@ export const createGroupOrder = (payload: CreateGroupOrderReq):Promise<CreateGro
 /**
  * 获取拼单列表
  * */
-export const getGroupOrders = (payload:GetGroupOrdersReq):Promise<GetGroupOrdersResp> => {
+export const getGroupOrders = (payload:GetGroupOrdersReq|undefined):Promise<GetGroupOrdersResp> => {
     return new Promise(async (resolve, reject) => {
-        try {
-            const res: response = <response>await http.get(`${BASE_URL}/group-orders?page=${payload?.page || null}&pageSize=${payload?.pageSize || null}&status=${payload?.status || null}&optionType=${payload?.optionType || null}&productCode=${payload?.productCode || null}&underlyingAssetName=${payload?.underlyingAssetName || null}`)
+        try {let url = '';
+            if(payload) {
+                Object.keys(payload).map((key, i) => {
+                    if(i === Object.keys(payload).length-1) {
+                        url += `${key}=${payload[key]}`
+                    }else {
+                        url += `${BASE_URL}/group-orders?${key}=${payload[key]}&`
+                    }
+                })
+            }else {
+                url = `${BASE_URL}/group-orders`;
+            }
+
+            const res: response = <response>await http.get(url)
             console.log("getGroupOrders res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as GetGroupOrdersResp)

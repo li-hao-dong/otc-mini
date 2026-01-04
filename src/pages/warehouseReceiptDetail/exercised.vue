@@ -6,13 +6,13 @@ import {onLoad} from "@dcloudio/uni-app";
 import {orderDetail} from "@/api";
 import {formatLocalTime, truncToTwo} from "@/utils";
 
-const detail = ref<OrderDetail | null>(null);
+// const detail = ref<OrderDetail | null>(null);
+const props = defineProps<{orderId?: string, detail: OrderDetail}>();
 
-
-onLoad((option) =>{
-  console.log("option", option)
-  getDetail(option?.id)
-})
+// onLoad((option) =>{
+//   console.log("option", option)
+//   getDetail(option?.id)
+// })
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {

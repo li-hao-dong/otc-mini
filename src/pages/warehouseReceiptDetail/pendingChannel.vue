@@ -1,21 +1,23 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, defineProps} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {orderDetail} from "@/api";
 import {formatLocalTime, truncToTwo} from "../../utils";
 
-const detail = ref<OrderDetail | null>(null);
+// const detail = ref<OrderDetail | null>(null);
+const props = defineProps<{detail: OrderDetail}>();
+console.log("props detail", props)
 
 onLoad((option) =>{
   console.log("option", option)
-  getDetail(option?.id)
+  // getDetail(option?.id)
 })
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
     console.log("订单详情", res)
-    detail.value = res
+    // detail.value = res
   })
 }
 

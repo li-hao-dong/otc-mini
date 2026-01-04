@@ -103,6 +103,8 @@
         拼单已成团，系统将为所有成员统⼀申请购买期权产品。若订单最终盈利，将按 本拼单模式约定，从收益中⾃动扣除拼单服务费。
       </view>
     </view>
+    <view class="operation_btn" @click="toOrderDetail">查看订单</view>
+
   </view>
 </template>
 
@@ -222,7 +224,7 @@ const copyUrl = () => {
 const toOrderDetail = () => {
   // 跳转到订单详情页的逻辑
   uni.navigateTo({
-    url: `/pages/orderDetail/orderDetail?groupOrderNo=${orderDetail.value.groupOrderNo}`
+    url: `/pages/warehouseReceiptDetail/warehouseReceiptDetail?groupOrderNo=${orderDetail.value.groupOrderNo}`
   });
 }
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, BASE_URL, getImage, orderDetail, paymentProofInfo} from "@/api";
@@ -8,7 +8,7 @@ import {useStore} from "@/stores";
 import {formatLocalTime, truncToTwo} from "@/utils";
 
 const voucher = ref<string>()
-const detail = ref<OrderDetail | null>(null);
+// const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const remitData = reactive({
   bankAccount: null,
@@ -18,12 +18,27 @@ const remitData = reactive({
   uploadTime: null,
   voucherUrl: null
 })
+const props = defineProps<{orderId: string, detail: OrderDetail}>();
 
-onLoad((option) =>{
-  console.log("option", option)
-  getDetail(option?.id)
-  // getBankReceiptInfo(option?.id)
-  getPaymentProofInfo(option?.id)
+// onLoad((option) =>{
+//   console.log("option", option)
+//   getDetail(option?.id)
+//   // getBankReceiptInfo(option?.id)
+//   getPaymentProofInfo(option?.id)
+// })
+
+// watch(() => props.detail, (newVal) => {
+//   if(newVal){
+//     detail.value = newVal;
+//   }
+// })
+
+watch(() => props.orderId, (newVal) => {
+  if(newVal){
+    // getDetail(newVal)
+    // getBankReceiptInfo(newVal)
+    getPaymentProofInfo(newVal)
+  }
 })
 
 const getDetail = (orderId: string) => {

@@ -22,6 +22,7 @@ import type {GetGroupOrdersReq, GetGroupOrdersResp} from "@/interfaces/groupOrde
 import type {GroupOrderDetailResp} from "@/interfaces/groupOrders/groupOrderDetail";
 import type {AddGroupOrder} from "@/interfaces/groupOrders/addGroupOrder";
 import type {MyGroupOrderReq, MyGroupOrderResp} from "@/interfaces/groupOrders/myGroupOrder";
+import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -517,6 +518,25 @@ export const addGroupOrder = (groupOrderNo:string, nominalAmount: number):Promis
                 resolve(res.data as AddGroupOrder)
             } else {
                 reject(new Error(res.message || 'Failed to fetch addGroupOrder info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取用户拼单成功的订单信息
+ * */
+export const getUserGroupOrderSuccessOrders = (groupOrderNo:string):Promise<UserGroupOrderDetailResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/group-orders/${groupOrderNo}/order`)
+            console.log("getUserGroupOrderSuccessOrders res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as UserGroupOrderDetailResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getUserGroupOrderSuccessOrders info'));
             }
         } catch (error) {
             reject(error);

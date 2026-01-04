@@ -1,19 +1,34 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {ref, watch} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, orderDetail} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {formatLocalTime, truncToTwo} from "../../utils";
 
-const detail = ref<OrderDetail | null>(null);
+// const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
+const props = defineProps<{orderId: string, detail: OrderDetail}>();
 
-onLoad((option) =>{
-  console.log("option", option)
-  getDetail(option?.id)
-  getBankReceiptInfo(option?.id)
+// onLoad((option) =>{
+//   console.log("option", option)
+//   getDetail(option?.id)
+//   getBankReceiptInfo(option?.id)
+// })
+
+// watch(() => props.detail, (newVal) => {
+//   if(newVal){
+//     detail.value = newVal;
+//   }
+// })
+
+watch(() => props.orderId, (newVal) => {
+  if(newVal){
+    // getDetail(newVal)
+    getBankReceiptInfo(newVal)
+  }
 })
+
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {

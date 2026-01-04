@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, BASE_URL, orderDetail, paymentProofInfo} from "@/api";
@@ -8,7 +8,7 @@ import {useStore} from "@/stores";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 
 const voucher = ref<string>()
-const detail = ref<OrderDetail | null>(null);
+// const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const remitData = reactive({
   bankAccount: null,
@@ -18,14 +18,30 @@ const remitData = reactive({
   uploadTime: null,
   voucherUrl: null
 })
+const props = defineProps<{orderId: string, detail: OrderDetail}>();
+
+// onLoad((option) =>{
+//   console.log("option", option)
+//   getDetail(option?.id)
+//   // getBankReceiptInfo(option?.id)
+//   getPaymentProofInfo(option?.id)
+// })
+console.log("props detail", props)
 
 
-onLoad((option) =>{
-  console.log("option", option)
-  getDetail(option?.id)
-  // getBankReceiptInfo(option?.id)
-  getPaymentProofInfo(option?.id)
-})
+// watch(() => props.detail, (newVal) => {
+//   if(newVal){
+//     detail.value = newVal;
+//   }
+// }, {deep: true})
+
+watch(() => props.orderId, (newVal) => {
+  console.log("orderId changed", newVal)
+  if(newVal){
+    // getDetail(newVal)
+    getPaymentProofInfo(newVal)
+  }
+}, {deep: true})
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
@@ -87,9 +103,9 @@ const previewImage = () =>  {
     <view class="card">
       <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color:#2ECC71;">已结算 · 订单已完成</view>
-      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{Number(detail.estimatedProfit) >= 0 ? '+' : '-'}} ¥ {{Math.abs(truncToTwo(Number(detail.estimatedProfit)))}}（{{ truncToTwo(detail.profitRate * 100)}}%）</text></view></view>
-      <view class="row"><view class="row_cont"><text>结算金额：</text>¥ {{ detail.settlementAmount }} </view></view>
-      <view class="row"><view class="row_cont"><text>总投入（期权费 + 通道费）：</text>¥ {{truncToTwo(Number(detail.transactionFee) + Number(detail.optionFee))}}</view></view>
+      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{Number(detail?.estimatedProfit) >= 0 ? '+' : '-'}} ¥ {{Math.abs(truncToTwo(Number(detail?.estimatedProfit)))}}（{{ truncToTwo(detail?.profitRate * 100)}}%）</text></view></view>
+      <view class="row"><view class="row_cont"><text>结算金额：</text>¥ {{ detail?.settlementAmount }} </view></view>
+      <view class="row"><view class="row_cont"><text>总投入（期权费 + 通道费）：</text>¥ {{truncToTwo(Number(detail?.transactionFee) + Number(detail?.optionFee))}}</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">本单已完成全部结算，资金方向与盈亏结果已最终确定。上述数据基于合作机构结算结果，已不再变动，仅供对账与历史查询使用。</view></view>
     </view>
 
@@ -103,25 +119,25 @@ const previewImage = () =>  {
 
     <view class="card">
       <view class="fir_title">资金结算明细</view>
-      <view class="row"><view class="row_cont"><text>总投入：</text>¥ {{truncToTwo(Number(detail.transactionFee) + Number(detail.optionFee))}}</view></view>
-      <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view></view>
-      <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{truncToTwo(detail.transactionFee)}}</view></view>
-      <view class="row"><view class="row_cont"><text>结算金额：</text>¥ {{ detail.settlementAmount }}</view></view>
+      <view class="row"><view class="row_cont"><text>总投入：</text>¥ {{truncToTwo(Number(detail?.transactionFee) + Number(detail?.optionFee))}}</view></view>
+      <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail?.optionFee) }}</view></view>
+      <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{truncToTwo(detail?.transactionFee)}}</view></view>
+      <view class="row"><view class="row_cont"><text>结算金额：</text>¥ {{ detail?.settlementAmount }}</view></view>
 <!--      <view class="row"><view class="row_cont"><text>结算通道费：</text>¥ 500.00???</view></view>-->
-      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{(Number(detail.estimatedProfit)) >= 0 ? '+' : '-'}} ¥ {{Math.abs(truncToTwo(Number(detail.estimatedProfit)))}}（{{ truncToTwo(detail.profitRate * 100)}}%）</text></view></view>
+      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{(Number(detail?.estimatedProfit)) >= 0 ? '+' : '-'}} ¥ {{Math.abs(truncToTwo(Number(detail?.estimatedProfit)))}}（{{ truncToTwo(detail?.profitRate * 100)}}%）</text></view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">资金结算明细用于帮助您理解本单的投入、结算及最终盈亏构成，如对具体金额有疑问，请以结算单及银行流水为准，并及时联系客服核对。</view></view>
     </view>
 
     <view class="card">
       <view class="fir_title">产品与合约要素</view>
-      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view></view>
-      <view class="row"><view class="row_cont"><text>订单号：</text>{{ detail.orderNo }}</view></view>
+      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType === "Call" ? '看涨':'看跌'}}</view></view>
+      <view class="row"><view class="row_cont"><text>订单号：</text>{{ detail?.orderNo }}</view></view>
       <view class="row"><view class="row_cont"><text>订单类型：</text>个股场外期权</view></view>
-      <view class="row"><view class="row_cont"><text>生效日期：</text>{{ formatLocalTime(new Date(detail.createdTime)) }}</view></view>
+      <view class="row"><view class="row_cont"><text>生效日期：</text>{{ formatLocalTime(new Date(detail?.createdTime)) }}</view></view>
       <view class="row"><view class="row_cont"><text>到期日期：</text>{{ formatLocalTime(new Date(detail?.maturityDate)) }}</view></view>
-      <view class="row"><view class="row_cont"><text>期限：</text>{{ detail.termName }}</view></view>
-      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}（{{ detail.optionCode }}）</view></view>
-      <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{ detail.optionType }}）</view></view>
+      <view class="row"><view class="row_cont"><text>期限：</text>{{ detail?.termName }}</view></view>
+      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail?.structureDisplayName}}{{detail?.optionType === "Call" ? '看涨':'看跌'}}（{{ detail?.optionCode }}）</view></view>
+      <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{ detail?.optionType }}）</view></view>
       <view class="row"><view class="row_cont"><text>行权方式：</text>欧式，到期一次性现金结算</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">本模块为合约核心要素摘要，完整条款与定义以《产品说明书》《交易确认书》及《风险揭示书》等正式文件为准。</view></view>
     </view>
@@ -134,7 +150,7 @@ const previewImage = () =>  {
       </view>
       <view class="row">
         <view class="row_cont"><text>下单时间：</text>
-          {{ formatLocalTime(new Date(detail.createdTime)) }}</view>
+          {{ formatLocalTime(new Date(detail?.createdTime)) }}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>支付时间：</text>{{formatLocalTime(new Date(remitData.paymentTime))}}</view>
@@ -147,7 +163,7 @@ const previewImage = () =>  {
           {{ remitData.bankName }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>汇款账号：</text>尾号 {{ remitData.bankAccount.substr(-4) }}</view>
+        <view class="row_cont"><text>汇款账号：</text>尾号 {{ remitData.bankAccount?.substr(-4) }}</view>
       </view>
       <view class="row">
 <!--        <view class="row_cont"><text>转账备注：</text>12cfe2566119 0000</view>-->

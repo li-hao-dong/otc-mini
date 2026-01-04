@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import {reactive, ref} from "vue";
+import {reactive, ref, watch} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, BASE_URL, orderDetail} from "@/api";
@@ -11,7 +11,7 @@ import {formatLocalTime, truncToTwo} from "@/utils";
 const orderId = ref<string>("")
 const voucher = ref<File>()
 const voucherUrl = ref<string>()
-const detail = ref<OrderDetail | null>(null);
+// const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const remitData = reactive<{accountName: string | null, bankName: string | null, bankAccount: string | null, paymentAmount: number | null, paymentTime: string | null, bankUserName: string | null}>({
   accountName: null,
@@ -22,11 +22,27 @@ const remitData = reactive<{accountName: string | null, bankName: string | null,
   bankUserName: null
 })
 
-onLoad((option) =>{
-  console.log("option", option)
-  orderId.value = option?.id;
-  getDetail(orderId.value)
-  getBankReceiptInfo(orderId.value)
+const props = defineProps<{detail: OrderDetail, orderId: string}>();
+
+// onLoad((option) =>{
+//   console.log("option", option)
+//   orderId.value = option?.id;
+//   getDetail(orderId.value)
+//   getBankReceiptInfo(orderId.value)
+// })
+
+// watch(() => props.detail, (newVal) => {
+//   if(newVal){
+//     detail.value = newVal;
+//   }
+// })
+
+watch(() => props.orderId, (newVal) => {
+  if(newVal){
+    orderId.value = newVal;
+    // getDetail(orderId.value)
+    getBankReceiptInfo(orderId.value)
+  }
 })
 
 const getDetail = (orderId: string) => {
@@ -188,7 +204,7 @@ const convertToFile = (tempFilePath:any, fileInfo:any) => {
 }
 
 const bindDayDateChange = (e: any) => {
-  remitData.paymentTime = e.detail.value as string
+  remitData.paymentTime = e.detail?.value as string
 }
 </script>
 
@@ -200,35 +216,35 @@ const bindDayDateChange = (e: any) => {
       <view class="fir_title">金额摘要</view>
       <view class="row">
 <!--        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ truncToTwo(detail?.paymentAmount) }}</view>-->
-        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ truncToTwo(Number(detail.optionFee) + Number(detail.transactionFee)) }}</view>
+        <view class="row_cont"><text>本次应付金额:</text> ¥ {{ truncToTwo(Number(detail?.optionFee) + Number(detail?.transactionFee)) }}</view>
 
       </view>
       <view class="row">
-        <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>
+        <view class="row_cont">{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType === "Call" ? '看涨':'看跌'}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>订单号：</text>{{detail.orderNo}}</view>
+        <view class="row_cont"><text>订单号：</text>{{detail?.orderNo}}</view>
       </view>
     </view>
 
     <view class="card">
       <view class="fir_title">费用明细</view>
       <view class="row">
-        <view class="row_cont"><text>名义本金：</text>¥ {{ truncToTwo(detail.nominalAmount) }}</view>
+        <view class="row_cont"><text>名义本金：</text>¥ {{ truncToTwo(detail?.nominalAmount) }}</view>
         <view class="row_cont"><text>期权费率：</text>
-          {{ truncToTwo(detail.optionFeeRate * 100) }}%</view>
+          {{ truncToTwo(detail?.optionFeeRate * 100) }}%</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view>
+        <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail?.optionFee) }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
-        <view class="row_cont"><text>通道费：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
+        <view class="row_cont"><text>通道费：</text>¥ {{ truncToTwo(detail?.transactionFee) }}</view>
       </view>
       <view class="row">
-<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.optionFee  }}</view>-->
-<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ detail.transactionFee }}</view>-->
-<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ Number(detail.optionFee) + Number(detail.transactionFee) }}</view>-->
-            <view class="row_cont"><text>合计应付：</text>¥ {{ truncToTwo(Number(detail.optionFee) + Number(detail.transactionFee)) }}</view>
+<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ detail?.optionFee  }}</view>-->
+<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ detail?.transactionFee }}</view>-->
+<!--        <view class="row_cont"><text>合计应付：</text>¥ {{ Number(detail?.optionFee) + Number(detail?.transactionFee) }}</view>-->
+            <view class="row_cont"><text>合计应付：</text>¥ {{ truncToTwo(Number(detail?.optionFee) + Number(detail?.transactionFee)) }}</view>
       </view>
     </view>
 

@@ -8,16 +8,17 @@ import {formatLocalTime, truncToTwo} from "@/utils";
 import {type ExerciseReq, ExerciseType} from "@/interfaces/exercise";
 
 const voucher = ref<string | string[]>()
-const detail = ref<OrderDetail | null>(null);
+// const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const orderId = ref<string>("");
+const props = defineProps<{orderId?: string, detail: OrderDetail}>();
 
-onLoad((option) =>{
-  console.log("option", option)
-  orderId.value = option?.id || "";
-  getDetail(option?.id)
-  // getBankReceiptInfo(option?.id)
-})
+// onLoad((option) =>{
+//   console.log("option", option)
+//   orderId.value = option?.id || "";
+//   getDetail(option?.id)
+//   // getBankReceiptInfo(option?.id)
+// })
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {

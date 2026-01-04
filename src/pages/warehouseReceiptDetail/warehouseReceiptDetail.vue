@@ -1,22 +1,58 @@
+<template>
+  <view>
+    <!--  待渠道确认1-->
+    <pendingChannel v-if="detail?.orderStatus == '待渠道确认'" :detail="detail"></pendingChannel>
+    <!--  已报价-待支付2-->
+    <quotedWithPaddingPayment v-if="detail?.orderStatus == '已报价' || detail?.orderStatus == '待支付'" :detail="detail" :orderId="orderId"></quotedWithPaddingPayment>
+    <!--  已支付3-->
+    <paid v-if="detail?.orderStatus == '已支付'" :detail="detail" :orderId="orderId"></paid>
+    <!--  支付已确认4-->
+    <paymentConfirmed v-if="detail?.orderStatus == '支付已确认'" :detail="detail" :orderId="orderId"></paymentConfirmed>
+    <!--  已购买5-->
+    <purchased v-if="detail?.orderStatus == '已购买'" :detail="detail"></purchased>
+    <!--  已到期6-->
+    <matured v-if="detail?.orderStatus == '已到期'" :detail="detail"></matured>
+    <!--  已行权7-->
+    <exercised v-if="detail?.orderStatus == '已行权'" :detail="detail"></exercised>
+    <!--  已结算8-->
+    <settled v-if="detail?.orderStatus == '已结算'" :detail="detail" :orderId="orderId"></settled>
+    <!--  已取消9-->
+    <view v-else>
+      暂无数据
+    </view>
+  </view>
+</template>
+
 <script setup lang="ts">
 import {onLoad} from "@dcloudio/uni-app";
-import {bankReceiptInfo, getUserOrderInfo, orderDetail} from "@/api";
+import {getUserGroupOrderSuccessOrders, orderDetail} from "@/api";
 import {ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
-import type { BankAccountInfoResp } from "@/interfaces/bankData";
+import PendingChannel from "@/pages/warehouseReceiptDetail/pendingChannel.vue";
+import QuotedWithPaddingPayment from "@/pages/warehouseReceiptDetail/quotedWithPaddingPayment.vue";
+import Paid from "@/pages/warehouseReceiptDetail/paid.vue";
+import PaymentConfirmed from "@/pages/warehouseReceiptDetail/paymentConfirmed.vue";
+import Purchased from "@/pages/warehouseReceiptDetail/purchased.vue";
+import Matured from "@/pages/warehouseReceiptDetail/matured.vue";
+import Exercised from "@/pages/warehouseReceiptDetail/exercised.vue";
+import Settled from "@/pages/warehouseReceiptDetail/settled.vue";
 
 const detail = ref<OrderDetail | null>(null);
-const paymentVoucherImage = ref<string>('');
-const bankReceiptInfoData = ref<BankAccountInfoResp>();
+const orderId = ref<string>("");
 
-onLoad((option) =>{
-  console.log("option", option)
-  // orderId 从 option 中获取 订单 ID
-  // orderStatus 从 option 中获取 订单状态
-  // getDetail(option?.orderId)
-  // getBankReceiptInfo(option?.orderId)
+onLoad((option) => {
+  if(option?.groupOrderNo){
+    // 获取拼单详情
+    orderId.value = option?.groupOrderNo
+    getGroupOrderDetail(option?.groupOrderNo)
+  }else if(option?.id){
+    // 获取仓单详情
+    orderId.value = option?.id
+    getDetail(option?.id)
+  }
 })
 
+// 获取订单详情
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
     console.log("订单详情", res)
@@ -24,166 +60,14 @@ const getDetail = (orderId: string) => {
   })
 }
 
-const getBankReceiptInfo = (orderId: string) => {
-  bankReceiptInfo(orderId).then(res => {
-    console.log("银行收款信息", res)
-    bankReceiptInfoData.value = res;
+// 获取拼单详情
+const getGroupOrderDetail = (groupOrderNo: string) => {
+  getUserGroupOrderSuccessOrders(groupOrderNo).then(res => {
+    console.log("拼单详情", res)
   })
-}
-
-
-// 格式化日期
-const formatDate = (date: Date | null | undefined) => {
-  if (!date) return 'xxxxx';
-  const d = new Date(date);
-  return d.toISOString().split('T')[0].replace(/-/g, '');
-}
-
-// 格式化金额
-const formatAmount = (amount: number | null | undefined) => {
-  if (amount === null || amount === undefined) return '0';
-  return `${amount.toFixed(2)}元`;
-}
-
-// 上传支付凭证
-const uploadPaymentVoucher = () => {
-  uni.chooseImage({
-    count: 1,
-    sizeType: ['compressed'],
-    sourceType: ['album', 'camera'],
-    success: (res) => {
-      const tempFilePaths = res.tempFilePaths;
-      if (tempFilePaths && tempFilePaths.length > 0) {
-        paymentVoucherImage.value = tempFilePaths[0];
-        // TODO: 上传到服务器
-        console.log('选择的图片:', tempFilePaths[0]);
-      }
-    },
-    fail: (err) => {
-      console.error('选择图片失败:', err);
-      uni.showToast({
-        title: '选择图片失败',
-        icon: 'none'
-      });
-    }
-  });
 }
 </script>
 
-<template>
-  <view class="container">
-    <!-- 仓单详情卡片 -->
-    <view class="card">
-      <!-- 标的信息区域 -->
-      <view class="assetInfo">
-        <view>
-          <view class="assetName">{{ detail?.underlyingAssetName}}</view>
-          <view class="assetCode">{{ detail?.underlyingAssetCode }}</view>
-        </view>
-        <view class="row priceRow">
-          <view class="para"><text class="label">股价：</text></view>
-          <view class="para"><text class="valueRed">{{ detail?.underlyingPrice}}</text></view>
-        </view>
-        <view class="row changeRow">
-          <text class="label">涨幅：{{ detail?.priceChange}}</text>
-        </view>
-      </view>
-
-      <!-- 详细信息列表 -->
-      <view class="rowBorder">
-        <text class="dataText"><text>开仓时间：</text>{{ formatDate(detail?.startDate) }}</text>
-        <text class="dataText"><text>到期时间：</text>{{ formatDate(detail?.maturityDate) }}</text>
-      </view>
-
-      <view class="rowBorder">
-        <text class="dataText"><text>期权代码：</text>{{ detail?.optionCode}}</text>
-        <text class="dataText"><text>名义本金：</text>{{ detail?.nominalAmount ? (detail.nominalAmount / 10000).toFixed(0) : 0 }}万</text>
-      </view>
-
-      <view class="rowBorder">
-        <text class="dataText"><text>期限：</text>{{ detail?.termName }}</text>
-        <text class="dataText"><text>剩余天数：</text>{{ detail?.daysToExpiry }}天</text>
-      </view>
-
-      <view class="rowBorder">
-        <text class="dataText"><text>开仓价格：</text>{{ formatAmount(detail?.underlyingPrice) }}</text>
-        <text class="dataText"><text>行权价格：</text>{{ formatAmount(detail?.strikePrice) }}</text>
-      </view>
-
-      <view class="rowBorder">
-        <text class="dataText"><text>预计回款：</text>{{ formatAmount(detail?.estimatedPayout) }}</text>
-        <text class="dataText"><text>预计盈亏：</text>{{ formatAmount(detail?.estimatedProfit) }}</text>
-      </view>
-
-      <view class="rowBorder">
-        <text class="dataText"><text>期权费：</text>{{ formatAmount(detail?.optionFee) }}</text>
-        <text class="dataText"><text>盈亏比例：</text>{{ detail?.profitRate ? (detail.profitRate * 100).toFixed(2) : 0 }}%</text>
-      </view>
-
-      <view class="rowBorder">
-        <text class="dataText"><text>交易商：</text>{{ detail?.sourceName }}</text>
-        <text class="dataText"><text>期权费率：</text>{{ detail?.optionFee && detail?.nominalAmount ? ((detail.optionFee / detail.nominalAmount) * 100).toFixed(2) : 0 }}%</text>
-      </view>
-
-      <view class="rowBorder">
-        <text class="dataText"><text>通道费：</text>{{ formatAmount(detail?.transactionFee) }}</text>
-      </view>
-    </view>
-
-    <!-- 收款信息卡片 -->
-    <view class="card payment-card">
-      <view class="card-title">收款信息</view>
-
-      <view class="payment-info">
-        <view class="payment-row">
-          <text class="payment-label">收款银行名称</text>
-          <text class="payment-value">{{ bankReceiptInfoData?.bankName }}</text>
-        </view>
-        <view class="payment-row">
-          <text class="payment-label">收款银行账号</text>
-          <text class="payment-value">{{ bankReceiptInfoData?.bankAccount }}</text>
-        </view>
-        <view class="payment-row">
-          <text class="payment-label">收款账户名称</text>
-          <text class="payment-value">{{ bankReceiptInfoData?.customerName }}</text>
-        </view>
-        <view class="payment-row">
-          <text class="payment-label">开户支行</text>
-          <text class="payment-value">{{bankReceiptInfoData?.branchName}}</text>
-        </view>
-        <view class="payment-row">
-          <text class="payment-label">应付金额</text>
-          <text class="payment-value">{{ formatAmount(bankReceiptInfoData?.paymentAmount) }}</text>
-        </view>
-        <view class="payment-row">
-          <text class="payment-label">支付截止时间</text>
-          <text class="payment-value">{{bankReceiptInfoData?.deadline}}</text>
-        </view>
-        <view class="payment-row">
-          <text class="payment-label">转账备注</text>
-          <text class="payment-value">{{bankReceiptInfoData?.notes}}</text>
-        </view>
-      </view>
-    </view>
-
-    <!-- 上传支付凭证卡片 -->
-    <view class="card upload-card">
-      <view class="card-title">上传支付凭证</view>
-
-      <view class="upload-area" @tap="uploadPaymentVoucher">
-        <view v-if="!paymentVoucherImage" class="upload-placeholder">
-          <view class="camera-icon">📷</view>
-          <text class="upload-text">添加图片</text>
-        </view>
-        <image v-else :src="paymentVoucherImage" class="uploaded-image" mode="aspectFit" />
-      </view>
-
-      <view class="upload-tips">
-        <text>特别提示：上传的图片大小控制在 1M 以内，超出请压缩或者裁剪。</text>
-      </view>
-    </view>
-  </view>
-</template>
 
 <style scoped>
 .container {

@@ -27,20 +27,19 @@
         <view style="color: var(--color-primary-bg)">本次拼单未成团，相关订单将按平台规则处理。本次未产⽣盈利结算，因此不收取拼单服务费。</view>
       </view>
     </view>
-
-    <view class="card">
+    <view class="card" v-if="myOrderDetail && Object.keys(myOrderDetail).length > 0">
       <view class="fir_title">我的拼单信息</view>
       <view class="row">
         <view class="small_tit">我的⾝份：</view>
-        <view class="group_order_data">{{calcRole(orderDetail.members[0].role)}}</view>
+        <view class="group_order_data">{{calcRole(myOrderDetail.role)}}</view>
       </view>
       <view class="row">
         <view class="small_tit">我的订单状态⾝份：</view>
-        <view class="group_order_data">{{ calcOrderStatus(orderDetail.members[0].orderStatus) }} </view>
+        <view class="group_order_data">{{ calcOrderStatus(myOrderDetail.orderStatus) }} </view>
       </view>
       <view class="row">
         <view class="small_tit">我的应付⾦额：</view>
-        <view class="group_order_data">¥ {{ truncToTwo(orderDetail.members[0].nominalAmount) }}</view>
+        <view class="group_order_data">¥ {{ truncToTwo(myOrderDetail.nominalAmount) }}</view>
       </view>
       <view>
         <!--    • 若我的订单状态为待⽀付/待上传：-->
@@ -73,7 +72,7 @@
           <view class="group_order_data">金额: ¥ {{ truncToTwo(orderDetail.members[index].nominalAmount) }}</view>
         </view>
         <view v-else>
-          <view class="wait_add"><uni-icons type="plusempty" size="20" color="#c0c0c0"></uni-icons>待加入</view>
+          <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#c0c0c0"></uni-icons>待加入</view>
         </view>
       </view>
     </view>
@@ -89,15 +88,19 @@
         </view>
       </view>
     </view>
-    <view class="btns_bottom">
+    <view class="btns_bottom"  v-if="Object.keys(myOrderDetail).length > 0 && myOrderDetail?.paymentStatus.toUpperCase() == 'PADDING'">
       <!--   我尚未⽀付   -->
       <view class="operation_btn">去支付?? 如何寻找的支付状态</view>
+    </view>
+    <view class="btns_bottom" v-if="Object.keys(myOrderDetail).length > 0 && myOrderDetail?.paymentStatus.toUpperCase() == 'PAID' && orderDetail?.currentSize<orderDetail?.targetSize">
       <!--   我已⽀付，拼单未满员   -->
-      <view class="operation_btn" v-if="orderDetail.currentSize<orderDetail.targetSize" @click="copyUrl">分享给好友拼单?? 如何寻找的支付状态</view>
+      <view class="operation_btn" @click="copyUrl">分享给好友拼单?? 如何寻找的支付状态</view>
+    </view>
+    <view class="btns_bottom" v-if="Object.keys(orderDetail).length > 0 && orderDetail?.members.every((member:Member) => member.orderStatus=='PAID') && orderDetail?.currentSize==orderDetail?.targetSize" >
       <!--   我已⽀付，拼单已满且组状态为 PAID   -->
-      <view class="operation_btn" v-if="orderDetail.groupStatus.toUpperCase() === 'PAID' " @click="toOrderDetail">查看订单</view>
+      <view class="operation_btn" @click="toOrderDetail">查看订单</view>
       <view class="hint_cont">
-            拼单已成团，系统将为所有成员统⼀申请购买期权产品。若订单最终盈利，将按 本拼单模式约定，从收益中⾃动扣除拼单服务费。
+        拼单已成团，系统将为所有成员统⼀申请购买期权产品。若订单最终盈利，将按 本拼单模式约定，从收益中⾃动扣除拼单服务费。
       </view>
     </view>
   </view>
@@ -106,11 +109,12 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {onLoad} from "@dcloudio/uni-app";
-import {getGroupOrderDetail} from "@/api";
-import type {GroupOrderDetailResp} from "@/interfaces/groupOrders/groupOrderDetail";
+import {addGroupOrder, getGroupOrderDetail} from "@/api";
+import type {GroupOrderDetailResp, Member} from "@/interfaces/groupOrders/groupOrderDetail";
 import {formatLocalTime, truncToTwo} from "@/utils";
 
 const orderDetail = ref<GroupOrderDetailResp>({});
+const myOrderDetail = ref<Member>({});
 
 onLoad((option) => {
   // 页面加载时的逻辑
@@ -189,6 +193,7 @@ const initOrderDetail = (groupOrderNo) => {
   getGroupOrderDetail(groupOrderNo).then(res => {
     console.log('Order detail:', res);
     orderDetail.value = res;
+    myOrderDetail.value = res.members.find(member => member.isMe) || {};
   }).catch(err => {
     console.log('Error fetching order detail:', err);
   })
@@ -217,8 +222,49 @@ const copyUrl = () => {
 const toOrderDetail = () => {
   // 跳转到订单详情页的逻辑
   uni.navigateTo({
-    url: `/pages/orderDetail/orderDetail?groupOrderNo=${orderDetail.groupOrderNo}&orderNo=${orderDetail.value.members[0].orderNo}`
+    url: `/pages/orderDetail/orderDetail?groupOrderNo=${orderDetail.value.groupOrderNo}`
   });
+}
+
+const addHintCont = () => {
+  if(myOrderDetail.value && Object.keys(myOrderDetail.value).length > 0){
+    uni.showToast({
+      title: '您已加入该拼单',
+      icon: 'none'
+    });
+    return;
+  }
+
+  uni.showModal({
+    title: '提示',
+    content: '您确认要加入拼单吗？',
+    showCancel: true,
+    cancelText: '取消',
+    confirmText: '确认',
+    success: (res) => {
+      if (res.confirm) {
+        addGroupOrder(orderDetail.value.groupOrderNo, Number(orderDetail.value.totalNominalAmount/orderDetail.value.targetSize)).then(res => {
+          uni.showToast({
+            title: '加入拼单成功',
+            icon: 'success'
+          });
+          setTimeout(() => {
+            initOrderDetail(orderDetail.value.groupOrderNo);
+          }, 1000);
+        }).catch(err => {
+          console.log('加入拼单失败:', err);
+          uni.showToast({
+            title: '加入拼单失败',
+            icon: 'none'
+          });
+        });
+        // uni.showToast({
+        //   title: '加入拼单成功',
+        //   icon: 'success'
+        // });
+      }
+    }
+  })
 }
 
 </script>
@@ -226,6 +272,7 @@ const toOrderDetail = () => {
 <style lang="scss" scoped>
 .container{
   padding-top: 10px;
+  padding-bottom: 90px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

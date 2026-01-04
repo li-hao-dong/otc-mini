@@ -20,6 +20,8 @@ import type {loginH5Resp} from "@/interfaces/loginH5";
 import type {CreateGroupOrderReq, CreateGroupOrderResp} from "@/interfaces/groupOrders/createGroupOrders";
 import type {GetGroupOrdersReq, GetGroupOrdersResp} from "@/interfaces/groupOrders/getGroupOrders";
 import type {GroupOrderDetailResp} from "@/interfaces/groupOrders/groupOrderDetail";
+import type {AddGroupOrder} from "@/interfaces/groupOrders/addGroupOrder";
+import type {MyGroupOrderReq, MyGroupOrderResp} from "@/interfaces/groupOrders/myGroupOrder";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -423,21 +425,20 @@ export const createGroupOrder = (payload: CreateGroupOrderReq):Promise<CreateGro
 }
 
 /**
- * 获取拼单列表
+ * 获取市场中拼单列表（非当前用户）
  * */
 export const getGroupOrders = (payload:GetGroupOrdersReq|undefined):Promise<GetGroupOrdersResp> => {
     return new Promise(async (resolve, reject) => {
-        try {let url = '';
+        try {
+            let url = `${BASE_URL}/group-orders?`;
             if(payload) {
                 Object.keys(payload).map((key, i) => {
                     if(i === Object.keys(payload).length-1) {
                         url += `${key}=${payload[key]}`
                     }else {
-                        url += `${BASE_URL}/group-orders?${key}=${payload[key]}&`
+                        url += `${key}=${payload[key]}&`
                     }
                 })
-            }else {
-                url = `${BASE_URL}/group-orders`;
             }
 
             const res: response = <response>await http.get(url)
@@ -446,6 +447,36 @@ export const getGroupOrders = (payload:GetGroupOrdersReq|undefined):Promise<GetG
                 resolve(res.data as GetGroupOrdersResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch getGroupOrders info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取当前用户拼单列表
+ * */
+export const getMyGroupOrders = (payload:MyGroupOrderReq):Promise<MyGroupOrderResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let url = `${BASE_URL}/group-orders/my-groups?`;
+            if (payload) {
+                Object.keys(payload).map((key, i) => {
+                    if (i === Object.keys(payload).length - 1) {
+                        url += `${key}=${payload[key]}`
+                    } else {
+                        url += `${key}=${payload[key]}&`
+                    }
+                })
+            }
+
+            const res: response = <response>await http.get(url)
+            console.log("getMyGroupOrders res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as MyGroupOrderResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getMyGroupOrders info'));
             }
         } catch (error) {
             reject(error);
@@ -465,6 +496,27 @@ export const getGroupOrderDetail = (groupOrderNo:string):Promise<GroupOrderDetai
                 resolve(res.data as GroupOrderDetailResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch getGroupOrderDetail info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+/**
+ * 加入拼单
+ * */
+export const addGroupOrder = (groupOrderNo:string, nominalAmount: number):Promise<AddGroupOrder> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.post(`${BASE_URL}/group-orders/${groupOrderNo}/join`, {
+                nominalAmount:nominalAmount,
+                priceType: "Market"
+            }, "application/json")
+            console.log("addGroupOrder res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as AddGroupOrder)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch addGroupOrder info'));
             }
         } catch (error) {
             reject(error);

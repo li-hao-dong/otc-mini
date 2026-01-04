@@ -93,6 +93,15 @@
 			}
 		},
 		{
+			"path": "pages/groupOrders/myGroupOrders",
+			"style": {
+				"navigationBarTitleText": "我的拼单",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
 			/* -待渠道确认1 */
 			"path": "pages/warehouseReceiptDetail/pendingChannel",
 			"style": {

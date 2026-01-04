@@ -168,11 +168,11 @@
             <view class="card_popup">
               <text class="popup_title">选择拼单人数</text>
               <view class="popup_card_row">
-                <view :class='`choose_people ${choosePeople == num ? "choose_people_active" : ""} `' v-for="(num,key) in 5" :key="key" @click="choosePeople=num">{{num}}人</view>
+                <view :class='`choose_people ${choosePeople == num ? "choose_people_active" : ""} `' v-for="(num,key) in [2, 3, 4, 5, 6, 8, 10]" :key="key" @click="choosePeople=num">{{num}}人</view>
               </view>
               <view class="popup_card_row">
                 <view class="popup_card_row_title"></view>
-                <view class="popup_card_row_cont">单人期权费： ¥ {{truncToTwo(quantity * 1000000 / choosePeople)}} / 人</view>
+                <view class="popup_card_row_cont">单人期权费： ¥ {{Math.ceil(quantity * 1000000 / choosePeople * 100) / 100}} / 人</view>
               </view>
               <view>
                 <view class="pd_hint">• 请在拼单创建后 24 小时内完成邀请并支付</view>
@@ -234,7 +234,7 @@ const getGroupOrderData = () => {
     pageSize: 2,
     productCode: '',
     status: Status.Open,
-    underlyingAssetName: orderPayload?.value.assetName,
+    underlyingAssetCode: orderPayload?.value.assetCode.indexOf('.') ? orderPayload?.value.assetCode.split('.')[0] : orderPayload?.value.assetCode,
   }
 
   getGroupOrders(payload).then(res => {

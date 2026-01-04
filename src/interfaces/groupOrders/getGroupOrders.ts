@@ -14,9 +14,9 @@ export interface GetGroupOrdersReq {
      */
     status?: Status;
     /**
-     * 按标的名称筛选
+     * 按标的code筛选
      */
-    underlyingAssetName?: string;
+    underlyingAssetCode?: string;
     [property: string]: any;
 }
 

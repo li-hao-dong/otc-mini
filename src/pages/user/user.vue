@@ -49,6 +49,21 @@
           普通用户
         </view>
       </view>
+
+      <view style="margin-top: 20px">
+        <view class="row" @click="uni.navigateTo({url: '/pages/groupOrders/myGroupOrders'})">
+          <view class="label">我的拼单</view>
+          <view class="value">
+            <uni-icons type="right" size="16"></uni-icons>
+          </view>
+        </view>
+        <view class="row" @click="signOut">
+          <view class="label">退出登录</view>
+          <view class="value">
+            <uni-icons type="right" size="16"></uni-icons>
+          </view>
+        </view>
+      </view>
     </view>
   </view>
 </template>
@@ -75,19 +90,19 @@ onShow(() =>{
   initUserInfo()
 })
 
-watch(username, (newVal, oldValue) => {
-  if (newVal != oldValue && !token.value) {
-    // console.log("用户名已设置，执行登录操作", newVal)
-    uni.showLoading({title: '登录中...'})
-    const timer = setInterval(()=>{
-      if(ticket.value){
-        login()
-        clearInterval(timer)
-        uni.hideLoading()
-      }
-    }, 100)
-  }
-})
+// watch(username, (newVal, oldValue) => {
+//   if (newVal != oldValue && !token.value) {
+//     // console.log("用户名已设置，执行登录操作", newVal)
+//     uni.showLoading({title: '登录中...'})
+//     const timer = setInterval(()=>{
+//       if(ticket.value){
+//         login()
+//         clearInterval(timer)
+//         uni.hideLoading()
+//       }
+//     }, 100)
+//   }
+// })
 
 const updateUserData = () => {
   // Placeholder for updating user data
@@ -176,6 +191,20 @@ const onChooseAvatar = (e:any) => {
 
 const changePicker = <T>(e: T) => {
   address.value = e.detail!.value.join('');
+}
+
+const signOut = () => {
+  useStore().user.clearUserInfo();
+  token.value = undefined;
+  username.value = undefined;
+  avatarUrl.value = undefined;
+  ticket.value = undefined;
+  succToast("已退出登录")
+  setTimeout(() => {
+    uni.reLaunch({
+      url: '/pages/reLogin/reLogin'
+    })
+  }, 1000)
 }
 
 </script>

@@ -1,7 +1,7 @@
 <template>
   <view class="container wrPage">
 <!--    <view class="topBar">-->
-<!--      <text class="topText">模拟机构</text>-->
+<!--      <text class="topText">机构</text>-->
 <!--&lt;!&ndash;      <text class="topText">录入 +</text>&ndash;&gt;-->
 <!--    </view>-->
 

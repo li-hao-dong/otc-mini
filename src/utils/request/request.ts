@@ -32,9 +32,11 @@ export const interceptor = function () {
 
 const beforeRequest = (url:string) => {
     // 对 不需要 token 的接口 直接放行
-    if(url.includes("/users/register") || url.includes("/users/login") || url.includes("/inquiry/history") ||
-        url.includes("/inquiry/options") || url.includes("/inquiry/quote") ||
-        url.includes("/tools/equity-option/calculate") || url.includes("/users/orders?page=")) return true;
+    // if(url.includes("/users/register") || url.includes("/users/login") || url.includes("/inquiry/history") ||
+    //     url.includes("/inquiry/options") || url.includes("/inquiry/quote") ||
+    //     url.includes("/tools/equity-option/calculate") || url.includes("/users/orders?page=")) return true;
+
+    if(url.includes("/users/register") || url.includes("/users/login")) return true;
 
     if(!useStore().user.token){
         warnToast("请先登录");

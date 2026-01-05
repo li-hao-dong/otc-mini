@@ -105,7 +105,7 @@
 			/* 拼单列表 */
 			"path": "pages/groupOrders/groupOrders",
 			"style": {
-				"navigationBarTitleText": "拼单列表",
+				"navigationBarTitleText": "拼单市场",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false

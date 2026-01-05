@@ -4,10 +4,11 @@
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <view :class="`${groupOrder.creatorName == '我' ? 'Leader':'Member'}`">{{groupOrder.creatorName == '我' ? 'Leader':'Member'}}</view>
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
-          <view class="bd">{{key}}{{ groupOrder.underlyingAssetName }} <text>601600.SH？？ · 平值100？？？{{groupOrder.optionType == "CALL" ? '看涨':'看跌'}}</text></view>
+          <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · 平值100？？？{{groupOrder.optionType == "CALL" ? '看涨':'看跌'}}</text></view>
           <view class="row">
             <view class="small_tit">拼单模式：</view>
-            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 ？？？</view>
+<!--            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>-->
+            <view class="group_order_data">官⽅推荐</view>
           </view>
           <view class="row">
             <view class="small_tit">拼单进度：</view>
@@ -39,6 +40,9 @@
           <view class="new_group_order">
             <view class="add_group" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">发起新的拼单</view>
           </view>
+         <view class="new_group_order">
+           <view class="add_group" @click="uni.reLaunch({url: '/pages/groupOrders/groupOrders'})">去拼单市场</view>
+         </view>
        </view>
       </view>
 

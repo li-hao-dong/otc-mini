@@ -3,7 +3,7 @@
       <view class="container" v-if="groupOrderDatas.length > 0">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
-          <view class="bd">{{key}}{{ groupOrder.underlyingAssetName }} <text>601600.SH？？ · 平值100？？？{{groupOrder.optionType == "CALL" ? '看涨':'看跌'}}</text></view>
+          <view class="bd">{{key}}{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · 平值100？？？{{groupOrder.optionType == "CALL" ? '看涨':'看跌'}}</text></view>
           <view class="row">
             <view class="small_tit">拼单模式：</view>
             <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 ？？？</view>
@@ -34,7 +34,7 @@
 
       <view v-else>
        <view class="not_data">
-          当前暂⽆该产品的拼单，您可以
+          当前市场暂⽆该标的的拼单，您可以
           <view class="new_group_order">
             <view class="add_group" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">发起新的拼单</view>
           </view>

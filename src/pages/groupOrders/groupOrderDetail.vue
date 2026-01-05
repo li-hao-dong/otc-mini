@@ -24,7 +24,7 @@
         <view>◦ 拼单模式：官⽅推荐标的拼单</view>
         <view>◦ 拼单服务费：订单盈利部分的 15%，仅在盈利时收取</view>
         <view>◦ 拼单服务费不会出现在当前⽀付⾦额中，将在订单结算（已结算状态）时，从实际收益中⾃动扣除。</view>
-        <view style="color: var(--color-primary-bg)">本次拼单未成团，相关订单将按平台规则处理。本次未产⽣盈利结算，因此不收取拼单服务费。</view>
+<!--        <view style="color: var(&#45;&#45;color-primary-bg)">本次拼单未成团，相关订单将按平台规则处理。本次未产⽣盈利结算，因此不收取拼单服务费。</view>-->
       </view>
     </view>
     <view class="card" v-if="myOrderDetail && Object.keys(myOrderDetail).length > 0">
@@ -35,7 +35,7 @@
       </view>
       <view class="row">
         <view class="small_tit">我的订单状态⾝份：</view>
-        <view class="group_order_data">{{ calcOrderStatus(myOrderDetail.orderStatus) }} </view>
+        <view class="group_order_data">{{ myOrderDetail.orderStatus }} </view>
       </view>
       <view class="row">
         <view class="small_tit">我的应付⾦额：</view>
@@ -67,7 +67,7 @@
                 {{calcRole(orderDetail.members[index].role)}}
               </view>
             </view>
-            <view>{{calcOrderStatus(orderDetail.members[index]?.orderStatus)}}</view>
+            <view>{{orderDetail.members[index]?.orderStatus}}</view>
           </view>
           <view class="group_order_data">金额: ¥ {{ truncToTwo(orderDetail.members[index].nominalAmount) }}</view>
         </view>
@@ -162,7 +162,7 @@ const calcRole = (role) => {
       text = "发起人";
       break;
     case "MEMBER":
-      text = "拼单成员";
+      text = "成员";
       break;
   }
 

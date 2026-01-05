@@ -112,7 +112,7 @@
                   暂无其他拼单，快来发起拼单吧！
                 </view>
               </view>
-              <view class="show_more" @click="uni.navigateTo({ url: '/pages/groupOrders/groupOrders' })">
+              <view class="show_more" @click="uni.switchTab({ url: '/pages/groupOrders/groupOrders' })">
                 查看全部拼单 >
               </view>
             </view>
@@ -152,7 +152,7 @@
                 <view class="popup_card_row_cont">{{orderPayload?.assetName}} {{ orderPayload?.assetCode }} · {{ orderPayload?.structureName }}{{orderPayload?.optionType}}</view>
               </view>
               <view class="popup_card_row">
-                <view class="popup_card_row_title">期权费总额</view>
+                <view class="popup_card_row_title">名义本金</view>
                 <view class="popup_card_row_cont">¥ {{truncToTwo(quantity * 1000000)}}</view>
               </view>
               <view class="popup_card_row">
@@ -167,12 +167,12 @@
 
             <view class="card_popup">
               <text class="popup_title">选择拼单人数</text>
-              <view class="popup_card_row">
+              <view class="popup_card_row group_num">
                 <view :class='`choose_people ${choosePeople == num ? "choose_people_active" : ""} `' v-for="(num,key) in [2, 3, 4, 5, 6, 8, 10]" :key="key" @click="choosePeople=num">{{num}}人</view>
               </view>
               <view class="popup_card_row">
                 <view class="popup_card_row_title"></view>
-                <view class="popup_card_row_cont">单人期权费： ¥ {{Math.ceil(quantity * 1000000 / choosePeople * 100) / 100}} / 人</view>
+                <view class="popup_card_row_cont">单人名义本金： ¥ {{Math.ceil(quantity * 1000000 / choosePeople * 100) / 100}} / 人</view>
               </view>
               <view>
                 <view class="pd_hint">• 请在拼单创建后 24 小时内完成邀请并支付</view>
@@ -368,6 +368,10 @@ const openConvenedBland = () => {
 };
 
 const createGroupOrders = () => {
+  if (!choosePeople.value){
+    uni.showToast({ title: '请选择拼单人数', icon: 'none' });
+    return
+  }
   const payload: CreateGroupOrderReq = {
     inquiryId: orderPayload.value?.inquiryId,
     productCode: orderPayload.value?.quote?.productCode,
@@ -381,7 +385,7 @@ const createGroupOrders = () => {
     if(res.status && res.status === 'success'){
       uni.showToast({ title: '拼单创建成功', icon: 'success' });
       popup.value.close();
-      setTimeout(() => { uni.reLaunch({ url: '/pages/groupOrders/groupOrders' }); }, 1500);
+      setTimeout(() => { uni.navigateTo({ url: '/pages/groupOrders/groupOrderDetail?groupOrderNo='+ res?.data?.groupOrderNo}); }, 1500);
     } else {
       uni.showToast({ title: res.message || '拼单创建失败', icon: 'none' });
     }
@@ -747,7 +751,9 @@ const createGroupOrders = () => {
 }
 
 .show_more{
-  width: fit-content;
+  width: 100%;
+  text-align: center;
+  /*width: fit-content;*/
   margin: 0 auto;
   color: #999999;
   font-size: 14px;
@@ -790,6 +796,7 @@ const createGroupOrders = () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
 }
 
 .popup_card_row_title{
@@ -802,14 +809,19 @@ const createGroupOrders = () => {
   color: #333333;
 }
 
-.choose_people{
-  padding: 5px 15px;
-  border: 1px solid #CCCCCC;
-  border-radius: 20px;
+.group_num{
   display: flex;
   align-items: center;
-  justify-content: center;
-  margin-right: 10px;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+.choose_people{
+  width: calc((100% - 40px) / 7);
+  padding: 5px 0;
+  border: 1px solid #CCCCCC;
+  border-radius: 20px;
+  text-align: center;
 }
 
 .choose_people_active{

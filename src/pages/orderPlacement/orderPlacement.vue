@@ -232,7 +232,7 @@ const getGroupOrderData = () => {
     optionType: orderPayload?.value.optionType || 'Call',
     page: 1,
     pageSize: 2,
-    productCode: '',
+    // productCode: '',
     status: Status.Open,
     underlyingAssetCode: orderPayload?.value.assetCode.indexOf('.') ? orderPayload?.value.assetCode.split('.')[0] : orderPayload?.value.assetCode,
   }

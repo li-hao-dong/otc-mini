@@ -59,13 +59,14 @@
     <view class="card" v-for="order in orderList" :key="order.orderId" @click="toDetail(order)">
       <view class="row" style="display: flex; justify-content: space-between">
         <view>
+          <view>{{order?.groupOrderNo ? '来自拼单':''}}</view>
           <view class="row">
             <view class="fir_row_text">{{order?.underlyingAssetName}}</view>
             <view class="fir_row_text">{{order?.optionCode}} {{order?.optionType}}</view>
             <view class="fir_row_text">{{order?.termName}}</view>
           </view>
           <view style="margin-top: 4px; padding: 0 0 10px 0;">
-            <view class="para"><text class="label">名义金额：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</view>
+            <view class="para"><text class="label">名义本金：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</view>
           </view>
         </view>
         <view>

@@ -3,10 +3,11 @@
       <view class="container" v-if="groupOrderDatas.length > 0">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
-          <view class="bd">{{key}}{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · 平值100？？？{{groupOrder.optionType == "CALL" ? '看涨':'看跌'}}</text></view>
+          <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.optionType.toUpperCase() == "CALL" ? '看涨':'看跌'}}</text></view>
           <view class="row">
             <view class="small_tit">拼单模式：</view>
-            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 ？？？</view>
+<!--            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>-->
+            <view class="group_order_data">官⽅推荐</view>
           </view>
           <view class="row">
             <view class="small_tit">拼单进度：</view>

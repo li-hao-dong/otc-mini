@@ -4,7 +4,7 @@
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <view :class="`${groupOrder.creatorName == '我' ? 'Leader':'Member'}`">{{groupOrder.creatorName == '我' ? 'Leader':'Member'}}</view>
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
-          <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · 平值100？？？{{groupOrder.optionType == "CALL" ? '看涨':'看跌'}}</text></view>
+          <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.optionType.toUpperCase() == "CALL" ? '看涨':'看跌'}}</text></view>
           <view class="row">
             <view class="small_tit">拼单模式：</view>
 <!--            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>-->

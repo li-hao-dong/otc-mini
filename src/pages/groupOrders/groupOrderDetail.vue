@@ -41,13 +41,13 @@
         <view class="small_tit">我的应付⾦额：</view>
         <view class="group_order_data">¥ {{ truncToTwo(myOrderDetail.nominalAmount) }}</view>
       </view>
-      <view>
-        <!--    • 若我的订单状态为待⽀付/待上传：-->
-        <!--    [ 去⽀付 / 上传凭证 ] （跳转现有“订单⽀付⻚”）-->
-        <!--    • 若已⽀付：-->
-        <!--    [ 查看我的订单详情 ]-->
-        <view class="btn">bottons here</view>
-      </view>
+<!--      <view>-->
+<!--        &lt;!&ndash;    • 若我的订单状态为待⽀付/待上传：&ndash;&gt;-->
+<!--        &lt;!&ndash;    [ 去⽀付 / 上传凭证 ] （跳转现有“订单⽀付⻚”）&ndash;&gt;-->
+<!--        &lt;!&ndash;    • 若已⽀付：&ndash;&gt;-->
+<!--        &lt;!&ndash;    [ 查看我的订单详情 ]&ndash;&gt;-->
+<!--        <view class="btn">bottons here</view>-->
+<!--      </view>-->
       <view class="hint_cont">
           <view>本次应付⾦额为您的期初期权费，不包含拼单服务费；如本订单最终产⽣盈利，将按照 15% ⽐例，从您的盈利中⾃动扣除拼单服务费。</view>
       </view>
@@ -72,7 +72,7 @@
           <view class="group_order_data">金额: ¥ {{ truncToTwo(orderDetail.members[index].nominalAmount) }}</view>
         </view>
         <view v-else>
-          <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#c0c0c0"></uni-icons>待加入</view>
+          <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>待加入</view>
         </view>
       </view>
     </view>
@@ -400,9 +400,9 @@ const addHintCont = () => {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  color: #c0c0c0;
+  color: var(--color-primary-bg);
   padding: 15px 0;
-  border: 1px solid #c0c0c0;
+  border: 1px solid var(--color-primary-bg);
   border-radius: 15px;
   margin-bottom: 10px;
 }

@@ -1,32 +1,39 @@
 <template>
     <view>
+
+      <uni-notice-bar scrollable text=" 选一条拼单 → 看清拼单模式和单人期权费 → 加入并在截止前支付 → 人数凑齐后系统统一帮您下单。优势：多人合伙分摊期权费，单笔投入更低；仅在订单盈利时按拼单模式收取服务费，亏损不额外收费。" />
+
       <view class="container" v-if="groupOrderDatas.length > 0">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
-          <view :class="`${groupOrder.creatorName == '我' ? 'Leader':'Member'}`">{{groupOrder.creatorName == '我' ? 'Leader':'Member'}}</view>
+          <view class="tag">官⽅推荐</view>
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
           <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.optionType.toUpperCase() == "CALL" ? '看涨':'看跌'}}</text></view>
+<!--          <view class="row">-->
+<!--            <view class="small_tit">拼单模式：</view>-->
+<!--&lt;!&ndash;            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>&ndash;&gt;-->
+<!--            <view class="group_order_data">官⽅推荐</view>-->
+<!--          </view>-->
           <view class="row">
-            <view class="small_tit">拼单模式：</view>
-<!--            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>-->
-            <view class="group_order_data">官⽅推荐</view>
+            <view class="small_tit">名义本金：</view>
+            <view class="group_order_data">{{ groupOrder.totalNominalAmount }} </view>
           </view>
           <view class="row">
             <view class="small_tit">拼单进度：</view>
             <view class="group_order_data">{{ groupOrder.currentSize }} / {{ groupOrder.targetSize }} ⼈ </view>
           </view>
           <view class="row">
-            <view class="small_tit">单⼈期权费：</view>
+            <view class="small_tit">单⼈名义本金：</view>
             <view class="group_order_data">¥ {{truncToTwo(Number(groupOrder.totalNominalAmount) / groupOrder.targetSize)}} / ⼈</view>
           </view>
 
           <view class="row ">
             <view class="time_hint">截止于 {{ formatLocalTime(new Date(groupOrder.expireTime)) }}</view>
-<!--            <view class="add_group">加⼊拼单</view>-->
+            <view class="add_group">加⼊拼单</view>
           </view>
 
-          <view class="hint_cont">
-            拼单服务费仅在对应订单最终盈利时按约定⽐例收取；如订单亏损，则不收取该项费⽤。
-          </view>
+<!--          <view class="hint_cont">-->
+<!--            拼单服务费仅在对应订单最终盈利时按约定⽐例收取；如订单亏损，则不收取该项费⽤。-->
+<!--          </view>-->
         </view>
         <view class="num_hint" @click="getPlatGroupOrders">
           <view>共 {{groupResp.total}} 条拼单记录，分 {{groupResp.totalPages}} 页显示</view>
@@ -36,13 +43,10 @@
 
       <view v-else>
        <view class="not_data">
-          当前暂⽆您的拼单，您可以
+          当前市场暂⽆该标的的拼单，您可以
           <view class="new_group_order">
             <view class="add_group" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">发起新的拼单</view>
           </view>
-         <view class="new_group_order">
-           <view class="add_group" @click="uni.reLaunch({url: '/pages/groupOrders/groupOrders'})">去拼单市场</view>
-         </view>
        </view>
       </view>
 
@@ -52,14 +56,13 @@
 <script setup lang="ts">
 
 import {onMounted, reactive, ref} from "vue";
-import {getGroupOrders, getMyGroupOrders} from "@/api";
+import {getGroupOrders} from "@/api";
 import type {GetGroupOrdersReq, GetGroupOrdersResp, Group} from "@/interfaces/groupOrders/getGroupOrders";
 import {formatLocalTime, truncToTwo} from "../../utils";
-import type {MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
-import {onShow} from "@dcloudio/uni-app";
+import {onHide, onLoad, onShow} from "@dcloudio/uni-app";
 
 const groupOrderDatas = ref<Array<Group>>([])
-const payloadData = reactive<MyGroupOrderReq>({
+const payloadData = reactive<GetGroupOrdersReq>({
   page: 1,
   pageSize: 10
 })
@@ -72,6 +75,13 @@ onShow(() => {
   getPlatGroupOrders()
 })
 
+onHide(() => {
+  groupOrderDatas.value = []
+  payloadData.page = 1
+  groupResp.total = 0
+  groupResp.totalPages = 0
+})
+
 const getPlatGroupOrders = async () => {
   if(groupOrderDatas.value.length>0){
     if(groupResp.totalPages === payloadData.page){
@@ -79,7 +89,7 @@ const getPlatGroupOrders = async () => {
     }
     payloadData!.page += 1
   }
-  getMyGroupOrders(payloadData).then(res => {
+  getGroupOrders(payloadData).then(res => {
     console.log('res', res)
     if(groupOrderDatas.value.length>0){
       groupOrderDatas.value = groupOrderDatas.value.concat(res.groups)
@@ -120,25 +130,14 @@ const toDetail = (groupOrder: Group) => {
   position: relative;
 }
 
-.Leader{
+.tag{
   position: absolute;
   top: 0px;
   right: 0px;
-  padding: 5px 8px;
-  background-color: #FFE5B4;
-  color: #FF8C00;
-  border-radius: 0px 12px 0px 8px;
-  font-size: 12px;
-}
-
-.Member {
-  position: absolute;
-  top: 0px;
-  right: 0px;
-  padding: 5px 8px;
-  background-color: #E0E0E0;
-  color: #666666;
-  border-radius: 0px 12px 0px 8px;
+  padding: 2px 8px;
+  background-color: #FFEDD5;
+  color: #D97706;
+  border-radius: 12px;
   font-size: 12px;
 }
 
@@ -148,7 +147,6 @@ const toDetail = (groupOrder: Group) => {
   color: #333333;
   padding-bottom: 10px;
   border-bottom: 1px solid #E6E6E6;
-  margin-top: 20px;
 }
 
 .bd text{

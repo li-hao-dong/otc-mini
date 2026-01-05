@@ -206,14 +206,14 @@ import {
   OptionType,
   Status
 } from "@/interfaces/groupOrders/getGroupOrders";
-const activeTab = ref<number>(1);
+const activeTab = ref<Number>(0);
 const subTabs = ref<Array<string>>(['单独购买', '拼单购买']);
 const selectedPriceType = ref<PriceType>(PriceType.MARKET);
 const orderPayload = ref<any>(null);
-const quantity = ref<number>(1);
-const limitPrice = ref<number>(0);
+const quantity = ref<Number>(1);
+const limitPrice = ref<Number>(0);
 const popup = ref<any>(null);
-const choosePeople = ref<number>(1);
+const choosePeople = ref<Number>(1);
 const groupOrders = ref<Array<Group>>([]);
 
 onLoad(() => { initData(); });

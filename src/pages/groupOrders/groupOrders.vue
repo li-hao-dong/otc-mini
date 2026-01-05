@@ -1,20 +1,28 @@
 <template>
     <view>
+
+      <uni-notice-bar scrollable text=" 选一条拼单 → 看清拼单模式和单人期权费 → 加入并在截止前支付 → 人数凑齐后系统统一帮您下单。优势：多人合伙分摊期权费，单笔投入更低；仅在订单盈利时按拼单模式收取服务费，亏损不额外收费。" />
+
       <view class="container" v-if="groupOrderDatas.length > 0">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
+          <view class="tag">官⽅推荐</view>
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
           <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.optionType.toUpperCase() == "CALL" ? '看涨':'看跌'}}</text></view>
+<!--          <view class="row">-->
+<!--            <view class="small_tit">拼单模式：</view>-->
+<!--&lt;!&ndash;            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>&ndash;&gt;-->
+<!--            <view class="group_order_data">官⽅推荐</view>-->
+<!--          </view>-->
           <view class="row">
-            <view class="small_tit">拼单模式：</view>
-<!--            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>-->
-            <view class="group_order_data">官⽅推荐</view>
+            <view class="small_tit">名义本金：</view>
+            <view class="group_order_data">{{ groupOrder.totalNominalAmount }} </view>
           </view>
           <view class="row">
             <view class="small_tit">拼单进度：</view>
             <view class="group_order_data">{{ groupOrder.currentSize }} / {{ groupOrder.targetSize }} ⼈ </view>
           </view>
           <view class="row">
-            <view class="small_tit">单⼈期权费：</view>
+            <view class="small_tit">单⼈名义本金：</view>
             <view class="group_order_data">¥ {{truncToTwo(Number(groupOrder.totalNominalAmount) / groupOrder.targetSize)}} / ⼈</view>
           </view>
 
@@ -23,9 +31,9 @@
             <view class="add_group">加⼊拼单</view>
           </view>
 
-          <view class="hint_cont">
-            拼单服务费仅在对应订单最终盈利时按约定⽐例收取；如订单亏损，则不收取该项费⽤。
-          </view>
+<!--          <view class="hint_cont">-->
+<!--            拼单服务费仅在对应订单最终盈利时按约定⽐例收取；如订单亏损，则不收取该项费⽤。-->
+<!--          </view>-->
         </view>
         <view class="num_hint" @click="getPlatGroupOrders">
           <view>共 {{groupResp.total}} 条拼单记录，分 {{groupResp.totalPages}} 页显示</view>
@@ -51,6 +59,7 @@ import {onMounted, reactive, ref} from "vue";
 import {getGroupOrders} from "@/api";
 import type {GetGroupOrdersReq, GetGroupOrdersResp, Group} from "@/interfaces/groupOrders/getGroupOrders";
 import {formatLocalTime, truncToTwo} from "../../utils";
+import {onHide, onLoad, onShow} from "@dcloudio/uni-app";
 
 const groupOrderDatas = ref<Array<Group>>([])
 const payloadData = reactive<GetGroupOrdersReq>({
@@ -62,8 +71,15 @@ const groupResp = reactive<{total: number, totalPages: number}>({
   totalPages: 0,
 })
 
-onMounted(() => {
+onShow(() => {
   getPlatGroupOrders()
+})
+
+onHide(() => {
+  groupOrderDatas.value = []
+  payloadData.page = 1
+  groupResp.total = 0
+  groupResp.totalPages = 0
 })
 
 const getPlatGroupOrders = async () => {
@@ -111,6 +127,18 @@ const toDetail = (groupOrder: Group) => {
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
   padding: 10px 20px;
   box-sizing: border-box;
+  position: relative;
+}
+
+.tag{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 2px 8px;
+  background-color: #FFEDD5;
+  color: #D97706;
+  border-radius: 12px;
+  font-size: 12px;
 }
 
 .bd{

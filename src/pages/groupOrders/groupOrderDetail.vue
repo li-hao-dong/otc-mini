@@ -34,7 +34,7 @@
         <view class="group_order_data">{{calcRole(myOrderDetail.role)}}</view>
       </view>
       <view class="row">
-        <view class="small_tit">我的订单状态⾝份：</view>
+        <view class="small_tit">我的订单状态：</view>
         <view class="group_order_data">{{ myOrderDetail.orderStatus }} </view>
       </view>
       <view class="row">
@@ -194,6 +194,7 @@ const initOrderDetail = (groupOrderNo) => {
   // 初始化订单详情的逻辑
   getGroupOrderDetail(groupOrderNo).then(res => {
     console.log('Order detail:', res);
+    res.members = res.members.reverse();
     orderDetail.value = res;
     myOrderDetail.value = res.members.find(member => member.isMe) || {};
   }).catch(err => {

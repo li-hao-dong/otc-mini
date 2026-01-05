@@ -59,7 +59,7 @@
     <view class="card" v-for="order in orderList" :key="order.orderId" @click="toDetail(order)">
       <view class="row" style="display: flex; justify-content: space-between">
         <view>
-          <view>{{order?.groupOrderNo ? '来自拼单':''}}</view>
+          <view class="tag">{{order?.groupOrderNo ? '来自拼单':''}}</view>
           <view class="row">
             <view class="fir_row_text">{{order?.underlyingAssetName}}</view>
             <view class="fir_row_text">{{order?.optionCode}} {{order?.optionType}}</view>
@@ -380,6 +380,18 @@ const getUserOrder = () => {
   margin: 16px auto;
   padding: 5%;
   box-sizing: border-box;
+  position: relative;
+}
+
+.tag{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  background-color: #F0F8FF;
+  color: #1E90FF;
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: 4px;
 }
 
 .assetInfo{

@@ -68,7 +68,7 @@ const groupResp = reactive<{total: number, totalPages: number}>({
   totalPages: 0,
 })
 
-onShow(() => {
+onMounted(() => {
   getPlatGroupOrders()
 })
 

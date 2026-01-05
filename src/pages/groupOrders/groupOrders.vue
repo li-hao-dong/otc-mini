@@ -7,10 +7,10 @@
       >{{ tab }}</view>
     </view>
 
-    <view class="group_cont_box" v-show="activeTab == 0">
+    <view class="group_cont_box" v-if="activeTab == 0">
         <groupOrdersMarket />
     </view>
-    <view class="group_cont_box" v-show="activeTab == 1">
+    <view class="group_cont_box" v-if="activeTab == 1">
         <myGroupOrders />
     </view>
   </view>

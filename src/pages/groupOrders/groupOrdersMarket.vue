@@ -55,7 +55,7 @@
 
 <script setup lang="ts">
 
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, onUnmounted, reactive, ref} from "vue";
 import {getGroupOrders} from "@/api";
 import type {GetGroupOrdersReq, GetGroupOrdersResp, Group} from "@/interfaces/groupOrders/getGroupOrders";
 import {formatLocalTime, truncToTwo} from "../../utils";
@@ -71,11 +71,11 @@ const groupResp = reactive<{total: number, totalPages: number}>({
   totalPages: 0,
 })
 
-onShow(() => {
+onMounted(() => {
   getPlatGroupOrders()
 })
 
-onHide(() => {
+onUnmounted(() => {
   groupOrderDatas.value = []
   payloadData.page = 1
   groupResp.total = 0

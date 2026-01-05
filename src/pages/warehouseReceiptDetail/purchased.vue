@@ -6,12 +6,13 @@ import {bankReceiptInfo, exerciseHandler, orderDetail} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {formatLocalTime, truncToTwo} from "@/utils";
 import {type ExerciseReq, ExerciseType} from "@/interfaces/exercise";
+import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
 const voucher = ref<string | string[]>()
 // const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const orderId = ref<string>("");
-const props = defineProps<{orderId?: string, detail: OrderDetail}>();
+const props = defineProps<{orderId?: string, detail: OrderDetail | UserGroupOrderDetailResp}>();
 
 // onLoad((option) =>{
 //   console.log("option", option)

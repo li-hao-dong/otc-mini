@@ -5,10 +5,11 @@ import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, orderDetail} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {formatLocalTime, truncToTwo} from "../../utils";
+import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
 // const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
-const props = defineProps<{orderId: string, detail: OrderDetail}>();
+const props = defineProps<{orderId: string, detail: OrderDetail | UserGroupOrderDetailResp}>();
 
 // onLoad((option) =>{
 //   console.log("option", option)

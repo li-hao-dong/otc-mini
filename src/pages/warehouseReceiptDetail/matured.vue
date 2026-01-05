@@ -6,9 +6,10 @@ import {useStore} from "@/stores";
 import {ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {formatLocalTime, truncToTwo} from "@/utils";
+import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
 // const detail = ref<OrderDetail | null>(null);
-const props = defineProps<{orderId?: string, detail: OrderDetail}>();
+const props = defineProps<{orderId?: string, detail: OrderDetail | UserGroupOrderDetailResp}>();
 
 // onLoad((option) =>{
 //   console.log("option", option)

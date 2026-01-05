@@ -7,6 +7,7 @@ import {bankReceiptInfo, BASE_URL, orderDetail} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {useStore} from "@/stores";
 import {formatLocalTime, truncToTwo} from "@/utils";
+import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
 const orderId = ref<string>("")
 const voucher = ref<File>()
@@ -22,7 +23,7 @@ const remitData = reactive<{accountName: string | null, bankName: string | null,
   bankUserName: null
 })
 
-const props = defineProps<{detail: OrderDetail, orderId: string}>();
+const props = defineProps<{detail: OrderDetail | UserGroupOrderDetailResp, orderId: string}>();
 
 // onLoad((option) =>{
 //   console.log("option", option)

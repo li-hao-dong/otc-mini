@@ -4,9 +4,10 @@ import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {orderDetail} from "@/api";
 import {formatLocalTime, truncToTwo} from "../../utils";
+import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
 // const detail = ref<OrderDetail | null>(null);
-const props = defineProps<{detail: OrderDetail}>();
+const props = defineProps<{detail: OrderDetail | UserGroupOrderDetailResp}>();
 console.log("props detail", props)
 
 onLoad((option) =>{

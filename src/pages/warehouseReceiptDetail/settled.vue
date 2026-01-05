@@ -6,6 +6,7 @@ import {bankReceiptInfo, BASE_URL, orderDetail, paymentProofInfo} from "@/api";
 import {formatLocalTime, truncToTwo} from "@/utils";
 import {useStore} from "@/stores";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
+import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
 const voucher = ref<string>()
 // const detail = ref<OrderDetail | null>(null);
@@ -18,7 +19,7 @@ const remitData = reactive({
   uploadTime: null,
   voucherUrl: null
 })
-const props = defineProps<{orderId: string, detail: OrderDetail}>();
+const props = defineProps<{orderId: string, detail: OrderDetail | UserGroupOrderDetailResp}>();
 
 // onLoad((option) =>{
 //   console.log("option", option)

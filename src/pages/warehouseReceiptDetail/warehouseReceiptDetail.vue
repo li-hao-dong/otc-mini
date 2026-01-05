@@ -17,9 +17,6 @@
     <!--  已结算8-->
     <settled v-if="detail?.orderStatus == '已结算'" :detail="detail" :orderId="orderId"></settled>
     <!--  已取消9-->
-    <view v-else>
-      暂无数据
-    </view>
   </view>
 </template>
 
@@ -36,8 +33,9 @@ import Purchased from "@/pages/warehouseReceiptDetail/purchased.vue";
 import Matured from "@/pages/warehouseReceiptDetail/matured.vue";
 import Exercised from "@/pages/warehouseReceiptDetail/exercised.vue";
 import Settled from "@/pages/warehouseReceiptDetail/settled.vue";
+import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
-const detail = ref<OrderDetail | null>(null);
+const detail = ref<OrderDetail | UserGroupOrderDetailResp | null>(null);
 const orderId = ref<string>("");
 
 onLoad((option) => {
@@ -64,6 +62,7 @@ const getDetail = (orderId: string) => {
 const getGroupOrderDetail = (groupOrderNo: string) => {
   getUserGroupOrderSuccessOrders(groupOrderNo).then(res => {
     console.log("拼单详情", res)
+    detail.value = res
   })
 }
 </script>

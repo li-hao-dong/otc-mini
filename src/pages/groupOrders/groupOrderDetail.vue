@@ -96,15 +96,13 @@
       <!--   我已⽀付，拼单未满员   -->
       <view class="operation_btn" @click="copyUrl">分享给好友拼单?? 如何寻找的支付状态</view>
     </view>
-    <view class="btns_bottom" v-if="Object.keys(orderDetail).length > 0 && orderDetail?.members.every((member:Member) => member.orderStatus=='PAID') && orderDetail?.currentSize==orderDetail?.targetSize" >
+    <view class="btns_bottom" v-if="orderDetail?.currentSize==orderDetail?.targetSize" >
       <!--   我已⽀付，拼单已满且组状态为 PAID   -->
       <view class="operation_btn" @click="toOrderDetail">查看订单</view>
       <view class="hint_cont">
         拼单已成团，系统将为所有成员统⼀申请购买期权产品。若订单最终盈利，将按 本拼单模式约定，从收益中⾃动扣除拼单服务费。
       </view>
     </view>
-    <view class="operation_btn" @click="toOrderDetail">查看订单</view>
-
   </view>
 </template>
 

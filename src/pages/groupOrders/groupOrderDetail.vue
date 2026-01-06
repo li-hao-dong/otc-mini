@@ -1,9 +1,12 @@
 <template>
   <view class="container">
     <view class="card">
+      <view class="tag" v-if="!orderDetail.isOfficialRecommend">
+        官方推荐
+      </view>
       <view class="bd row">
-        <view>{{ orderDetail.underlyingAssetName }} <text>{{orderDetail.underlyingAssetCode}} · {{orderDetail.strikeType}}{{orderDetail.optionType == "CALL" ? '看涨':'看跌'}}</text></view>
-        <view>{{calcStatus(orderDetail.groupStatus)}}</view>
+        <view>{{ orderDetail.underlyingAssetName }} <text>{{orderDetail.underlyingAssetCode}} · {{orderDetail.strikeType}} {{orderDetail.termName}} {{orderDetail.optionType}}</text></view>
+        <view>{{orderDetail?.groupStatus}}</view>
       </view>
       <view class="row">
         <view class="small_tit">拼单进度：</view>
@@ -21,7 +24,7 @@
       </view>
       <view class="hint_cont">
         <view>拼单模式与费⽤</view>
-        <view>◦ 拼单模式：官⽅推荐标的拼单</view>
+<!--        <view>◦ 拼单模式：官⽅推荐标的拼单</view>-->
         <view>◦ 拼单服务费：订单盈利部分的 15%，仅在盈利时收取</view>
         <view>◦ 拼单服务费不会出现在当前⽀付⾦额中，将在订单结算（已结算状态）时，从实际收益中⾃动扣除。</view>
 <!--        <view style="color: var(&#45;&#45;color-primary-bg)">本次拼单未成团，相关订单将按平台规则处理。本次未产⽣盈利结算，因此不收取拼单服务费。</view>-->
@@ -38,7 +41,7 @@
         <view class="group_order_data">{{ myOrderDetail.orderStatus }} </view>
       </view>
       <view class="row">
-        <view class="small_tit">我的应付⾦额：</view>
+        <view class="small_tit">我的名义本金：</view>
         <view class="group_order_data">¥ {{ truncToTwo(myOrderDetail.nominalAmount) }}</view>
       </view>
 <!--      <view>-->
@@ -48,9 +51,9 @@
 <!--        &lt;!&ndash;    [ 查看我的订单详情 ]&ndash;&gt;-->
 <!--        <view class="btn">bottons here</view>-->
 <!--      </view>-->
-      <view class="hint_cont">
-          <view>本次应付⾦额为您的期初期权费，不包含拼单服务费；如本订单最终产⽣盈利，将按照 15% ⽐例，从您的盈利中⾃动扣除拼单服务费。</view>
-      </view>
+<!--      <view class="hint_cont">-->
+<!--          <view>本次应付⾦额为您的期初期权费，不包含拼单服务费；如本订单最终产⽣盈利，将按照 15% ⽐例，从您的盈利中⾃动扣除拼单服务费。</view>-->
+<!--      </view>-->
     </view>
 
     <view class="card">
@@ -69,7 +72,7 @@
             </view>
             <view>{{orderDetail.members[index]?.orderStatus}}</view>
           </view>
-          <view class="group_order_data">金额: ¥ {{ truncToTwo(orderDetail.members[index].nominalAmount) }}</view>
+          <view class="group_order_data">名义本金: ¥ {{ truncToTwo(orderDetail.members[index].nominalAmount) }}</view>
         </view>
         <view v-else>
           <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>待加入</view>
@@ -84,7 +87,7 @@
           <view>• 拼单⼈数达到⽬标且全部成员⽀付成功后，系统将统⼀向通道侧申请购买该期权产品</view>
           <view>• 如在截⽌时间前未凑⻬⼈数或有⼈未完成⽀付，平台将按规则取消相关订单</view>
           <view>• 实际购买、⾏权和结算以各⾃订单的《交易确认书》为准</view>
-          <view>• 本拼单为官⽅推荐标的拼单：如订单最终盈利，将按盈利部分的 15% 收取拼单服务费；如订单亏损，则不收取该项费⽤，您的亏损不会因为拼单⽽扩⼤。</view>
+          <view v-if="orderDetail.isOfficialRecommend">• 本拼单为官⽅推荐标的拼单：如订单最终盈利，将按盈利部分的 15% 收取拼单服务费；如订单亏损，则不收取该项费⽤，您的亏损不会因为拼单⽽扩⼤。</view>
         </view>
       </view>
     </view>
@@ -98,7 +101,7 @@
     </view>
     <view class="btns_bottom" v-if="orderDetail?.currentSize==orderDetail?.targetSize" >
       <!--   我已⽀付，拼单已满且组状态为 PAID   -->
-      <view class="operation_btn" @click="toOrderDetail">查看订单</view>
+      <view class="operation_btn" @click="toOrderDetail">前往仓单详情</view>
       <view class="hint_cont">
         拼单已成团，系统将为所有成员统⼀申请购买期权产品。若订单最终盈利，将按 本拼单模式约定，从收益中⾃动扣除拼单服务费。
       </view>
@@ -287,6 +290,18 @@ const addHintCont = () => {
   box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.08);
   padding: 10px 20px;
   box-sizing: border-box;
+  position: relative;
+}
+
+.tag{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 2px 8px;
+  background-color: #FFEDD5;
+  color: #D97706;
+  border-radius: 12px;
+  font-size: 12px;
 }
 
 .bd{
@@ -295,6 +310,7 @@ const addHintCont = () => {
   color: #333333;
   padding-bottom: 10px;
   border-bottom: 1px solid #E6E6E6;
+  margin-top: 10px;
 }
 
 .bd text{

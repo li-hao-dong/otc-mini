@@ -21,6 +21,8 @@ export interface GroupOrderDetailResp {
     totalNominalAmount: number;
     underlyingAssetCode: string;
     underlyingAssetName: string;
+    isOfficialRecommend: boolean;
+    isGuaranteed: boolean;
     [property: string]: any;
 }
 

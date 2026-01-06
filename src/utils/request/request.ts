@@ -17,7 +17,7 @@ export const interceptor = function () {
             if(!`${useStore().user.token}`){
                 warnToast("请先登录");
                 setTimeout(() => {
-                    uni.switchTab({url: '/pages/user/user'})
+                    uni.reLaunch({url: '/pages/user/user'})
                 }, 2000)
                 return;
             }
@@ -46,7 +46,7 @@ const beforeRequest = (url:string) => {
             // #endif
 
             // #ifdef H5
-            uni.switchTab({url: '/pages/reLogin/reLogin'})
+            uni.reLaunch({url: '/pages/reLogin/reLogin'})
             // #endif
         }, 2000)
         return false;

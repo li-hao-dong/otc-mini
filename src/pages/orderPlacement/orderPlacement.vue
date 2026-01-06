@@ -156,7 +156,7 @@
                 <view class="popup_card_row_cont">¥ {{truncToTwo(quantity * 1000000)}}</view>
               </view>
               <view class="popup_card_row">
-                <view class="popup_card_row_title">拼单模式</view>
+                <view class="popup_card_row_title">拼单类型</view>
                 <view class="popup_card_row_cont">官方推荐标的拼单</view>
               </view>
               <view class="popup_card_row">

@@ -4,7 +4,7 @@
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <view :class="`${groupOrder.creatorName == '我' ? 'Leader':'Member'}`">{{groupOrder.creatorName == '我' ? 'Leader':'Member'}}</view>
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
-          <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.optionType.toUpperCase() == "CALL" ? '看涨':'看跌'}}</text></view>
+          <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.termName}} {{groupOrder.optionType}}</text></view>
           <view class="row">
             <view class="small_tit">拼单模式：</view>
 <!--            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>-->
@@ -51,54 +51,29 @@
 
 <script setup lang="ts">
 
-import {onMounted, reactive, ref} from "vue";
+import {onMounted, onUnmounted, reactive, ref} from "vue";
 import {getGroupOrders, getMyGroupOrders} from "@/api";
 import type {GetGroupOrdersReq, GetGroupOrdersResp, Group} from "@/interfaces/groupOrders/getGroupOrders";
 import {formatLocalTime, truncToTwo} from "../../utils";
 import type {MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
-import {onShow} from "@dcloudio/uni-app";
+import {onHide, onLoad, onShow} from "@dcloudio/uni-app";
 
-const groupOrderDatas = ref<Array<Group>>([])
-const payloadData = reactive<MyGroupOrderReq>({
-  page: 1,
-  pageSize: 10
-})
-const groupResp = reactive<{total: number, totalPages: number}>({
-  total: 0,
-  totalPages: 0,
-})
+// const groupOrderDatas = ref<Array<Group>>([])
 
-onMounted(() => {
-  getPlatGroupOrders()
-})
+const porps = defineProps<{groupOrderDatas: Array<Group>, payloadData: GetGroupOrdersReq, groupResp:{total: number, totalPages: number}}>();
+const emits = defineEmits<{
+  (e: 'getGroupOrders'): void
+}>()
 
-const getPlatGroupOrders = async () => {
-  if(groupOrderDatas.value.length>0){
-    if(groupResp.totalPages === payloadData.page){
-      return
-    }
-    payloadData!.page += 1
-  }
-  getMyGroupOrders(payloadData).then(res => {
-    console.log('res', res)
-    if(groupOrderDatas.value.length>0){
-      groupOrderDatas.value = groupOrderDatas.value.concat(res.groups)
-    }else{
-      groupOrderDatas.value = res.groups
-    }
-    groupResp.total = res.pagination.total;
-    groupResp.totalPages = res.pagination.totalPages;
-  }).catch(err => {
-    console.log('err', err)
-  })
-};
+const getPlatGroupOrders = () => {
+  emits("getGroupOrders")
+}
 
 const toDetail = (groupOrder: Group) => {
   uni.navigateTo({
     url: `/pages/groupOrders/groupOrderDetail?groupOrderNo=${groupOrder.groupOrderNo}`
   })
 }
-
 </script>
 
 <style scoped>
@@ -148,7 +123,7 @@ const toDetail = (groupOrder: Group) => {
   color: #333333;
   padding-bottom: 10px;
   border-bottom: 1px solid #E6E6E6;
-  margin-top: 20px;
+  //margin-top: 20px;
 }
 
 .bd text{

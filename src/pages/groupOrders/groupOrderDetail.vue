@@ -91,15 +91,15 @@
         </view>
       </view>
     </view>
-    <view class="btns_bottom"  v-if="Object.keys(myOrderDetail).length > 0 && myOrderDetail?.paymentStatus.toUpperCase() == 'PADDING'">
-      <!--   我尚未⽀付   -->
-      <view class="operation_btn">去支付?? 如何寻找的支付状态</view>
-    </view>
-    <view class="btns_bottom" v-if="Object.keys(myOrderDetail).length > 0 && myOrderDetail?.paymentStatus.toUpperCase() == 'PAID' && orderDetail?.currentSize<orderDetail?.targetSize">
+<!--    <view class="btns_bottom"  v-if="Object.keys(myOrderDetail).length > 0 && myOrderDetail?.paymentStatus.toUpperCase() == 'PADDING'">-->
+<!--      &lt;!&ndash;   我尚未⽀付   &ndash;&gt;-->
+<!--      <view class="operation_btn">去支付?? 如何寻找的支付状态</view>-->
+<!--    </view>-->
+    <view class="btns_bottom" v-if="orderDetail?.currentSize<orderDetail?.targetSize">
       <!--   我已⽀付，拼单未满员   -->
-      <view class="operation_btn" @click="copyUrl">分享给好友拼单?? 如何寻找的支付状态</view>
+      <view class="operation_btn" @click="copyUrl">分享给好友拼单</view>
     </view>
-    <view class="btns_bottom" v-if="orderDetail?.currentSize==orderDetail?.targetSize" >
+    <view class="btns_bottom" v-if="Object.keys(myOrderDetail).length > 0 && orderDetail?.currentSize==orderDetail?.targetSize" >
       <!--   我已⽀付，拼单已满且组状态为 PAID   -->
       <view class="operation_btn" @click="toOrderDetail">前往仓单详情</view>
       <view class="hint_cont">

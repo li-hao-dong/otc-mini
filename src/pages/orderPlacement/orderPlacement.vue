@@ -17,22 +17,42 @@
                   <text class="assetCode">{{ orderPayload?.assetCode }}</text> ·
                   <text class="assetCode">{{ orderPayload?.structureName }}{{orderPayload?.optionType}} {{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text>
                 </view>
+                <view class="row rowChange">
+                  <view class="para"><text class="labelGray">标的名称：</text></view>
+                  <view class="para"><text class="">{{ orderPayload?.assetName }}</text></view>
+                </view>
+                <view class="row rowChange">
+                  <view class="para"><text class="labelGray">标的代码：</text></view>
+                  <view class="para"><text class="">{{ orderPayload?.assetCode }}</text></view>
+                </view>
+                <view class="row rowChange">
+                  <view class="para"><text class="labelGray">产品结构</text></view>
+                  <view class="para"><text class="">{{ orderPayload?.priceChange }}</text></view>
+                </view>
+                <view class="row rowChange">
+                  <view class="para"><text class="labelGray">期限</text></view>
+                  <view class="para"><text class="">{{ orderPayload?.term }}</text></view>
+                </view>
+                <view class="row rowChange">
+                  <view class="para"><text class="labelGray">交易类型</text></view>
+                  <view class="para"><text class="">{{ calcOptionType(orderPayload?.optionType) }}</text></view>
+                </view>
                 <view class="row rowPrice">
                     <view class="para"><text class="labelGray">股价：</text></view>
-                    <view class="para"><text class="valueRed">￥{{ orderPayload?.currentPrice }}</text></view>
+                    <view class="para"><text :class="orderPayload?.currentPrice > 0 ? valueRed : valueGreen">￥{{ orderPayload?.currentPrice }}</text></view>
                 </view>
                 <view class="row rowChange">
                     <view class="para"><text class="labelGray">涨幅：</text></view>
-                    <view class="para"><text class="valueGreen">{{ orderPayload?.priceChange }}</text></view>
+                    <view class="para"><text :class="orderPayload?.priceChange > 0 ? valueRed : valueGreen">{{ orderPayload?.priceChange }}</text></view>
                 </view>
-                <view class="row rowInquirer">
-                    <view class="para"><text class="labelGray">询价人：</text></view>
-                    <view class="para"><text class="valueDark">-</text></view>
-                </view>
-                <view class="row rowScale">
-                    <view class="para"><text class="labelGray">询价规模：</text></view>
-                    <view class="para"><text class="valueDark">{{ orderPayload?.nominalAmount }}万</text></view>
-                </view>
+<!--                <view class="row rowInquirer">-->
+<!--                    <view class="para"><text class="labelGray">询价人：</text></view>-->
+<!--                    <view class="para"><text class="valueDark">-</text></view>-->
+<!--                </view>-->
+<!--                <view class="row rowScale">-->
+<!--                    <view class="para"><text class="labelGray">名义本金：</text></view>-->
+<!--                    <view class="para"><text class="valueDark">{{ orderPayload?.nominalAmount }}万</text></view>-->
+<!--                </view>-->
 <!--                <view class="row rowStruct">-->
 <!--                    <view class="para"><text class="labelGray">{{ orderPayload?.structureName }}</text></view>-->
 <!--                    <view class="para"><text class="valueDark">{{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text></view>-->
@@ -71,13 +91,40 @@
                 </view>
             </view>
 
+            <view class="card">
+              <view class="row">
+                <text class="sectionTitle">总费用概览</text>
+              </view>
+              <view class="row">
+                <view class="row_cont"><text class="popup_card_row_title">名义本金：</text>¥ {{truncToTwo(orderPayload?.nominalAmount * 10000 * quantity)}}</view>
+              </view>
+              <view class="row">
+                <view class="row_cont"><text class="popup_card_row_title">期权费率：</text>
+                  {{ truncToTwo(orderPayload?.quote.price) }}%</view>
+              </view>
+              <view class="row">
+                <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100)}}</view>
+              </view>
+              <view class="row">
+                <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(5000) }}</view>
+              </view>
+              <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
+              </view>
+              <view class="row">
+                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 + 5000) }}</view>
+              </view>
+              <view class="row">
+                <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>
+              </view>
+            </view>
+
             <view class="card" v-show="activeTab === 1">
               <view class="row">
                 <text class="sectionTitle">拼单购买</text>
               </view>
               <view class="group_buy_hint2">
                 <view style="border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px;">
-                  <view>· 支持 2–5 人拼单购买同一产品</view>
+                  <view>· 支持多人拼单购买同一产品</view>
                   <view>· 拼单人数达到目标且全部完成支付后，系统统一向通道侧下单</view>
                   <view>· 拼单未成团或超时，将按规则自动取消相关订单</view>
                 </view>
@@ -95,15 +142,15 @@
               </view>
               <view class="group_buy_hint2">
                 <view v-show="groupOrders.length > 0">
-                  <view v-for="(item, key) in 2" :key="key" style="border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px;">
+                  <view v-for="(item, key) in groupOrders" :key="key" style="border-bottom: 1px solid #e0e0e0; padding-bottom: 10px; margin-bottom: 10px;">
                     <view class="row" style="display: flex; justify-content: space-between; align-items: center;">
                       <view>
-                        <view class="small_title">拼单{{ item }}</view>
-                        <view class="group_buy_data">3人拼单 · 已有 2/3 人</view>
-                        <view class="group_buy_data">剩余时间 03:21:15</view>
+                        <view class="small_title">{{ item.underlyingAssetName }} · {{item.underlyingAssetCode}}{{item.termName}}{{item.optionType}}</view>
+                        <view class="group_buy_data">{{ item.targetSize }}人拼单 · 已有 {{ item.currentSize }}/{{ item.targetSize }} 人</view>
+                        <view class="group_buy_data">截止时间 {{formatLocalTime(new Date(item.expireTime))}}</view>
                       </view>
                       <view>
-                        <view class="add_group_buy">加入拼单</view>
+                        <view class="add_group_buy" @click="uni.navigateTo({url: '/pages/groupOrders/groupOrderDetail?groupOrderNo='+item.groupOrderNo})">加入拼单</view>
                       </view>
                     </view>
                   </view>
@@ -170,16 +217,43 @@
               <view class="popup_card_row group_num">
                 <view :class='`choose_people ${choosePeople == num ? "choose_people_active" : ""} `' v-for="(num,key) in [2, 3, 4, 5, 6, 8, 10]" :key="key" @click="choosePeople=num">{{num}}人</view>
               </view>
-              <view class="popup_card_row">
-                <view class="popup_card_row_title"></view>
-                <view class="popup_card_row_cont">单人名义本金： ¥ {{Math.ceil(quantity * 1000000 / choosePeople * 100) / 100}} / 人</view>
-              </view>
+<!--              <view class="popup_card_row">-->
+<!--                <view class="popup_card_row_title"></view>-->
+<!--                <view class="popup_card_row_cont">单人名义本金： ¥ {{Math.ceil(quantity * 1000000 / choosePeople * 100) / 100}} / 人</view>-->
+<!--              </view>-->
               <view>
                 <view class="pd_hint">• 请在拼单创建后 24 小时内完成邀请并支付</view>
                 <view class="pd_hint">• 所有成员支付成功后，系统才会统一向通道侧申请购买</view>
                 <view class="pd_hint">• 拼单未成团或超时，将按平台规则取消订单</view>
                 <view class="pd_hint">• 如订单最终盈利，平台将按约定从盈利部分中收取 15% 拼单服务费； 如订单亏损，则不收取该项费用。</view>
                 <view class="pd_hint">示例：若最终盈利 10,000 元，则拼单服务费为 1,500 元， 剩余收益 8,500 元。</view>
+              </view>
+            </view>
+
+            <view class="card_popup">
+              <view class="popup_card_row">
+                <text class="popup_title">个人费用概览</text>
+              </view>
+              <view class="popup_card_row">
+                <view class="row_cont"><text class="popup_card_row_title">名义本金：</text>¥ {{truncToTwo(Math.ceil(orderPayload?.nominalAmount * 10000 * quantity / choosePeople * 100) / 100)}}</view>
+              </view>
+              <view class="popup_card_row">
+                <view class="row_cont"><text class="popup_card_row_title">期权费率：</text>
+                  {{ truncToTwo(orderPayload?.quote.price) }}%</view>
+              </view>
+              <view class="popup_card_row">
+                <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(Math.ceil(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 / choosePeople * 100) / 100)}}</view>
+              </view>
+              <view class="popup_card_row">
+                <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(5000) }}</view>
+              </view>
+              <view class="popup_card_row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
+              </view>
+              <view class="popup_card_row">
+                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(Math.ceil(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 / choosePeople * 100) / 100 + 5000) }}</view>
+              </view>
+              <view class="popup_card_row">
+                <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>
               </view>
             </view>
 
@@ -198,7 +272,7 @@ import { PriceType, type orderPayloadReq } from '@/interfaces/inquiry/orderPaylo
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
 import {useStore} from "@/stores";
-import {truncToTwo} from "@/utils";
+import {formatLocalTime, truncToTwo} from "@/utils";
 import type {CreateGroupOrderReq} from "@/interfaces/groupOrders/createGroupOrders";
 import {
   type GetGroupOrdersReq,
@@ -385,13 +459,19 @@ const createGroupOrders = () => {
     if(res.status && res.status === 'success'){
       uni.showToast({ title: '拼单创建成功', icon: 'success' });
       popup.value.close();
-      setTimeout(() => { uni.navigateTo({ url: '/pages/groupOrders/groupOrderDetail?groupOrderNo='+ res?.data?.groupOrderNo}); }, 1500);
+      setTimeout(() => { uni.reLaunch({ url: '/pages/groupOrders/groupOrderDetail?groupOrderNo='+ res?.data?.groupOrderNo}); }, 1500);
     } else {
       uni.showToast({ title: res.message || '拼单创建失败', icon: 'none' });
     }
   }).catch(err => {
     console.log('createGroupOrders err', err);
   })
+}
+
+const calcOptionType = (type: OptionType | undefined) => {
+  if(type === OptionType.Call.toUpperCase()) return '香草';
+  else if(type === OptionType.Put.toUpperCase()) return '雪球';
+  else return type;
 }
 
 </script>
@@ -762,10 +842,13 @@ const createGroupOrders = () => {
 .bottom_popup{
   width: 100%;
   min-height: 50vh;
+  max-height: 90vh;
   background: #f5f5f5;
   border-radius: 15px 15px 0 0;
   padding: 10px 2.5% 0 2.5%;
   box-sizing: border-box;
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 .card_popup{

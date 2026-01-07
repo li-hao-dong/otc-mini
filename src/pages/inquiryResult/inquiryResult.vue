@@ -81,6 +81,7 @@ const assetName = ref<string | undefined>();
 const assetCode = ref<string | undefined>();
 const currentPrice = ref<number | undefined>();
 const nominalAmount = ref<number | undefined>();
+const optionType = ref<string | undefined>();
 const priceChange = ref<string | undefined>();
 const terms = ref<string[] | undefined>();
 const results = ref<QuoteResult[] | undefined>([]);
@@ -113,6 +114,7 @@ const getInquiryResults = () => {
     currentPrice.value = res.data.currentPrice;
     priceChange.value = res.data.priceChange;
     nominalAmount.value = res.data.nominalAmount;
+    optionType.value = res.data.optionType;
     // interface QuoteItem {
     //   structure: string;
     //   structureName: string;
@@ -133,7 +135,7 @@ const getInquiryResults = () => {
     console.log("inquiryQuote error,", err)
     uni.showModal({
       title: '询价失败',
-      content: err?.message.includes('Underlying asset not found') ? '系统未匹配到标的，请确认代码/名称是否正确' : err?.message,
+      content: err?.message,
       showCancel: false,
       success: () => {
         uni.hideLoading()
@@ -220,6 +222,7 @@ const placeAnOrder = (quote: any, term: string, result: any) => {
   // console.log("priceChange:", priceChange.value)
   // console.log("currentPrice:", currentPrice.value)
   // console.log("nominalAmount:", nominalAmount.value)
+  // console.log("quote:", quote)
   console.log("result:", result)
   const payload = {
     inquiryId: inquiryId.value,
@@ -231,7 +234,8 @@ const placeAnOrder = (quote: any, term: string, result: any) => {
     quote: quote,
     term: term,
     structure: result.structure,
-    structureName: result.structureName
+    structureName: result.structureName,
+    optionType: optionType.value,
   };
   uni.setStorageSync('OrderPayload', payload)
 

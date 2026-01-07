@@ -1,7 +1,8 @@
 <template>
+  <navigation-title title="拼单详情"></navigation-title>
   <view class="container">
     <view class="card">
-      <view class="tag" v-if="!orderDetail.isOfficialRecommend">
+      <view class="tag" v-if="orderDetail.isOfficialRecommend">
         官方推荐
       </view>
       <view class="bd row">
@@ -23,7 +24,7 @@
         <view class="group_order_data">{{ orderDetail.groupOrderNo }}</view>
       </view>
       <view class="hint_cont">
-        <view>拼单模式与费⽤</view>
+        <view>拼单费⽤</view>
 <!--        <view>◦ 拼单模式：官⽅推荐标的拼单</view>-->
         <view>◦ 拼单服务费：订单盈利部分的 15%，仅在盈利时收取</view>
         <view>◦ 拼单服务费不会出现在当前⽀付⾦额中，将在订单结算（已结算状态）时，从实际收益中⾃动扣除。</view>
@@ -115,6 +116,7 @@ import {onLoad} from "@dcloudio/uni-app";
 import {addGroupOrder, getGroupOrderDetail} from "@/api";
 import type {GroupOrderDetailResp, Member} from "@/interfaces/groupOrders/groupOrderDetail";
 import {formatLocalTime, truncToTwo} from "@/utils";
+import NavigationTitle from "@/components/navigationTitle.vue";
 
 const orderDetail = ref<GroupOrderDetailResp>({});
 const myOrderDetail = ref<Member>({});
@@ -247,7 +249,7 @@ const addHintCont = () => {
     confirmText: '确认',
     success: (res) => {
       if (res.confirm) {
-        addGroupOrder(orderDetail.value.groupOrderNo, Number(orderDetail.value.totalNominalAmount/orderDetail.value.targetSize)).then(res => {
+        addGroupOrder(orderDetail.value.groupOrderNo, Number(orderDetail.value.totalNominalAmount)).then(res => {
           uni.showToast({
             title: '加入拼单成功',
             icon: 'success'

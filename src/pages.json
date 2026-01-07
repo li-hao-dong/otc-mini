@@ -119,7 +119,8 @@
 				"navigationBarTitleText": "拼单详情",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
-				"enablePullDownRefresh": false
+				"enablePullDownRefresh": false,
+				"navigationStyle": "custom",
 			}
 		}
 	],
@@ -143,8 +144,8 @@
 			},
 			{
 				"pagePath": "pages/groupOrders/groupOrders",
-				"iconPath": "static/menu/icon_cd.png",
-				"selectedIconPath": "static/menu/icon_cd_active.png",
+				"iconPath": "static/menu/icon_group_order.png",
+				"selectedIconPath": "static/menu/icon_group_order_active.png",
 				"text": "拼单"
 			},
 			{

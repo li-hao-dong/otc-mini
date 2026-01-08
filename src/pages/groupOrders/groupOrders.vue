@@ -6,6 +6,7 @@
             @click="changeComponent(k)"
       >{{ tab }}</view>
     </view>
+    <view class="create_group_order_btn" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">创建新拼单</view>
 
 <!--    <component :is="activeComponent" :key="activeTab" />-->
     <!--0        <groupOrdersMarket/>-->
@@ -163,6 +164,18 @@ const clearMyPlatGroupOrdersData = () => {
   color: #FFFFFF;
   background: var(--color-primary-bg);
   border-radius: 12px;
+}
+
+.create_group_order_btn{
+  width: 95%;
+  text-align: center;
+  margin: auto;
+  padding: 10px 0;
+  color: #000;
+  background: #fff;
+  border: 1px solid #CCCCCC;
+  border-radius: 12px;
+  box-sizing: content-box;
 }
 
 .group_cont_box{

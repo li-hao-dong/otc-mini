@@ -24,9 +24,9 @@
 <!--            <view class="add_group">加⼊拼单</view>-->
           </view>
 
-          <view class="hint_cont">
-            拼单服务费仅在对应订单最终盈利时按约定⽐例收取；如订单亏损，则不收取该项费⽤。
-          </view>
+<!--          <view class="hint_cont">-->
+<!--            拼单服务费仅在对应订单最终盈利时按约定⽐例收取；如订单亏损，则不收取该项费⽤。-->
+<!--          </view>-->
         </view>
         <view class="num_hint" @click="getPlatGroupOrders">
           <view>共 {{groupResp.total}} 条拼单记录，分 {{groupResp.totalPages}} 页显示</view>

@@ -58,25 +58,48 @@
     </view>
 
     <view class="card">
-      <view class="fir_title">成员列表</view>
-      <view v-for="(_, index) in orderDetail.targetSize" :key="index">
-        <view class="members" v-if="orderDetail.members[index]">
+      <view class="fir_title row">
+        <view>成员列表</view>
+        <view style="font-weight: lighter" v-if="orderDetail.currentSize !== orderDetail.targetSize">当前已有 {{orderDetail.currentSize}}人 ，还需 {{orderDetail.targetSize - orderDetail.currentSize}}人</view>
+      </view>
+<!--      <view v-for="(_, index) in orderDetail.targetSize" :key="index">-->
+<!--        <view class="members" v-if="orderDetail.members[index]">-->
+<!--          <view class="row">-->
+<!--            <view style="display: flex; gap: 10px; align-items: center">-->
+<!--              <view style="display: flex; gap: 10px; align-items: center;">-->
+<!--                <view class="member_key"><p>{{index+1}}</p></view>-->
+<!--                <view class="memebr_name">{{orderDetail.members[index]?.maskedUserId}}</view>-->
+<!--              </view>-->
+<!--              <view class="member_role">-->
+<!--                {{calcRole(orderDetail.members[index].role)}}-->
+<!--              </view>-->
+<!--            </view>-->
+<!--            <view>{{orderDetail.members[index]?.orderStatus}}</view>-->
+<!--          </view>-->
+<!--          <view class="group_order_data">名义本金: ¥ {{ truncToTwo(orderDetail.members[index].nominalAmount) }}</view>-->
+<!--        </view>-->
+<!--        <view v-else>-->
+<!--          <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>待加入</view>-->
+<!--        </view>-->
+<!--      </view>-->
+      <view >
+        <view class="members" v-for="(member, index) in orderDetail.members" :key="index">
           <view class="row">
             <view style="display: flex; gap: 10px; align-items: center">
               <view style="display: flex; gap: 10px; align-items: center;">
                 <view class="member_key"><p>{{index+1}}</p></view>
-                <view class="memebr_name">{{orderDetail.members[index]?.maskedUserId}}</view>
+                <view class="memebr_name">{{member?.maskedUserId}}</view>
               </view>
               <view class="member_role">
-                {{calcRole(orderDetail.members[index].role)}}
+                {{calcRole(member.role)}}
               </view>
             </view>
-            <view>{{orderDetail.members[index]?.orderStatus}}</view>
+            <view>{{member?.orderStatus}}</view>
           </view>
-          <view class="group_order_data">名义本金: ¥ {{ truncToTwo(orderDetail.members[index].nominalAmount) }}</view>
+          <view class="group_order_data">名义本金: ¥ {{ truncToTwo(member.nominalAmount) }}</view>
         </view>
-        <view v-else>
-          <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>待加入</view>
+        <view v-if="Object.keys(myOrderDetail).length == 0 && orderDetail.currentSize < orderDetail.targetSize">
+          <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>点击加入</view>
         </view>
       </view>
     </view>
@@ -206,23 +229,39 @@ const initOrderDetail = (groupOrderNo) => {
 };
 
 const copyUrl = () => {
-  // 复制链接的逻辑
-  const url = `${window.location.origin}${window.location.pathname}${window.location.search}`;
-  uni.setClipboardData({
-    data: url,
-    success: () => {
-      uni.showToast({
-        title: '复制链接成功',
-        icon: 'success'
-      });
-    },
-    fail: () => {
-      uni.showToast({
-        title: '复制链接失败',
-        icon: 'none'
-      });
+  uni.showModal({
+    title: '如何邀请好友？',
+    content: '复制链接后->发送给朋友->朋友在浏览器地址栏粘贴访问。',
+    showCancel: true,
+    cancelText: '取消',
+    confirmText: '复制链接',
+    success: (res) => {
+      if (res.confirm) {
+        // 复制链接的逻辑
+        copyToClipboard()
+      }
     }
-  });
+  })
+
+  function copyToClipboard() {
+    // 复制链接的逻辑
+    const url = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+    uni.setClipboardData({
+      data: url,
+      success: () => {
+        uni.showToast({
+          title: '复制链接成功',
+          icon: 'success'
+        });
+      },
+      fail: () => {
+        uni.showToast({
+          title: '复制链接失败',
+          icon: 'none'
+        });
+      }
+    });
+  }
 }
 
 const toOrderDetail = () => {

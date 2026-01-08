@@ -16,7 +16,7 @@ const callBackPage = () => {
     uni.navigateBack(-1);
   }else {
     uni.switchTab({
-      url: '/pages/inquiryHistory/inquiryHistory'
+      url: '/pages/groupOrders/groupOrders'
     });
   }
 }

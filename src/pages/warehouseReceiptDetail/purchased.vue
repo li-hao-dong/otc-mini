@@ -13,6 +13,9 @@ const voucher = ref<string | string[]>()
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const orderId = ref<string>("");
 const props = defineProps<{orderId?: string, detail: OrderDetail | UserGroupOrderDetailResp}>();
+const emits = defineEmits<{
+  (e: 'callback'): void;
+}>();
 
 onLoad((option) =>{
   console.log("option", option)
@@ -69,9 +72,10 @@ const exexercise = () => {
           });
 
           setTimeout(() => {
-            uni.redirectTo({
-              url: `/pages/warehouseReceiptDetail/exercised?id=${orderId.value}`
-            });
+            emits('callback')
+            // uni.redirectTo({
+            //   url: `/pages/warehouseReceiptDetail/exercised?id=${orderId.value}`
+            // });
           }, 2000)
         })
       }

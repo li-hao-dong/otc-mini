@@ -34,13 +34,6 @@ const props = defineProps<{orderId: string, detail: OrderDetail | UserGroupOrder
 //   }
 // })
 
-watch(() => props.orderId, (newVal) => {
-  if(newVal){
-    // getDetail(newVal)
-    // getBankReceiptInfo(newVal)
-    getPaymentProofInfo(newVal)
-  }
-})
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
@@ -95,6 +88,13 @@ const previewImage = () =>  {
   });
 }
 
+watch(() => props.orderId, (newVal) => {
+  if(newVal){
+    // getDetail(newVal)
+    // getBankReceiptInfo(newVal)
+    getPaymentProofInfo(newVal)
+  }
+}, {immediate: true})
 </script>
 
 <template>

@@ -24,6 +24,9 @@ const remitData = reactive<{accountName: string | null, bankName: string | null,
 })
 
 const props = defineProps<{detail: OrderDetail | UserGroupOrderDetailResp, orderId: string}>();
+const emits = defineEmits<{
+  (e: 'callback'): void;
+}>()
 
 onLoad((option) =>{
   console.log("option", option)
@@ -37,14 +40,6 @@ onLoad((option) =>{
 //     detail.value = newVal;
 //   }
 // })
-
-watch(() => props.orderId, (newVal) => {
-  if(newVal){
-    orderId.value = newVal;
-    // getDetail(orderId.value)
-    getBankReceiptInfo(orderId.value)
-  }
-})
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
@@ -179,7 +174,8 @@ const uploadImage = () => {
           duration: 1000
         })
         setTimeout(() => {
-          uni.redirectTo({url: `/pages/warehouseReceiptDetail/paid?id=${orderId.value}`})
+          // uni.redirectTo({url: `/pages/warehouseReceiptDetail/paid?id=${orderId.value}`})
+          emits("callback")
         }, 2000)
       }
     },
@@ -207,6 +203,19 @@ const convertToFile = (tempFilePath:any, fileInfo:any) => {
 const bindDayDateChange = (e: any) => {
   remitData.paymentTime = e.detail?.value as string
 }
+
+
+watch(() => props.orderId, (newVal) => {
+  console.log("props.orderId@@@@", props.orderId)
+  console.log("props.orderId@@@@", newVal)
+  if(newVal){
+    // orderId.value = newVal;
+    // getDetail(orderId.value)
+    getBankReceiptInfo(orderId.value)
+  }
+}, {immediate: true})
+
+
 </script>
 
 <template>
@@ -253,14 +262,14 @@ const bindDayDateChange = (e: any) => {
       <view class="fir_title">收款信息</view>
       <view class="row">
         <view class="row_cont"><text>收款户名：</text>
-          {{ bankReceiptInfoData.accountName }}</view>
+          {{ bankReceiptInfoData?.accountName }}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>收款银行：</text>
-          {{ bankReceiptInfoData.bankName }} {{ bankReceiptInfoData.branchName }}</view>
+          {{ bankReceiptInfoData?.bankName }} {{ bankReceiptInfoData?.branchName }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>银行账号：</text>{{bankReceiptInfoData.bankAccount}}</view>
+        <view class="row_cont"><text>银行账号：</text>{{bankReceiptInfoData?.bankAccount}}</view>
       </view>
 <!--      <view class="row">-->
 <!--        <view class="row_cont"><text>转账备注：</text>-->

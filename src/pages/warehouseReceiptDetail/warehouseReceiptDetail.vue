@@ -3,13 +3,13 @@
     <!--  待渠道确认1-->
     <pendingChannel v-if="detail?.orderStatus == '待渠道确认'" :detail="detail"></pendingChannel>
     <!--  已报价-待支付2-->
-    <quotedWithPaddingPayment v-if="detail?.orderStatus == '已报价' || detail?.orderStatus == '待支付'" :detail="detail" :orderId="orderId"></quotedWithPaddingPayment>
+    <quotedWithPaddingPayment v-if="detail?.orderStatus == '已报价' || detail?.orderStatus == '待支付'" :detail="detail" :orderId="orderId" @callback="initDetail"></quotedWithPaddingPayment>
     <!--  已支付3-->
     <paid v-if="detail?.orderStatus == '已支付'" :detail="detail" :orderId="orderId"></paid>
     <!--  支付已确认4-->
     <paymentConfirmed v-if="detail?.orderStatus == '支付已确认'" :detail="detail" :orderId="orderId"></paymentConfirmed>
-    <!--  已购买5-->
-    <purchased v-if="detail?.orderStatus == '已购买'" :detail="detail"></purchased>
+    <!--  已购买5 可行权-->
+    <purchased v-if="detail?.orderStatus == '已购买'" :detail="detail" @callback="initDetail"></purchased>
     <!--  已到期6-->
     <matured v-if="detail?.orderStatus == '已到期'" :detail="detail"></matured>
     <!--  已行权7-->
@@ -35,20 +35,38 @@ import Exercised from "@/pages/warehouseReceiptDetail/exercised.vue";
 import Settled from "@/pages/warehouseReceiptDetail/settled.vue";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
+enum OrderType {
+  GroupOrder = "GROUPORDER",
+  Order = "ORDER"
+}
+
 const detail = ref<OrderDetail | UserGroupOrderDetailResp | null>(null);
 const orderId = ref<string>("");
+const orderType = ref<OrderType>();
 
 onLoad((option) => {
   if(option?.groupOrderNo){
     // 获取拼单详情
     orderId.value = option?.groupOrderNo
+    orderType.value = OrderType.GroupOrder
     getGroupOrderDetail(option?.groupOrderNo)
   }else if(option?.id){
     // 获取仓单详情
     orderId.value = option?.id
+    orderType.value = OrderType.Order
     getDetail(option?.id)
   }
 })
+
+const initDetail = () => {
+  if(orderType.value === OrderType.GroupOrder && orderId.value){
+    // 获取拼单详情
+    getGroupOrderDetail(orderId.value)
+  }else if(orderType.value === OrderType.Order && orderId.value){
+    // 获取仓单详情
+    getDetail(orderId.value)
+  }
+}
 
 // 获取订单详情
 const getDetail = (orderId: string) => {

@@ -14,12 +14,12 @@ const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const orderId = ref<string>("");
 const props = defineProps<{orderId?: string, detail: OrderDetail | UserGroupOrderDetailResp}>();
 
-// onLoad((option) =>{
-//   console.log("option", option)
-//   orderId.value = option?.id || "";
-//   getDetail(option?.id)
-//   // getBankReceiptInfo(option?.id)
-// })
+onLoad((option) =>{
+  console.log("option", option)
+  orderId.value = option?.id || "";
+  // getDetail(option?.id)
+  // getBankReceiptInfo(option?.id)
+})
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {

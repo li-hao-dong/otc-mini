@@ -25,12 +25,12 @@ const remitData = reactive<{accountName: string | null, bankName: string | null,
 
 const props = defineProps<{detail: OrderDetail | UserGroupOrderDetailResp, orderId: string}>();
 
-// onLoad((option) =>{
-//   console.log("option", option)
-//   orderId.value = option?.id;
-//   getDetail(orderId.value)
-//   getBankReceiptInfo(orderId.value)
-// })
+onLoad((option) =>{
+  console.log("option", option)
+  orderId.value = option?.id;
+  // getDetail(orderId.value)
+  // getBankReceiptInfo(orderId.value)
+})
 
 // watch(() => props.detail, (newVal) => {
 //   if(newVal){

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {reactive, ref, watch} from "vue";
+import {reactive, ref, watch, watchEffect} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, BASE_URL, orderDetail, paymentProofInfo} from "@/api";
@@ -36,13 +36,19 @@ console.log("props detail", props)
 //   }
 // }, {deep: true})
 
-watch(() => props.orderId, (newVal) => {
-  console.log("orderId changed", newVal)
-  if(newVal){
-    // getDetail(newVal)
-    getPaymentProofInfo(newVal)
-  }
-}, {deep: true})
+// watch(() => props.orderId, (newVal) => {
+//   console.log("orderId changed", newVal)
+//   if(newVal){
+//     // getDetail(newVal)
+//     // downloadImage(newVal.voucherUrl || "")
+//     getPaymentProofInfo(newVal)
+//   }
+// }, {deep: true})
+
+watchEffect(() => {
+  // console.log("props changed", props.detail)
+  downloadImage(props.detail?.paymentVoucherUrl || "")
+})
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
@@ -67,6 +73,24 @@ const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
     console.log("银行收款信息", res)
     bankReceiptInfoData.value = res;
+  })
+}
+
+function downloadImage(url: string) {
+  if(!url){
+    return;
+  }
+  uni.downloadFile({
+    url: `${BASE_URL}${url}`,
+    header:{
+      'Authorization': `Bearer ${useStore().user.token}`
+    },
+    success: res => {
+      console.log("下载支付凭证结果", res)
+      if(res.statusCode === 200){
+        voucher.value = res.tempFilePath;
+      }
+    }
   })
 }
 

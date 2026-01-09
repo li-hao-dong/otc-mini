@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {reactive, ref, watch} from "vue";
+import {reactive, ref, watch, watchEffect} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, BASE_URL, getImage, orderDetail, paymentProofInfo} from "@/api";
@@ -34,6 +34,10 @@ const props = defineProps<{orderId: string, detail: OrderDetail | UserGroupOrder
 //   }
 // })
 
+watchEffect(() => {
+  downloadImage(props.detail?.paymentVoucherUrl || "")
+})
+
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
@@ -51,6 +55,24 @@ const getDetail = (orderId: string) => {
         }
       }
     })
+  })
+}
+
+function downloadImage(url: string) {
+  if (!url) {
+    return;
+  }
+  uni.downloadFile({
+    url: `${BASE_URL}${url}`,
+    header:{
+      'Authorization': `Bearer ${useStore().user.token}`
+    },
+    success: res => {
+      console.log("下载支付凭证结果", res)
+      if(res.statusCode === 200){
+        voucher.value = res.tempFilePath;
+      }
+    }
   })
 }
 

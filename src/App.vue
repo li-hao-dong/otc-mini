@@ -4,10 +4,10 @@ import {useStore} from "@/stores";
 import {truncToTwo} from "@/utils";
 onLaunch(() => {
   console.log("App Launch");
-  useStore().user.initUserInfo()
 });
 onShow(() => {
   console.log("App Show");
+  useStore().user.initUserInfo()
 });
 onHide(() => {
   console.log("App Hide");

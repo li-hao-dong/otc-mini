@@ -6,6 +6,10 @@
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
           <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.termName}} {{groupOrder.optionType}}</text></view>
           <view class="row">
+            <view class="small_tit">订单编号：</view>
+            <view class="group_order_data">{{ groupOrder.groupOrderNo }} </view>
+          </view>
+          <view class="row">
             <view class="small_tit">拼单模式：</view>
 <!--            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>-->
             <view class="group_order_data">官⽅推荐</view>

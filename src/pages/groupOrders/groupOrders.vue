@@ -176,6 +176,7 @@ const clearMyPlatGroupOrdersData = () => {
   border: 1px solid #CCCCCC;
   border-radius: 12px;
   box-sizing: content-box;
+  margin-bottom: 10px;
 }
 
 .group_cont_box{

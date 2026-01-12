@@ -7,7 +7,15 @@
 		}
 	},
 	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
-
+		{
+			"path": "pages/home/home",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
 		{
 			"path": "pages/inquiryHistory/inquiryHistory",
 			"style": {
@@ -122,7 +130,7 @@
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",
 			}
-		}
+		},
 	],
 	"tabBar": {
 		"color": "#7A7E83",
@@ -130,6 +138,12 @@
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [
+			{
+				"pagePath": "pages/home/home",
+				"iconPath": "static/menu/icon_inquiry_history.png",
+				"selectedIconPath": "static/menu/icon_inquiry_history_active.png",
+				"text": "首页"
+			},
 			{
 				"pagePath": "pages/inquiryHistory/inquiryHistory",
 				"iconPath": "static/menu/icon_inquiry_history.png",
@@ -148,12 +162,7 @@
 				"selectedIconPath": "static/menu/icon_group_order_active.png",
 				"text": "拼单"
 			},
-			{
-				"pagePath": "pages/calculator/calculator",
-				"iconPath": "static/menu/icon_calc.png",
-				"selectedIconPath": "static/menu/icon_calc_active.png",
-				"text": "计算器"
-			},
+
 			{
 				"pagePath": "pages/user/user",
 				"iconPath": "static/menu/icon_user.png",

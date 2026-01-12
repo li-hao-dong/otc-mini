@@ -13,6 +13,10 @@
 <!--            <view class="group_order_data">官⽅推荐</view>-->
 <!--          </view>-->
           <view class="row">
+            <view class="small_tit">订单编号：</view>
+            <view class="group_order_data">{{ groupOrder.groupOrderNo }} </view>
+          </view>
+          <view class="row">
             <view class="small_tit">名义本金：</view>
             <view class="group_order_data">{{ groupOrder.totalNominalAmount }} </view>
           </view>

@@ -220,6 +220,7 @@ const signOut = () => {
   align-items: center;
   gap: 15px;
   color: white;
+  box-sizing: border-box;
 }
 
 #setName{

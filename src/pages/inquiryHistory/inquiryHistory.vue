@@ -87,6 +87,8 @@
 <!--      <view class="hint_sign">您还未登录，请先登录！</view>-->
 <!--      <button class="to_sign" @click="uni.switchTab({url: '/pages/user/user'})">去登录</button>-->
     </view>
+
+    <fab />
   </view>
 </template>
 
@@ -100,6 +102,7 @@ import type {InquiryQuoteReq, InquiryResp, QuoteResult} from "@/interfaces/inqui
 import {onLoad, onShow} from "@dcloudio/uni-app";
 import {failToast} from "@/utils/toast/toast";
 import {calcClassName} from "@/utils";
+import Fab from "@/components/fab.vue";
 
 const store = useStore();
 const history = ref<InquiryHistoryResp[]>([]);

@@ -145,6 +145,12 @@ const selectedTerms = ref<string[]>([]);
 const sources = ref<Source[]>();
 const selectedSources = ref<string[]>([]);
 
+onLoad(option => {
+  if(option.name){
+    underlying.value = option.name;
+  }
+})
+
 onShow(() => {
   getOptions();
 })

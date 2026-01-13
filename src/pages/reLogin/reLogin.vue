@@ -100,7 +100,7 @@ const userLoggedIn = () => {
         // uni.setStorageSync('userInfo', res.data.userInfo)
         useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type, token_valid_until: new Date().getTime() + (60 * 60 * 24 * 1000)});
 
-        uni.reLaunch({ url: '/pages/inquiryHistory/inquiryHistory' })
+        uni.reLaunch({ url: '/pages/home/home' })
       } else {
         uni.showToast({ title: res.message || '登录失败', icon: 'none' })
       }

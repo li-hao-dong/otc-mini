@@ -1,6 +1,6 @@
 <template>
     <view>
-      <view class="container" v-if="groupOrderDatas.length > 0">
+      <view class="container_box" v-if="groupOrderDatas.length > 0">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <view :class="`${groupOrder.creatorName == '我' ? 'Leader':'Member'}`">{{groupOrder.creatorName == '我' ? 'Leader':'Member'}}</view>
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
@@ -81,7 +81,7 @@ const toDetail = (groupOrder: Group) => {
 </script>
 
 <style scoped>
-.container{
+.container_box{
   padding-top: 10px;
   box-sizing: border-box;
   display: flex;

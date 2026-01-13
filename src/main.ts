@@ -7,7 +7,6 @@ import uTr from '@dcloudio/uni-ui/lib/uni-tr/uni-tr.vue'
 import uTh from '@dcloudio/uni-ui/lib/uni-th/uni-th.vue'
 import uTd from '@dcloudio/uni-ui/lib/uni-td/uni-td.vue'
 import uDataSelect from "@dcloudio/uni-ui/lib/uni-data-select/uni-data-select.vue";
-
 import { createPinia } from 'pinia'
 import App from "./App.vue";
 export function createApp() {

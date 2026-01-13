@@ -1,13 +1,13 @@
-export interface IndustryResp {
+export interface ConceptResp {
     count: number;
-    data: industryStruct[];
+    data: conceptStruct[];
     message: string;
     status: string;
     updated_at: string;
     [property: string]: any;
 }
 
-export interface industryStruct {
+export interface conceptStruct {
     "上涨家数": number;
     "下跌家数": number;
     "总市值": number;

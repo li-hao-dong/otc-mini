@@ -1,14 +1,22 @@
 <template>
   <view class="container">
+
+    <swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
+            :duration="duration">
+      <swiper-item v-for="(color,key) in background" :key="key">
+        <view class="swiper-item" :style="{background: color, height: '100%'}">{{ color }}</view>
+      </swiper-item>
+    </swiper>
+
     <view class="part_box market_indices">
-      <view class="title">市场指数</view>
-      <view class="row">
-        <view class="indice" v-for="(marketIndice, key) in marketIndices" :key="key">
+<!--      <view class="title">市场指数</view>-->
+      <view class="row" style="padding-top: 15px">
+        <view :class="`indice ${Number(marketIndice.change.split('%')[0])>0?'indice_red':'indice_green'}`" v-for="(marketIndice, key) in marketIndices" :key="key">
           <view class="indice_title">{{marketIndice.name}}</view>
-          <view class="indice_value red">{{marketIndice.value}}</view>
+          <view :class="`indice_value ${Number(marketIndice.change.split('%')[0])>0?'red':'green'}`">{{marketIndice.price}}</view>
           <view class="row">
-            <view class="stext red">{{marketIndice.change}}</view>
-            <view class="stext red">{{marketIndice.changeValue}}</view>
+            <view :class="`stext ${Number(marketIndice.change.split('%')[0])>0?'red':'green'}`">{{marketIndice.change}}</view>
+<!--            <view class="stext red">{{marketIndice.change_amount}}</view>-->
           </view>
         </view>
       </view>
@@ -17,29 +25,34 @@
     <view class="part_box hot_sectors">
       <view class="title">热门板块</view>
       <view>
-        <view :class="`bk_menu ${activeBkType==menu.code?'bk_menu_active':''}`" v-for="(menu, key) in bkTypes" :key="key" @click="activeBkType = menu.code">{{menu.name}}</view>
+        <view :class="`bk_menu ${activeBkType==menu.code?'bk_menu_active':''}`" v-for="(menu, key) in bkTypes" :key="key" @click="changeHotSelector(menu.code)">{{menu.name}}</view>
       </view>
       <view>
         <view class="hot_sectors_th">
           <view>排名</view>
           <view>板块名称</view>
           <view>涨幅</view>
-          <view>热度</view>
+          <view>换手率</view>
         </view>
-        <view class="hot_sectors_td" v-for="n in 5" :key="n">
-          <view :class="`regular ordinal ${calcOrdinalBg(n)}`">{{n}}</view>
-          <view>
-            <view>{{n}}名字</view>
-            <view class="stext">code{{n}}</view>
+        <view v-if="hotSectors && hotSectors.length > 0">
+          <view class="hot_sectors_td" v-for="(item,n) in hotSectors" :key="n">
+            <view :class="`regular ordinal ${calcOrdinalBg(item.排名)}`">{{item.排名}}</view>
+            <view>
+              <view>{{item.板块名称}}</view>
+              <view class="stext">{{item.板块代码}}</view>
+            </view>
+            <view :class="`${item.涨跌幅.toFixed(2) > 0 ? 'red':'green'}`">{{item.涨跌幅 >0 ? '+':''}}{{ item.涨跌幅.toFixed(2) }}%</view>
+            <view>{{item.换手率}}%</view>
           </view>
-          <view class="red green">{{ Math.random().toFixed(2) }}%</view>
-          <view>热度xxx</view>
+        </view>
+        <view v-else class="noData">
+          暂无数据
         </view>
       </view>
     </view>
 
     <view class="part_box hot_target">
-      <view class="title">热门标的</view>
+      <view class="title">官方推荐的标的</view>
       <view>
         <view :class="`bk_menu ${activeBdReferral==menu.code?'bk_menu_active':''}`" v-for="(menu, key) in bdReferral" :key="key" @click="activeBdReferral = menu.code">{{menu.name}}</view>
       </view>
@@ -50,46 +63,83 @@
           <view>涨幅</view>
           <view>5日涨幅</view>
         </view>
-        <view class="hot_target_td" v-for="n in 5" :key="n">
-          <view>
-            <view>{{n}}名字</view>
-            <view class="stext">code{{n}}</view>
+        <view v-if="referralBd && referralBd.length > 0">
+          <view class="hot_target_td" v-for="(item,n) in referralBd" :key="n" @click="uni.navigateTo({url: `/pages/inquiry/inquiry?name=${item.name}`})">
+            <view>
+              <view>{{ item.name}}</view>
+              <view class="stext">{{ item.code }}</view>
+            </view>
+            <view :class="` ordinal ${calcOrdinalBg(item.latest_price)}`">￥{{item.latest_price}}</view>
+            <view :class="`${item.pct_change.toFixed(2) > 0 ? 'red':'green'}`">{{item.pct_change >0 ? '+':''}}{{ item.pct_change.toFixed(2) }}%</view>
+            <view>{{ item.pct_change_5d.toFixed(2) }}%</view>
           </view>
-          <view :class="`regular ordinal ${calcOrdinalBg(n)}`">{{n}}</view>
-          <view class="red green">{{ Math.random().toFixed(2) }}%</view>
-          <view>热度xxx</view>
+        </view>
+        <view v-else class="noData">
+          暂无数据
         </view>
       </view>
     </view>
 
     <view class="part_box">
       <view class="title">公司介绍</view>
-      <view>
+      <view style="color: #807d7e;">
         本平台由深圳市芯晟微提供技术支持，专注于场外个股期权撮合与服务，联合合作机构为用户提供标准化产品结构、透明费用和全流程信息披露。您的个人信息与订单数据采用加密传输和权限控制，仅用于履行交易与合规风控义务。
       </view>
     </view>
+
+    <fab />
   </view>
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
-
-const marketIndices = [
-  { name: '上证指数', code: '000001.SH', value: '3,456.78', change: '+12.34', changeValue: '+0.36%' },
-  { name: '深证成指', code: '399001.SZ', value: '14,567.89', change: '-45.67', changeValue: '-0.31%' },
-  { name: '创业板指', code: '399006.SZ', value: '3,123.45', change: '+23.45', changeValue: '+0.76%' },
-];
-const bkTypes = [
+import {ref, watchEffect} from "vue";
+import {getConcept, getIndices, getIndustry, getRecommendations} from "@/api";
+import {onShow} from "@dcloudio/uni-app";
+import type {IndustryResp, industryStruct} from "@/interfaces/industry";
+import type {ConceptResp, conceptStruct} from "@/interfaces/concept";
+import type {RecommendationItemResp} from "@/interfaces/recommendation";
+import type {MarketIndexResponse} from "@/interfaces/indices";
+import Fab from "@/components/fab.vue";
+const marketIndices = ref<MarketIndexResponse[]>([]);
+const bkTypes = ref<{ name: string, code: number }[]>([
   { name: '概念板块', code: 1},
   { name: '行业板块', code: 2}
-];
-const activeBkType = ref<number>(1);
-
-const bdReferral = ref<string>([
-  {name: '推荐', code: 1},
-  {name: '保本', code: 2},
 ]);
+const activeBkType = ref<number>(1);
+const hotSectors = ref<industryStruct[] | conceptStruct[]>([])
+
+// const bdReferral = ref<{ name: string, code: number }[]>([
+//   {name: '推荐', code: 1},
+//   {name: '保本', code: 2},
+// ]);
 const activeBdReferral = ref<number>(1);
+const referralBd = ref<RecommendationItemResp[]>();
+
+const background = ref(['#f76260', '#09bb07', '#007aff'])
+const indicatorDots = ref(true)
+const autoplay = ref(true)
+const interval = ref(2000)
+const duration = ref(1500)
+
+onShow(() => {
+  activeBkType.value = 1;
+  getIndicess();
+  getIndustries();
+  getRecommendationss();
+  // getConcepts();
+})
+const change = (e) => {
+  current.value = e.detail.current;
+}
+
+function changeHotSelector(code: number){
+  activeBkType.value = code;
+  if(code == 1){
+    getIndustries()
+  }else {
+    getConcepts()
+  }
+}
 
 function calcOrdinalBg(n){
   if(n === 1){
@@ -102,13 +152,72 @@ function calcOrdinalBg(n){
     return ''
   }
 }
+
+const getIndustries = () => {
+  uni.showLoading({title: "加载中…"})
+  getIndustry().then(res => {
+    console.log("res", res)
+    hotSectors.value = res
+    uni.hideLoading()
+  }).catch(err => {
+    console.log("getIndustries err.", err)
+    uni.hideLoading()
+  })
+}
+
+const getConcepts = () => {
+  uni.showLoading({title: "加载中…"})
+  getConcept().then(res => {
+    hotSectors.value = res
+    uni.hideLoading()
+  }).catch(err => {
+    console.log("getConcepts err.", err)
+    uni.hideLoading()
+  })
+}
+
+const getRecommendationss = () => {
+  getRecommendations().then(res => {
+    console.log("res111", res)
+    referralBd.value = res;
+  }).catch(err => {
+    console.log("getRecommendationss err.", err)
+  })
+}
+
+const getIndicess = () => {
+  getIndices().then(res => {
+    marketIndices.value = res?.major_indices.slice(0, 3);
+  }).catch(err => {
+    console.log("getIndicess err.", err)
+  })
+}
+
 </script>
 
 <style lang="scss" scoped>
 .container{
+  .swiper{
+
+    .swiper-item{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFFFFF;
+    }
+  }
+
   .part_box{
-    width: 95%;
+    width: 90%;
     margin: auto;
+
+    .noData{
+      width: 100%;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
     .title{
       font-size: 18px;
       font-weight: bold;
@@ -138,11 +247,17 @@ function calcOrdinalBg(n){
       justify-content: space-between;
 
       /* 大盘指数 */
+      .indice_red{
+        background: linear-gradient(180deg, #fdebec, #f5f5f5);
+      }
+
+      .indice_green{
+        background: linear-gradient(180deg, #ecfdeb, #f5f5f5);
+      }
       .indice{
         display: flex;
         flex-direction: column;
         align-items: center;
-        background: linear-gradient(180deg, #fdebec, #f5f5f5);
         padding: 10px 0;
         width: calc(100% / 3 - 10px);
         border-radius: 10px;
@@ -170,6 +285,10 @@ function calcOrdinalBg(n){
         .red {
           color: var(--color-primary-bg);
         }
+
+        .green{
+          color: #1fab63;
+        }
       }
     }
 
@@ -195,7 +314,8 @@ function calcOrdinalBg(n){
       display: inline-grid;
       grid-template-columns: 1fr 3fr 2fr 2fr;
       align-items: center;
-      padding: 8px 0;
+      box-sizing: border-box;
+      padding: 4px 0;
 
       & view:nth-child(1),
       & view:nth-child(2){
@@ -264,7 +384,7 @@ function calcOrdinalBg(n){
       display: inline-grid;
       grid-template-columns: 3fr 2fr 2fr 2fr;
       align-items: center;
-      padding: 8px 0;
+      padding: 4px 0;
 
       & view:nth-child(1),
       & view:nth-child(2){
@@ -310,7 +430,6 @@ function calcOrdinalBg(n){
         color: #1fab63;
       }
     }
-
   }
 }
 </style>

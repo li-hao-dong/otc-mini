@@ -23,6 +23,10 @@ import type {GroupOrderDetailResp} from "@/interfaces/groupOrders/groupOrderDeta
 import type {AddGroupOrder} from "@/interfaces/groupOrders/addGroupOrder";
 import type {MyGroupOrderReq, MyGroupOrderResp} from "@/interfaces/groupOrders/myGroupOrder";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
+import type {IndustryResp, industryStruct} from "@/interfaces/industry";
+import type {ConceptResp, conceptStruct} from "@/interfaces/concept";
+import type {RecommendationItemResp} from "@/interfaces/recommendation";
+import type {IndicesResp} from "@/interfaces/indices";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -34,6 +38,7 @@ export const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
 
 // #ifdef H5
 export const BASE_URL: string = "/apiAgent"
+export const BASE_URL_BOARD: string = "/boardApiAgent"
 // export const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
 // #endif
 
@@ -537,6 +542,83 @@ export const getUserGroupOrderSuccessOrders = (groupOrderNo:string):Promise<User
                 resolve(res.data as UserGroupOrderDetailResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch getUserGroupOrderSuccessOrders info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取市场指数汇总
+ * */
+export const getIndices = ():Promise<IndicesResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL}/market/indices`)
+            console.log("getIndices res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as IndicesResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getIndices info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取行业板块指数排行榜
+ * */
+export const getIndustry = ():Promise<industryStruct> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL_BOARD}/industry?limit=${5}`)
+            console.log("getIndustry res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as industryStruct)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getIndustry info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取概念板块指数排行榜
+ * */
+export const getConcept = ():Promise<conceptStruct> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL_BOARD}/concept?limit=${5}`)
+            console.log("getConcept res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as conceptStruct)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getConcept info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+
+/**
+ * 获取推荐股票
+ * */
+export const getRecommendations = ():Promise<RecommendationItemResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL_BOARD}/recommendations?limit=${10}`)
+            console.log("getConcept res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as RecommendationItemResp)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getConcept info'));
             }
         } catch (error) {
             reject(error);

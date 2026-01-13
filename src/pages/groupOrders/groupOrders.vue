@@ -20,6 +20,8 @@
         <myGroupOrders  :groupOrderDatas="myGroupOrderDatas" :payloadData="myGroupOrderPayloadData" :groupResp="myGroupOrderResp" @getGroupOrders="getMyGroupOrdersData"/>
 <!--      <component :is="activeComponent" :key="currentKey" />-->
     </view>
+
+    <fab />
   </view>
 </template>
 
@@ -31,6 +33,7 @@ import {getGroupOrders, getMyGroupOrders} from "@/api";
 import type {MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
 import type {GetGroupOrdersReq, Group} from "@/interfaces/groupOrders/getGroupOrders";
 import {onShow} from "@dcloudio/uni-app";
+import Fab from "@/components/fab.vue";
 
 const activeTab = ref<number>(0);
 const subTabs = ref<Array<string>>(['拼单市场', '我的拼单']);

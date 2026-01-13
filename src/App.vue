@@ -51,7 +51,7 @@ page{
   min-height: 100dvh;
   background-color: var(--color-secondary-bg);
   font-size: var(--size-text);
-  padding-bottom: 20px;
+  padding-bottom: 80px;
 }
 
 .rise_color,

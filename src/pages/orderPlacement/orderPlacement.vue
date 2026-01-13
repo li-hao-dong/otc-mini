@@ -27,7 +27,7 @@
                 </view>
                 <view class="row rowChange">
                   <view class="para"><text class="labelGray">产品结构</text></view>
-                  <view class="para"><text class="">{{ orderPayload?.priceChange }}</text></view>
+                  <view class="para"><text class="">{{ orderPayload?.structure }}</text></view>
                 </view>
                 <view class="row rowChange">
                   <view class="para"><text class="labelGray">期限</text></view>

@@ -94,7 +94,7 @@
 <script setup lang="ts">
 import {ref, watchEffect} from "vue";
 import {getConcept, getIndices, getIndustry, getRecommendations} from "@/api";
-import {onShow} from "@dcloudio/uni-app";
+import {onHide, onShow} from "@dcloudio/uni-app";
 import type {IndustryResp, industryStruct} from "@/interfaces/industry";
 import type {ConceptResp, conceptStruct} from "@/interfaces/concept";
 import type {RecommendationItemResp} from "@/interfaces/recommendation";
@@ -120,6 +120,7 @@ const indicatorDots = ref(true)
 const autoplay = ref(true)
 const interval = ref(2000)
 const duration = ref(1500)
+const timer = ref();
 
 onShow(() => {
   activeBkType.value = 1;
@@ -127,7 +128,22 @@ onShow(() => {
   getIndustries();
   getRecommendationss();
   // getConcepts();
+  timer.value = setInterval(() => {
+    getIndicess();
+    if(activeBkType.value == 1){
+      getIndustries()
+    }else {
+      getConcepts()
+    }
+    getRecommendationss();
+  }, 60000 * 3)
 })
+
+onHide(() => {
+  clearInterval(timer.value)
+  timer.value = null;
+})
+
 const change = (e) => {
   current.value = e.detail.current;
 }

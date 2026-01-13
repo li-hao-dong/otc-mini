@@ -15,7 +15,7 @@
                 </view>
                 <view class="row assetRowCode">
                   <text class="assetCode">{{ orderPayload?.assetCode }}</text> ·
-                  <text class="assetCode">{{ orderPayload?.structureName }}{{orderPayload?.optionType}} {{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text>
+                  <text class="assetCode">{{ orderPayload?.structureName }}{{calcOptionType(orderPayload?.optionType)}} {{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text>
                 </view>
                 <view class="row rowChange">
                   <view class="para"><text class="labelGray">标的名称：</text></view>
@@ -469,8 +469,8 @@ const createGroupOrders = () => {
 }
 
 const calcOptionType = (type: OptionType | undefined) => {
-  if(type === OptionType.Call.toUpperCase()) return '香草';
-  else if(type === OptionType.Put.toUpperCase()) return '雪球';
+  if(type?.toUpperCase() === OptionType.Call.toUpperCase()) return '香草';
+  else if(type?.toUpperCase() === OptionType.Put.toUpperCase()) return '雪球';
   else return type;
 }
 

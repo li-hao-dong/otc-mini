@@ -41,7 +41,7 @@ watchEffect(() => {
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
-    console.log("订单详情", res)
+    // console.log("订单详情", res)
     detail.value = res
     uni.downloadFile({
       url: `${BASE_URL}${res.paymentVoucherUrl}`,
@@ -49,7 +49,7 @@ const getDetail = (orderId: string) => {
         'Authorization': `Bearer ${useStore().user.token}`
       },
       success: res => {
-        console.log("下载支付凭证结果", res)
+        // console.log("下载支付凭证结果", res)
         if(res.statusCode === 200){
           voucher.value = res.tempFilePath;
         }
@@ -68,7 +68,7 @@ function downloadImage(url: string) {
       'Authorization': `Bearer ${useStore().user.token}`
     },
     success: res => {
-      console.log("下载支付凭证结果", res)
+      // console.log("下载支付凭证结果", res)
       if(res.statusCode === 200){
         voucher.value = res.tempFilePath;
       }
@@ -78,14 +78,14 @@ function downloadImage(url: string) {
 
 const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
-    console.log("银行收款信息", res)
+    // console.log("银行收款信息", res)
     bankReceiptInfoData.value = res;
   })
 }
 
 const getPaymentProofInfo = (orderId:string) => {
   paymentProofInfo(orderId).then(res => {
-    console.log("支付凭证信息", res)
+    // console.log("支付凭证信息", res)
     // voucher.value = res.paymentVoucherUrl;
     remitData.bankAccount = res.bankAccount;
     remitData.bankName = res.bankName;
@@ -102,7 +102,7 @@ const previewImage = () =>  {
     urls: [voucher.value],  // 预览列表（单图仅需自身）
     indicator: "number", // 显示数字指示器
     success: (res) => {
-      console.log("预览成功", res);
+      // console.log("预览成功", res);
     },
     fail: (err) => {
       console.error("预览失败", err);

@@ -92,7 +92,7 @@ const getPlatGroupOrders = async () => {
     payloadData.page += 1
   }
   getGroupOrders(payloadData).then(res => {
-    console.log('res111', res)
+    // console.log('res111', res)
     if(groupOrderDatas.value.length>0){
       groupOrderDatas.value = groupOrderDatas.value.concat(res.groups)
     }else{
@@ -120,7 +120,7 @@ const getMyGroupOrdersData = () => {
     myGroupOrderPayloadData.page += 1
   }
   getMyGroupOrders(myGroupOrderPayloadData).then(res => {
-    console.log('res222', res)
+    // console.log('res222', res)
     if(myGroupOrderDatas.value.length>0){
       myGroupOrderDatas.value = myGroupOrderDatas.value.concat(res.groups)
     }else{

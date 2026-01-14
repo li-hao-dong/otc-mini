@@ -18,7 +18,7 @@ const props = defineProps<{orderId?: string, detail: OrderDetail | UserGroupOrde
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
-    console.log("订单详情", res)
+    // console.log("订单详情", res)
     detail.value = res
   })
 }

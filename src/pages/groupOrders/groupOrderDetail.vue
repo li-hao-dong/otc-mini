@@ -147,7 +147,7 @@ const fee = ref<number>()
 
 onLoad((option) => {
   // 页面加载时的逻辑
-  console.log('Page loaded with options:', option);
+  // console.log('Page loaded with options:', option);
   initOrderDetail(option.groupOrderNo)
 });
 

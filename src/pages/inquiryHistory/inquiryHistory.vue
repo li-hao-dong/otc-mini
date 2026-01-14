@@ -124,7 +124,7 @@ const moreData = () => {
 
 const inquiryHistoryFun = async () => {
   inquiryHistory(pageNum.value, pageSize.value).then((res:InquiryHistoryResp) => {
-    console.log("res.inquiries", res.inquiries);
+    // console.log("res.inquiries", res.inquiries);
     moreDataStatus.value = res.pagination?.total_pages! >= pageNum.value;
 
     res.inquiries!.map((data:InquiryResp, key: number) => {

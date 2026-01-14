@@ -36,8 +36,8 @@
   onLoad((option)=>{
     // option.board_type
     // option.symbol
-    console.log("board_type", option?.board_type)
-    console.log("board_type", option?.symbol)
+    // console.log("board_type", option?.board_type)
+    // console.log("board_type", option?.symbol)
     if(option?.board_type && option?.symbol){
       getConstituentss(option?.board_type, option?.symbol)
     }

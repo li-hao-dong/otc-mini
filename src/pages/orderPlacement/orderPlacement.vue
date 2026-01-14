@@ -314,7 +314,7 @@ const getGroupOrderData = () => {
   }
 
   getGroupOrders(payload).then(res => {
-    console.log('getGroupOrders res', res);
+    // console.log('getGroupOrders res', res);
     if(res.groups && res.groups.length > 0){
       // 有拼单数据
       groupOrders.value = res.groups;
@@ -340,7 +340,7 @@ const placeOrder = () => {
         .then(res => {
             if (res.confirm) {
                 buyProduct(orderPayload.value?.inquiryId, orderPayload.value?.quote?.productCode, selectedPriceType.value, Number(quantity.value * 1000000), Number(limitPrice.value)).then(res => {
-                    console.log('buyProduct res', res);
+                    // console.log('buyProduct res', res);
                     if (res.status && res.status === 'success'){
                       uni.showToast({ title: '下单成功', icon: 'success' });
 
@@ -352,12 +352,12 @@ const placeOrder = () => {
                             tmplIds: messageIds, // 替换为你的模板ID
                             success(res) {
                               if (res[messageIds[0]] === 'accept'){
-                                console.log('订阅消息授权成功：', res);
+                                // console.log('订阅消息授权成功：', res);
                                 subscribeMessage(messageIds[0]).then(res => {
-                                  console.log('订阅消息接口调用结果：', res);
+                                  // console.log('订阅消息接口调用结果：', res);
                                 });
                               }else {
-                                console.log('订阅消息被拒绝：', res);
+                                // console.log('订阅消息被拒绝：', res);
                               }
                             },
                             fail(err) {

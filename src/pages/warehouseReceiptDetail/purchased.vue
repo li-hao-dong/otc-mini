@@ -18,7 +18,7 @@ const emits = defineEmits<{
 }>();
 
 onLoad((option) =>{
-  console.log("option", option)
+  // console.log("option", option)
   orderId.value = option?.id || "";
   // getDetail(option?.id)
   // getBankReceiptInfo(option?.id)
@@ -26,14 +26,14 @@ onLoad((option) =>{
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
-    console.log("订单详情", res)
+    // console.log("订单详情", res)
     detail.value = res
   })
 }
 
 const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
-    console.log("银行收款信息", res)
+    // console.log("银行收款信息", res)
     bankReceiptInfoData.value = res;
   })
 }
@@ -57,7 +57,7 @@ const exexercise = () => {
           remarks: undefined
         }
         exerciseHandler(orderId.value, payload).then(res => {
-          console.log("行权结果", res)
+          // console.log("行权结果", res)
           if (res.status !== "success") {
             uni.showToast({
               title: res.message || '行权申请提交失败',

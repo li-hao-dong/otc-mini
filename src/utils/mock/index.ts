@@ -10,7 +10,7 @@ export const postHandler = (req: any) => {
      * 发起询价
      * */
     inquiryQuote: Mock.mock("/inquiry/quote", 'POST', (inquiryQuoteReq:InquiryQuoteReq): response => {
-        console.log("inquiryQuoteReq", inquiryQuoteReq);
+        // console.log("inquiryQuoteReq", inquiryQuoteReq);
         const res: response = {
             code: 200,
             message: "success",
@@ -50,7 +50,7 @@ export const getHandler = (req: any) => {
      * 获取询价选项配置
      * */
     inquiryOptions: Mock.mock("/inquiry/options", 'GET', (inquiryQuoteReq:InquiryQuoteReq): response => {
-        console.log("inquiryQuoteReq", inquiryQuoteReq);
+        // console.log("inquiryQuoteReq", inquiryQuoteReq);
         const res: response = {
             code: 200,
             message: "success",
@@ -107,7 +107,7 @@ export const getHandler = (req: any) => {
      * 获取询价历史
      * */
     inquiryHistory: Mock.mock("/inquiry/history", 'GET', (options: any): response => {
-        console.log("options", options);
+        // console.log("options", options);
 
         // 解析 query 参数
         // const queryParams = Object.fromEntries(url.searchParams.entries()) as InquiryHistoryReq;
@@ -117,7 +117,7 @@ export const getHandler = (req: any) => {
             (url.searchParams as globalThis.URLSearchParams).entries()
         );
 
-        console.log("query参数:", queryParams);
+        // console.log("query参数:", queryParams);
 
         const res: response = {
             code: 200,

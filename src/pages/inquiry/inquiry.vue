@@ -170,14 +170,14 @@ const selectType = (code: OptionTypeCode) => {
 };
 
 const toggleStructure = (code: string) => {
-  console.log("toggleStructure code", code)
+  // console.log("toggleStructure code", code)
   const i = selectedStructures.value.indexOf(code);
   if (i >= 0) {
     selectedStructures.value.splice(i, 1);
   } else if (selectedStructures.value.length < 3) {
     selectedStructures.value.push(code);
   }
-  console.log("selectedStructures", selectedStructures.value)
+  // console.log("selectedStructures", selectedStructures.value)
 };
 
 const selectNominal = (n: number) => {
@@ -215,7 +215,7 @@ const getOptions = () => {
   // Placeholder for fetching options from an API if needed
   inquiryOptions().then((res: InquiryOptionsResp) => {
     // Process response if needed
-    console.log("res!!!!", res)
+    // console.log("res!!!!", res)
     optionTypes.value = <OptionType[]>res.optionTypes;
     selectedType.value = res.optionTypes![0].code;
     structures.value = <StructureDefinition[]>res.structures;

@@ -29,7 +29,7 @@ const emits = defineEmits<{
 }>()
 
 onLoad((option) =>{
-  console.log("option", option)
+  // console.log("option", option)
   orderId.value = option?.id;
   // getDetail(orderId.value)
   // getBankReceiptInfo(orderId.value)
@@ -43,14 +43,14 @@ onLoad((option) =>{
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
-    console.log("订单详情", res)
+    // console.log("订单详情", res)
     detail.value = res
   })
 }
 
 const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
-    console.log("银行收款信息", res)
+    // console.log("银行收款信息", res)
     bankReceiptInfoData.value = res;
   })
 }
@@ -61,7 +61,7 @@ const uploadPaymentVoucher = () => {
     sizeType: ['compressed'],
     sourceType: ['album', 'camera'],
     success: (res) => {
-      console.log('选择的图片:', res);
+      // console.log('选择的图片:', res);
       if(res.tempFiles[0].size > 1 * 1024 * 1024){
         uni.showToast({
           title: '图片大小不能超过1MB',
@@ -86,7 +86,7 @@ const uploadPaymentVoucher = () => {
 
     },
     fail: (err) => {
-      console.error('选择图片失败:', err);
+      // console.error('选择图片失败:', err);
       uni.showToast({
         title: '选择图片失败',
         icon: 'none'
@@ -164,7 +164,7 @@ const uploadImage = () => {
       bankUserName: remitData.bankUserName
     },
     success: (res) => {
-      console.log('uploadImage success, res is:', res)
+      // console.log('uploadImage success, res is:', res)
       uni.hideLoading();
       if(res.statusCode === 200){
         // voucherUrl.value = `${BASE_URL}${JSON.parse(res.data).data.paymentVoucherUrl}`;
@@ -180,7 +180,7 @@ const uploadImage = () => {
       }
     },
     fail: (err) => {
-      console.log('uploadImage fail', err);
+      // console.log('uploadImage fail', err);
       uni.hideLoading();
       uni.showModal({
         content: err.errMsg,
@@ -206,8 +206,8 @@ const bindDayDateChange = (e: any) => {
 
 
 watch(() => props.orderId, (newVal) => {
-  console.log("props.orderId@@@@", props.orderId)
-  console.log("props.orderId@@@@", newVal)
+  // console.log("props.orderId@@@@", props.orderId)
+  // console.log("props.orderId@@@@", newVal)
   if(newVal){
     // orderId.value = newVal;
     // getDetail(orderId.value)

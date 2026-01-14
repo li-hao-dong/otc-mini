@@ -101,13 +101,13 @@ const getInquiryResults = () => {
 
   const payload = uni.getStorageSync('InquiryQuoteReqPayload')
   if(Object.keys(payload).length === 0){
-    console.log("没有询价请求参数")
+    // console.log("没有询价请求参数")
     return;
   }
 
   loadingToast("询价中");
   inquiryQuote(payload).then((res: InquiryResp) =>{
-    console.log("inquiryQuote res1111,", res.data)
+    // console.log("inquiryQuote res1111,", res.data)
     inquiryId.value = res.data.inquiryId;
     assetName.value = res.data.underlying;
     assetCode.value = res.data.underlyingCode;
@@ -132,7 +132,7 @@ const getInquiryResults = () => {
   }).catch((err) => {
     // failToast("询价失败，请稍后重试");
     // uni.showToast({title: "未匹配到标的", duration: 2000, icon: "error"})
-    console.log("inquiryQuote error,", err)
+    // console.log("inquiryQuote error,", err)
     uni.showModal({
       title: '询价失败',
       content: err?.message,
@@ -149,7 +149,7 @@ const getInquiryResults = () => {
 };
 
 const formatInquiryStruct = (quoteResult:QuoteResult[]) =>　{
-  console.log("quoteResult", quoteResult)
+  // console.log("quoteResult", quoteResult)
   const filterData: any = {};
   quoteResult.map((item:QuoteResult) => {
     // console.log("item", item)
@@ -223,7 +223,7 @@ const placeAnOrder = (quote: any, term: string, result: any) => {
   // console.log("currentPrice:", currentPrice.value)
   // console.log("nominalAmount:", nominalAmount.value)
   // console.log("quote:", quote)
-  console.log("result:", result)
+  // console.log("result:", result)
   const payload = {
     inquiryId: inquiryId.value,
     assetName: assetName.value,

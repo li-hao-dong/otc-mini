@@ -26,7 +26,7 @@ onBackPress((options) => {
             // 退出应用或跳转到主页
             uni.reLaunch({ url: '/pages/index/index' }); // 返回主页并清理历史栈
           } else if (res.cancel) {
-            console.log('用户点击取消');
+            // console.log('用户点击取消');
           }
         }
       });

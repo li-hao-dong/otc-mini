@@ -50,7 +50,7 @@ export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): Promise<InquiryR
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.post(`${BASE_URL}/inquiry/quote`, inquiryQuoteReq)
-            console.log("InquiryResp res", res);
+            // console.log("InquiryResp res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as InquiryResp)
             } else {
@@ -75,7 +75,7 @@ export const userLogin = (code: string, nickname: string):Promise<loginResp> => 
                 wechat_login_js_code: code,
             }
             const res: response = <response>await  http.post(`${BASE_URL}/users/login`, params)
-            console.log("login res", res);
+            // console.log("login res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as loginResp)
             } else {
@@ -104,7 +104,7 @@ export const buyProduct = ( inquiryId: string, productCode: string, priceType: P
                 limitPrice: limitPrice
             };
             const res: response = <response>await  http.post(`${BASE_URL}/inquiry/INQ_20251201075147/order`, payload)
-            console.log("buyProduct res", res);
+            // console.log("buyProduct res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as orderPayloadResp)
             } else {
@@ -124,7 +124,7 @@ export const exerciseHandler = (orderId: string, payload: ExerciseReq):Promise<E
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.post(`${BASE_URL}/users/orders/${orderId}/exercise`, payload)
-            console.log("exerciseHandler res", res);
+            // console.log("exerciseHandler res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as ExerciseResp)
             } else {
@@ -147,7 +147,7 @@ export const subscribeMessage = (templateIds: string):Promise<subscribeMessageRe
                 template_id: templateIds
             }
             const res: response = <response>await http.post(`${BASE_URL}/user-wechat-subscriptions/user/subscribe`, payload)
-            console.log("subscribeMessage res", res);
+            // console.log("subscribeMessage res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as subscribeMessageResp)
             } else {
@@ -172,7 +172,7 @@ export const userRegister = (userName: string, password: string, telephone: stri
                 referrer_uuid: referrerUuid
             }
             const res: response = <response>await  http.post(`${BASE_URL}/users/register`, params)
-            console.log("userRegister res", res);
+            // console.log("userRegister res", res);
             if (res.data.id) {
                 resolve(res.data as any)
             } else {
@@ -197,7 +197,7 @@ export const userLoginH5 = (userName: string, password: string, wechatLoginJsCod
                 referrer_uuid: referrerUuid
             }
             const res: response = <response>await http.post(`${BASE_URL}/users/login`, params)
-            console.log("userLogin res", res);
+            // console.log("userLogin res", res);
             if (res.statusCode == 200) {
                 resolve(res.data as loginH5Resp)
             } else {

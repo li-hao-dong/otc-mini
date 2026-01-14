@@ -147,7 +147,7 @@ onHide(() => {
 
 const toPlateDetail = (item: industryStruct|conceptStruct) => {
   const boardType = bkTypes.value.find( (val)=> val.code==activeBkType.value)
-  console.log("boardType", boardType)
+  // console.log("boardType", boardType)
   uni.navigateTo({url: `/pages/plateComposition/plateComposition?board_type=${boardType.type}&symbol=${item.板块代码}`})
 }
 

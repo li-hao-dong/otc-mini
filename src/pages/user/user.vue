@@ -106,7 +106,7 @@ onShow(() =>{
 
 const updateUserData = () => {
   // Placeholder for updating user data
-  console.log("更新用户数据:", {idCard: idCard.value, address: address.value})
+  // console.log("更新用户数据:", {idCard: idCard.value, address: address.value})
   userDataStatus.value = false;
 }
 
@@ -141,8 +141,8 @@ const login = () => {
     return;
   }
 
-  console.log("ticket.value", ticket.value)
-  console.log("username.value", username.value)
+  // console.log("ticket.value", ticket.value)
+  // console.log("username.value", username.value)
 
   userLogin(ticket.value, username.value).then((res: loginResp) => {
     if(res.status === 'success'){
@@ -150,7 +150,7 @@ const login = () => {
       succToast("登录成功!")
       getUserInfo()
     }else {
-      console.log("res", res)
+      // console.log("res", res)
     }
   }).catch((err: Error) => {
     console.log("login err:", err)
@@ -162,7 +162,7 @@ const getUserProfile = () => {
   if (token.value) return
   if(uni.getUserProfile){
     uni.getUserProfile({desc: '用于完善会员资料'}).then((res) => {
-      console.log("res", res)
+      // console.log("res", res)
       uni.login({
         "provider": "weixin",
         "onlyAuthorize": true, // 微信登录仅请求授权认证
@@ -182,7 +182,7 @@ const getUserProfile = () => {
 }
 
 const onChooseAvatar = (e:any) => {
-  console.log("user avatar", e)
+  // console.log("user avatar", e)
   if(e.detail && e.detail.avatarUrl){
     avatarUrl.value = e.detail.avatarUrl;
     useStore().user.setAvatarUrl(e.detail.avatarUrl)

@@ -8,16 +8,16 @@ import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGro
 
 // const detail = ref<OrderDetail | null>(null);
 const props = defineProps<{detail: OrderDetail | UserGroupOrderDetailResp}>();
-console.log("props detail", props)
+// console.log("props detail", props)
 
 onLoad((option) =>{
-  console.log("option", option)
+  // console.log("option", option)
   // getDetail(option?.id)
 })
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
-    console.log("订单详情", res)
+    // console.log("订单详情", res)
     // detail.value = res
   })
 }

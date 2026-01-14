@@ -33,14 +33,14 @@ watch(() => props.orderId, (newVal) => {
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
-    console.log("订单详情", res)
+    // console.log("订单详情", res)
     detail.value = res
   })
 }
 
 const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
-    console.log("银行收款信息", res)
+    // console.log("银行收款信息", res)
     bankReceiptInfoData.value = res;
   })
 }

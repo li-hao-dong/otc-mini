@@ -10,7 +10,7 @@ const paymentVoucherImage = ref<string>('');
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 
 onLoad((option) =>{
-  console.log("option", option)
+  // console.log("option", option)
   // orderId 从 option 中获取 订单 ID
   // orderStatus 从 option 中获取 订单状态
   // getDetail(option?.orderId)
@@ -19,14 +19,14 @@ onLoad((option) =>{
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
-    console.log("订单详情", res)
+    // console.log("订单详情", res)
     detail.value = res
   })
 }
 
 const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
-    console.log("银行收款信息", res)
+    // console.log("银行收款信息", res)
     bankReceiptInfoData.value = res;
   })
 }
@@ -56,11 +56,11 @@ const uploadPaymentVoucher = () => {
       if (tempFilePaths && tempFilePaths.length > 0) {
         paymentVoucherImage.value = tempFilePaths[0];
         // TODO: 上传到服务器
-        console.log('选择的图片:', tempFilePaths[0]);
+        // console.log('选择的图片:', tempFilePaths[0]);
       }
     },
     fail: (err) => {
-      console.error('选择图片失败:', err);
+      // console.error('选择图片失败:', err);
       uni.showToast({
         title: '选择图片失败',
         icon: 'none'

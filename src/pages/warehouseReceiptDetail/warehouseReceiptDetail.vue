@@ -71,7 +71,7 @@ const initDetail = () => {
 // 获取订单详情
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
-    console.log("订单详情", res)
+    // console.log("订单详情", res)
     detail.value = res
   })
 }
@@ -79,7 +79,7 @@ const getDetail = (orderId: string) => {
 // 获取拼单详情
 const getGroupOrderDetail = (groupOrderNo: string) => {
   getUserGroupOrderSuccessOrders(groupOrderNo).then(res => {
-    console.log("拼单详情", res)
+    // console.log("拼单详情", res)
     detail.value = res
   })
 }

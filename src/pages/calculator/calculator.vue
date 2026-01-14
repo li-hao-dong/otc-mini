@@ -105,7 +105,7 @@ const getOptions = () => {
   // Placeholder for fetching options from an API if needed
   inquiryOptions().then((res: InquiryOptionsResp) => {
     // Process response if needed
-    console.log("res!!!!", res)
+    // console.log("res!!!!", res)
     structures.range = calcSameTypeStructure(<StructureDefinition[]>res.structures).map(v => {
       return {value: v.code, text: v.name}
     })
@@ -123,7 +123,7 @@ const calcSameTypeStructure = ( structures: StructureDefinition[]) => {
 }
 
 const change = (e) => {
-  console.log("选择了结构:", e);
+  // console.log("选择了结构:", e);
   calculator.structuresCode = e;
 }
 
@@ -141,7 +141,7 @@ const calculatorHandler = () => {
     structureCode: calculator.structuresCode
   } as calculatorReq;
   calculatorData(payload).then((res:EquityOptionCalculatorResult) => {
-    console.log("calculatorData res", res);
+    // console.log("calculatorData res", res);
     uni.showToast({
       title: '计算成功',
       duration: 2000

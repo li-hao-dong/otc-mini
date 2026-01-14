@@ -131,6 +131,16 @@
 				"navigationStyle": "custom",
 			}
 		},
+		{
+			/* 模块成分 */
+			"path": "pages/plateComposition/plateComposition",
+			"style": {
+				"navigationBarTitleText": "模块成分",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		},
 	],
 	"tabBar": {
 		"color": "#7A7E83",

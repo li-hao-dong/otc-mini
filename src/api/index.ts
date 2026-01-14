@@ -27,6 +27,7 @@ import type {IndustryResp, industryStruct} from "@/interfaces/industry";
 import type {ConceptResp, conceptStruct} from "@/interfaces/concept";
 import type {RecommendationItemResp} from "@/interfaces/recommendation";
 import type {IndicesResp} from "@/interfaces/indices";
+import type {constituents} from "@/interfaces/constituents";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -632,12 +633,31 @@ export const getRecommendations = ():Promise<RecommendationItemResp> => {
 export const getStockFee = (symbol: string):Promise<number> => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res: response = <response>await http.get(`${BASE_URL_BOARD}//stock/fee?symbol=${symbol}`)
+            const res: response = <response>await http.get(`${BASE_URL_BOARD}/stock/fee?symbol=${symbol}`)
             console.log("getStockFee res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.value as number)
             } else {
                 reject(new Error(res.message || 'Failed to fetch getStockFee info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 获取板块成分股列表
+ * */
+export const getConstituents = (board_type: string, symbol:string):Promise<constituents[]> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL_BOARD}/constituents?board_type=${board_type}&symbol=${symbol}`)
+            console.log("getConstituents res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as constituents[])
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getConstituents info'));
             }
         } catch (error) {
             reject(error);

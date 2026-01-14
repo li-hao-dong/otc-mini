@@ -36,7 +36,7 @@
           <view>换手率</view>
         </view>
         <view v-if="hotSectors && hotSectors.length > 0">
-          <view class="hot_sectors_td" v-for="(item,n) in hotSectors" :key="n">
+          <view class="hot_sectors_td" v-for="(item,n) in hotSectors" :key="n" @click="toPlateDetail(item)">
             <view :class="`regular ordinal ${calcOrdinalBg(item.排名)}`">{{item.排名}}</view>
             <view>
               <view>{{item.板块名称}}</view>
@@ -102,9 +102,9 @@ import type {RecommendationItemResp} from "@/interfaces/recommendation";
 import type {MarketIndexResponse} from "@/interfaces/indices";
 import Fab from "@/components/fab.vue";
 const marketIndices = ref<MarketIndexResponse[]>([]);
-const bkTypes = ref<{ name: string, code: number }[]>([
-  { name: '概念板块', code: 1},
-  { name: '行业板块', code: 2}
+const bkTypes = ref<{ name: string, code: number, type: string }[]>([
+  { name: '概念板块', code: 1, type: "concept"},
+  { name: '行业板块', code: 2, type: "industry"}
 ]);
 const activeBkType = ref<number>(1);
 const hotSectors = ref<industryStruct[] | conceptStruct[]>([])
@@ -144,6 +144,12 @@ onHide(() => {
   clearInterval(timer.value)
   timer.value = null;
 })
+
+const toPlateDetail = (item: industryStruct|conceptStruct) => {
+  const boardType = bkTypes.value.find( (val)=> val.code==activeBkType.value)
+  console.log("boardType", boardType)
+  uni.navigateTo({url: `/pages/plateComposition/plateComposition?board_type=${boardType.type}&symbol=${item.板块代码}`})
+}
 
 const change = (e) => {
   current.value = e.detail.current;

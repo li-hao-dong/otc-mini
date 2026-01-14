@@ -26,7 +26,7 @@
       <view class="hint_cont">
         <view>拼单费⽤</view>
 <!--        <view>◦ 拼单模式：官⽅推荐标的拼单</view>-->
-        <view>◦ 拼单服务费：订单盈利部分的 15%，仅在盈利时收取</view>
+        <view>◦ 拼单服务费：订单盈利部分的 {{fee}}%，仅在盈利时收取</view>
         <view>◦ 拼单服务费不会出现在当前⽀付⾦额中，将在订单结算（已结算状态）时，从实际收益中⾃动扣除。</view>
 <!--        <view style="color: var(&#45;&#45;color-primary-bg)">本次拼单未成团，相关订单将按平台规则处理。本次未产⽣盈利结算，因此不收取拼单服务费。</view>-->
       </view>
@@ -53,7 +53,7 @@
 <!--        <view class="btn">bottons here</view>-->
 <!--      </view>-->
 <!--      <view class="hint_cont">-->
-<!--          <view>本次应付⾦额为您的期初期权费，不包含拼单服务费；如本订单最终产⽣盈利，将按照 15% ⽐例，从您的盈利中⾃动扣除拼单服务费。</view>-->
+<!--          <view>本次应付⾦额为您的期初期权费，不包含拼单服务费；如本订单最终产⽣盈利，将按照 {{fee}}% ⽐例，从您的盈利中⾃动扣除拼单服务费。</view>-->
 <!--      </view>-->
     </view>
 
@@ -111,7 +111,7 @@
           <view>• 拼单⼈数达到⽬标且全部成员⽀付成功后，系统将统⼀向通道侧申请购买该期权产品</view>
           <view>• 如在截⽌时间前未凑⻬⼈数或有⼈未完成⽀付，平台将按规则取消相关订单</view>
           <view>• 实际购买、⾏权和结算以各⾃订单的《交易确认书》为准</view>
-          <view v-if="orderDetail.isOfficialRecommend">• 本拼单为官⽅推荐标的拼单：如订单最终盈利，将按盈利部分的 15% 收取拼单服务费；如订单亏损，则不收取该项费⽤，您的亏损不会因为拼单⽽扩⼤。</view>
+          <view v-if="orderDetail.isOfficialRecommend">• 本拼单为官⽅推荐标的拼单：如订单最终盈利，将按盈利部分的 {{fee}}% 收取拼单服务费；如订单亏损，则不收取该项费⽤，您的亏损不会因为拼单⽽扩⼤。</view>
         </view>
       </view>
     </view>
@@ -136,13 +136,14 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {onLoad} from "@dcloudio/uni-app";
-import {addGroupOrder, getGroupOrderDetail} from "@/api";
+import {addGroupOrder, getGroupOrderDetail, getStockFee} from "@/api";
 import type {GroupOrderDetailResp, Member} from "@/interfaces/groupOrders/groupOrderDetail";
 import {formatLocalTime, truncToTwo} from "@/utils";
 import NavigationTitle from "@/components/navigationTitle.vue";
 
 const orderDetail = ref<GroupOrderDetailResp>({});
 const myOrderDetail = ref<Member>({});
+const fee = ref<number>()
 
 onLoad((option) => {
   // 页面加载时的逻辑
@@ -223,6 +224,7 @@ const initOrderDetail = (groupOrderNo) => {
     res.members = res.members.reverse();
     orderDetail.value = res;
     myOrderDetail.value = res.members.find(member => member.isMe) || {};
+    getStockFees(orderDetail.value.underlyingAssetCode)
   }).catch(err => {
     console.log('Error fetching order detail:', err);
   })
@@ -312,6 +314,14 @@ const addHintCont = () => {
   })
 }
 
+const getStockFees = (assetCode: string) => {
+  getStockFee(assetCode).then(res => {
+    console.log("getStockFee res", res)
+    fee.value= res;
+  }).catch(err => {
+    console.log("getStockFee err", err)
+  })
+}
 </script>
 
 <style lang="scss" scoped>

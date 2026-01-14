@@ -130,7 +130,7 @@
                 </view>
                 <view>
                   <view>· 本产品支持：官方推荐标的拼单</view>
-                  <view>· 拼单服务费：订单盈利部分的 15%，仅在订单最终盈利时收取</view>
+                  <view>· 拼单服务费：订单盈利部分的 {{fee}}%，仅在订单最终盈利时收取</view>
                   <view>· 服务费将在「已结算」时从实际收益中自动扣除</view>
                 </view>
               </view>
@@ -208,7 +208,7 @@
               </view>
               <view class="popup_card_row">
                 <view class="popup_card_row_title">拼单服务费</view>
-                <view class="popup_card_row_cont">盈利部分的 15%（仅在盈利时收取）</view>
+                <view class="popup_card_row_cont">盈利部分的 {{ fee }}%（仅在盈利时收取）</view>
               </view>
             </view>
 
@@ -225,7 +225,7 @@
                 <view class="pd_hint">• 请在拼单创建后 24 小时内完成邀请并支付</view>
                 <view class="pd_hint">• 所有成员支付成功后，系统才会统一向通道侧申请购买</view>
                 <view class="pd_hint">• 拼单未成团或超时，将按平台规则取消订单</view>
-                <view class="pd_hint">• 如订单最终盈利，平台将按约定从盈利部分中收取 15% 拼单服务费； 如订单亏损，则不收取该项费用。</view>
+                <view class="pd_hint">• 如订单最终盈利，平台将按约定从盈利部分中收取 {{ fee }}% 拼单服务费； 如订单亏损，则不收取该项费用。</view>
                 <view class="pd_hint">示例：若最终盈利 10,000 元，则拼单服务费为 1,500 元， 剩余收益 8,500 元。</view>
               </view>
             </view>
@@ -267,7 +267,7 @@
 </template>
 
 <script setup lang="ts">
-import {buyProduct, createGroupOrder, getGroupOrders, subscribeMessage} from '@/api';
+import {buyProduct, createGroupOrder, getGroupOrders, getStockFee, subscribeMessage} from '@/api';
 import { PriceType, type orderPayloadReq } from '@/interfaces/inquiry/orderPayload';
 import { onLoad } from '@dcloudio/uni-app';
 import { ref } from 'vue';
@@ -289,6 +289,7 @@ const limitPrice = ref<Number>(0);
 const popup = ref<any>(null);
 const choosePeople = ref<Number>(1);
 const groupOrders = ref<Array<Group>>([]);
+const fee = ref<number>()
 
 onLoad(() => { initData(); });
 
@@ -298,6 +299,7 @@ const selectPriceType = (t: PriceType.MARKET | PriceType.LIMIT) => { selectedPri
 const initData = () => {
     orderPayload.value = uni.getStorageSync('OrderPayload');
     getGroupOrderData()
+    getStockFees()
     if(!orderPayload.value) uni.switchTab ({ url: '/pages/inquiry/inquiry' });
 };
 
@@ -472,6 +474,15 @@ const calcOptionType = (type: OptionType | undefined) => {
   if(type?.toUpperCase() === OptionType.Call.toUpperCase()) return '香草';
   else if(type?.toUpperCase() === OptionType.Put.toUpperCase()) return '雪球';
   else return type;
+}
+
+const getStockFees = () => {
+  getStockFee(orderPayload.value.assetCode).then(res => {
+    console.log("getStockFee res", res)
+    fee.value= res;
+  }).catch(err => {
+    console.log("getStockFee err", err)
+  })
 }
 
 </script>

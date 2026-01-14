@@ -626,6 +626,24 @@ export const getRecommendations = ():Promise<RecommendationItemResp> => {
     })
 }
 
+/**
+ * 获取拼单手续费率
+ * */
+export const getStockFee = (symbol: string):Promise<number> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.get(`${BASE_URL_BOARD}//stock/fee?symbol=${symbol}`)
+            console.log("getStockFee res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.value as number)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch getStockFee info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
 
 // TODO 废弃
 export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {

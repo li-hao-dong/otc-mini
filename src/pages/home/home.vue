@@ -3,8 +3,9 @@
 
     <swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
             :duration="duration">
-      <swiper-item v-for="(color,key) in background" :key="key">
-        <view class="swiper-item" :style="{background: color, height: '100%'}">{{ color }}</view>
+      <swiper-item v-for="(img,key) in background" :key="key">
+<!--        <view class="swiper-item" :style="{background: color, height: '100%'}">{{ color }}</view>-->
+        <img :src="img" alt="img" srcset="" width="100%">
       </swiper-item>
     </swiper>
 
@@ -52,7 +53,7 @@
     </view>
 
     <view class="part_box hot_target">
-      <view class="title">官方推荐的标的</view>
+      <view class="title">官推标的</view>
       <view>
         <view :class="`bk_menu ${activeBdReferral==menu.code?'bk_menu_active':''}`" v-for="(menu, key) in bdReferral" :key="key" @click="activeBdReferral = menu.code">{{menu.name}}</view>
       </view>
@@ -115,7 +116,7 @@ const hotSectors = ref<industryStruct[] | conceptStruct[]>([])
 const activeBdReferral = ref<number>(1);
 const referralBd = ref<RecommendationItemResp[]>();
 
-const background = ref(['#f76260', '#09bb07', '#007aff'])
+const background = ref(["/static/post.png"])
 const indicatorDots = ref(true)
 const autoplay = ref(true)
 const interval = ref(2000)
@@ -125,15 +126,15 @@ const timer = ref();
 onShow(() => {
   activeBkType.value = 1;
   getIndicess();
-  getIndustries();
+  getConcepts()
   getRecommendationss();
   // getConcepts();
   timer.value = setInterval(() => {
     getIndicess();
     if(activeBkType.value == 1){
-      getIndustries()
-    }else {
       getConcepts()
+    }else {
+      getIndustries()
     }
     getRecommendationss();
   }, 60000 * 3)
@@ -151,9 +152,9 @@ const change = (e) => {
 function changeHotSelector(code: number){
   activeBkType.value = code;
   if(code == 1){
-    getIndustries()
-  }else {
     getConcepts()
+  }else {
+    getIndustries()
   }
 }
 

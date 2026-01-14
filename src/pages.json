@@ -140,8 +140,8 @@
 		"list": [
 			{
 				"pagePath": "pages/home/home",
-				"iconPath": "static/menu/icon_inquiry_history.png",
-				"selectedIconPath": "static/menu/icon_inquiry_history_active.png",
+				"iconPath": "static/menu/icon_home.png",
+				"selectedIconPath": "static/menu/icon_home_active.png",
 				"text": "首页"
 			},
 			{

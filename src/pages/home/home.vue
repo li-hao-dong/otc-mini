@@ -25,8 +25,11 @@
 
     <view class="part_box hot_sectors">
       <view class="title">热门板块</view>
-      <view>
-        <view :class="`bk_menu ${activeBkType==menu.code?'bk_menu_active':''}`" v-for="(menu, key) in bkTypes" :key="key" @click="changeHotSelector(menu.code)">{{menu.name}}</view>
+      <view style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <view>
+          <view :class="`bk_menu ${activeBkType==menu.code?'bk_menu_active':''}`" v-for="(menu, key) in bkTypes" :key="key" @click="changeHotSelector(menu.code)">{{menu.name}}</view>
+        </view>
+        <view style="color: #807d7e;" @click="showMoreData">更多></view>
       </view>
       <view>
         <view class="hot_sectors_th">
@@ -216,6 +219,18 @@ const getIndicess = () => {
   })
 }
 
+const showMoreData = () => {
+  if(activeBkType.value == 1){
+    // 概念板块
+    uni.navigateTo({url: `/pages/plateList/plateList?type=concepts`})
+    // getConcepts()
+  }else {
+    // 行业板块
+    uni.navigateTo({url: `/pages/plateList/plateList?type=industries`})
+    // getIndustries()
+  }
+}
+
 </script>
 
 <style lang="scss" scoped>
@@ -252,7 +267,6 @@ const getIndicess = () => {
       display: inline-block;
       padding: 5px 10px;
       margin-right: 10px;
-      margin-bottom: 10px;
       background-color: #f0f0f0;
       border-radius: 5px;
       font-size: 14px;

@@ -572,10 +572,10 @@ export const getIndices = ():Promise<IndicesResp> => {
 /**
  * 获取行业板块指数排行榜
  * */
-export const getIndustry = ():Promise<industryStruct> => {
+export const getIndustry = (limit: number):Promise<industryStruct> => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res: response = <response>await http.get(`${BASE_URL_BOARD}/industry?limit=${5}`)
+            const res: response = <response>await http.get(`${BASE_URL_BOARD}/industry?limit=${limit ? limit:5}`)
             console.log("getIndustry res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as industryStruct)
@@ -591,10 +591,10 @@ export const getIndustry = ():Promise<industryStruct> => {
 /**
  * 获取概念板块指数排行榜
  * */
-export const getConcept = ():Promise<conceptStruct> => {
+export const getConcept = (limit: number):Promise<conceptStruct> => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res: response = <response>await http.get(`${BASE_URL_BOARD}/concept?limit=${5}`)
+            const res: response = <response>await http.get(`${BASE_URL_BOARD}/concept?limit=${limit ? limit:5}`)
             console.log("getConcept res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as conceptStruct)

@@ -141,6 +141,16 @@
 				"enablePullDownRefresh": false
 			}
 		},
+		{
+			/* 模块成分 */
+			"path": "pages/plateList/plateList",
+			"style": {
+				"navigationBarTitleText": "模块信息",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "bold",
+				"enablePullDownRefresh": false
+			}
+		}
 	],
 	"tabBar": {
 		"color": "#7A7E83",

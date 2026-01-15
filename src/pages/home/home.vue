@@ -1,7 +1,8 @@
 <template>
   <view class="container">
 
-    <swiper class="swiper" circular :indicator-dots="indicatorDots" :autoplay="autoplay" :interval="interval"
+    <swiper class="swiper" :style="`height: ${swiperHeight}px`" circular :indicator-dots="indicatorDots"
+            :autoplay="autoplay" :interval="interval"
             :duration="duration">
       <swiper-item v-for="(img,key) in background" :key="key">
 <!--        <view class="swiper-item" :style="{background: color, height: '100%'}">{{ color }}</view>-->
@@ -125,8 +126,10 @@ const autoplay = ref(true)
 const interval = ref(2000)
 const duration = ref(1500)
 const timer = ref();
+const swiperHeight = ref()
 
 onShow(() => {
+  initSwiperHeight()
   activeBkType.value = 1;
   getIndicess();
   getConcepts()
@@ -148,6 +151,12 @@ onHide(() => {
   timer.value = null;
 })
 
+const initSwiperHeight = () => {
+  const width = document.body.clientWidth || document.documentElement.clientWidth
+  const imgWidth = 390
+  const imgHeight = 150
+  swiperHeight.value = width * imgHeight / imgWidth
+}
 const toPlateDetail = (item: industryStruct|conceptStruct) => {
   const boardType = bkTypes.value.find( (val)=> val.code==activeBkType.value)
   // console.log("boardType", boardType)

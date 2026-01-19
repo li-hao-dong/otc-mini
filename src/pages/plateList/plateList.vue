@@ -9,7 +9,7 @@
         <view>换手率</view>
       </view>
       <view v-if="hotSectors && hotSectors.length > 0">
-        <view class="hot_sectors_td" v-for="(item,n) in hotSectors" :key="n" @click="toPlateDetail(item)">
+        <view class="hot_sectors_td" v-for="(item,n) in hotSectors" :key="n" @click="uni.navigateTo({url: `/pages/inquiry/inquiry?name=${item.板块名称}`})">
           <view :class="`regular ordinal ${calcOrdinalBg(item.排名)}`">{{item.排名}}</view>
           <view>
             <view>{{item.板块名称}}</view>

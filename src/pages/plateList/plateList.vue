@@ -9,7 +9,7 @@
         <view>换手率</view>
       </view>
       <view v-if="hotSectors && hotSectors.length > 0">
-        <view class="hot_sectors_td" v-for="(item,n) in hotSectors" :key="n" @click="uni.navigateTo({url: `/pages/inquiry/inquiry?name=${item.板块名称}`})">
+        <view class="hot_sectors_td" v-for="(item,n) in hotSectors" :key="n" @click="toPlateDetail(item)">
           <view :class="`regular ordinal ${calcOrdinalBg(item.排名)}`">{{item.排名}}</view>
           <view>
             <view>{{item.板块名称}}</view>
@@ -34,11 +34,14 @@ import {getConcept, getIndices, getIndustry} from "@/api";
 import {onLoad} from "@dcloudio/uni-app";
 
 const hotSectors = ref<industryStruct[] | conceptStruct[]>([])
+const boardType = ref()
 
 onLoad((option) => {
   if (option?.type == 'concepts'){
+    boardType.value = 'concept'
     getConcepts()
   }else if(option?.type == 'industries'){
+    boardType.value = 'industry'
     getIndustries()
   }
 })
@@ -78,6 +81,9 @@ function calcOrdinalBg(n){
   }
 }
 
+const toPlateDetail = (item: industryStruct|conceptStruct) => {
+  uni.navigateTo({url: `/pages/plateComposition/plateComposition?board_type=${boardType.value}&symbol=${item.板块代码}`})
+}
 </script>
 
 <style lang="scss" scoped>

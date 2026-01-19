@@ -106,12 +106,12 @@
                 <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100)}}</view>
               </view>
               <view class="row">
-                <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(5000) }}</view>
+                <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(useStore().miniData.channelFee) }}</view>
               </view>
               <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
               </view>
               <view class="row">
-                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 + 5000) }}</view>
+                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 + useStore().miniData.channelFee) }}</view>
               </view>
               <view class="row">
                 <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>
@@ -245,12 +245,12 @@
                 <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(Math.ceil(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 / choosePeople * 100) / 100)}}</view>
               </view>
               <view class="popup_card_row">
-                <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(5000) }}</view>
+                <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(Math.ceil(useStore().miniData.channelFee / choosePeople)) }}</view>
               </view>
               <view class="popup_card_row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
               </view>
               <view class="popup_card_row">
-                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(Math.ceil(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 / choosePeople * 100) / 100 + 5000) }}</view>
+                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(Math.ceil(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 / choosePeople * 100) / 100 + Math.ceil(useStore().miniData.channelFee / choosePeople)) }}</view>
               </view>
               <view class="popup_card_row">
                 <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>

@@ -4,6 +4,7 @@
       <view class="hot_sectors_th">
         <view>序号</view>
         <view>名称/代码</view>
+        <view>价格</view>
         <view>涨幅</view>
         <view>换手率</view>
       </view>
@@ -14,6 +15,7 @@
             <view>{{item.名称}}</view>
             <view class="stext">{{item.代码}}</view>
           </view>
+          <view>{{item.最新价}}</view>
           <view :class="`${item.涨跌幅.toFixed(2) > 0 ? 'red':'green'}`">{{item.涨跌幅 >0 ? '+':''}}{{ item.涨跌幅.toFixed(2) }}%</view>
           <view>{{item.换手率}}%</view>
         </view>
@@ -83,7 +85,7 @@
   .hot_sectors_th{
     width: 100%;
     display: inline-grid;
-    grid-template-columns: 1fr 3fr 2fr 2fr;
+    grid-template-columns: 1fr 3fr 2fr 2fr 2fr;
     color: #807d7e;
 
     & view:nth-child(1),
@@ -99,7 +101,7 @@
   .hot_sectors_td{
     width: 100%;
     display: inline-grid;
-    grid-template-columns: 1fr 3fr 2fr 2fr;
+    grid-template-columns: 1fr 3fr 2fr 2fr 2fr;
     align-items: center;
     box-sizing: border-box;
     padding: 4px 0;

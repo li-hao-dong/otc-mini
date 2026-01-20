@@ -25,7 +25,8 @@
 
           <view class="row ">
             <view class="time_hint">截止于 {{ formatLocalTime(new Date(groupOrder.expireTime)) }}</view>
-<!--            <view class="add_group">加⼊拼单</view>-->
+            <!--            <view class="add_group">加⼊拼单</view>-->
+            <view class="group_order_data">订单状态：{{ groupOrder.groupStatus }}</view>
           </view>
 
 <!--          <view class="hint_cont">-->

@@ -85,23 +85,28 @@
   .hot_sectors_th{
     width: 100%;
     display: inline-grid;
-    grid-template-columns: 1fr 3fr 2fr 2fr 2fr;
+    grid-template-columns: 1fr 2.5fr 2fr 1.5fr 2fr;
     color: #807d7e;
 
     & view:nth-child(1),
-    & view:nth-child(2){
+    & view:nth-child(2),
+    {
       text-align: left;
     }
 
-    & view:nth-child(3),
-    & view:nth-child(4){
+    & view:nth-child(3){
+      text-align: center;
+    }
+
+    & view:nth-child(4),
+    & view:nth-child(5){
       text-align: right;
     }
   }
   .hot_sectors_td{
     width: 100%;
     display: inline-grid;
-    grid-template-columns: 1fr 3fr 2fr 2fr 2fr;
+    grid-template-columns: 1fr 2.5fr 2fr 1.5fr 2fr;
     align-items: center;
     box-sizing: border-box;
     padding: 4px 0;
@@ -111,8 +116,12 @@
       text-align: left;
     }
 
-    & view:nth-child(3),
-    & view:nth-child(4){
+    & view:nth-child(3){
+      text-align: center;
+    }
+
+    & view:nth-child(4),
+    & view:nth-child(5){
       text-align: right;
     }
 

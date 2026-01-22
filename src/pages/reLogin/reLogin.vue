@@ -13,7 +13,7 @@ const loginForm = reactive({
 
 const registerForm = reactive({
   userName: '',
-  telephone: '13089118936',
+  telephone: '',
   smsCode: '',
   password: '',
   confirmPassword: '',

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import {userLoginH5, userRegister} from "@/api";
+import {getSmsCode, userLoginH5, userRegister} from "@/api";
 import {useStore} from "@/stores";
 
 type Mode = 'login' | 'register'
@@ -13,7 +13,8 @@ const loginForm = reactive({
 
 const registerForm = reactive({
   userName: '',
-  telephone: '',
+  telephone: '13089118936',
+  smsCode: '',
   password: '',
   confirmPassword: '',
   referrerUuid: ''
@@ -22,9 +23,29 @@ const registerForm = reactive({
 const showLoginPwd = ref(false)
 const showRegisterPwd = ref(false)
 const showRegisterConfirmPwd = ref(false)
+const smsBtnText = ref("发送验证码")
 
 const switchMode = (m: Mode) => {
   mode.value = m
+}
+
+const getSmsCodes = () => {
+  if(!registerForm.telephone || !/^[0-9]{11}$/.test(registerForm.telephone.trim())){
+    uni.showToast({ title: '手机号码格式不正确', icon: 'none' })
+    return
+  }
+  console.log("registerForm.telephone", registerForm.telephone)
+  getSmsCode(registerForm.telephone).then(res => {
+    console.log("rews", res)
+    if(!res.success){
+      uni.showToast({ title: res.message || '发送失败', icon: 'none' })
+      return
+    }
+    uni.showToast({ title: '发送成功', icon: 'none' })
+  }).catch(err => {
+    console.log("获取验证码异常", err)
+    uni.showToast({ title: err, icon: 'none' })
+  })
 }
 
 const onSubmit = () => {
@@ -49,10 +70,15 @@ const onSubmit = () => {
     //   uni.showToast({ title: '请输入手机号码', icon: 'none' })
     //   return
     // }
-    if(registerForm.telephone && !/^[0-9]{11}$/.test(registerForm.telephone.trim())){
+    if(!registerForm.telephone || !/^[0-9]{11}$/.test(registerForm.telephone.trim())){
       uni.showToast({ title: '手机号码格式不正确', icon: 'none' })
       return
     }
+
+    // if(!registerForm.smsCode || !/^[0-9]{6}$/.test(registerForm.smsCode.trim())){
+    //   uni.showToast({ title: '验证码不正确', icon: 'none' })
+    //   return
+    // }
 
     if (!registerForm.password || registerForm.password.trim() === '') {
       uni.showToast({ title: '请输入密码', icon: 'none' })
@@ -74,7 +100,7 @@ const userRegistered = () => {
   console.log("注册表单", registerForm)
   uni.showToast({ title: '注册中...', icon: 'none' })
 
-  userRegister(registerForm.userName, registerForm.password, registerForm.telephone, registerForm.referrerUuid)
+  userRegister(registerForm.userName, registerForm.password, registerForm.telephone, registerForm.smsCode, registerForm.referrerUuid)
     .then(res => {
       console.log("注册结果", res)
       if(res.id){
@@ -144,10 +170,19 @@ const userLoggedIn = () => {
         </view>
 
         <view class="form-row" v-if="mode!=='login'">
-          <text class="label">手机号码（选填）</text>
+          <text class="label">手机号码</text>
           <view class="input-wrap">
             <view class="icon-left">📱</view>
             <input class="input" v-model="registerForm.telephone" placeholder="请输入手机号码" />
+          </view>
+        </view>
+
+        <view class="form-row" v-if="mode!=='login'">
+          <text class="label">验证码</text>
+          <view class="input-wrap">
+            <view class="icon-left">🔢</view>
+            <input class="input" maxlength="6" v-model="registerForm.smsCode" placeholder="请输入验证码" />
+            <view class="sms-btn" @click="getSmsCodes">{{ smsBtnText }}</view>
           </view>
         </view>
 
@@ -240,6 +275,7 @@ const userLoggedIn = () => {
 .input-wrap{ position: relative; }
 .input-wrap .input{ padding-right: 42px; padding-left: 42px; }
 .eye{ position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #999; }
+.sms-btn {position: absolute; right: 0px; top: 50%; transform: translateY(-50%); font-size: 13px; background: var(--color-primary-bg); color: #FFFFFF; padding: 0 10px; height: 100%; display: flex; align-items: center; border-radius: 10px}
 .icon-left{ position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #999; }
 .submit{ margin: 14px auto; width: 100%; text-align: center; background: var(--color-primary-bg); line-height: 46px; border-radius: 12px; box-sizing: border-box; color: #FFFFFF; }
 .row{ padding: 2px 0; display: flex; align-items: center; justify-content: space-between; }

@@ -36,7 +36,7 @@ const beforeRequest = (url:string) => {
     //     url.includes("/inquiry/options") || url.includes("/inquiry/quote") ||
     //     url.includes("/tools/equity-option/calculate") || url.includes("/users/orders?page=")) return true;
 
-    if(url.includes("/users/register") || url.includes("/users/login")) return true;
+    if(url.includes("/users/register") || url.includes("/users/login") || url.includes("/sms/register-code")) return true;
 
     if(!useStore().user.token){
         warnToast("请先登录");

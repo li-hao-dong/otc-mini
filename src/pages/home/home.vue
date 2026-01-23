@@ -74,9 +74,9 @@
               <view>{{ item.name}}</view>
               <view class="stext">{{ item.code }}</view>
             </view>
-            <view :class="` ordinal ${calcOrdinalBg(item.latest_price)}`">￥{{item.latest_price}}</view>
-            <view :class="`${item.pct_change.toFixed(2) > 0 ? 'red':'green'}`">{{item.pct_change >0 ? '+':''}}{{ item.pct_change.toFixed(2) }}%</view>
-            <view>{{ item.pct_change_5d.toFixed(2) }}%</view>
+            <view :class="` ordinal ${calcOrdinalBg(item.latest_price)}`">￥{{Number(truncToTwo(item.latest_price))}}</view>
+            <view :class="`${Number(truncToTwo(item.pct_change)) > 0 ? 'red':'green'}`">{{Number(truncToTwo(item.pct_change)) >0 ? '+':''}}{{ Number(truncToTwo(item.pct_change)) }}%</view>
+            <view>{{ Number(truncToTwo(item.pct_change_5d)) }}%</view>
           </view>
         </view>
         <view v-else class="noData">
@@ -105,6 +105,7 @@ import type {ConceptResp, conceptStruct} from "@/interfaces/concept";
 import type {RecommendationItemResp} from "@/interfaces/recommendation";
 import type {MarketIndexResponse} from "@/interfaces/indices";
 import Fab from "@/components/fab.vue";
+import {truncToTwo} from "@/utils";
 const marketIndices = ref<MarketIndexResponse[]>([]);
 const bkTypes = ref<{ name: string, code: number, type: string }[]>([
   { name: '概念板块', code: 1, type: "concept"},

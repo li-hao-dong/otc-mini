@@ -132,10 +132,10 @@
 			}
 		},
 		{
-			/* 模块成分 */
+			/* 板块名称 */
 			"path": "pages/plateComposition/plateComposition",
 			"style": {
-				"navigationBarTitleText": "模块成分",
+				"navigationBarTitleText": "板块名称",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "bold",
 				"enablePullDownRefresh": false

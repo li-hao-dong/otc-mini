@@ -189,23 +189,22 @@ export const userRegister = (userName: string, password: string, telephone: stri
 export const getSmsCode = (telephone: string):Promise<SmsCodeRes> => {
     return new Promise(async (resolve, reject) => {
         console.log("123", `+86${telephone}`)
-        // try {
+        try {
             const params = {
                 phone: `+86${telephone}`,
                 captcha_type: "register"
             }
             const res: response = <response>await http.post(`${BASE_URL}/sms/register-code`, params)
             console.log("getSmsCode res", res);
-            if (res) {
-                resolve(res as SmsCodeRes)
+            if (res.data) {
+                resolve(res.data.data as SmsCodeRes)
             }
-            // else {
-            //     reject(new Error(res.message || 'Failed to fetch getSmsCode info'));
-            // }
-        // }
-        // catch (error) {
-        //     reject(error);
-        // }
+            else {
+                reject(new Error(res.message || 'Failed to fetch getSmsCode info'));
+            }
+        }catch (error) {
+            reject(error);
+        }
     })
 }
 

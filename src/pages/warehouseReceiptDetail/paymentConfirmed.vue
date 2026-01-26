@@ -56,7 +56,7 @@ const getBankReceiptInfo = (orderId: string) => {
         <view class="row_cont"><text>本次已支付金额：</text><text style="color:#E8473A">¥ {{ truncToTwo(detail.paymentAmount) }}</text></view>
       </view>
       <view class="row">
-        <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view>
+        <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}</view>
       </view>
       <view class="row">
         <view class="row_cont" style="color:#999999; font-size:12px;">订单号：{{detail.orderNo}}</view>
@@ -87,8 +87,8 @@ const getBankReceiptInfo = (orderId: string) => {
     <!-- 产品要素 -->
     <view class="card">
       <view class="fir_title">产品信息</view>
-      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view></view>
-      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}（{{ detail.optionCode }}）</view></view>
+      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}</view></view>
+      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}（{{ detail.optionCode }}）</view></view>
       <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{detail.optionType}}）</view></view>
       <view class="row"><view class="row_cont"><text>期限：</text>
         {{ detail.termName }}</view></view>

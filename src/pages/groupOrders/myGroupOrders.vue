@@ -41,13 +41,14 @@
 
       <view v-else>
        <view class="not_data">
-          当前暂⽆您的拼单，您可以
-          <view class="new_group_order">
-            <view class="add_group" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">发起新的拼单</view>
-          </view>
-         <view class="new_group_order">
-           <view class="add_group" @click="uni.reLaunch({url: '/pages/groupOrders/groupOrders'})">去拼单市场</view>
-         </view>
+          当前暂⽆您的拼单
+<!--         ，您可以-->
+<!--          <view class="new_group_order">-->
+<!--            <view class="add_group" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">发起新的拼单</view>-->
+<!--          </view>-->
+<!--         <view class="new_group_order">-->
+<!--           <view class="add_group" @click="uni.reLaunch({url: '/pages/groupOrders/groupOrders'})">去拼单市场</view>-->
+<!--         </view>-->
        </view>
       </view>
 

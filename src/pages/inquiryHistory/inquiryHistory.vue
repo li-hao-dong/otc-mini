@@ -131,7 +131,7 @@ const inquiryHistoryFun = async () => {
       const filterData: any = {};
 
       data.inquiry_results.map((item: QuoteResult, index: number) => {
-        console.log("item.structure", item.structure)
+        // console.log("item.structure", item.structure)
         data.inquiry_results[index].days = item.term?.replace("W", '') * 7 || item.term?.replace('M', '') * 30 || 0;
       })
 
@@ -169,7 +169,7 @@ const inquiryHistoryFun = async () => {
     }else {
       history.value = res.inquiries;
     }
-    console.log("structureData,", structureData.value)
+    // console.log("structureData,", structureData.value)
 
 
   }).catch((err: Error) => {
@@ -178,7 +178,7 @@ const inquiryHistoryFun = async () => {
 }
 
 const toDetail = (inquiry_parameters:InquiryQuoteReq) => {
-  console.log("inquiry_parameters,", inquiry_parameters)
+  // console.log("inquiry_parameters,", inquiry_parameters)
   inquiry_parameters["optionType"]= (inquiry_parameters["option_type"])?.toUpperCase()
   inquiry_parameters["nominalAmount"]=inquiry_parameters["nominal_amount"]
   // delete inquiry_parameters["option_type"]

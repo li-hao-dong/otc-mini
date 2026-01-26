@@ -230,7 +230,7 @@ watch(() => props.orderId, (newVal) => {
 
       </view>
       <view class="row">
-        <view class="row_cont">{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType === "Call" ? '看涨':'看跌'}}</view>
+        <view class="row_cont">{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>订单号：</text>{{detail?.orderNo}}</view>

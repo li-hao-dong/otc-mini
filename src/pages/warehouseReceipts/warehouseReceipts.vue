@@ -115,11 +115,11 @@
             <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{order?.estimatedPayout ? truncToTwo(order.estimatedPayout) : '-'}}元</text></text>
           </view>
           <view class="rowBorder">
-            <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>
+<!--            <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>-->
             <text class="dataText"><text>期权费率：</text>{{order?.optionFeeRate ? truncToTwo(order.optionFeeRate * 100) : 0}}%</text>
+            <text class="dataText"><text>期权费：</text>{{order?.upstreamFee || order?.optionFee}}元</text>
           </view>
           <view class="rowBorder">
-            <text class="dataText"><text>期权费：</text>{{order?.upstreamFee || order?.optionFee}}元</text>
             <text class="dataText"><text>通道费：</text>{{truncToTwo(order?.transactionFee)}}元</text>
           </view>
       </view>

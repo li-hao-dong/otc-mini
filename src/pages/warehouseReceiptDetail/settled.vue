@@ -27,7 +27,7 @@ const props = defineProps<{orderId: string, detail: OrderDetail | UserGroupOrder
 //   // getBankReceiptInfo(option?.id)
 //   getPaymentProofInfo(option?.id)
 // })
-console.log("props detail", props)
+// console.log("props detail", props)
 
 
 // watch(() => props.detail, (newVal) => {
@@ -52,7 +52,7 @@ watchEffect(() => {
 
 const getDetail = (orderId: string) => {
   orderDetail(orderId).then(res => {
-    console.log("订单详情", res)
+    // console.log("订单详情", res)
     detail.value = res
     uni.downloadFile({
       url: `${BASE_URL}${res.paymentVoucherUrl}`,
@@ -60,7 +60,7 @@ const getDetail = (orderId: string) => {
         'Authorization': `Bearer ${useStore().user.token}`
       },
       success: res => {
-        console.log("下载支付凭证结果", res)
+        // console.log("下载支付凭证结果", res)
         if(res.statusCode === 200){
           voucher.value = res.tempFilePath;
         }
@@ -71,7 +71,7 @@ const getDetail = (orderId: string) => {
 
 const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
-    console.log("银行收款信息", res)
+    // console.log("银行收款信息", res)
     bankReceiptInfoData.value = res;
   })
 }
@@ -155,13 +155,13 @@ const previewImage = () =>  {
 
     <view class="card">
       <view class="fir_title">产品与合约要素</view>
-      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType === "Call" ? '看涨':'看跌'}}</view></view>
+      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}</view></view>
       <view class="row"><view class="row_cont"><text>订单号：</text>{{ detail?.orderNo }}</view></view>
       <view class="row"><view class="row_cont"><text>订单类型：</text>个股场外期权</view></view>
       <view class="row"><view class="row_cont"><text>生效日期：</text>{{ formatLocalTime(new Date(detail?.createdTime)) }}</view></view>
       <view class="row"><view class="row_cont"><text>到期日期：</text>{{ formatLocalTime(new Date(detail?.maturityDate)) }}</view></view>
       <view class="row"><view class="row_cont"><text>期限：</text>{{ detail?.termName }}</view></view>
-      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail?.structureDisplayName}}{{detail?.optionType === "Call" ? '看涨':'看跌'}}（{{ detail?.optionCode }}）</view></view>
+      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail?.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}（{{ detail?.optionCode }}）</view></view>
       <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{ detail?.optionType }}）</view></view>
       <view class="row"><view class="row_cont"><text>行权方式：</text>欧式，到期一次性现金结算</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">本模块为合约核心要素摘要，完整条款与定义以《产品说明书》《交易确认书》及《风险揭示书》等正式文件为准。</view></view>

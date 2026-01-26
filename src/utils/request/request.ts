@@ -72,7 +72,7 @@ const http = {
                     Authorization: `${useStore().user.token_type} ${useStore().user.token}`,
                 },
                 success: (res:response) => {
-                    console.log("res@@@", res);
+                    // console.log("res@@@", res);
                     if (res.statusCode != 200) {
                         this.checkoutDataCode(res.data.code||res.statusCode, res.msg || res.data);
                         // failToast(res.data.msg);

@@ -125,10 +125,10 @@ const exexercise = () => {
     <!-- 产品与合约要素 -->
     <view class="card">
       <view class="fir_title">产品与合约要素</view>
-      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType === "Call" ? '看涨':'看跌'}}</view></view>
+      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}</view></view>
       <view class="row"><view class="row_cont"><text>订单号：</text>{{detail?.orderNo}}</view></view>
       <view class="row"><view class="row_cont"><text>下单时间：</text>{{formatLocalTime(new Date(detail?.createdTime))}}</view></view>
-      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail?.structureDisplayName}}{{detail?.optionType === "Call" ? '看涨':'看跌'}}（{{ detail?.optionCode }}）</view></view>
+      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail?.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}（{{ detail?.optionCode }}）</view></view>
       <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{detail?.optionType}}）</view></view>
       <view class="row"><view class="row_cont"><text>行权方式：</text>欧式，到期一次性现金结算</view></view>
       <view class="row"><view class="row_cont"><text>生效日期：</text>

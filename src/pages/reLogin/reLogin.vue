@@ -24,12 +24,46 @@ const showLoginPwd = ref(false)
 const showRegisterPwd = ref(false)
 const showRegisterConfirmPwd = ref(false)
 const smsBtnText = ref("发送验证码")
+const remainingTime = ref(0)
+const timer = ref()
+
+
+const dealTime = () => {
+  timer.value = setInterval(() => {
+    if(remainingTime.value >0){
+      remainingTime.value -= 1
+    }else {
+      clearInterval(timer.value)
+      timer.value = ''
+    }
+    // console.log("remainingTime.value", remainingTime.value)
+  }, 1000)
+}
+
+const initSmsCodeData = () => {
+  const smsCodeTime = uni.getStorageSync("smsCode")
+  console.log("smsCodeTime", smsCodeTime)
+  console.log("new Date().getTime()", new Date().getTime())
+  console.log("new Date().getTime()", new Date().getTime() <= smsCodeTime)
+
+  if(new Date().getTime() <= smsCodeTime){
+    remainingTime.value = Math.floor((smsCodeTime - new Date().getTime())/ 1000)
+    dealTime()
+  }
+}
+
+initSmsCodeData()
 
 const switchMode = (m: Mode) => {
   mode.value = m
 }
 
 const getSmsCodes = () => {
+  if(remainingTime.value) {
+    uni.showToast({ title: '请等待时间结束', icon: 'none' })
+    return
+  }
+
   if(!registerForm.telephone || !/^[0-9]{11}$/.test(registerForm.telephone.trim())){
     uni.showToast({ title: '手机号码格式不正确', icon: 'none' })
     return
@@ -42,9 +76,14 @@ const getSmsCodes = () => {
       return
     }
     uni.showToast({ title: '发送成功', icon: 'none' })
+    if(res.next_request_interval){
+      uni.setStorageSync("smsCode", new Date().getTime()+(res?.next_request_interval ? res?.next_request_interval * 1000:0))
+      remainingTime.value = res.next_request_interval
+      dealTime()
+    }
   }).catch(err => {
     console.log("获取验证码异常", err)
-    uni.showToast({ title: err, icon: 'none' })
+    uni.showToast({ title: err.message, icon: 'none' })
   })
 }
 
@@ -75,10 +114,10 @@ const onSubmit = () => {
       return
     }
 
-    // if(!registerForm.smsCode || !/^[0-9]{6}$/.test(registerForm.smsCode.trim())){
-    //   uni.showToast({ title: '验证码不正确', icon: 'none' })
-    //   return
-    // }
+    if(!registerForm.smsCode || !/^[0-9]{6}$/.test(registerForm.smsCode.trim())){
+      uni.showToast({ title: '验证码不正确', icon: 'none' })
+      return
+    }
 
     if (!registerForm.password || registerForm.password.trim() === '') {
       uni.showToast({ title: '请输入密码', icon: 'none' })
@@ -182,7 +221,7 @@ const userLoggedIn = () => {
           <view class="input-wrap">
             <view class="icon-left">🔢</view>
             <input class="input" maxlength="6" v-model="registerForm.smsCode" placeholder="请输入验证码" />
-            <view class="sms-btn" @click="getSmsCodes">{{ smsBtnText }}</view>
+            <view class="sms-btn" @click="getSmsCodes">{{ remainingTime ? `${remainingTime}s`:smsBtnText }}</view>
           </view>
         </view>
 
@@ -275,7 +314,7 @@ const userLoggedIn = () => {
 .input-wrap{ position: relative; }
 .input-wrap .input{ padding-right: 42px; padding-left: 42px; }
 .eye{ position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #999; }
-.sms-btn {position: absolute; right: 0px; top: 50%; transform: translateY(-50%); font-size: 13px; background: var(--color-primary-bg); color: #FFFFFF; padding: 0 10px; height: 100%; display: flex; align-items: center; border-radius: 10px}
+.sms-btn {position: absolute; width: 66px; right: 0px; top: 50%; transform: translateY(-50%); font-size: 13px; text-align: center; background: var(--color-primary-bg); color: #FFFFFF; padding: 0 10px; height: 100%; display: flex; align-items: center; justify-content: center; border-radius: 10px}
 .icon-left{ position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 18px; color: #999; }
 .submit{ margin: 14px auto; width: 100%; text-align: center; background: var(--color-primary-bg); line-height: 46px; border-radius: 12px; box-sizing: border-box; color: #FFFFFF; }
 .row{ padding: 2px 0; display: flex; align-items: center; justify-content: space-between; }

@@ -28,6 +28,7 @@ import type {ConceptResp, conceptStruct} from "@/interfaces/concept";
 import type {RecommendationItemResp} from "@/interfaces/recommendation";
 import type {IndicesResp} from "@/interfaces/indices";
 import type {constituents} from "@/interfaces/constituents";
+import type {SmsCodeRes} from "@/interfaces/smsCode";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -162,12 +163,13 @@ export const subscribeMessage = (templateIds: string):Promise<subscribeMessageRe
 /**
  * 用户注册 H5
  * */
-export const userRegister = (userName: string, password: string, telephone: string, referrerUuid: string):Promise<any> => {
+export const userRegister = (userName: string, password: string, telephone: string, smsCode: number, referrerUuid: string):Promise<any> => {
     return new Promise(async (resolve, reject) => {
         try {
             const params = {
                 user_name: userName,
                 password: password,
+                sms_code: smsCode,
                 telephone: telephone,
                 referrer_uuid: referrerUuid
             }
@@ -183,6 +185,31 @@ export const userRegister = (userName: string, password: string, telephone: stri
         }
     })
 }
+
+export const getSmsCode = (telephone: string):Promise<SmsCodeRes> => {
+    return new Promise(async (resolve, reject) => {
+        console.log("123", `+86${telephone}`)
+        // try {
+            const params = {
+                phone: `+86${telephone}`,
+                captcha_type: "register"
+            }
+            const res: response = <response>await http.post(`${BASE_URL}/sms/register-code`, params)
+            console.log("getSmsCode res", res);
+            if (res) {
+                resolve(res as SmsCodeRes)
+            }
+            // else {
+            //     reject(new Error(res.message || 'Failed to fetch getSmsCode info'));
+            // }
+        // }
+        // catch (error) {
+        //     reject(error);
+        // }
+    })
+}
+
+
 
 /**
  * 用户登录 H5

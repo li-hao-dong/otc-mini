@@ -2,8 +2,12 @@
 import {onLaunch, onShow, onHide, onBackPress} from "@dcloudio/uni-app";
 import {useStore} from "@/stores";
 import {truncToTwo} from "@/utils";
+import VConsole from 'vconsole';
+
+
 onLaunch(() => {
   console.log("App Launch");
+  // const vConsole = new VConsole();
 });
 onShow(() => {
   console.log("App Show");

@@ -139,10 +139,10 @@ const userRegistered = () => {
   console.log("注册表单", registerForm)
   uni.showToast({ title: '注册中...', icon: 'none' })
 
-  userRegister(registerForm.userName, registerForm.password, registerForm.telephone, registerForm.smsCode, registerForm.referrerUuid)
+  userRegister(registerForm.userName, registerForm.password, `+86${registerForm.telephone}`, registerForm.smsCode, registerForm.referrerUuid)
     .then(res => {
       console.log("注册结果", res)
-      if(res.id){
+      if(res.access_token){
         uni.showToast({ title: '注册成功，请登录', icon: 'none' })
         switchMode('login')
       } else {
@@ -151,7 +151,7 @@ const userRegistered = () => {
     })
     .catch(err => {
       console.log("注册异常", err)
-      uni.showToast({ title: err, icon: 'none' })
+      uni.showToast({ title: Object.keys(err).length > 0 ? err.message:err, icon: 'none' })
     })
 }
 

@@ -170,13 +170,13 @@ export const userRegister = (userName: string, password: string, telephone: stri
                 user_name: userName,
                 password: password,
                 sms_code: smsCode,
-                telephone: telephone,
+                phone: telephone,
                 referrer_uuid: referrerUuid
             }
             const res: response = <response>await  http.post(`${BASE_URL}/users/register`, params)
-            // console.log("userRegister res", res);
-            if (res.data.id) {
-                resolve(res.data as any)
+            console.log("userRegister res", res);
+            if (res.data?.status === "success") {
+                resolve(res.data.data as any)
             } else {
                 reject(new Error(res.message || 'Failed to fetch userRegister info'));
             }

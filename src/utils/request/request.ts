@@ -113,9 +113,9 @@ const http = {
                 success: (res:response) => {
                     console.log("res@@@", res);
                     if (res.statusCode != 200) {
-                        this.checkoutDataCode(res.data.code||res.statusCode, res.msg || res.data);
+                        let hintContent = this.checkoutDataCode(res.data.code||res.statusCode, res.msg || res.data);
                         // failToast(res.data.msg);
-                        setTimeout(() => {reject(res.msg || res.data);}, 2000)
+                        setTimeout(() => {reject(hintContent || res.msg || res.data);}, 2000)
                         return;
                     }
                     resolve(res);
@@ -186,6 +186,7 @@ const http = {
      * 校验data中自定义的code
      * */
     checkoutDataCode(code: number, msg?: string) {
+        let hintContent;
         switch (code) {
             case 401: {
                 // token 失效
@@ -226,11 +227,14 @@ const http = {
                 break;
             }
             case 409:
-                warnToast("用户已存在");
+                // warnToast("用户已存在");
+                hintContent = "用户已存在"
                 break;
             // default:
             //     warnToast(msg || "请求出错，请稍后重试");
         }
+
+        return hintContent;
     },
 };
 

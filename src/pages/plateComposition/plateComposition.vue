@@ -48,7 +48,7 @@
   const getConstituentss = (board_type: string, symbol: string) => {
     uni.showLoading({title: '加载中…'})
     getConstituents(board_type, symbol).then(res => {
-      console.log("获取模块成分", res)
+      // console.log("获取模块成分", res)
       hotSectors.value = res;
       uni.hideLoading()
     }).catch(err => {

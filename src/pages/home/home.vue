@@ -66,7 +66,7 @@
           <view>名称/代码</view>
           <view>最新价格</view>
           <view>涨幅</view>
-          <view>5日涨幅</view>
+          <view>换手率</view>
         </view>
         <view v-if="referralBd && referralBd.length > 0">
           <view class="hot_target_td" v-for="(item,n) in referralBd" :key="n" @click="uni.navigateTo({url: `/pages/inquiry/inquiry?name=${item.name}`})">
@@ -192,7 +192,7 @@ function calcOrdinalBg(n){
 const getIndustries = () => {
   uni.showLoading({title: "加载中…"})
   getIndustry().then(res => {
-    console.log("res", res)
+    // console.log("res", res)
     hotSectors.value = res
     uni.hideLoading()
   }).catch(err => {

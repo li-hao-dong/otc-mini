@@ -174,7 +174,7 @@ export const userRegister = (userName: string, password: string, telephone: stri
                 referrer_uuid: referrerUuid
             }
             const res: response = <response>await  http.post(`${BASE_URL}/users/register`, params)
-            console.log("userRegister res", res);
+            // console.log("userRegister res", res);
             if (res.data?.status === "success") {
                 resolve(res.data.data as any)
             } else {
@@ -188,14 +188,12 @@ export const userRegister = (userName: string, password: string, telephone: stri
 
 export const getSmsCode = (telephone: string):Promise<SmsCodeRes> => {
     return new Promise(async (resolve, reject) => {
-        console.log("123", `+86${telephone}`)
         try {
             const params = {
                 phone: `+86${telephone}`,
                 captcha_type: "register"
             }
             const res: response = <response>await http.post(`${BASE_URL}/sms/register-code`, params)
-            console.log("getSmsCode res", res);
             if (res.data) {
                 resolve(res.data.data as SmsCodeRes)
             }

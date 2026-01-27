@@ -220,7 +220,7 @@ const calcOrderStatus = (orderStatus) => {
 const initOrderDetail = (groupOrderNo) => {
   // 初始化订单详情的逻辑
   getGroupOrderDetail(groupOrderNo).then(res => {
-    console.log('Order detail:', res);
+    // console.log('Order detail:', res);
     res.members = res.members.reverse();
     orderDetail.value = res;
     myOrderDetail.value = res.members.find(member => member.isMe) || {};

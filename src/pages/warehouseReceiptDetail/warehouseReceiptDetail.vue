@@ -34,6 +34,7 @@ import Matured from "@/pages/warehouseReceiptDetail/matured.vue";
 import Exercised from "@/pages/warehouseReceiptDetail/exercised.vue";
 import Settled from "@/pages/warehouseReceiptDetail/settled.vue";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
+import {truncToTwo} from "@/utils";
 
 enum OrderType {
   GroupOrder = "GROUPORDER",

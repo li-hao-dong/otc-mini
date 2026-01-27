@@ -28,11 +28,11 @@ export const formatLocalTime = (date: Date) => {
 
 // 截断两位小数（不四舍五入）
 export const truncToTwo = (num: number) => {
-    if (num === null || num === undefined) return '0.00';
+    if (num === null || num === undefined) return '-';
 
     if (isNaN(num)) return '0.00';
 
-    const str = String(num);
+    const str = Number(num).toFixed(10);
     const dotIndex = str.indexOf('.');
 
     // 没有小数点
@@ -40,6 +40,7 @@ export const truncToTwo = (num: number) => {
 
     const intPart = str.slice(0, dotIndex);
     let decimalPart = str.slice(dotIndex + 1);
+    // console.log("decimalPart", decimalPart)
 
     // 如果小数位超过两位 → 截断
     if (decimalPart.length > 2) {

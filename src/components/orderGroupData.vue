@@ -2,7 +2,7 @@
   <view class="container">
     <view class="card">
       <view class="fir_title">拼单信息</view>
-<!--      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType === "Call" ? '看涨':'看跌'}}</view></view>-->
+<!--      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType}}</view></view>-->
 <!--      <view class="row"><view class="row_cont"><text>订单号：</text>-->
 <!--        {{ detail.orderNo }}</view></view>-->
       <view class="row"><view class="row_cont"><text>拼单类型：</text>拼单订单</view></view>

@@ -62,7 +62,7 @@
           <view class="tag">{{order?.groupOrderNo ? '来自拼单':''}}</view>
           <view class="row">
             <view class="fir_row_text">{{order?.underlyingAssetName}}</view>
-            <view class="fir_row_text">{{order?.optionCode}} {{order?.optionType}}</view>
+            <view class="fir_row_text">{{order?.structureDisplayName}} {{order?.optionType}}</view>
             <view class="fir_row_text">{{order?.termName}}</view>
           </view>
           <view style="margin-top: 4px; padding: 0 0 10px 0;">

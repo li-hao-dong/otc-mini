@@ -111,7 +111,7 @@ const http = {
                 },
                 data,
                 success: (res:response) => {
-                    console.log("res@@@", res);
+                    // console.log("res@@@", res);
                     if (res.statusCode != 200) {
                         let hintContent = this.checkoutDataCode(res.data.code||res.statusCode, res.msg || res.data);
                         // failToast(res.data.msg);
@@ -193,7 +193,7 @@ const http = {
                 const routers = getCurrentPages();
                 if (routers && routers.length > 0) {
                     const currentPage = routers[routers.length - 1];
-                    console.log("currentPage", currentPage.route);
+                    // console.log("currentPage", currentPage.route);
                     // #ifdef MP-WEIXIN
                     if (currentPage.route !== "pages/user/user") {
                         warnToast("请重新登录");

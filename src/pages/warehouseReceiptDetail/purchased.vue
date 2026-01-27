@@ -123,20 +123,20 @@ const exexercise = () => {
     </view>
 
     <!-- 产品与合约要素 -->
-    <view class="card">
-      <view class="fir_title">产品与合约要素</view>
-      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}</view></view>
-      <view class="row"><view class="row_cont"><text>订单号：</text>{{detail?.orderNo}}</view></view>
-      <view class="row"><view class="row_cont"><text>下单时间：</text>{{formatLocalTime(new Date(detail?.createdTime))}}</view></view>
-      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail?.structureDisplayName}}{{detail?.optionType.toUpperCase() === "CALL" ? '看涨':'看跌'}}（{{ detail?.optionCode }}）</view></view>
-      <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{detail?.optionType}}）</view></view>
-      <view class="row"><view class="row_cont"><text>行权方式：</text>欧式，到期一次性现金结算</view></view>
-      <view class="row"><view class="row_cont"><text>生效日期：</text>
-        {{ detail?.startDate }}</view></view>
-      <view class="row"><view class="row_cont"><text>到期日期：</text>{{ detail?.maturityDate }}</view></view>
-      <view class="row"><view class="row_cont"><text>期限：</text>{{ detail?.termName }}</view></view>
-      <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">收益结构：到期时，如果标的价格高于行权价，则根据约定公式计算收益；若标的价格低于或等于行权价，则期权到期失效，可能损失全部期权费。（具体以《产品说明书》《交易确认书》为准）</view></view>
-    </view>
+<!--    <view class="card">-->
+<!--      <view class="fir_title">产品与合约要素</view>-->
+<!--      <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}} {{detail?.optionType}}</view></view>-->
+<!--      <view class="row"><view class="row_cont"><text>订单号：</text>{{detail?.orderNo}}</view></view>-->
+<!--      <view class="row"><view class="row_cont"><text>下单时间：</text>{{formatLocalTime(new Date(detail?.createdTime))}}</view></view>-->
+<!--      <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail?.structureDisplayName}}{{detail?.optionType}}（{{ detail?.optionCode }}）</view></view>-->
+<!--      <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{detail?.optionType}}）</view></view>-->
+<!--      <view class="row"><view class="row_cont"><text>行权方式：</text>欧式，到期一次性现金结算</view></view>-->
+<!--      <view class="row"><view class="row_cont"><text>生效日期：</text>-->
+<!--        {{ detail?.startDate }}</view></view>-->
+<!--      <view class="row"><view class="row_cont"><text>到期日期：</text>{{ detail?.maturityDate }}</view></view>-->
+<!--      <view class="row"><view class="row_cont"><text>期限：</text>{{ detail?.termName }}</view></view>-->
+<!--      <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">收益结构：到期时，如果标的价格高于行权价，则根据约定公式计算收益；若标的价格低于或等于行权价，则期权到期失效，可能损失全部期权费。（具体以《产品说明书》《交易确认书》为准）</view></view>-->
+<!--    </view>-->
 
     <!-- 资金投入与成本 -->
     <view class="card">

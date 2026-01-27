@@ -42,9 +42,6 @@ const dealTime = () => {
 
 const initSmsCodeData = () => {
   const smsCodeTime = uni.getStorageSync("smsCode")
-  console.log("smsCodeTime", smsCodeTime)
-  console.log("new Date().getTime()", new Date().getTime())
-  console.log("new Date().getTime()", new Date().getTime() <= smsCodeTime)
 
   if(new Date().getTime() <= smsCodeTime){
     remainingTime.value = Math.floor((smsCodeTime - new Date().getTime())/ 1000)
@@ -68,9 +65,9 @@ const getSmsCodes = () => {
     uni.showToast({ title: '手机号码格式不正确', icon: 'none' })
     return
   }
-  console.log("registerForm.telephone", registerForm.telephone)
+
   getSmsCode(registerForm.telephone).then(res => {
-    console.log("rews", res)
+    // console.log("rews", res)
     if(!res.success){
       uni.showToast({ title: res.message || '发送失败', icon: 'none' })
       return
@@ -82,7 +79,7 @@ const getSmsCodes = () => {
       dealTime()
     }
   }).catch(err => {
-    console.log("获取验证码异常", err)
+    console.log("获取验证码异常 error", err)
     uni.showToast({ title: err.message, icon: 'none' })
   })
 }
@@ -136,12 +133,11 @@ const onSubmit = () => {
 }
 
 const userRegistered = () => {
-  console.log("注册表单", registerForm)
+  // console.log("注册表单", registerForm)
   uni.showToast({ title: '注册中...', icon: 'none' })
 
   userRegister(registerForm.userName, registerForm.password, `+86${registerForm.telephone}`, registerForm.smsCode, registerForm.referrerUuid)
     .then(res => {
-      console.log("注册结果", res)
       if(res.access_token){
         uni.showToast({ title: '注册成功，请登录', icon: 'none' })
         switchMode('login')
@@ -158,7 +154,6 @@ const userRegistered = () => {
 const userLoggedIn = () => {
   userLoginH5(loginForm.userName, loginForm.password, "", "")
     .then(res => {
-      console.log("登录结果", res)
       if(res.status == "success"){
         uni.showToast({ title: '登录成功', icon: 'none' })
         uni.setStorageSync('authToken', res.data.access_token)

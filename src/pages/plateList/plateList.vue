@@ -60,7 +60,7 @@ const getConcepts = () => {
 const getIndustries = () => {
   uni.showLoading({title: "加载中…"})
   getIndustry(50).then(res => {
-    console.log("res", res)
+    // console.log("res", res)
     hotSectors.value = res
     uni.hideLoading()
   }).catch(err => {

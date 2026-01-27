@@ -242,7 +242,7 @@ export const inquiryOptions = ():Promise<InquiryOptionsResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await  http.get(`${BASE_URL}/inquiry/options`)
-            console.log("InquiryOptionsResp res", res);
+            // console.log("InquiryOptionsResp res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as InquiryOptionsResp)
             } else {
@@ -280,7 +280,7 @@ export const getUserInfo = ():Promise<UserResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/info`)
-            console.log("getUserInfo res", res);
+            // console.log("getUserInfo res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as UserResp)
             } else {
@@ -694,7 +694,7 @@ export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.pat(`${BASE_URL}/users/info`)
-            console.log("getUserInfo res", res);
+            // console.log("getUserInfo res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as UserResp)
             } else {

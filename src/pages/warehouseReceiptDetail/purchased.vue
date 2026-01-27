@@ -164,7 +164,7 @@ const exexercise = () => {
     <!-- 文档与风险提示 -->
     <view class="card">
       <view class="fir_title">文档与风险提示</view>
-      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《交易确认书》</view></view>
+<!--      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《交易确认书》</view></view>-->
       <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《产品说明书》</view></view>
       <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《风险揭示书》</view></view>
       <view class="row">

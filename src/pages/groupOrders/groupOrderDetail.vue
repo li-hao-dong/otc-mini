@@ -120,11 +120,11 @@
 <!--      <view class="operation_btn">去支付?? 如何寻找的支付状态</view>-->
 <!--    </view>-->
     <view class="btns_bottom" v-if="orderDetail?.currentSize<orderDetail?.targetSize">
-      <!--   我已⽀付，拼单未满员   -->
+      <!--   拼单未满员   -->
       <view class="operation_btn" @click="copyUrl">分享给好友拼单</view>
     </view>
     <view class="btns_bottom" v-if="Object.keys(myOrderDetail).length > 0 && orderDetail?.currentSize==orderDetail?.targetSize" >
-      <!--   我已⽀付，拼单已满且组状态为 PAID   -->
+      <!--   我参与，拼单满员   -->
       <view class="operation_btn" @click="toOrderDetail">前往仓单详情</view>
       <view class="hint_cont">
         拼单已成团，系统将为所有成员统⼀申请购买期权产品。若订单最终盈利，将按 本拼单模式约定，从收益中⾃动扣除拼单服务费。

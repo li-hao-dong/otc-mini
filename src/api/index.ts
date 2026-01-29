@@ -51,7 +51,7 @@ export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): Promise<InquiryR
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.post(`${BASE_URL}/inquiry/quote`, inquiryQuoteReq)
-            // console.log("InquiryResp res", res);
+            console.log("InquiryResp res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as InquiryResp)
             } else {
@@ -76,7 +76,7 @@ export const userLogin = (code: string, nickname: string):Promise<loginResp> => 
                 wechat_login_js_code: code,
             }
             const res: response = <response>await  http.post(`${BASE_URL}/users/login`, params)
-            // console.log("login res", res);
+            // // console.log("login res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as loginResp)
             } else {
@@ -105,7 +105,7 @@ export const buyProduct = ( inquiryId: string, productCode: string, priceType: P
                 limitPrice: limitPrice
             };
             const res: response = <response>await  http.post(`${BASE_URL}/inquiry/INQ_20251201075147/order`, payload)
-            // console.log("buyProduct res", res);
+            // // console.log("buyProduct res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as orderPayloadResp)
             } else {
@@ -125,7 +125,7 @@ export const exerciseHandler = (orderId: string, payload: ExerciseReq):Promise<E
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.post(`${BASE_URL}/users/orders/${orderId}/exercise`, payload)
-            // console.log("exerciseHandler res", res);
+            // // console.log("exerciseHandler res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as ExerciseResp)
             } else {
@@ -148,7 +148,7 @@ export const subscribeMessage = (templateIds: string):Promise<subscribeMessageRe
                 template_id: templateIds
             }
             const res: response = <response>await http.post(`${BASE_URL}/user-wechat-subscriptions/user/subscribe`, payload)
-            // console.log("subscribeMessage res", res);
+            // // console.log("subscribeMessage res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as subscribeMessageResp)
             } else {
@@ -174,7 +174,7 @@ export const userRegister = (userName: string, password: string, telephone: stri
                 referrer_uuid: referrerUuid
             }
             const res: response = <response>await  http.post(`${BASE_URL}/users/register`, params)
-            // console.log("userRegister res", res);
+            // // console.log("userRegister res", res);
             if (res.data?.status === "success") {
                 resolve(res.data.data as any)
             } else {
@@ -223,7 +223,7 @@ export const userLoginH5 = (userName: string, password: string, wechatLoginJsCod
                 referrer_uuid: referrerUuid
             }
             const res: response = <response>await http.post(`${BASE_URL}/users/login`, params)
-            // console.log("userLogin res", res);
+            // // console.log("userLogin res", res);
             if (res.statusCode == 200) {
                 resolve(res.data as loginH5Resp)
             } else {
@@ -244,7 +244,7 @@ export const inquiryOptions = ():Promise<InquiryOptionsResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await  http.get(`${BASE_URL}/inquiry/options`)
-            // console.log("InquiryOptionsResp res", res);
+            // // console.log("InquiryOptionsResp res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as InquiryOptionsResp)
             } else {
@@ -262,7 +262,7 @@ export const inquiryHistory = (page: number, pageSize: number):Promise<InquiryHi
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/inquiry/history?page=${page}&pageSize=${pageSize}`)
-            console.log("inquiryHistory res", res);
+            // // console.log("inquiryHistory res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as InquiryHistoryResp)
             } else {
@@ -282,9 +282,9 @@ export const getUserInfo = ():Promise<UserResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/info`)
-            // console.log("getUserInfo res", res);
-            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
-                resolve(res.data as UserResp)
+            // // console.log("getUserInfo res", res);
+            if (res.user_uuid) {
+                resolve(res as UserResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch user info'));
             }
@@ -302,7 +302,7 @@ export const calculatorData = (payload: calculatorReq):EquityOptionCalculatorRes
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await  http.post(`${BASE_URL}/tools/equity-option/calculate`, payload)
-            console.log("calculator res", res);
+            // console.log("calculator res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data.data as EquityOptionCalculatorResult)
             } else {
@@ -328,7 +328,7 @@ export const uploadPaymentProof = (orderId: string, imgFile: File, bankName: str
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await  http.post(`${BASE_URL}/users/orders/${orderId}/payment-proof`, payload, 'application/x-www-form-urlencoded')
-            console.log("calculator res", res);
+            // console.log("calculator res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as UploadImageResp)
             } else {
@@ -349,7 +349,7 @@ export const getUserOrderInfo = (page: number, size: number, status: string):Pro
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/orders?page=${page}&size=${size}&status=${status}`)
-            console.log("getUserOrderInfo res", res);
+            // console.log("getUserOrderInfo res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as userOrderResp)
             } else {
@@ -368,7 +368,7 @@ export const orderDetail = (orderId: string):Promise<OrderDetail> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/orders/${orderId}`)
-            console.log("orderDetail res", res);
+            // console.log("orderDetail res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as OrderDetail)
             } else {
@@ -387,7 +387,7 @@ export const bankReceiptInfo = (orderId: string):Promise<BankAccountInfoResp> =>
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/orders/${orderId}/bank-info`)
-            console.log("bankReceiptInfo res", res);
+            // console.log("bankReceiptInfo res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as BankAccountInfoResp)
             } else {
@@ -407,7 +407,7 @@ export const paymentProofInfo = (orderId: string):Promise<PaymentProofInfoResp> 
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/users/orders/${orderId}/payment-proof`)
-            console.log("paymentProofInfo res", res);
+            // console.log("paymentProofInfo res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as PaymentProofInfoResp)
             } else {
@@ -426,7 +426,7 @@ export const getImage = (paymentVoucherUrl: string):Promise<any> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: any = <response>await http.get(`${BASE_URL}${paymentVoucherUrl}?timestamp=${new Date().getTime()}`)
-            console.log("getImage res", res);
+            // console.log("getImage res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res as any)
             } else {
@@ -445,7 +445,7 @@ export const createGroupOrder = (payload: CreateGroupOrderReq):Promise<CreateGro
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.post(`${BASE_URL}/group-orders`, payload, 'application/json')
-            console.log("createGroupOrder res", res);
+            // console.log("createGroupOrder res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as CreateGroupOrderResp)
             } else {
@@ -475,7 +475,7 @@ export const getGroupOrders = (payload:GetGroupOrdersReq|undefined):Promise<GetG
             }
 
             const res: response = <response>await http.get(url)
-            console.log("getGroupOrders res", res);
+            // console.log("getGroupOrders res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as GetGroupOrdersResp)
             } else {
@@ -505,7 +505,7 @@ export const getMyGroupOrders = (payload:MyGroupOrderReq):Promise<MyGroupOrderRe
             }
 
             const res: response = <response>await http.get(url)
-            console.log("getMyGroupOrders res", res);
+            // console.log("getMyGroupOrders res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as MyGroupOrderResp)
             } else {
@@ -524,7 +524,7 @@ export const getGroupOrderDetail = (groupOrderNo:string):Promise<GroupOrderDetai
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/group-orders/${groupOrderNo}`)
-            console.log("getGroupOrderDetail res", res);
+            // console.log("getGroupOrderDetail res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as GroupOrderDetailResp)
             } else {
@@ -545,7 +545,7 @@ export const addGroupOrder = (groupOrderNo:string, nominalAmount: number):Promis
                 nominalAmount:nominalAmount,
                 priceType: "Market"
             }, "application/json")
-            console.log("addGroupOrder res", res);
+            // console.log("addGroupOrder res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as AddGroupOrder)
             } else {
@@ -564,7 +564,7 @@ export const getUserGroupOrderSuccessOrders = (groupOrderNo:string):Promise<User
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/group-orders/${groupOrderNo}/order`)
-            console.log("getUserGroupOrderSuccessOrders res", res);
+            // console.log("getUserGroupOrderSuccessOrders res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as UserGroupOrderDetailResp)
             } else {
@@ -583,7 +583,7 @@ export const getIndices = ():Promise<IndicesResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL}/market/indices`)
-            console.log("getIndices res", res);
+            // // console.log("getIndices res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as IndicesResp)
             } else {
@@ -602,7 +602,7 @@ export const getIndustry = (limit: number):Promise<industryStruct> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL_BOARD}/industry?limit=${limit ? limit:5}`)
-            console.log("getIndustry res", res);
+            // console.log("getIndustry res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as industryStruct)
             } else {
@@ -621,7 +621,7 @@ export const getConcept = (limit: number):Promise<conceptStruct> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL_BOARD}/concept?limit=${limit ? limit:5}`)
-            console.log("getConcept res", res);
+            // // console.log("getConcept res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as conceptStruct)
             } else {
@@ -641,7 +641,7 @@ export const getRecommendations = ():Promise<RecommendationItemResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL_BOARD}/recommendations?limit=${10}`)
-            console.log("getConcept res", res);
+            // // console.log("getConcept res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as RecommendationItemResp)
             } else {
@@ -660,7 +660,7 @@ export const getStockFee = (symbol: string):Promise<number> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL_BOARD}/stock/fee?symbol=${symbol}`)
-            console.log("getStockFee res", res);
+            // console.log("getStockFee res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.value as number)
             } else {
@@ -679,7 +679,7 @@ export const getConstituents = (board_type: string, symbol:string):Promise<const
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL_BOARD}/constituents?board_type=${board_type}&symbol=${symbol}`)
-            console.log("getConstituents res", res);
+            // console.log("getConstituents res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as constituents[])
             } else {
@@ -696,7 +696,7 @@ export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.pat(`${BASE_URL}/users/info`)
-            // console.log("getUserInfo res", res);
+            // // console.log("getUserInfo res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as UserResp)
             } else {

@@ -214,7 +214,6 @@ const getConcepts = () => {
 
 const getRecommendationss = () => {
   getRecommendations().then(res => {
-    console.log("res111", res)
     referralBd.value = res;
   }).catch(err => {
     console.log("getRecommendationss err.", err)

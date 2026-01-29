@@ -51,7 +51,7 @@ export const inquiryQuote = (inquiryQuoteReq: InquiryQuoteReq): Promise<InquiryR
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.post(`${BASE_URL}/inquiry/quote`, inquiryQuoteReq)
-            console.log("InquiryResp res", res);
+            // console.log("InquiryResp res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as InquiryResp)
             } else {

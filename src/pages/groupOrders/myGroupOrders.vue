@@ -2,7 +2,7 @@
     <view>
       <view class="container_box" v-if="groupOrderDatas.length > 0">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
-          <view :class="`${groupOrder.creatorName == '我' ? 'Leader':'Member'}`">{{groupOrder.creatorName == '我' ? 'Leader':'Member'}}</view>
+          <view :class="`${groupOrder.creatorName == '我' ? '发起人':'成员'}`">{{groupOrder.creatorName == '我' ? 'Leader':'Member'}}</view>
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
           <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.termName}} {{groupOrder.optionType}}</text></view>
           <view class="row">
@@ -19,7 +19,7 @@
             <view class="group_order_data">{{ groupOrder.currentSize }} / {{ groupOrder.targetSize }} ⼈ </view>
           </view>
           <view class="row">
-            <view class="small_tit">单⼈期权费：</view>
+            <view class="small_tit">单⼈名义本金：</view>
             <view class="group_order_data">¥ {{truncToTwo(Number(groupOrder.totalNominalAmount) / groupOrder.targetSize)}} / ⼈</view>
           </view>
 

@@ -181,6 +181,8 @@ export const userRegister = (userName: string, password: string, telephone: stri
                 reject(new Error(res.message || 'Failed to fetch userRegister info'));
             }
         } catch (error) {
+            console.error("error", error)
+            // reject(new Error(res.message || 'Failed to fetch userRegister info'));
             reject(error);
         }
     })

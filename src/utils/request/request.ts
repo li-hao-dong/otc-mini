@@ -3,33 +3,6 @@ import { failToast, warnToast } from "@/utils/toast/toast";
 import type {response} from "@/interfaces/response";
 const timeout = 6000; // 6s内未返回数据视为超时
 
-
-/**
- * @TODO
- * request 拦截器
- * @description 等待完善，需要先对接不同状态的接口
- * */
-export const interceptor = function () {
-    // 添加请求拦截器
-    uni.addInterceptor("request", {
-        // 发请求前执行
-        invoke(args) {
-            if(!`${useStore().user.token}`){
-                warnToast("请先登录");
-                setTimeout(() => {
-                    uni.reLaunch({url: '/pages/user/user'})
-                }, 2000)
-                return;
-            }
-            // if (useStore().user.token_valid_until < new Date().getTime()) {
-            //     // 超出有效时间
-            //     warnToast("请重新登录");
-            //     return;
-            // }
-        },
-    });
-};
-
 const beforeRequest = (url:string) => {
     // 对 不需要 token 的接口 直接放行
     // if(url.includes("/users/register") || url.includes("/users/login") || url.includes("/inquiry/history") ||
@@ -74,9 +47,9 @@ const http = {
                 success: (res:response) => {
                     // console.log("res@@@", res);
                     if (res.statusCode != 200) {
-                        this.checkoutDataCode(res.data.code||res.statusCode, res.msg || res.data);
+                        this.checkoutDataCode(res.data?.code??res?.statusCode, res?.msg ?? res?.data);
                         // failToast(res.data.msg);
-                        setTimeout(() => {reject(res.msg || res.data);}, 2000)
+                        setTimeout(() => {reject(res?.msg ?? res?.data);}, 2000)
                         return;
                     }
                     resolve(res.data);
@@ -113,9 +86,9 @@ const http = {
                 success: (res:response) => {
                     // console.log("res@@@", res);
                     if (res.statusCode != 200) {
-                        let hintContent = this.checkoutDataCode(res.data.code||res.statusCode, res.msg || res.data);
+                        let hintContent = this.checkoutDataCode(res.data?.code??res?.statusCode, res?.msg ?? res?.data);
                         // failToast(res.data.msg);
-                        setTimeout(() => {reject(hintContent || res.msg || res.data);}, 2000)
+                        setTimeout(() => {reject(hintContent ?? res?.msg ?? res?.data);}, 2000)
                         return;
                     }
                     resolve(res);
@@ -228,7 +201,7 @@ const http = {
             }
             case 409:
                 // warnToast("用户已存在");
-                hintContent = "用户已存在"
+                hintContent = msg ?? "用户已存在"
                 break;
             // default:
             //     warnToast(msg || "请求出错，请稍后重试");

@@ -147,7 +147,7 @@ const userRegistered = () => {
     })
     .catch(err => {
       console.log("注册异常", err)
-      uni.showToast({ title: Object.keys(err).length > 0 ? err.message:err, icon: 'none' })
+      uni.showToast({ title: typeof(err) === 'string' ? err:err.message, icon: 'none' })
     })
 }
 

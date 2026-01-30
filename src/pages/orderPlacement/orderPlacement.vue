@@ -100,10 +100,10 @@
               </view>
               <view class="row">
                 <view class="row_cont"><text class="popup_card_row_title">期权费率：</text>
-                  {{ truncToTwo(orderPayload?.quote.price) }}%</view>
+                  {{ truncToTwo(orderPayload?.quote.price) }}% {{useStore().miniData.waitPriceHint}}</view>
               </view>
               <view class="row">
-                <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100)}}</view>
+                <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100)}}{{useStore().miniData.waitPriceHint}}</view>
               </view>
               <view class="row">
                 <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(useStore().miniData.channelFee) }}</view>
@@ -111,7 +111,7 @@
               <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
               </view>
               <view class="row">
-                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 + useStore().miniData.channelFee) }}</view>
+                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 + useStore().miniData.channelFee) }}{{useStore().miniData.waitPriceHint}}</view>
               </view>
               <view class="row">
                 <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>
@@ -478,7 +478,7 @@ const calcOptionType = (type: OptionType | undefined) => {
 
 const getStockFees = () => {
   getStockFee(orderPayload.value.assetCode).then(res => {
-    console.log("getStockFee res", res)
+    // console.log("getStockFee res", res)
     fee.value= res;
   }).catch(err => {
     console.log("getStockFee err", err)

@@ -5,6 +5,7 @@ import {onLoad} from "@dcloudio/uni-app";
 import {orderDetail} from "@/api";
 import {formatLocalTime, truncToTwo} from "../../utils";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
+import {useStore} from "../../stores";
 
 // const detail = ref<OrderDetail | null>(null);
 const props = defineProps<{detail: OrderDetail | UserGroupOrderDetailResp}>();
@@ -83,7 +84,7 @@ const getDetail = (orderId: string) => {
 
     <!-- 费用概览 -->
     <view class="card">
-      <view class="fir_title">费用概览</view>
+      <view class="fir_title">费用概览 {{useStore().miniData.waitPriceHint}}</view>
       <view class="row">
         <view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(detail.nominalAmount)}}</view>
         <view class="row_cont"><text>期权费率：</text>{{ detail.volatilityPercent }}%</view>

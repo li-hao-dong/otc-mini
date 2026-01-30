@@ -22,13 +22,13 @@
       </view>
 
 
-      <view style=" margin-top: 10px; ">
-        <view :class="`grid_col ${calcColNum(terms.length)}`" ref="gridCol" :style="`width: 100%; color: #777777; display: grid; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;`">
+      <view style=" margin-top: 10px; " v-if="terms && terms.length">
+        <view :class="`grid_col ${calcColNum(terms?.length)}`" ref="gridCol" :style="`width: 100%; color: #777777; display: grid; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;`">
           <view >结构</view>
           <view v-for="(term, index) in terms" :key="index">{{ term }}</view>
           <view >报价方</view>
         </view>
-        <view :class="`grid_col ${calcColNum(terms.length)}`" :style="`width: 100%; display: inline-grid; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;`"
+        <view :class="`grid_col ${calcColNum(terms?.length)}`" :style="`width: 100%; display: inline-grid; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;`"
               v-for="(item, index) in results" :key="index">
           <view>{{ item.structureName }}</view>
           <view v-for="(term, i) in terms" :key="i">
@@ -56,7 +56,7 @@
 <!--      </uni-table>-->
 
       <view class="hint_text actions">
-        请点击报价查看详情并下单
+        请点击报价查看详情并下单。当前报价为0时，代表暂未查询到可成交的实时报价。你仍然可以下单，由通道侧人工或离线系统为您寻找可成交报价。
       </view>
 
       <view class="row">

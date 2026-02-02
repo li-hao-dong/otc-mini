@@ -221,7 +221,7 @@ const previewImage = () =>  {
       </view>
     </view>
 
-    <view class="submit" @click="()=> uni.switchTab({url: '/pages/warehouseReceipts/warehouseReceipts'})">返回订单列表</view>
+    <view class="submit" @click="()=> uni.navigateTo({url: '/pages/warehouseReceipts/warehouseReceipts'})">返回订单列表</view>
     <view class="card"><view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">我有疑问，联系客服</view></view></view>
 
     <view class="card">

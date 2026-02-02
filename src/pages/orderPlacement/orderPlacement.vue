@@ -300,7 +300,7 @@ const initData = () => {
     orderPayload.value = uni.getStorageSync('OrderPayload');
     getGroupOrderData()
     getStockFees()
-    if(!orderPayload.value) uni.switchTab ({ url: '/pages/inquiry/inquiry' });
+    if(!orderPayload.value) uni.navigateTo ({ url: '/pages/inquiry/inquiry' });
 };
 
 const getGroupOrderData = () => {
@@ -364,14 +364,14 @@ const placeOrder = () => {
                               console.error('订阅消息授权失败：', err);
                             },
                             complete() {
-                              setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+                              setTimeout(() => { uni.navigateTo({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
                             }
                           }
                       )
                       // #endif
 
                       // #ifdef H5
-                      setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+                      setTimeout(() => { uni.navigateTo({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
                       // #endif
 
                     }
@@ -401,7 +401,7 @@ const applySubscribeMessage = () => {
           subscribeMessage(messageIds).then(res => {
             console.log('订阅消息接口调用结果：', res);
           });
-          setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+          setTimeout(() => { uni.navigateTo({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
           return;
         } else if (tmplStatus === 'reject') {
           console.log('用户已拒绝订阅该模板消息');
@@ -426,7 +426,7 @@ const applySubscribeMessage = () => {
               console.error('订阅消息授权失败：', err);
             },
             complete() {
-              setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+              setTimeout(() => { uni.navigateTo({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
             }
           }
         )

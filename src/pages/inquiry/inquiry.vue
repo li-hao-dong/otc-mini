@@ -102,6 +102,8 @@
       <view class="submitBtn" role="button" tabindex="0" @click="submit">
         <text class="submitText">询价</text>
       </view>
+
+      <tabbar :currentTabbarKey="2"/>
     </view>
   </view>
 
@@ -121,6 +123,7 @@ import {
 } from "@/interfaces/inquiry/inquiryOptions";
 import type {InquiryQuoteReq, InquiryResp} from "@/interfaces/inquiry/inquiryQuote";
 import {onLoad, onShow} from "@dcloudio/uni-app";
+import Tabbar from "@/components/tabbar.vue";
 
 type OptionTypeCode = "SNOWBALL" | "CALL";
 

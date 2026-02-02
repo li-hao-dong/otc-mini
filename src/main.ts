@@ -5,14 +5,17 @@ import uListItem from '@dcloudio/uni-ui/lib/uni-list-item/uni-list-item.vue'
 import uTable from '@dcloudio/uni-ui/lib/uni-table/uni-table.vue'
 import uTr from '@dcloudio/uni-ui/lib/uni-tr/uni-tr.vue'
 // import uTh from '@dcloudio/uni-ui/lib/uni-th/uni-th.vue'
+import uviewPlus from 'uview-plus'
 import uTd from '@dcloudio/uni-ui/lib/uni-td/uni-td.vue'
 import uDataSelect from "@dcloudio/uni-ui/lib/uni-data-select/uni-data-select.vue";
 import { createPinia } from 'pinia'
 import App from "./App.vue";
+
 export function createApp() {
   const pinia = createPinia();
   const app = createSSRApp(App);
   app.use(pinia);
+  app.use(uviewPlus)
   app.component("uniIcons", uniIcons)
   app.component("uniLists", uList)
   app.component("uniListItem", uListItem)

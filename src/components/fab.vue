@@ -21,14 +21,16 @@
           text: '计算器',
           active: false,
           pagePath: "/pages/calculator/calculator",
+          type: '',
         },
-      {
-        iconPath: '/static/menu/icon_place_an_order.png',
-        selectedIconPath: '/static/menu/icon_place_an_order_active.png',
-        text: '下单',
-        active: false,
-        pagePath: "/pages/inquiry/inquiry",
-      },
+        {
+          iconPath: '/static/menu/icon_place_an_order.png',
+          selectedIconPath: '/static/menu/icon_place_an_order_active.png',
+          text: '下单',
+          active: false,
+          pagePath: "/pages/inquiry/inquiry",
+          type: 'tabbar',
+        },
         // {
         //   iconPath: '/static/menu/icon_inquiry_history.png',
         //   selectedIconPath: '/static/menu/icon_inquiry_history_active.png',
@@ -40,7 +42,11 @@
 
     const trigger = (e) => {
       // content.value[e.index].active = !e.item.active
-      uni.navigateTo({url: e.item.pagePath})
+      if(e.item.type === 'tabbar'){
+        uni.switchTab({url: e.item.pagePath})
+      }else {
+        uni.navigateTo({url: e.item.pagePath})
+      }
     }
 </script>
 

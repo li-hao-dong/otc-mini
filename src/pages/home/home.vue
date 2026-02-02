@@ -93,6 +93,8 @@
     </view>
 
     <fab />
+
+    <tabbar :currentTabbarKey="0"/>
   </view>
 </template>
 
@@ -106,6 +108,7 @@ import type {RecommendationItemResp} from "@/interfaces/recommendation";
 import type {MarketIndexResponse} from "@/interfaces/indices";
 import Fab from "@/components/fab.vue";
 import {truncToTwo} from "@/utils";
+import Tabbar from "@/components/tabbar.vue";
 const marketIndices = ref<MarketIndexResponse[]>([]);
 const bkTypes = ref<{ name: string, code: number, type: string }[]>([
   { name: '概念板块', code: 1, type: "concept"},

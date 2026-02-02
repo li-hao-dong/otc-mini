@@ -82,4 +82,7 @@ page{
   font-size: 20upx !important; /* 使用upx单位适配不同屏幕 */
 }
 
+.uni-tabbar-bottom{
+  display: none !important;
+}
 </style>

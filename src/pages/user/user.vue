@@ -51,7 +51,7 @@
       </view>
 
       <view style="margin-top: 20px">
-        <view class="row" @click="uni.switchTab({url: '/pages/warehouseReceipts/warehouseReceipts'})">
+        <view class="row" @click="uni.navigateTo({url: '/pages/warehouseReceipts/warehouseReceipts'})">
           <view class="label">我的仓单</view>
           <view class="value">
             <uni-icons type="right" size="16"></uni-icons>
@@ -71,6 +71,7 @@
         </view>
       </view>
     </view>
+    <tabbar  :currentTabbarKey="4"/>
   </view>
 </template>
 
@@ -82,6 +83,7 @@ import type {loginResp} from "@/interfaces/login";
 import {useStore} from "@/stores";
 import {onLoad, onShow} from "@dcloudio/uni-app";
 import {failToast, succToast} from "@/utils/toast/toast";
+import Tabbar from "@/components/tabbar.vue";
 
 const avatarUrl = ref<string|undefined>("")
 const address = ref<string|undefined>("暂无")

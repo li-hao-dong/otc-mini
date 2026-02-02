@@ -24,6 +24,7 @@
 <!--    </view>-->
 
     <fab />
+    <tabbar  :currentTabbarKey="3"/>
   </view>
 </template>
 
@@ -36,6 +37,7 @@ import type {MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
 import {type GetGroupOrdersReq, type Group, Status} from "@/interfaces/groupOrders/getGroupOrders";
 import {onShow} from "@dcloudio/uni-app";
 import Fab from "@/components/fab.vue";
+import Tabbar from "@/components/tabbar.vue";
 
 const activeTab = ref<number>(0);
 const subTabs = ref<Array<string>>(['拼单市场', '我的拼单']);

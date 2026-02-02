@@ -89,6 +89,7 @@
     </view>
 
     <fab />
+    <tabbar :currentTabbarKey="1"/>
   </view>
 </template>
 
@@ -103,6 +104,7 @@ import {onLoad, onShow} from "@dcloudio/uni-app";
 import {failToast} from "@/utils/toast/toast";
 import {calcClassName} from "@/utils";
 import Fab from "@/components/fab.vue";
+import Tabbar from "@/components/tabbar.vue";
 
 const store = useStore();
 const history = ref<InquiryHistoryResp[]>([]);

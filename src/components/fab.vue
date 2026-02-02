@@ -22,6 +22,13 @@
           active: false,
           pagePath: "/pages/calculator/calculator",
         },
+      {
+        iconPath: '/static/menu/icon_place_an_order.png',
+        selectedIconPath: '/static/menu/icon_place_an_order_active.png',
+        text: '下单',
+        active: false,
+        pagePath: "/pages/inquiry/inquiry",
+      },
         // {
         //   iconPath: '/static/menu/icon_inquiry_history.png',
         //   selectedIconPath: '/static/menu/icon_inquiry_history_active.png',

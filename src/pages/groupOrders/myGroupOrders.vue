@@ -1,8 +1,8 @@
 <template>
     <view>
-      <view class="container_box" v-if="groupOrderDatas.length > 0">
+      <view class="container container_box" v-if="groupOrderDatas.length > 0">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
-          <view :class="`${groupOrder.creatorName == '我' ? '发起人':'成员'}`">{{groupOrder.creatorName == '我' ? 'Leader':'Member'}}</view>
+          <view :class="`${groupOrder.creatorName == '我' ? 'Leader':'Member'}`">{{groupOrder.creatorName == '我' ? '发起人':'成员'}}</view>
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
           <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.termName}} {{groupOrder.optionType}}</text></view>
           <view class="row">
@@ -64,15 +64,27 @@ import {formatLocalTime, truncToTwo} from "../../utils";
 import type {MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
 import {onHide, onLoad, onShow} from "@dcloudio/uni-app";
 
-// const groupOrderDatas = ref<Array<Group>>([])
+const groupOrderDatas = ref<Array<Group>>([])
+const payloadData = reactive<MyGroupOrderReq>({
+  page: 1,
+  pageSize: 10
+})
+const groupResp = reactive<{total: number, totalPages: number}>({
+  total: 0,
+  totalPages: 0,
+})
+// const porps = defineProps<{groupOrderDatas: Array<Group>, payloadData: GetGroupOrdersReq, groupResp:{total: number, totalPages: number}}>();
+// const emits = defineEmits<{
+//   (e: 'getGroupOrders'): void
+// }>()
 
-const porps = defineProps<{groupOrderDatas: Array<Group>, payloadData: GetGroupOrdersReq, groupResp:{total: number, totalPages: number}}>();
-const emits = defineEmits<{
-  (e: 'getGroupOrders'): void
-}>()
+onShow(() => {
+  getMyGroupOrdersData()
+})
 
 const getPlatGroupOrders = () => {
-  emits("getGroupOrders")
+  // emits("getGroupOrders")
+  getMyGroupOrdersData()
 }
 
 const toDetail = (groupOrder: Group) => {
@@ -80,6 +92,27 @@ const toDetail = (groupOrder: Group) => {
     url: `/pages/groupOrders/groupOrderDetail?groupOrderNo=${groupOrder.groupOrderNo}`
   })
 }
+
+const getMyGroupOrdersData = () => {
+  if(groupOrderDatas.value.length>0){
+    if(groupResp.totalPages === payloadData.page){
+      return
+    }
+    payloadData.page += 1
+  }
+  getMyGroupOrders(payloadData).then(res => {
+    // console.log('res222', res)
+    if(groupOrderDatas.value.length>0){
+      groupOrderDatas.value = groupOrderDatas.value.concat(res.groups)
+    }else{
+      groupOrderDatas.value = res.groups
+    }
+    groupResp.total = res.pagination.total;
+    groupResp.totalPages = res.pagination.totalPages;
+  }).catch(err => {
+    console.log('err', err)
+  })
+};
 </script>
 
 <style scoped>
@@ -129,7 +162,7 @@ const toDetail = (groupOrder: Group) => {
   color: #333333;
   padding-bottom: 10px;
   border-bottom: 1px solid #E6E6E6;
-  //margin-top: 20px;
+  /*margin-top: 20px;*/
 }
 
 .bd text{

@@ -63,8 +63,8 @@
       </view>
 
       <view class="section">
-<!--        <view class="label">期限 (最多三选)</view>-->
-        <view class="label">期限 (单选)</view>
+        <view class="label">期限 (最多三选)</view>
+<!--        <view class="label">期限 (单选)</view>-->
         <view class="chips">
           <view
             v-for="t in terms"
@@ -187,13 +187,13 @@ const selectNominal = (n: number) => {
 };
 
 const toggleTerm = (code: string) => {
-  selectedTerms.value = [code]
-  // const i = selectedTerms.value.indexOf(code);
-  // if (i >= 0) {
-  //   selectedTerms.value.splice(i, 1);
-  // } else if (selectedTerms.value.length < 3) {
-  //   selectedTerms.value.push(code);
-  // }
+  // selectedTerms.value = [code]
+  const i = selectedTerms.value.indexOf(code);
+  if (i >= 0) {
+    selectedTerms.value.splice(i, 1);
+  } else if (selectedTerms.value.length < 3) {
+    selectedTerms.value.push(code);
+  }
 };
 
 const toggleSource = (code: string) => {
@@ -229,8 +229,8 @@ const getOptions = () => {
     selectedNominal.value = <number>res.nominalAmounts![0];
     // console.log("res.terms.sort((termA, termB) => return termB.days > termA.days ? termA:termB);", res.terms.sort((termA, termB) => return termB.days > termA.days ? termA:termB))
     terms.value = <Term[]>res.terms.sort((a, b) => a.days - b.days);
-    // selectedTerms.value = <string[]>[res.terms![3].code, res.terms![1].code, res.terms![2].code];
-    selectedTerms.value = <string[]>[res.terms![1].code];
+    selectedTerms.value = <string[]>[res.terms![3].code, res.terms![1].code, res.terms![2].code];
+    // selectedTerms.value = <string[]>[res.terms![1].code];
     sources.value = res.sources?.length == 0 ? <Source[]>[{ code: "ALL", name: "ALL", isActive: true }] : <Source[]>[{ code: "ALL", name: "ALL", isActive: true }, ...res!.sources];
     selectedSources.value = <string[]>[sources.value![0].code];
   }).catch(() => {

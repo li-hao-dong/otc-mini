@@ -86,6 +86,7 @@ export const useUserStore = defineStore('user', {
                         this.status = <string>res.status;
                         this.update_timestamp = <Date>res.update_timestamp;
                         this.user_type = <string>res.user_type;
+                        uni.switchTab({url:'/pages/home/home'})
                     }).catch(err => {
                         console.error("Failed to fetch user info:", err);
                     })

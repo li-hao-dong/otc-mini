@@ -51,12 +51,18 @@
       </view>
 
       <view style="margin-top: 20px">
-<!--        <view class="row" @click="uni.navigateTo({url: '/pages/groupOrders/myGroupOrders'})">-->
-<!--          <view class="label">我的拼单</view>-->
-<!--          <view class="value">-->
-<!--            <uni-icons type="right" size="16"></uni-icons>-->
-<!--          </view>-->
-<!--        </view>-->
+        <view class="row" @click="uni.switchTab({url: '/pages/warehouseReceipts/warehouseReceipts'})">
+          <view class="label">我的仓单</view>
+          <view class="value">
+            <uni-icons type="right" size="16"></uni-icons>
+          </view>
+        </view>
+        <view class="row" @click="uni.navigateTo({url: '/pages/groupOrders/myGroupOrders'})">
+          <view class="label">我的拼单</view>
+          <view class="value">
+            <uni-icons type="right" size="16"></uni-icons>
+          </view>
+        </view>
         <view class="row" @click="signOut">
           <view class="label">退出登录</view>
           <view class="value">

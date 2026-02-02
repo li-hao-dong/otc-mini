@@ -1,25 +1,27 @@
 <template>
   <view class="container">
-    <view class="sub_tabs">
-      <view class="tab_btn "
-            v-for="(tab,k) in subTabs" :class="activeTab == k ? 'tab_btn_avtive': ''"
-            @click="changeComponent(k)"
-      >{{ tab }}</view>
-    </view>
+<!--    <view class="sub_tabs">-->
+<!--      <view class="tab_btn "-->
+<!--            v-for="(tab,k) in subTabs" :class="activeTab == k ? 'tab_btn_avtive': ''"-->
+<!--            @click="changeComponent(k)"-->
+<!--      >{{ tab }}</view>-->
+<!--    </view>-->
+    <uni-notice-bar scrollable text=" 选一条拼单 → 看清拼单模式和单人名义本金 → 加入并在截止前支付 → 人数凑齐后系统统一帮您下单。优势：多人合伙分摊期权费，单笔投入更低；仅在订单盈利时按拼单模式收取服务费，亏损不额外收费。" />
+
     <view class="create_group_order_btn" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">创建新拼单</view>
 
 <!--    <component :is="activeComponent" :key="activeTab" />-->
     <!--0        <groupOrdersMarket/>-->
     <!--1        <myGroupOrders/>-->
 
-    <view class="group_cont_box" v-show="activeTab == 0">
+<!--    <view class="group_cont_box" v-show="activeTab == 0">-->
         <groupOrdersMarket :groupOrderDatas="groupOrderDatas" :payloadData="payloadData" :groupResp="groupResp" @getGroupOrders="getPlatGroupOrders"/>
 <!--      <component :is="activeComponent" :key="currentKey" />-->
-    </view>
-    <view class="group_cont_box" v-show="activeTab == 1">
-        <myGroupOrders  :groupOrderDatas="myGroupOrderDatas" :payloadData="myGroupOrderPayloadData" :groupResp="myGroupOrderResp" @getGroupOrders="getMyGroupOrdersData"/>
+<!--    </view>-->
+<!--    <view class="group_cont_box" v-show="activeTab == 1">-->
+<!--        <myGroupOrders  :groupOrderDatas="myGroupOrderDatas" :payloadData="myGroupOrderPayloadData" :groupResp="myGroupOrderResp" @getGroupOrders="getMyGroupOrdersData"/>-->
 <!--      <component :is="activeComponent" :key="currentKey" />-->
-    </view>
+<!--    </view>-->
 
     <fab />
   </view>
@@ -31,7 +33,7 @@ import MyGroupOrders from "@/pages/groupOrders/myGroupOrders.vue";
 import GroupOrdersMarket from "@/pages/groupOrders/groupOrdersMarket.vue";
 import {getGroupOrders, getMyGroupOrders} from "@/api";
 import type {MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
-import type {GetGroupOrdersReq, Group} from "@/interfaces/groupOrders/getGroupOrders";
+import {type GetGroupOrdersReq, type Group, Status} from "@/interfaces/groupOrders/getGroupOrders";
 import {onShow} from "@dcloudio/uni-app";
 import Fab from "@/components/fab.vue";
 
@@ -43,7 +45,8 @@ const activeComponent = ref<any>(GroupOrdersMarket);
 const groupOrderDatas = ref<Array<Group>>([])
 const payloadData = reactive<GetGroupOrdersReq>({
   page: 1,
-  pageSize: 10
+  pageSize: 10,
+  status: Status.Open
 })
 const groupResp = reactive<{total: number, totalPages: number}>({
   total: 0,
@@ -144,7 +147,7 @@ const clearMyPlatGroupOrdersData = () => {
 
 <style lang="scss" scoped>
 .container{
-  padding-top: 10px;
+  /*padding-top: 10px;*/
 }
 .sub_tabs{
   width: 95%;

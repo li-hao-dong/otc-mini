@@ -56,7 +56,8 @@
 <!--      </uni-table>-->
 
       <view class="hint_text actions">
-        请点击报价查看详情并下单。当前报价为0时，代表暂未查询到可成交的实时报价。你仍然可以下单，由通道侧人工或离线系统为您寻找可成交报价。
+        请点击报价查看详情并下单。<br/>
+        当前报价为0时，代表暂未查询到可成交的实时报价。你仍然可以下单，由通道侧人工或离线系统为您寻找可成交报价。
       </view>
 
       <view class="row">
@@ -362,7 +363,8 @@ const placeAnOrder = (quote: any, term: string, result: any) => {
   font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: 400;
   font-size: 13px;
-  line-height: 1.21em;
-  color: #999999;
+  line-height: 1.5em;
+  /*color: #999999;*/
+  color: #e63946;
 }
 </style>

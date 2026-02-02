@@ -1,7 +1,5 @@
 <template>
     <view>
-
-      <uni-notice-bar scrollable text=" 选一条拼单 → 看清拼单模式和单人名义本金 → 加入并在截止前支付 → 人数凑齐后系统统一帮您下单。优势：多人合伙分摊期权费，单笔投入更低；仅在订单盈利时按拼单模式收取服务费，亏损不额外收费。" />
       <view class="container_box" v-if="groupOrderDatas.length > 0">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <view class="tag">官⽅推荐</view>

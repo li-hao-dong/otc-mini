@@ -50,12 +50,18 @@ page{
   --size-text: 14px;
 }
 
+/*.bottom-box {
+  bottom: var(--window-bottom); !* 自动适配 Tabbar 的位置 *!
+}*/
+
 .container{
   width: 100%;
   min-height: 100dvh;
   background-color: var(--color-secondary-bg);
   font-size: var(--size-text);
   padding-bottom: 80px;
+  /*padding-bottom: constant(safe-area-inset-bottom);
+  padding-bottom: env(safe-area-inset-bottom);*/
 }
 
 .rise_color,

@@ -158,7 +158,7 @@ const userLoggedIn = () => {
         uni.showToast({ title: '登录成功', icon: 'none' })
         uni.setStorageSync('authToken', res.data.access_token)
         // uni.setStorageSync('userInfo', res.data.userInfo)
-        useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type, token_valid_until: new Date().getTime() + (60 * 60 * 24 * 1000)});
+        useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type, token_valid_until: new Date().getTime() + (60 * 60 * 24 * 6 * 1000)});
 
         uni.reLaunch({ url: '/pages/home/home' })
       } else {

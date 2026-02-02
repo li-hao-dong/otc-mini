@@ -29,7 +29,7 @@
           text: '下单',
           active: false,
           pagePath: "/pages/inquiry/inquiry",
-          type: 'tabbar',
+          type: '',
         },
         // {
         //   iconPath: '/static/menu/icon_inquiry_history.png',
@@ -42,11 +42,11 @@
 
     const trigger = (e) => {
       // content.value[e.index].active = !e.item.active
-      if(e.item.type === 'tabbar'){
-        uni.switchTab({url: e.item.pagePath})
-      }else {
+      // if(e.item.type === 'tabbar'){
+      //   uni.switchTab({url: e.item.pagePath})
+      // }else {
         uni.navigateTo({url: e.item.pagePath})
-      }
+      // }
     }
 </script>
 

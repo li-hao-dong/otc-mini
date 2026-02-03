@@ -89,8 +89,19 @@ const changeTabbar = (e:any) => {
 
 
 <style scoped lang="scss">
+
+
+.u-tabbar__placeholder{
+  height: calc(50px + constant(safe-area-inset-bottom)) !important;
+  height: calc(50px + env(safe-area-inset-bottom)) !important;
+}
+
 .u-tabbar__content__item-wrapper{
   padding-top: 3px;
+  /*padding-top: calc(3px + constant(safe-area-inset-top)) !important;
+  padding-top: calc(3px + env(safe-area-inset-top)) !important;
+  padding-bottom: calc(80px + constant(safe-area-inset-bottom)) !important;
+  padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;*/
 
   .u-tabbar-item{
     font-size: 12px;

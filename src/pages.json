@@ -15,7 +15,7 @@
 			"style": {
 				"navigationBarTitleText": "首页",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -24,7 +24,7 @@
 			"style": {
 				"navigationBarTitleText": "询价记录",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -32,9 +32,8 @@
 			"path": "pages/inquiry/inquiry",
 			"style": {
 				"navigationBarTitleText": "询价信息",
-				"navigationBarTextStyle": "black",
-				"navigationBarTextWeight": "bold",
-				"navigationBarBackgroundColor": "#fff",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -43,7 +42,7 @@
 			"style": {
 				"navigationBarTitleText": "询价结果",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -52,16 +51,17 @@
 			"style": {
 				"navigationBarTitleText": "下单操作",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
 		{
 			"path": "pages/warehouseReceipts/warehouseReceipts",
 			"style": {
+				"navigationStyle": "custom",
 				"navigationBarTitleText": "仓单",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -70,7 +70,7 @@
 			"style": {
 				"navigationBarTitleText": "计算器",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -79,7 +79,7 @@
 			"style": {
 				"navigationBarTitleText": "我的",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -89,7 +89,7 @@
 			"style": {
 				"navigationBarTitleText": "登录/注册",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
@@ -100,7 +100,7 @@
 			"style": {
 				"navigationBarTitleText": "仓单详情",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -109,7 +109,7 @@
 			"style": {
 				"navigationBarTitleText": "我的拼单",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -119,7 +119,7 @@
 			"style": {
 				"navigationBarTitleText": "拼单市场",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -129,7 +129,7 @@
 			"style": {
 				"navigationBarTitleText": "拼单详情",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom",
 			}
@@ -140,7 +140,7 @@
 			"style": {
 				"navigationBarTitleText": "板块名称",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		},
@@ -150,7 +150,7 @@
 			"style": {
 				"navigationBarTitleText": "模块信息",
 				"navigationBarTextStyle": "white",
-				"navigationBarTextWeight": "bold",
+				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
 		}

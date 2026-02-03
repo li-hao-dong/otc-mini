@@ -149,7 +149,8 @@ const clearMyPlatGroupOrdersData = () => {
 
 <style lang="scss" scoped>
 .container{
-  /*padding-top: 10px;*/
+  padding-bottom: 0;
+  min-height: fit-content;
 }
 .sub_tabs{
   width: 95%;

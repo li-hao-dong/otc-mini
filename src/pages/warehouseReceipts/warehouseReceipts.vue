@@ -1,10 +1,18 @@
 <template>
+
   <view class="container wrPage">
 <!--    <view class="topBar">-->
 <!--      <text class="topText">机构</text>-->
 <!--&lt;!&ndash;      <text class="topText">录入 +</text>&ndash;&gt;-->
 <!--    </view>-->
-
+    <up-navbar
+        title="仓单"
+        @leftClick="backPage"
+        bg-color="#d6423a"
+        leftIconColor="#fff"
+        titleStyle="color: #fff"
+    >
+    </up-navbar>
     <!--  菜单部分  -->
     <view class="segTabs">
       <view class="segItem" style="width: 100%;" v-for="(item, index) in orderType" :key="index" @click="orderTypeKey = index">
@@ -145,7 +153,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue"
 import { getUserOrderInfo } from "@/api"
-import {onLoad, onShow} from "@dcloudio/uni-app"
+import {onBackPress, onLoad, onShow} from "@dcloudio/uni-app"
 import type { OrdersSummary, OrderSummary, Pagination } from "@/interfaces/orders"
 import { useStore } from "@/stores"
 import { failToast } from "@/utils/toast/toast"
@@ -166,11 +174,25 @@ const orderList = ref<OrderSummary[]>([])
 const ordersSummary = ref<OrdersSummary>()
 const pagination = ref<Pagination>()
 const moreDataStatus = ref<boolean>(false);
+const customeBackPage = ref<string>()
 
 onShow(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  console.log(urlParams.get('origin'))
+  if(urlParams.get('origin')){
+    customeBackPage.value = urlParams.get('origin') as string;
+  }
   resetData()
   getUserOrder()
 })
+
+const backPage =() => {
+  if(customeBackPage.value){
+    uni.switchTab({url:`/pages/home/${customeBackPage.value}`})
+    return
+  }
+  uni.navigateBack()
+}
 
 watch(() => orderTypeKey.value, () => {
   status.value = orderTypeKey.value === 0 ? '' : 'SETTLED'
@@ -257,6 +279,9 @@ const getUserOrder = () => {
 </script>
 
 <style scoped>
+.container{
+  padding-top: 44px;
+}
 .segTabs {
   width: 100%;
   text-align: center;

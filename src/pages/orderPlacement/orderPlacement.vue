@@ -113,8 +113,11 @@
               <view class="row">
                 <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 + useStore().miniData.channelFee) }}{{useStore().miniData.waitPriceHint}}</view>
               </view>
-              <view class="row">
+              <view>
                 <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>
+                <view class="row_cont" style="color: #d6423a; font-size: 12px;">当前页面展示的费率与费用项均为预估/待报价，不代表最终报价。
+                  您提交订单后，通道侧运营人员将根据实时市场情况进行报价并回传最终期权费率、期权费、通道费及合计金额，并通过系统或短信通知您。
+                  如您不接受确认后的报价，可取消订单。</view>
               </view>
             </view>
 
@@ -371,7 +374,7 @@ const placeOrder = () => {
                       // #endif
 
                       // #ifdef H5
-                      setTimeout(() => { uni.navigateTo({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
+                      setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
                       // #endif
 
                     }

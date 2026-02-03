@@ -139,20 +139,20 @@ onShow(() => {
   getConcepts()
   getRecommendationss();
   // getConcepts();
-  timer.value = setInterval(() => {
-    getIndicess();
-    if(activeBkType.value == 1){
-      getConcepts()
-    }else {
-      getIndustries()
-    }
-    getRecommendationss();
-  }, 60000 * 3)
+  // timer.value = setInterval(() => {
+  //   getIndicess();
+  //   if(activeBkType.value == 1){
+  //     getConcepts()
+  //   }else {
+  //     getIndustries()
+  //   }
+  //   getRecommendationss();
+  // }, 60000 * 3)
 })
 
 onHide(() => {
-  clearInterval(timer.value)
-  timer.value = null;
+  // clearInterval(timer.value)
+  // timer.value = null;
 })
 
 const initSwiperHeight = () => {

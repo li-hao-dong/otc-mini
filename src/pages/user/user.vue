@@ -63,6 +63,8 @@
             <uni-icons type="right" size="16"></uni-icons>
           </view>
         </view>
+      </view>
+      <view style="margin-top: 20px">
         <view class="row" @click="signOut">
           <view class="label">退出登录</view>
           <view class="value">

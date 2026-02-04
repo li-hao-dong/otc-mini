@@ -77,7 +77,7 @@
             <view class="para"><text class="label">名义本金：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</view>
           </view>
         </view>
-        <view>
+        <view style="white-space: nowrap;">
           距离结束 {{ calcLeftDay(order?.maturityDate) }} 天
         </view>
       </view>
@@ -282,6 +282,7 @@ const getUserOrder = () => {
 .container{
   padding-top: 44px;
 }
+
 .segTabs {
   width: 100%;
   text-align: center;
@@ -328,7 +329,7 @@ const getUserOrder = () => {
 }
 
 .sumCard {
-  width: 100%;
+  /*width: 100%;*/
   padding: 20px;
   box-sizing: border-box;
 }
@@ -401,11 +402,11 @@ const getUserOrder = () => {
 }
 
 .card {
-  width: 100%;
+  /*width: 100%;*/
   background-color: #FFFFFF;
   border-radius: 14px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  margin: 16px auto;
+  margin: 16px 9px;
   padding: 5%;
   box-sizing: border-box;
   position: relative;
@@ -444,6 +445,7 @@ const getUserOrder = () => {
   color: #000000;
   margin-right: 15px;
   padding: 0 0 10px 0;
+  white-space: nowrap;
 }
 
 .fir_row_text:first-child{

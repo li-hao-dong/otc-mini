@@ -45,11 +45,13 @@ enum OrderType {
 
 const detail = ref<OrderDetail | UserGroupOrderDetailResp | null>(null);
 const orderId = ref<string>("");
+const groupOrderId = ref<string>("");
 const orderType = ref<OrderType>();
 
 onLoad((option) => {
   if(option?.groupOrderNo){
     // 获取拼单详情
+    groupOrderId.value = option?.groupOrderNo
     orderId.value = option?.groupOrderNo
     orderType.value = OrderType.GroupOrder
     getGroupOrderDetail(option?.groupOrderNo)
@@ -62,9 +64,9 @@ onLoad((option) => {
 })
 
 const initDetail = () => {
-  if(orderType.value === OrderType.GroupOrder && orderId.value){
+  if(orderType.value === OrderType.GroupOrder && groupOrderId.value){
     // 获取拼单详情
-    getGroupOrderDetail(orderId.value)
+    getGroupOrderDetail(groupOrderId.value)
   }else if(orderType.value === OrderType.Order && orderId.value){
     // 获取仓单详情
     getDetail(orderId.value)
@@ -85,7 +87,6 @@ const getGroupOrderDetail = (groupOrderNo: string) => {
     // console.log("拼单详情", res)
     detail.value = res
     orderId.value = res.orderNo
-
   })
 }
 </script>

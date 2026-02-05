@@ -17,6 +17,7 @@
     <!--  已结算8-->
     <settled v-if="detail?.orderStatus == '已结算'" :detail="detail" :orderId="orderId"></settled>
     <!--  已取消9-->
+    <cancel v-if="detail?.orderStatus == '已取消'" :detail="detail" :orderId="orderId"></cancel>
   </view>
 </template>
 
@@ -35,6 +36,7 @@ import Exercised from "@/pages/warehouseReceiptDetail/exercised.vue";
 import Settled from "@/pages/warehouseReceiptDetail/settled.vue";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 import {truncToTwo} from "@/utils";
+import Cancel from "@/pages/warehouseReceiptDetail/cancel.vue";
 
 enum OrderType {
   GroupOrder = "GROUPORDER",
@@ -82,6 +84,8 @@ const getGroupOrderDetail = (groupOrderNo: string) => {
   getUserGroupOrderSuccessOrders(groupOrderNo).then(res => {
     // console.log("拼单详情", res)
     detail.value = res
+    orderId.value = res.orderNo
+
   })
 }
 </script>

@@ -374,7 +374,7 @@ const placeOrder = () => {
                       // #endif
 
                       // #ifdef H5
-                      setTimeout(() => { uni.navigateTo({ url: '/pages/warehouseReceipts/warehouseReceipts?origin=home'}); }, 1500);
+                      setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts?origin=home'}); }, 1500);
                       // #endif
 
                     }

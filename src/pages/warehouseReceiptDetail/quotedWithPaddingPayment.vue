@@ -209,7 +209,7 @@ watch(() => props.orderId, (newVal) => {
   // console.log("props.orderId@@@@", props.orderId)
   // console.log("props.orderId@@@@", newVal)
   if(newVal){
-    // orderId.value = newVal;
+    orderId.value = newVal;
     // getDetail(orderId.value)
     getBankReceiptInfo(orderId.value)
   }

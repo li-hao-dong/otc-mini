@@ -12,6 +12,31 @@
         leftIconColor="#fff"
         titleStyle="color: #fff"
     >
+<!--      <template #left>-->
+<!--        <up-navbar-mini-->
+<!--            :autoBack="true"-->
+<!--            homeUrl="/pages/home/home"-->
+<!--        >-->
+<!--        </up-navbar-mini>-->
+<!--&lt;!&ndash;        <view&ndash;&gt;-->
+<!--&lt;!&ndash;            class="u-nav-slot"&ndash;&gt;-->
+<!--&lt;!&ndash;        >&ndash;&gt;-->
+<!--&lt;!&ndash;          <up-icon&ndash;&gt;-->
+<!--&lt;!&ndash;              name="arrow-left"&ndash;&gt;-->
+<!--&lt;!&ndash;              size="19"&ndash;&gt;-->
+<!--&lt;!&ndash;          ></up-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;          <up-line&ndash;&gt;-->
+<!--&lt;!&ndash;              direction="column"&ndash;&gt;-->
+<!--&lt;!&ndash;              :hairline="false"&ndash;&gt;-->
+<!--&lt;!&ndash;              length="16"&ndash;&gt;-->
+<!--&lt;!&ndash;              margin="0 8px"&ndash;&gt;-->
+<!--&lt;!&ndash;          ></up-line>&ndash;&gt;-->
+<!--&lt;!&ndash;          <up-icon&ndash;&gt;-->
+<!--&lt;!&ndash;              name="home"&ndash;&gt;-->
+<!--&lt;!&ndash;              size="20"&ndash;&gt;-->
+<!--&lt;!&ndash;          ></up-icon>&ndash;&gt;-->
+<!--&lt;!&ndash;        </view>&ndash;&gt;-->
+<!--      </template>-->
     </up-navbar>
     <!--  菜单部分  -->
     <view class="segTabs">

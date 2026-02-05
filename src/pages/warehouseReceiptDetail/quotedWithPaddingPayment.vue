@@ -298,7 +298,7 @@ watch(() => props.orderId, (newVal) => {
     <view class="card">
       <view class="fir_title">上传支付凭证</view>
       <view class="row">
-        <view class="row_cont remittance"><text>实际支付金额：</text>￥<input type="number" v-model="remitData.paymentAmount" placeholder="请输入实际支付金额"></view>
+        <view class="row_cont remittance"><text>实际支付金额：</text>￥<input type="digit" v-model="remitData.paymentAmount" placeholder="请输入实际支付金额"></view>
       </view>
       <view class="row">
         <view class="row_cont remittance"><text>支付时间：</text>

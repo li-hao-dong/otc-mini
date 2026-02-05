@@ -73,7 +73,7 @@
                         <text class="pillText">限价</text>
                     </view>
                     <view class="limitInput" v-if="selectedPriceType === PriceType.LIMIT">
-                        <input type="number" class="inputBox" placeholder="请输入限价" v-model="limitPrice" />
+                        <input type="digit" class="inputBox" placeholder="请输入限价" v-model="limitPrice" />
                         <text class="unit">元</text>
                     </view>
                 </view>

@@ -68,6 +68,7 @@
     "@dcloudio/uni-cli-shared": "3.0.0-4080420251103001",
     "@dcloudio/uni-stacktracey": "3.0.0-4080420251103001",
     "@dcloudio/vite-plugin-uni": "3.0.0-4080420251103001",
+    "@plugin-web-update-notification/vite": "^2.0.2",
     "@types/mockjs": "^1.0.10",
     "@vue/runtime-core": "^3.4.21",
     "@vue/tsconfig": "^0.1.3",

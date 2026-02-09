@@ -7,6 +7,7 @@ import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {formatLocalTime, truncToTwo} from "@/utils";
 import {type ExerciseReq, ExerciseType} from "@/interfaces/exercise";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
+import {prodBook, riskBook} from "@/utils/instruction";
 
 const voucher = ref<string | string[]>()
 // const detail = ref<OrderDetail | null>(null);
@@ -168,8 +169,8 @@ const exexercise = () => {
     <view class="card">
       <view class="fir_title">文档与风险提示</view>
 <!--      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《交易确认书》</view></view>-->
-      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《产品说明书》</view></view>
-      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《风险揭示书》</view></view>
+      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;" @click="prodBook">查看《产品说明书》</view></view>
+      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;" @click="riskBook">查看《风险揭示书》</view></view>
       <view class="row">
         <view class="row_cont" style="color:#999999; font-size:12px;">
           场外个股期权属于高风险复杂金融产品，可能发生全部投资本金损失。<br/>

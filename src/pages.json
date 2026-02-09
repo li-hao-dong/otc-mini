@@ -154,6 +154,16 @@
 				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			/* PDF阅读 */
+			"path": "pages/pdfView/pdfView",
+			"style": {
+				"navigationBarTitleText": "PDF预览",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "linear",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"tabBar": {

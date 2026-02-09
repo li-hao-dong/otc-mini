@@ -7,6 +7,7 @@ import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {useStore} from "@/stores";
 import {formatLocalTime, truncToTwo} from "@/utils";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
+import {prodBook, riskBook} from "@/utils/instruction";
 
 const voucher = ref<string>()
 // const detail = ref<OrderDetail | null>(null);
@@ -240,10 +241,10 @@ watch(() => props.orderId, (newVal) => {
           请确认已充分阅读并理解产品说明及风险揭示书，仅使用自有闲散资金参与投资。</text>
       </view>
       <view class="row" style="margin-top: 10px;">
-        <view class="row_cont" style="color: #5E8ED6; font-size: 12px;">查看《产品说明书》</view>
+        <view class="row_cont" style="color: #5E8ED6; font-size: 12px;" @click="prodBook">查看《产品说明书》</view>
       </view>
       <view class="row">
-        <view class="row_cont" style="color: #5E8ED6; font-size: 12px;">查看《风险揭示书》</view>
+        <view class="row_cont" style="color: #5E8ED6; font-size: 12px;" @click="riskBook">查看《风险揭示书》</view>
       </view>
     </view>
 

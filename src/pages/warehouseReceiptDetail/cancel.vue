@@ -7,6 +7,7 @@ import {formatLocalTime, truncToTwo} from "@/utils";
 import {useStore} from "@/stores";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
+import {prodBook, riskBook} from "@/utils/instruction";
 
 const voucher = ref<string>()
 // const detail = ref<OrderDetail | null>(null);
@@ -213,8 +214,8 @@ const previewImage = () =>  {
       <view class="fir_title">文档与风险提示</view>
 <!--      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看/下载《结算单》</view></view>-->
 <!--      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《交易确认书》</view></view>-->
-      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《产品说明书》</view></view>
-      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看《风险揭示书》</view></view>
+      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;" @click="prodBook">查看《产品说明书》</view></view>
+      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;" @click="riskBook">查看《风险揭示书》</view></view>
       <view class="upload-tips">
         <text>场外个股期权属于高风险复杂金融产品，可能发生全部期权费损失，历史结算结果不代表未来收益表现。</text>
         <text>请在未来投资中继续充分评估自身风险承受能力，仅使用自有闲散资金参与，并认真阅读相关产品文件与风险揭示文件。</text>

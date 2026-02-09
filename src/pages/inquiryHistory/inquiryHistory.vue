@@ -7,86 +7,91 @@
         <view class="inquiryTitle">询价</view>
       </view>
     </view>
-    <view class="inquiryHistoryBox" v-if="history.length > 0 && store.user.token">
-      <view class="inquiryHistoryList" v-for="(item, index) in history" :key="item.inquiryId" @click="toDetail(item.inquiry_parameters)">
-        <view class="fir_row">
-          <view class="fir_br">
-            <view class="fir_br_center">
-              <view>{{ item.underlying }}</view>
-              <view style="color: #acacac; padding-top: 2px;">{{ item.underlying_code }}</view>
+
+    <z-paging v-model="history" @callback="inquiryHistoryFun">
+      <view class="inquiryHistoryBox" >
+        <view class="inquiryHistoryList" v-for="(item, index) in history" :key="item.inquiryId" @click="toDetail(item.inquiry_parameters)">
+          <view class="fir_row">
+            <view class="fir_br">
+              <view class="fir_br_center">
+                <view>{{ item.underlying }}</view>
+                <view style="color: #acacac; padding-top: 2px;">{{ item.underlying_code }}</view>
+              </view>
+            </view>
+            <view class="fir_br">
+              股价：<text :class="calcClassName(item.price_change)">{{ item.current_price }}</text>
+            </view>
+            <view class="fir_br">
+              涨幅：<text :class="calcClassName(item.price_change)">{{ item.price_change }}</text>
             </view>
           </view>
-          <view class="fir_br">
-            股价：<text :class="calcClassName(item.price_change)">{{ item.current_price }}</text>
+          <view class="sec_row">
+            <view>询价规模：<text>{{ item.nominal_amount }}万</text></view>
+            <view>询价机构：<text>机构</text></view>
           </view>
-          <view class="fir_br">
-            涨幅：<text :class="calcClassName(item.price_change)">{{ item.price_change }}</text>
-          </view>
-        </view>
-        <view class="sec_row">
-          <view>询价规模：<text>{{ item.nominal_amount }}万</text></view>
-          <view>询价机构：<text>机构</text></view>
-        </view>
 
-        <view style="margin-top: 10px; ">
-          <view  style="width: 100%; color: #777777; display: grid; grid-template-columns: 25% 25% 25% 25%; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;">
-            <view>结构</view>
-            <view>期限</view>
-            <view>最优报价</view>
-            <view>报价方</view>
-          </view>
-          <view style="width: 100%; display: inline-grid; grid-template-columns: 25% 25% 25% 25%; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;"
-                v-for="(res, key) in structureData[index]" :key="key">
-            <view>{{ res.structureName }}</view>
-            <view><view style="line-height: 26px;" v-for="(term, i) in Object.keys(res?.terms)" :key="i">{{term}}</view></view>
-            <view><view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i" :class="calcClassName(term.price)">{{term.price}}%</view></view>
-            <view>
-              <view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i">
-                {{term.sourceCode}}
-                <!--                <uni-icons type="right" size="16" color="#c3c9d3"></uni-icons>-->
+          <view style="margin-top: 10px; ">
+            <view  style="width: 100%; color: #777777; display: grid; grid-template-columns: 25% 25% 25% 25%; font-size: 12px; padding-bottom: 10px; border-bottom: 1px solid #eaeaea;">
+              <view>结构</view>
+              <view>期限</view>
+              <view>最优报价</view>
+              <view>报价方</view>
+            </view>
+            <view style="width: 100%; display: inline-grid; grid-template-columns: 25% 25% 25% 25%; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;"
+                  v-for="(res, key) in structureData[index]" :key="key">
+              <view>{{ res.structureName }}</view>
+              <view><view style="line-height: 26px;" v-for="(term, i) in Object.keys(res?.terms)" :key="i">{{term}}</view></view>
+              <view><view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i" :class="calcClassName(term.price)">{{term.price}}%</view></view>
+              <view>
+                <view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i">
+                  {{term.sourceCode}}
+                  <!--                <uni-icons type="right" size="16" color="#c3c9d3"></uni-icons>-->
+                </view>
               </view>
             </view>
           </view>
+
+          <!--        <uni-table border stripe emptyText="暂无更多数据" style="width: 100%">-->
+          <!--          <uni-tr>-->
+          <!--            <uni-th align="center" style="width: calc(100% / 4);">结构</uni-th>-->
+          <!--            <uni-th align="center" style="width: calc(100% / 4);">期限</uni-th>-->
+          <!--            <uni-th align="center" style="width: calc(100% / 4);">最优报价</uni-th>-->
+          <!--            <uni-th align="center" style="width: calc(100% / 4);">报价方</uni-th>-->
+          <!--          </uni-tr>-->
+          <!--          <uni-tr v-for="(res, key) in structureData[index]" :key="key">-->
+          <!--            <uni-td>{{ res.structureName }}</uni-td>-->
+          <!--            <uni-td><view v-for="(term, i) in Object.keys(res.terms)" :key="i">{{term}}</view></uni-td>-->
+          <!--            <uni-td><view v-for="(term, i) in Object.values(res.terms)" :key="i">{{term.price}}%</view></uni-td>-->
+          <!--            <uni-td>-->
+          <!--              <view v-for="(term, i) in Object.values(res.terms)" :key="i">-->
+          <!--                {{term.sourceCode}}-->
+          <!--&lt;!&ndash;                <uni-icons type="right" size="16" color="#c3c9d3"></uni-icons>&ndash;&gt;-->
+          <!--              </view>-->
+          <!--            </uni-td>-->
+          <!--          </uni-tr>-->
+          <!--        </uni-table>-->
         </view>
-
-<!--        <uni-table border stripe emptyText="暂无更多数据" style="width: 100%">-->
-<!--          <uni-tr>-->
-<!--            <uni-th align="center" style="width: calc(100% / 4);">结构</uni-th>-->
-<!--            <uni-th align="center" style="width: calc(100% / 4);">期限</uni-th>-->
-<!--            <uni-th align="center" style="width: calc(100% / 4);">最优报价</uni-th>-->
-<!--            <uni-th align="center" style="width: calc(100% / 4);">报价方</uni-th>-->
-<!--          </uni-tr>-->
-<!--          <uni-tr v-for="(res, key) in structureData[index]" :key="key">-->
-<!--            <uni-td>{{ res.structureName }}</uni-td>-->
-<!--            <uni-td><view v-for="(term, i) in Object.keys(res.terms)" :key="i">{{term}}</view></uni-td>-->
-<!--            <uni-td><view v-for="(term, i) in Object.values(res.terms)" :key="i">{{term.price}}%</view></uni-td>-->
-<!--            <uni-td>-->
-<!--              <view v-for="(term, i) in Object.values(res.terms)" :key="i">-->
-<!--                {{term.sourceCode}}-->
-<!--&lt;!&ndash;                <uni-icons type="right" size="16" color="#c3c9d3"></uni-icons>&ndash;&gt;-->
-<!--              </view>-->
-<!--            </uni-td>-->
-<!--          </uni-tr>-->
-<!--        </uni-table>-->
       </view>
-    </view>
 
-    <view class="hint" v-else-if="store.user.token">
-      <view class="hint_sign">您还没有询价记录，请先询价！</view>
-      <button class="to_sign" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">去询价</button>
-    </view>
+      <template #empty>
+        <view class="hint">
+          <view class="hint_sign">您还没有询价记录，请先询价！</view>
+          <button class="to_sign" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">去询价</button>
+        </view>
+      </template>
+    </z-paging>
 
-    <view v-if="store.user.token">
+<!--    <view v-if="store.user.token">-->
 <!--      <view class="more_data_cont" v-if="moreDataStatus" @click="moreData">加载更多</view>-->
 <!--      <view class="more_data_cont" v-else>没有数据了</view>-->
 <!--      <view class="more_data_cont" v-else>询价历史</view>-->
-    </view>
-    <view class="hint" v-else>
-      <view class="hint_sign">询价历史</view>
+<!--    </view>-->
+<!--    <view class="hint" v-else>-->
+<!--      <view class="hint_sign">询价历史</view>-->
 <!--      <view class="hint_sign">询价历史，需要登录后才能提供。</view>-->
 <!--      <view class="hint_sign">您还未登录，请先登录！</view>-->
 <!--      <button class="to_sign" @click="uni.switchTab({url: '/pages/user/user'})">去登录</button>-->
-    </view>
+<!--    </view>-->
 
     <fab />
     <tabbar :currentTabbarKey="1"/>
@@ -105,29 +110,22 @@ import {failToast} from "@/utils/toast/toast";
 import {calcClassName} from "@/utils";
 import Fab from "@/components/fab.vue";
 import Tabbar from "@/components/tabbar.vue";
+import ZPaging from "@/components/zPaging/zPaging.vue";
 
 const store = useStore();
 const history = ref<InquiryHistoryResp[]>([]);
 const moreDataStatus = ref<boolean>(true);
 const structureData = ref<any>([]);
-const pageNum = ref<number>(1);
-const pageSize = ref<number>(20);
+// onShow(() => {
+//   resetDate();
+// })
 
-onShow(() => {
-  resetDate();
-  inquiryHistoryFun();
-})
 
-const moreData = () => {
-  if(!moreDataStatus.value) return failToast("没有更多数据了");
-  pageNum.value += 1;
-  inquiryHistoryFun()
-}
-
-const inquiryHistoryFun = async () => {
-  inquiryHistory(pageNum.value, pageSize.value).then((res:InquiryHistoryResp) => {
+const inquiryHistoryFun = async ({paging, pageNo, pageSize}) => {
+  // inquiryHistory(pageNum.value, pageSize.value).then((res:InquiryHistoryResp) => {
+  uni.showLoading({title: '加载中'})
+  inquiryHistory(pageNo, pageSize).then((res:InquiryHistoryResp) => {
     // console.log("res.inquiries", res.inquiries);
-    moreDataStatus.value = res.pagination?.total_pages! >= pageNum.value;
 
     res.inquiries!.map((data:InquiryResp, key: number) => {
       const filterData: any = {};
@@ -165,17 +163,11 @@ const inquiryHistoryFun = async () => {
 
     });
 
-    // res.inquiries['filterData'] = filterData
-    if(history.value!.length > 0){
-      history.value = history.value?.concat(res.inquiries!)
-    }else {
-      history.value = res.inquiries;
-    }
-    // console.log("structureData,", structureData.value)
-
-
+    paging.complete(res.inquiries)
+    uni.hideLoading()
   }).catch((err: Error) => {
     console.log("inquiryHistory err", err);
+    uni.hideLoading()
   });
 }
 
@@ -192,7 +184,6 @@ const toDetail = (inquiry_parameters:InquiryQuoteReq) => {
 const resetDate = () => {
   history.value = [];
   structureData.value = [];
-  pageNum.value = 1;
   moreDataStatus.value = true;
 }
 
@@ -332,10 +323,6 @@ const resetDate = () => {
 
 .hint{
   width: 100%;
-  margin-top: 50%;
-  margin-left: 50%;
-  position: absolute;
-  transform: translateX(-50%) translateY(-50%);
 }
 
 .hint_sign{

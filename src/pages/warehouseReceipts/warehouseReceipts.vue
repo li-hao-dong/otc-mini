@@ -12,31 +12,6 @@
         leftIconColor="#fff"
         titleStyle="color: #fff"
     >
-<!--      <template #left>-->
-<!--        <up-navbar-mini-->
-<!--            :autoBack="true"-->
-<!--            homeUrl="/pages/home/home"-->
-<!--        >-->
-<!--        </up-navbar-mini>-->
-<!--&lt;!&ndash;        <view&ndash;&gt;-->
-<!--&lt;!&ndash;            class="u-nav-slot"&ndash;&gt;-->
-<!--&lt;!&ndash;        >&ndash;&gt;-->
-<!--&lt;!&ndash;          <up-icon&ndash;&gt;-->
-<!--&lt;!&ndash;              name="arrow-left"&ndash;&gt;-->
-<!--&lt;!&ndash;              size="19"&ndash;&gt;-->
-<!--&lt;!&ndash;          ></up-icon>&ndash;&gt;-->
-<!--&lt;!&ndash;          <up-line&ndash;&gt;-->
-<!--&lt;!&ndash;              direction="column"&ndash;&gt;-->
-<!--&lt;!&ndash;              :hairline="false"&ndash;&gt;-->
-<!--&lt;!&ndash;              length="16"&ndash;&gt;-->
-<!--&lt;!&ndash;              margin="0 8px"&ndash;&gt;-->
-<!--&lt;!&ndash;          ></up-line>&ndash;&gt;-->
-<!--&lt;!&ndash;          <up-icon&ndash;&gt;-->
-<!--&lt;!&ndash;              name="home"&ndash;&gt;-->
-<!--&lt;!&ndash;              size="20"&ndash;&gt;-->
-<!--&lt;!&ndash;          ></up-icon>&ndash;&gt;-->
-<!--&lt;!&ndash;        </view>&ndash;&gt;-->
-<!--      </template>-->
     </up-navbar>
     <!--  菜单部分  -->
     <view class="segTabs">
@@ -89,52 +64,53 @@
     </view>
 
     <!--  列表部分  -->
-    <view class="card" v-for="order in orderList" :key="order.orderId" @click="toDetail(order)">
-      <view class="row" style="display: flex; justify-content: space-between">
-        <view>
-          <view class="tag">{{order?.groupOrderNo ? '来自拼单':''}}</view>
-          <view class="row">
-            <view class="fir_row_text">{{order?.underlyingAssetName}}</view>
-            <view class="fir_row_text">{{order?.structureDisplayName}} {{order?.optionType}}</view>
-            <view class="fir_row_text">{{order?.termName}}</view>
+    <z-paging @callback="getUserOrder" v-model="orderList" ref="zPaging">
+      <view class="card" v-for="order in orderList" :key="order.orderId" @click="toDetail(order)">
+        <view class="row" style="display: flex; justify-content: space-between">
+          <view>
+            <view class="tag">{{order?.groupOrderNo ? '来自拼单':''}}</view>
+            <view class="row">
+              <view class="fir_row_text">{{order?.underlyingAssetName}}</view>
+              <view class="fir_row_text">{{order?.structureDisplayName}} {{order?.optionType}}</view>
+              <view class="fir_row_text">{{order?.termName}}</view>
+            </view>
+            <view style="margin-top: 4px; padding: 0 0 10px 0;">
+              <view class="para"><text class="label">名义本金：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</view>
+            </view>
           </view>
-          <view style="margin-top: 4px; padding: 0 0 10px 0;">
-            <view class="para"><text class="label">名义本金：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</view>
+          <view style="white-space: nowrap;">
+            距离结束 {{ calcLeftDay(order?.maturityDate) }} 天
           </view>
         </view>
-        <view style="white-space: nowrap;">
-          距离结束 {{ calcLeftDay(order?.maturityDate) }} 天
-        </view>
-      </view>
 
-      <view class="sec_middle_row">
-        <view class="para_1">
-          <view>{{truncToTwo(order?.strikePrice)}}元</view>
-          <view style="color: #6d7075;">行权价格</view>
-        </view>
-        <view class="para_2">
-          <view style="width: fit-content;">
-            <view :class="order?.estimatedProfit >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.estimatedProfit)}}元</view>
-            <view style="color: #6d7075;">预计盈亏</view>
+        <view class="sec_middle_row">
+          <view class="para_1">
+            <view>{{truncToTwo(order?.strikePrice)}}元</view>
+            <view style="color: #6d7075;">行权价格</view>
+          </view>
+          <view class="para_2">
+            <view style="width: fit-content;">
+              <view :class="order?.estimatedProfit >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.estimatedProfit)}}元</view>
+              <view style="color: #6d7075;">预计盈亏</view>
+            </view>
+          </view>
+          <view class="para_3">
+            <view style="width: fit-content;">
+              <view :class="order?.profitRate >= 0 ? 'valueRed' : 'valueGreen'">{{order?.profitRate ? truncToTwo(order.profitRate * 100) : 0}}%</view>
+              <view style="color: #6d7075;">盈亏比例</view>
+            </view>
           </view>
         </view>
-        <view class="para_3">
-          <view style="width: fit-content;">
-            <view :class="order?.profitRate >= 0 ? 'valueRed' : 'valueGreen'">{{order?.profitRate ? truncToTwo(order.profitRate * 100) : 0}}%</view>
-            <view style="color: #6d7075;">盈亏比例</view>
-          </view>
+
+        <view class="row bottom_row" @click.stop="order['showDetail'] = !order['showDetail']">
+          <view class="orderStatus">{{order?.orderStatus}}</view>
+          <view class="para"><text class="label">股价：</text><text :class="order?.underlyingPrice >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.underlyingPrice)}}</text></view>
+          <view class="para"><text class="label">涨幅：</text><text :class="Number(order?.priceChange.slice(0, -1)) >= 0 ? 'valueRed' : 'valueGreen'">{{order?.priceChange}}</text></view>
+          <view v-show="!order['showDetail']"><uni-icons type="down" size="16"></uni-icons></view>
+          <view v-show="order['showDetail']"><uni-icons type="up" size="16"></uni-icons></view>
         </view>
-      </view>
 
-      <view class="row bottom_row" @click.stop="order['showDetail'] = !order['showDetail']">
-        <view class="orderStatus">{{order?.orderStatus}}</view>
-        <view class="para"><text class="label">股价：</text><text :class="order?.underlyingPrice >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.underlyingPrice)}}</text></view>
-        <view class="para"><text class="label">涨幅：</text><text :class="Number(order?.priceChange.slice(0, -1)) >= 0 ? 'valueRed' : 'valueGreen'">{{order?.priceChange}}</text></view>
-        <view v-show="!order['showDetail']"><uni-icons type="down" size="16"></uni-icons></view>
-        <view v-show="order['showDetail']"><uni-icons type="up" size="16"></uni-icons></view>
-      </view>
-
-      <view style="padding-top: 10px;" v-show="order['showDetail']">
+        <view style="padding-top: 10px;" v-show="order['showDetail']">
           <view class="rowBorder">
             <text class="dataText"><text>开仓时间：</text>{{order?.startDate}}</text>
             <text class="dataText"><text>到期时间：</text>{{order?.maturityDate}}</text>
@@ -148,28 +124,29 @@
             <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{order?.estimatedPayout ? truncToTwo(order.estimatedPayout) : '-'}}元</text></text>
           </view>
           <view class="rowBorder">
-<!--            <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>-->
+            <!--            <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>-->
             <text class="dataText"><text>期权费率：</text>{{order?.optionFeeRate ? truncToTwo(order.optionFeeRate * 100) : 0}}%</text>
             <text class="dataText"><text>期权费：</text>{{order?.upstreamFee || order?.optionFee}}元</text>
           </view>
           <view class="rowBorder">
             <text class="dataText"><text>通道费：</text>{{truncToTwo(order?.transactionFee)}}元</text>
           </view>
+        </view>
       </view>
-    </view>
+    </z-paging>
 
-    <view v-if="store.user.token">
-      <view class="more_data_cont" v-if="moreDataStatus" @click="moreData">加载更多</view>
-      <view class="more_data_cont" v-else>订单记录</view>
-<!--      <view class="more_data_cont" v-else>没有数据了</view>-->
-    </view>
-    <view class="hint" v-else>
-      <view class="hint_sign">仓单记录</view>
-<!--      <view class="hint_sign">订单服务，需要登录后才能提供。</view>-->
-<!--      <view class="hint_sign">“暂无数据</view>-->
-<!--      <view class="hint_sign">您还未登录，请先登录！</view>-->
-<!--      <button class="to_sign" @click="uni.switchTab({url: '/pages/user/user'})">去登录</button>-->
-    </view>
+<!--    <view v-if="store.user.token">-->
+<!--      <view class="more_data_cont" v-if="moreDataStatus" @click="moreData">加载更多</view>-->
+<!--      <view class="more_data_cont" v-else>订单记录</view>-->
+<!--&lt;!&ndash;      <view class="more_data_cont" v-else>没有数据了</view>&ndash;&gt;-->
+<!--    </view>-->
+<!--    <view class="hint" v-else>-->
+<!--      <view class="hint_sign">仓单记录</view>-->
+<!--&lt;!&ndash;      <view class="hint_sign">订单服务，需要登录后才能提供。</view>&ndash;&gt;-->
+<!--&lt;!&ndash;      <view class="hint_sign">“暂无数据</view>&ndash;&gt;-->
+<!--&lt;!&ndash;      <view class="hint_sign">您还未登录，请先登录！</view>&ndash;&gt;-->
+<!--&lt;!&ndash;      <button class="to_sign" @click="uni.switchTab({url: '/pages/user/user'})">去登录</button>&ndash;&gt;-->
+<!--    </view>-->
     <fab />
 
   </view>
@@ -184,6 +161,7 @@ import { useStore } from "@/stores"
 import { failToast } from "@/utils/toast/toast"
 import {truncToTwo} from "@/utils";
 import Fab from "@/components/fab.vue";
+import ZPaging from "@/components/zPaging/zPaging.vue";
 
 
 const store = useStore()
@@ -200,15 +178,14 @@ const ordersSummary = ref<OrdersSummary>()
 const pagination = ref<Pagination>()
 const moreDataStatus = ref<boolean>(false);
 const customeBackPage = ref<string>()
+const zPaging = ref()
 
 onShow(() => {
   const urlParams = new URLSearchParams(window.location.search);
-  console.log(urlParams.get('origin'))
   if(urlParams.get('origin')){
     customeBackPage.value = urlParams.get('origin') as string;
   }
   resetData()
-  getUserOrder()
 })
 
 const backPage =() => {
@@ -221,8 +198,9 @@ const backPage =() => {
 
 watch(() => orderTypeKey.value, () => {
   status.value = orderTypeKey.value === 0 ? '' : 'SETTLED'
+  zPaging.value.reload()
   resetData()
-  getUserOrder()
+  // getUserOrder()
 })
 
 const calcLeftDay = (endDate: string): number => {
@@ -276,28 +254,27 @@ const toDetail = (order:OrderSummary) => {
 
 const resetData = () => {
   orderList.value = []
-  page.value = 1
   orderList.value = []
   pagination.value = undefined
   ordersSummary.value = undefined
 }
 
-const moreData = () => {
-    if(!moreDataStatus.value) return failToast("没有更多数据了");
-    page.value += 1;
-    getUserOrder()
-}
 
-const getUserOrder = () => {
-  getUserOrderInfo(page.value, size.value, status.value).then(res => {
+const getUserOrder = ({paging, pageNo, pageSize}) => {
+  uni.showLoading({title: '加载中'})
+  getUserOrderInfo(pageNo, pageSize, status.value).then(res => {
     moreDataStatus.value = res.pagination?.total_pages! >= page.value;
-    if(orderList.value!.length > 0){
-      orderList.value = orderList.value?.concat(res.orders!)
-    }else {
-      orderList.value = res.orders || [];
-    }
+    // if(orderList.value!.length > 0){
+    //   orderList.value = orderList.value?.concat(res.orders!)
+    // }else {
+    //   orderList.value = res.orders || [];
+    // }
+    paging.complete(res.orders)
     pagination.value = res.pagination
     ordersSummary.value = res.summary
+    uni.hideLoading()
+  }).catch(err => {
+    uni.hideLoading()
   })
 }
 
@@ -306,6 +283,7 @@ const getUserOrder = () => {
 <style scoped>
 .container{
   padding-top: 44px;
+  padding-bottom: 0;
 }
 
 .segTabs {

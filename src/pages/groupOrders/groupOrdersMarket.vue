@@ -1,15 +1,15 @@
 <template>
-    <view>
-      <view class="container_box" v-if="groupOrderDatas.length > 0">
+    <z-paging v-model="attrs.groupOrderDatas" @callback="getPlatGroupOrders">
+      <view class="container_box">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <view class="tag">官⽅推荐</view>
           <!--        贵州茅台 600519.SH · 轻度价外看涨-->
           <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.termName}} {{groupOrder.optionType}}</text></view>
-<!--          <view class="row">-->
-<!--            <view class="small_tit">拼单模式：</view>-->
-<!--&lt;!&ndash;            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>&ndash;&gt;-->
-<!--            <view class="group_order_data">官⽅推荐</view>-->
-<!--          </view>-->
+          <!--          <view class="row">-->
+          <!--            <view class="small_tit">拼单模式：</view>-->
+          <!--&lt;!&ndash;            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>&ndash;&gt;-->
+          <!--            <view class="group_order_data">官⽅推荐</view>-->
+          <!--          </view>-->
           <view class="row">
             <view class="small_tit">订单编号：</view>
             <view class="group_order_data">{{ groupOrder.groupOrderNo }} </view>
@@ -32,44 +32,48 @@
             <view class="add_group">加⼊拼单</view>
           </view>
 
-<!--          <view class="hint_cont">-->
-<!--            拼单服务费仅在对应订单最终盈利时按约定⽐例收取；如订单亏损，则不收取该项费⽤。-->
-<!--          </view>-->
+          <!--          <view class="hint_cont">-->
+          <!--            拼单服务费仅在对应订单最终盈利时按约定⽐例收取；如订单亏损，则不收取该项费⽤。-->
+          <!--          </view>-->
         </view>
-        <view class="num_hint" @click="getPlatGroupOrders">
-          <view>共 {{groupResp.total}} 条拼单记录，分 {{groupResp.totalPages}} 页显示</view>
-          <view>{{ groupResp.totalPages === payloadData.page ? '没有更多数据了' : '点击加载' }}</view>
-        </view>
+<!--        <view class="num_hint" @click="getPlatGroupOrders">-->
+<!--          <view>共 {{groupResp.total}} 条拼单记录，分 {{groupResp.totalPages}} 页显示</view>-->
+<!--          <view>{{ groupResp.totalPages === payloadData.page ? '没有更多数据了' : '点击加载' }}</view>-->
+<!--        </view>-->
       </view>
 
-      <view v-else>
-       <view class="not_data">
-          当前市场暂⽆该标的的拼单，您可以
-          <view class="new_group_order">
-            <view class="add_group" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">发起新的拼单</view>
-          </view>
-       </view>
-      </view>
-
-    </view>
+       <template #empty>
+         <view class="not_data">
+            当前市场暂⽆该标的的拼单，您可以
+            <view class="new_group_order">
+              <view class="add_group" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">发起新的拼单</view>
+            </view>
+         </view>
+       </template>
+    </z-paging>
 </template>
 
 <script setup lang="ts">
 
-import {onMounted, onUnmounted, reactive, ref} from "vue";
+import {onMounted, onUnmounted, reactive, ref, useAttrs} from "vue";
 import {getGroupOrders} from "@/api";
 import type {GetGroupOrdersReq, GetGroupOrdersResp, Group} from "@/interfaces/groupOrders/getGroupOrders";
 import {formatLocalTime, truncToTwo} from "../../utils";
 import {onHide, onLoad, onShow} from "@dcloudio/uni-app";
+import ZPaging from "@/components/zPaging/zPaging.vue";
 
 // const groupOrderDatas = ref<Array<Group>>([])
-const porps = defineProps<{groupOrderDatas: Array<Group>, payloadData: GetGroupOrdersReq, groupResp:{total: number, totalPages: number}}>();
+const porps = defineProps<{payloadData: GetGroupOrdersReq, groupResp:{total: number, totalPages: number}}>();
+/**
+ * @param {Array<Group>>} groupOrderDatas
+ */
+const attrs = useAttrs()
 const emits = defineEmits<{
   (e: 'getGroupOrders'): void
 }>()
 
-const getPlatGroupOrders = () => {
-  emits("getGroupOrders")
+const getPlatGroupOrders = ({paging, pageNo, pageSize}) => {
+  emits("getGroupOrders", {paging, pageNo, pageSize})
 }
 
 const toDetail = (groupOrder: Group) => {
@@ -165,8 +169,6 @@ const toDetail = (groupOrder: Group) => {
 }
 
 .not_data{
-  width: 100dvw;
-  height: 100dvh;
   display: table-cell;
   text-align: center;
   vertical-align: middle;
@@ -188,3 +190,5 @@ const toDetail = (groupOrder: Group) => {
 }
 
 </style>
+<script setup lang="ts">
+</script>

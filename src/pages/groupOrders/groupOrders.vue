@@ -67,7 +67,7 @@ const myGroupOrderResp = reactive<{total: number, totalPages: number}>({
 onShow(() => {
   if(activeTab.value === 0){
     clearPlatGroupOrdersData()
-    getPlatGroupOrders()
+    // getPlatGroupOrders()
   }else{
     clearMyPlatGroupOrdersData()
     getMyGroupOrdersData()
@@ -79,7 +79,7 @@ const changeComponent = (key:number) => {
   if (activeTab.value === 0) {
     // activeComponent.value = GroupOrdersMarket;
     clearPlatGroupOrdersData()
-    getPlatGroupOrders()
+    // getPlatGroupOrders()
   } else {
     // activeComponent.value = MyGroupOrders;
     clearMyPlatGroupOrdersData()
@@ -89,20 +89,24 @@ const changeComponent = (key:number) => {
 };
 
 
-const getPlatGroupOrders = async () => {
-  if(groupOrderDatas.value.length>0){
-    if(groupResp.totalPages === payloadData.page){
-      return
-    }
-    payloadData.page += 1
-  }
+const getPlatGroupOrders = async ({paging, pageNo, pageSize}) => {
+  // if(groupOrderDatas.value.length>0){
+  //   if(groupResp.totalPages === payloadData.page){
+  //     return
+  //   }
+  //   payloadData.page += 1
+  // }
+  payloadData.page = pageNo
+  payloadData.pageSize = pageSize
+
   getGroupOrders(payloadData).then(res => {
     // console.log('res111', res)
-    if(groupOrderDatas.value.length>0){
-      groupOrderDatas.value = groupOrderDatas.value.concat(res.groups)
-    }else{
-      groupOrderDatas.value = res.groups
-    }
+    // if(groupOrderDatas.value.length>0){
+    //   groupOrderDatas.value = groupOrderDatas.value.concat(res.groups)
+    // }else{
+    //   groupOrderDatas.value = res.groups
+    // }
+    paging.complete(res.groups)
     groupResp.total = res.pagination.total;
     groupResp.totalPages = res.pagination.totalPages;
   }).catch(err => {

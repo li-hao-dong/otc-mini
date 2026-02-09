@@ -1,0 +1,26 @@
+.noe_data_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+
+  .no_data {
+    position: relative;
+    padding: 10px;
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+  }
+
+  .before_solid {
+    width: 12%;
+    height: 1px;
+    background-color: #c0c0c0;
+  }
+
+  .after_solid {
+    width: 12%;
+    height: 1px;
+    background-color: #c0c0c0;
+  }
+}

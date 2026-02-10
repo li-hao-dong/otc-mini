@@ -123,6 +123,7 @@ const getMyGroupOrdersData = ({paging, pageNo, pageSize}) => {
 
 <style scoped>
 .container_box{
+  min-height: unset;
   padding-top: 10px;
   box-sizing: border-box;
   display: flex;

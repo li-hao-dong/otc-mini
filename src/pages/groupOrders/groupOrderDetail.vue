@@ -58,6 +58,40 @@
     </view>
 
     <view class="card">
+      <view class="row">
+        <text class="sectionTitle">个人费用概览</text>
+      </view>
+      <view class="row">
+        <view class="row_cont"><text class="popup_card_row_title">名义本金：</text>¥ {{truncToTwo(Math.ceil(orderDetail?.totalNominalAmount / orderDetail?.targetSize * 100)/100)}}</view>
+      </view>
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text class="popup_card_row_title">期权费率：</text>-->
+<!--          {{ truncToTwo(orderDetail?.quotedPrice * 100) }}% {{useStore().miniData.waitPriceHint}}</view>-->
+<!--      </view>-->
+      <view class="row">
+        <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(Math.ceil(orderDetail.optionFee / orderDetail?.targetSize * 100) / 100)}}{{useStore().miniData.waitPriceHint}}</view>
+      </view>
+      <view class="row">
+        <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(Math.ceil((orderDetail.transactionFee || useStore().miniData.channelFee) / orderDetail?.targetSize * 100) / 100) }}</view>
+      </view>
+<!--      <view class="row">-->
+<!--        <view class="row_cont"><text class="popup_card_row_title">拼单佣金：</text>-->
+<!--          {{ truncToTwo(orderDetail?.commission * 100) }}% {{useStore().miniData.waitPriceHint}}</view>-->
+<!--      </view>-->
+      <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
+      </view>
+      <view class="row">
+        <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(Math.ceil((orderDetail.transactionFee || useStore().miniData.channelFee) / orderDetail?.targetSize * 100) / 100 + Math.ceil(orderDetail.optionFee / orderDetail?.targetSize * 100) / 100) }}{{useStore().miniData.waitPriceHint}}</view>
+      </view>
+      <view>
+        <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>
+        <view class="row_cont" style="color: #d6423a; font-size: 12px;">当前页面展示的费率与费用项均为预估/待报价，不代表最终报价。
+          您提交订单后，通道侧运营人员将根据实时市场情况进行报价并回传最终期权费率、期权费、通道费及合计金额，并通过系统或短信通知您。
+          如您不接受确认后的报价，可取消订单。</view>
+      </view>
+    </view>
+
+    <view class="card">
       <view class="fir_title row">
         <view>成员列表</view>
         <view style="font-weight: lighter" v-if="orderDetail.currentSize !== orderDetail.targetSize">当前已有 {{orderDetail.currentSize}}人 ，还需 {{orderDetail.targetSize - orderDetail.currentSize}}人</view>
@@ -140,6 +174,7 @@ import {addGroupOrder, getGroupOrderDetail, getStockFee} from "@/api";
 import type {GroupOrderDetailResp, Member} from "@/interfaces/groupOrders/groupOrderDetail";
 import {formatLocalTime, truncToTwo} from "@/utils";
 import NavigationTitle from "@/components/navigationTitle.vue";
+import {useStore} from "@/stores";
 
 const orderDetail = ref<GroupOrderDetailResp>({});
 const myOrderDetail = ref<Member>({});

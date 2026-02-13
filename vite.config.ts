@@ -8,8 +8,6 @@ export default defineConfig(async() => {
     plugins: [
       uni(),
       webUpdateNotice({
-        // logVersion: true,
-        // versionType: 'build_timestamp',
         notificationProps: {
           title: '版本提示',
           description: '检测到系统版本升级，请刷新页面!',

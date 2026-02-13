@@ -8,6 +8,7 @@ export default defineConfig(async() => {
     plugins: [
       uni(),
       webUpdateNotice({
+        checkOnWindowFocus: true, // 当窗口获得焦点（进入页面）时立即检查
         notificationProps: {
           title: '版本提示',
           description: '检测到系统版本升级，请刷新页面!',

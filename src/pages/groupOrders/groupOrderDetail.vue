@@ -72,7 +72,7 @@
         <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(Math.ceil(orderDetail.optionFee / orderDetail?.targetSize * 100) / 100)}}{{useStore().miniData.waitPriceHint}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(Math.ceil((orderDetail.transactionFee || useStore().miniData.channelFee) / orderDetail?.targetSize * 100) / 100) }}</view>
+        <view class="row_cont"><text class="popup_card_row_title">通道费：</text>¥ {{ truncToTwo(Math.ceil((orderDetail.transactionFee || useStore().miniData.channelFee) / orderDetail?.targetSize * 100) / 100) }}</view>
       </view>
 <!--      <view class="row">-->
 <!--        <view class="row_cont"><text class="popup_card_row_title">拼单佣金：</text>-->

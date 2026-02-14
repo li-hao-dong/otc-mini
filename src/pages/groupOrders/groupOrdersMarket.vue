@@ -1,5 +1,5 @@
 <template>
-    <z-paging v-model="groupOrderDatas" @callback="getPlatGroupOrders">
+    <z-paging v-model="groupOrderDatas" @callback="getPlatGroupOrders" ref="paging">
       <view class="container_box">
         <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
           <view class="tag">官⽅推荐</view>
@@ -71,6 +71,12 @@ const porps = defineProps<{payloadData: GetGroupOrdersReq, groupResp:{total: num
 const emits = defineEmits<{
   (e: 'getGroupOrders'): void
 }>()
+
+const paging = ref()
+
+onShow(() => {
+  paging.value.reload()
+})
 
 const groupOrderDatas = defineModel({
   type: Array,

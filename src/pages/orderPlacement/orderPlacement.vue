@@ -64,17 +64,19 @@
                     <text class="sectionTitle">下单价格</text>
                 </view>
                 <view class="priceType">
-                    <view class="optionRow" role="button" tabindex="0" @click="selectPriceType(PriceType.MARKET)">
+                    <view class="optionRow market" role="button" tabindex="0" @click="selectPriceType(PriceType.MARKET)">
                         <view class="radioDot" :class="selectedPriceType === PriceType.MARKET ? 'radioPrimary' : 'radioSecondary'"></view>
                         <text class="pillText">市价</text>
                     </view>
-                    <view class="optionRow" role="button" tabindex="0" @click="selectPriceType(PriceType.LIMIT)">
+                    <view class="limit">
+                      <view class="optionRow" role="button" tabindex="0" @click="selectPriceType(PriceType.LIMIT)">
                         <view class="radioDot" :class="selectedPriceType === PriceType.LIMIT ? 'radioPrimary' : 'radioSecondary'"></view>
                         <text class="pillText">限价</text>
-                    </view>
-                    <view class="limitInput" v-if="selectedPriceType === PriceType.LIMIT">
+                      </view>
+                      <view class="limitInput" v-if="selectedPriceType === PriceType.LIMIT">
                         <input type="digit" class="inputBox" placeholder="请输入限价" v-model="limitPrice" />
                         <text class="unit">元</text>
+                      </view>
                     </view>
                 </view>
 
@@ -91,7 +93,7 @@
                 </view>
             </view>
 
-            <view class="card">
+            <view class="card fee_box">
               <view class="row">
                 <text class="sectionTitle">总费用概览</text>
               </view>
@@ -233,7 +235,7 @@
               </view>
             </view>
 
-            <view class="card_popup">
+            <view class="card_popup personal_fee_box">
               <view class="popup_card_row">
                 <text class="popup_title">个人费用概览</text>
               </view>
@@ -273,7 +275,7 @@
 import {buyProduct, createGroupOrder, getGroupOrders, getStockFee, subscribeMessage} from '@/api';
 import { PriceType, type orderPayloadReq } from '@/interfaces/inquiry/orderPayload';
 import { onLoad } from '@dcloudio/uni-app';
-import { ref } from 'vue';
+import {ref, watch, watchEffect} from 'vue';
 import {useStore} from "@/stores";
 import {formatLocalTime, truncToTwo} from "@/utils";
 import type {CreateGroupOrderReq} from "@/interfaces/groupOrders/createGroupOrders";
@@ -283,6 +285,8 @@ import {
   OptionType,
   Status
 } from "@/interfaces/groupOrders/getGroupOrders";
+
+const store = useStore()
 const activeTab = ref<Number>(0);
 const subTabs = ref<Array<string>>(['单独购买', '拼单购买']);
 const selectedPriceType = ref<PriceType>(PriceType.MARKET);
@@ -295,6 +299,14 @@ const groupOrders = ref<Array<Group>>([]);
 const fee = ref<number>()
 
 onLoad(() => { initData(); });
+
+watch(() => store.miniData.orderPlacementTabIndex, (newVal) => {
+  activeTab.value = newVal
+})
+
+watch(() => store.miniData.groupPeople, (newVal) => {
+  choosePeople.value = newVal
+})
 
 const selectPriceType = (t: PriceType.MARKET | PriceType.LIMIT) => { selectedPriceType.value = t; };
 

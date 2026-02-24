@@ -32,8 +32,11 @@
               v-for="(item, index) in results" :key="index">
           <view>{{ item.structureName }}</view>
           <view v-for="(term, i) in terms" :key="i">
-            <view style="line-height: 26px;" v-for="(quote, x) in Object.values(item.quotes)" :key="x" :class="quote[term] && quote[term][0].isRecommended?'rise_color':''" @click="placeAnOrder(quote[term][0], term, item)">
-              {{ `${quote[term] ? quote[term][0].price+'%' : '-'}` }}<uni-icons v-if="quote[term]" type="right" size="15"></uni-icons>
+            <view style="line-height: 26px;" v-for="(quote, x) in Object.values(item.quotes)" :key="x"
+                  :class="`price ${quote[term] && quote[term][0].isRecommended?'rise_color':''}`"
+                  @click="placeAnOrder(quote[term][0], term, item)">
+              {{ `${quote[term] ? quote[term][0].price+'%' : '-'}` }}
+              <uni-icons v-if="quote[term]" type="right" size="15"></uni-icons>
             </view>
           </view>
           <view>

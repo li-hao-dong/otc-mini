@@ -54,6 +54,7 @@
     "@dcloudio/uni-mp-xhs": "3.0.0-4080420251103001",
     "@dcloudio/uni-quickapp-webview": "3.0.0-4080420251103001",
     "@dcloudio/uni-ui": "^1.5.11",
+    "driver.js": "^1.4.0",
     "mockjs": "^1.1.0",
     "pinia": "^3.0.4",
     "uview-plus": "^3.7.0",

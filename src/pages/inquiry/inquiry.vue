@@ -1,7 +1,7 @@
 <template>
   <view class="container inquiryPage">
     <view class="form">
-      <view class="section">
+      <view class="section bdSection">
         <view class="label">标的</view>
         <view class="inputWrap">
           <input class="input" v-model="underlying" placeholder="请输入名称/代码" />

@@ -3,6 +3,7 @@ import {onLaunch, onShow, onHide, onBackPress} from "@dcloudio/uni-app";
 import {useStore} from "@/stores";
 import {truncToTwo} from "@/utils";
 import VConsole from 'vconsole';
+import {driverObj, startGuide} from "@/utils/guide/guide";
 
 
 onLaunch(() => {
@@ -59,7 +60,6 @@ page{
   padding-top: env(safe-area-inset-top);
   position: relative;
 }
-
 /*.bottom-box {
   bottom: var(--window-bottom); !* 自动适配 Tabbar 的位置 *!
 }*/
@@ -93,4 +93,5 @@ page{
 .uni-tabbar-bottom{
   display: none !important;
 }
+
 </style>

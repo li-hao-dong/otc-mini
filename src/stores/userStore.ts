@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import {getUserInfo} from "@/api";
 import type {UserResp} from "@/interfaces/user";
 import {warnToast} from "@/utils/toast/toast";
+import {startGuide} from "@/utils/guide/guide";
 
 interface userStore {
     uuid: string;
@@ -91,6 +92,7 @@ export const useUserStore = defineStore('user', {
                         if (pageRouter == "/pages/reLogin/reLogin") {
                             uni.switchTab({url:'/pages/home/home'})
                         }
+                        startGuide()
                     }).catch(err => {
                         console.error("Failed to fetch user info:", err);
                     })

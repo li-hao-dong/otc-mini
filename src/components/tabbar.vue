@@ -10,7 +10,7 @@
   <up-tabbar
       :value="props.currentTabbarKey" active-color="#d6423a">
     <up-tabbar-item v-for="(tabbar, key) in tabbarData" :key="key"
-                    @click="changeTabbar" >
+                    @click="changeTabbar" :class="tabbar.className">
       <template #active-icon>
         <view class="special-tabbar-item">
           <image class="special-img" :src="tabbar.selectedIconPath"></image>
@@ -34,14 +34,16 @@ const tabbarData = ref([
     icon: "/static/menu/icon_home.png",
     selectedIconPath: "/static/menu/icon_home_active.png",
     text: "首页",
-    pageType: 'tabbar'
+    pageType: 'tabbar',
+    className: 'home'
   },
   {
     pagePath: "/pages/inquiryHistory/inquiryHistory",
     icon: "/static/menu/icon_inquiry_history.png",
     selectedIconPath: "/static/menu/icon_inquiry_history_active.png",
     text: "询价",
-    pageType: 'tabbar'
+    pageType: 'tabbar',
+    className: 'inquiryHistory'
   },
   {
     pagePath: "/pages/inquiry/inquiry",
@@ -50,21 +52,24 @@ const tabbarData = ref([
     // "iconPath": "static/menu/icon_cd.png",
     // "selectedIconPath": "static/menu/icon_cd_active.png",
     text: "下单",
-    pageType: ''
+    pageType: '',
+    className: 'inquiry'
   },
   {
     pagePath: "/pages/groupOrders/groupOrders",
     icon: "/static/menu/icon_group_order.png",
     selectedIconPath: "/static/menu/icon_group_order_active.png",
     text: "拼单",
-    pageType: 'tabbar'
+    pageType: 'tabbar',
+    className: 'groupOrders'
   },
   {
     pagePath: "/pages/user/user",
     icon: "/static/menu/icon_user.png",
     selectedIconPath: "/static/menu/icon_user_active.png",
     text: "我的",
-    pageType: 'tabbar'
+    pageType: 'tabbar',
+    className: 'user'
   }
 ])
 const props =  defineProps({
@@ -116,7 +121,9 @@ const changeTabbar = (e:any) => {
     }
 
     &:nth-child(3){
-      transform: translateY(14px);
+      transform: translateY(-36px);
+      height: fit-content;
+
       .special-tabbar-item {
         width: 66px;
         height: 66px;
@@ -125,8 +132,8 @@ const changeTabbar = (e:any) => {
         display: flex;
         justify-content: center;
         align-items: center;
-        position: absolute;
-        bottom: 0;
+        //position: absolute;
+        //bottom: 0;
         transform: translateY(10px);
         /*box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.2);*/
         z-index: -1;
@@ -136,6 +143,7 @@ const changeTabbar = (e:any) => {
           height: 33px;
         }
       }
+
     }
 
     .active{

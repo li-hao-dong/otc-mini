@@ -38,8 +38,14 @@ const getDetail = (orderId: string) => {
     <view class="card">
       <view class="fir_title">产品与合约要素</view>
       <view class="row"><view class="row_cont"><text>产品名称：</text>{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType}}</view></view>
-      <view class="row"><view class="row_cont"><text>订单号：</text>
-        {{ detail.orderNo }}</view></view>
+      <view class="row">
+        <view class="row_cont"><text>订单号：</text>
+          {{ detail.orderNo }}
+          <up-copy :content="detail?.orderNo">
+            <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>
+          </up-copy>
+        </view>
+      </view>
       <view class="row"><view class="row_cont"><text>订单类型：</text>个股场外期权</view></view>
       <view class="row"><view class="row_cont"><text>生效日期：</text>
         {{ formatLocalTime(new Date(detail.createdTime)) }}</view></view>

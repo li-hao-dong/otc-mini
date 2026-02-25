@@ -233,7 +233,10 @@ watch(() => props.orderId, (newVal) => {
         <view class="row_cont">{{ detail?.underlyingAssetName }} {{ detail?.underlyingAssetCode }} · {{detail?.structureDisplayName}}{{detail?.optionType}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>订单号：</text>{{detail?.orderNo}}</view>
+        <view class="row_cont"><text>订单号：</text>{{detail?.orderNo}}
+          <up-copy :content="detail?.orderNo">
+            <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>
+          </up-copy></view>
       </view>
     </view>
 
@@ -262,14 +265,26 @@ watch(() => props.orderId, (newVal) => {
       <view class="fir_title">收款信息</view>
       <view class="row">
         <view class="row_cont"><text>收款户名：</text>
-          {{ bankReceiptInfoData?.accountName }}</view>
+          {{ bankReceiptInfoData?.accountName }}
+          <up-copy :content="bankReceiptInfoData?.accountName">
+            <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>
+          </up-copy>
+        </view>
       </view>
       <view class="row">
         <view class="row_cont"><text>收款银行：</text>
-          {{ bankReceiptInfoData?.bankName }} {{ bankReceiptInfoData?.branchName }}</view>
+          {{ bankReceiptInfoData?.bankName }} {{ bankReceiptInfoData?.branchName }}
+          <up-copy :content="`${bankReceiptInfoData?.bankName}${bankReceiptInfoData?.branchName}`">
+            <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>
+          </up-copy>
+        </view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>银行账号：</text>{{bankReceiptInfoData?.bankAccount}}</view>
+        <view class="row_cont"><text>银行账号：</text>{{bankReceiptInfoData?.bankAccount}}
+          <up-copy :content="bankReceiptInfoData?.bankAccount">
+            <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>
+          </up-copy>
+        </view>
       </view>
 <!--      <view class="row">-->
 <!--        <view class="row_cont"><text>转账备注：</text>-->
@@ -358,6 +373,10 @@ watch(() => props.orderId, (newVal) => {
 
     .row_cont{
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
 
       text{
         color: #999999;

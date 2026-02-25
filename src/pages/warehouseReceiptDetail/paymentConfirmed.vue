@@ -60,7 +60,11 @@ const getBankReceiptInfo = (orderId: string) => {
         <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail?.optionType}}</view>
       </view>
       <view class="row">
-        <view class="row_cont" style="color:#999999; font-size:12px;">订单号：{{detail.orderNo}}</view>
+        <view class="row_cont" style="color:#999999; font-size:12px;">订单号：{{detail.orderNo}}
+          <up-copy :content="detail.orderNo">
+            <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>
+          </up-copy>
+        </view>
       </view>
       <view class="row">
         <view class="row_cont" style="color:#999999; font-size:12px;">

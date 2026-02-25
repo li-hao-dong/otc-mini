@@ -54,7 +54,11 @@ const getDetail = (orderId: string) => {
         <view class="row_cont">{{ detail.underlyingAssetName }} {{ detail.underlyingAssetCode }} · {{detail.structureDisplayName}}{{detail.optionType}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>订单号：</text>{{detail.orderNo}}</view>
+        <view class="row_cont"><text>订单号：</text>{{detail.orderNo}}
+          <up-copy :content="detail.orderNo">
+            <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>
+          </up-copy>
+        </view>
       </view>
       <view class="row">
         <view class="row_cont"><text>下单时间：</text>
@@ -166,6 +170,10 @@ const getDetail = (orderId: string) => {
 
     .row_cont{
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
 
       text{
         color: #999999;

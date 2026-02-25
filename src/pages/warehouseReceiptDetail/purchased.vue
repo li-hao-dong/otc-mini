@@ -101,7 +101,11 @@ const exexercise = () => {
       <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color:#E8473A;">已购买 · 持有中 · 可行权</view>
       <view class="row">
-        <view class="row_cont"><text>订单号：</text>{{detail?.orderNo}}</view>
+        <view class="row_cont"><text>订单号：</text>{{detail?.orderNo}}
+          <up-copy :content="detail?.orderNo">
+            <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>
+          </up-copy>
+        </view>
       </view>
       <view class="row">
         <view class="row_cont"><text>当前参考盈亏：</text><text :class="Number(detail?.estimatedProfit) >= 0 ? 'valueRed' : 'valueGreen'">

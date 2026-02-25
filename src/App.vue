@@ -54,11 +54,8 @@ page{
 }
 
 #app{
-  padding-bottom: constant(safe-area-inset-bottom);
-  padding-bottom: env(safe-area-inset-bottom);
-  padding-top: constant(safe-area-inset-top);
-  padding-top: env(safe-area-inset-top);
   position: relative;
+
 }
 /*.bottom-box {
   bottom: var(--window-bottom); !* 自动适配 Tabbar 的位置 *!

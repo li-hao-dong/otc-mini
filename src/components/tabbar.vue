@@ -94,65 +94,68 @@ const changeTabbar = (e:any) => {
 
 
 <style scoped lang="scss">
+::v-deep{
+  .u-tabbar{
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 
+  .u-tabbar__placeholder{
+    height: 50px !important;
+  }
 
-.u-tabbar__placeholder{
-  height: calc(50px + constant(safe-area-inset-bottom)) !important;
-  height: calc(50px + env(safe-area-inset-bottom)) !important;
-}
+  .u-tabbar__content__item-wrapper{
+    padding-top: 3px;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
+    /*padding-top: calc(3px + constant(safe-area-inset-top)) !important;
+    padding-top: calc(3px + env(safe-area-inset-top)) !important;
+    padding-bottom: calc(80px + constant(safe-area-inset-bottom)) !important;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;*/
 
-.u-tabbar__content__item-wrapper{
-  padding-top: 3px;
-  /*padding-top: calc(3px + constant(safe-area-inset-top)) !important;
-  padding-top: calc(3px + env(safe-area-inset-top)) !important;
-  padding-bottom: calc(80px + constant(safe-area-inset-bottom)) !important;
-  padding-bottom: calc(80px + env(safe-area-inset-bottom)) !important;*/
-
-  .u-tabbar-item{
-    font-size: 12px;
-    font-weight: lighter;
-
-    .special-tabbar-item {
-
-      .special-img {
-        width: 25px;
-        height: 25px;
-      }
-    }
-
-    &:nth-child(3){
-      transform: translateY(-36px);
-      height: fit-content;
+    .u-tabbar-item{
+      font-size: 12px;
+      font-weight: lighter;
 
       .special-tabbar-item {
-        width: 66px;
-        height: 66px;
-        background-color: #FFFFFF;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        //position: absolute;
-        //bottom: 0;
-        transform: translateY(10px);
-        /*box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.2);*/
-        z-index: -1;
 
         .special-img {
-          width: 33px;
-          height: 33px;
+          width: 25px;
+          height: 25px;
         }
       }
 
-    }
+      &:nth-child(3){
+        transform: translateY(-36px);
+        height: fit-content;
 
-    .active{
-      color: #d6423a;
-    }
+        .special-tabbar-item {
+          width: 66px;
+          height: 66px;
+          background-color: #FFFFFF;
+          border-radius: 50%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          //position: absolute;
+          //bottom: 0;
+          transform: translateY(10px);
+          /*box-shadow: 0 4rpx 10rpx rgba(0,0,0,0.2);*/
+          z-index: -1;
 
+          .special-img {
+            width: 33px;
+            height: 33px;
+          }
+        }
+
+      }
+
+      .active{
+        color: #d6423a;
+      }
+
+    }
   }
 }
-
-
-
 </style>

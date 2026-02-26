@@ -17,14 +17,17 @@
                   <text class="assetCode">{{ orderPayload?.assetCode }}</text> ·
                   <text class="assetCode">{{ orderPayload?.structureName }}{{calcOptionType(orderPayload?.optionType)}} {{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text>
                 </view>
-                <view class="row rowChange">
-                  <view class="para"><text class="labelGray">标的名称：</text></view>
-                  <view class="para"><text class="">{{ orderPayload?.assetName }}</text></view>
+                <view class="two_col">
+                  <view class="row rowChange">
+                    <view class="para"><text class="labelGray">标的名称：</text></view>
+                    <view class="para"><text class="">{{ orderPayload?.assetName }}</text></view>
+                  </view>
+                  <view class="row rowChange">
+                    <view class="para"><text class="labelGray">标的代码：</text></view>
+                    <view class="para"><text class="">{{ orderPayload?.assetCode }}</text></view>
+                  </view>
                 </view>
-                <view class="row rowChange">
-                  <view class="para"><text class="labelGray">标的代码：</text></view>
-                  <view class="para"><text class="">{{ orderPayload?.assetCode }}</text></view>
-                </view>
+              <view class="two_col">
                 <view class="row rowChange">
                   <view class="para"><text class="labelGray">产品结构</text></view>
                   <view class="para"><text class="">{{ orderPayload?.structure }}</text></view>
@@ -33,6 +36,8 @@
                   <view class="para"><text class="labelGray">期限</text></view>
                   <view class="para"><text class="">{{ orderPayload?.term }}</text></view>
                 </view>
+              </view>
+              <view class="two_col">
                 <view class="row rowChange">
                   <view class="para"><text class="labelGray">交易类型</text></view>
                   <view class="para"><text class="">{{ calcOptionType(orderPayload?.optionType) }}</text></view>
@@ -41,6 +46,8 @@
                     <view class="para"><text class="labelGray">股价：</text></view>
                     <view class="para"><text :class="orderPayload?.currentPrice > 0 ? valueRed : valueGreen">￥{{ orderPayload?.currentPrice }}</text></view>
                 </view>
+              </view>
+              <view class="two_col">
                 <view class="row rowChange">
                     <view class="para"><text class="labelGray">涨幅：</text></view>
                     <view class="para"><text :class="orderPayload?.priceChange > 0 ? valueRed : valueGreen">{{ orderPayload?.priceChange }}</text></view>
@@ -57,6 +64,7 @@
 <!--                    <view class="para"><text class="labelGray">{{ orderPayload?.structureName }}</text></view>-->
 <!--                    <view class="para"><text class="valueDark">{{orderPayload?.term}} {{orderPayload?.quote.price}}% {{orderPayload?.quote.sourceCode}}</text></view>-->
 <!--                </view>-->
+              </view>
             </view>
 
             <view class="card">
@@ -64,34 +72,38 @@
                     <text class="sectionTitle">下单价格</text>
                 </view>
                 <view class="priceType">
+                  <view style="display: flex; align-items: center; gap: 15px;">
                     <view class="optionRow market" role="button" tabindex="0" @click="selectPriceType(PriceType.MARKET)">
-                        <view class="radioDot" :class="selectedPriceType === PriceType.MARKET ? 'radioPrimary' : 'radioSecondary'"></view>
-                        <text class="pillText">市价</text>
+                      <view class="radioDot" :class="selectedPriceType === PriceType.MARKET ? 'radioPrimary' : 'radioSecondary'"></view>
+                      <text class="pillText">市价</text>
                     </view>
+                    <view class="optionRow" role="button" tabindex="0" @click="selectPriceType(PriceType.LIMIT)">
+                      <view class="radioDot" :class="selectedPriceType === PriceType.LIMIT ? 'radioPrimary' : 'radioSecondary'"></view>
+                      <text class="pillText">限价</text>
+                    </view>
+                  </view>
                     <view class="limit">
-                      <view class="optionRow" role="button" tabindex="0" @click="selectPriceType(PriceType.LIMIT)">
-                        <view class="radioDot" :class="selectedPriceType === PriceType.LIMIT ? 'radioPrimary' : 'radioSecondary'"></view>
-                        <text class="pillText">限价</text>
-                      </view>
                       <view class="limitInput" v-if="selectedPriceType === PriceType.LIMIT">
                         <input type="digit" class="inputBox" placeholder="请输入限价" v-model="limitPrice" />
                         <text class="unit">元</text>
                       </view>
                     </view>
                 </view>
-
-                <view class="row">
-                    <text class="sectionTitle">下单规模</text>
-                </view>
-                <view class="quantityRow">
-                    <view class="quantityStrong"><input type="number" class="inputBox" placeholder="请输入下单规模" v-model="quantity" /></view>
-                    <text class="quantitySuffix">× 100万</text>
-                </view>
-                <view class="group_buy_hint1" v-show="activeTab === 1">
-                  如通过拼单方式购买，拼单服务费将在订单盈利结算时，从您的
-                  实际收益中按约定比例扣除，不增加亏损金额。
-                </view>
             </view>
+
+          <view class="card">
+            <view class="row">
+              <text class="sectionTitle">下单规模</text>
+            </view>
+            <view class="quantityRow">
+              <view class="quantityStrong"><input type="number" class="inputBox" placeholder="请输入下单规模" v-model="quantity" /></view>
+              <text class="quantitySuffix">× 100万</text>
+            </view>
+<!--            <view class="group_buy_hint1" v-show="activeTab === 1">-->
+<!--              如通过拼单方式购买，拼单服务费将在订单盈利结算时，从您的-->
+<!--              实际收益中按约定比例扣除，不增加亏损金额。-->
+<!--            </view>-->
+          </view>
 
             <view class="card fee_box">
               <view class="row">
@@ -553,9 +565,21 @@ const getStockFees = () => {
     gap: 4px;
 }
 
+.two_col{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
 .row {
     display: flex;
     width: 100%;
+}
+
+.rowChange,
+.rowPrice{
+  width: calc(50% - 15px / 2);
 }
 
 .assetRowName {
@@ -691,7 +715,7 @@ const getStockFees = () => {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-left: 20px;
+    //margin-left: 20px;
 }
 
 .inputBox {

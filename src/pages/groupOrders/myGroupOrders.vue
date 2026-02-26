@@ -11,9 +11,9 @@
               <view class="group_order_data">{{ groupOrder.groupOrderNo }} </view>
             </view>
             <view class="row">
-              <view class="small_tit">拼单模式：</view>
+              <view class="small_tit">订单状态：</view>
               <!--            <view class="group_order_data">官⽅推荐 · 盈利部分 15% 服务费 </view>-->
-              <view class="group_order_data">官⽅推荐</view>
+              <view class="group_order_data">{{ groupOrder.groupStatus}}</view>
             </view>
             <view class="row">
               <view class="small_tit">拼单进度：</view>
@@ -27,7 +27,9 @@
             <view class="row ">
               <view class="time_hint">截止于 {{ formatLocalTime(new Date(groupOrder.expireTime)) }}</view>
               <!--            <view class="add_group">加⼊拼单</view>-->
-              <view class="group_order_data">订单状态：{{ groupOrder.groupStatus }}</view>
+              <view class="group_order_data" v-if="groupOrder.isOfficialRecommend">
+                <up-tag shape="circle" text="官⽅推荐"></up-tag>
+              </view>
             </view>
 
             <!--          <view class="hint_cont">-->

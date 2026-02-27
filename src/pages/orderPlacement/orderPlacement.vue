@@ -29,17 +29,17 @@
                 </view>
               <view class="two_col">
                 <view class="row rowChange">
-                  <view class="para"><text class="labelGray">产品结构</text></view>
+                  <view class="para"><text class="labelGray">产品结构：</text></view>
                   <view class="para"><text class="">{{ orderPayload?.structure }}</text></view>
                 </view>
                 <view class="row rowChange">
-                  <view class="para"><text class="labelGray">期限</text></view>
+                  <view class="para"><text class="labelGray">期限：</text></view>
                   <view class="para"><text class="">{{ orderPayload?.term }}</text></view>
                 </view>
               </view>
               <view class="two_col">
                 <view class="row rowChange">
-                  <view class="para"><text class="labelGray">交易类型</text></view>
+                  <view class="para"><text class="labelGray">交易类型：</text></view>
                   <view class="para"><text class="">{{ calcOptionType(orderPayload?.optionType) }}</text></view>
                 </view>
                 <view class="row rowPrice">

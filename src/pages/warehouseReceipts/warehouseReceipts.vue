@@ -186,6 +186,7 @@ onShow(() => {
     customeBackPage.value = urlParams.get('origin') as string;
   }
   resetData()
+  zPaging.value.reload()
 })
 
 const backPage =() => {

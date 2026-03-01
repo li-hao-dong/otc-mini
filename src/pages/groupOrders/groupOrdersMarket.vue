@@ -12,7 +12,12 @@
           <!--          </view>-->
           <view class="row">
             <view class="small_tit">订单编号：</view>
-            <view class="group_order_data">{{ groupOrder.groupOrderNo }} </view>
+            <view class="group_order_data row_copy">
+              {{ groupOrder.groupOrderNo }}
+<!--              <up-copy :content="groupOrder.groupOrderNo">-->
+<!--                <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>-->
+<!--              </up-copy>-->
+            </view>
           </view>
           <view class="row">
             <view class="small_tit">名义本金：</view>
@@ -158,6 +163,12 @@ const toDetail = (groupOrder: Group) => {
 .group_order_data{
   overflow: hidden;
   white-space: nowrap;
+}
+
+.row_copy{
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .time_hint{

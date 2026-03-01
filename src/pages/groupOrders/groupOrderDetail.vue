@@ -21,7 +21,12 @@
       <view class="time_hint">截止于 {{ formatLocalTime(new Date(orderDetail.expireTime)) }}</view>
       <view class="row">
         <view class="small_tit">拼单编号：</view>
-        <view class="group_order_data">{{ orderDetail.groupOrderNo }}</view>
+        <view class="group_order_data row_copy">
+          {{ orderDetail.groupOrderNo }}
+          <up-copy :content="orderDetail.groupOrderNo">
+            <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>
+          </up-copy>
+        </view>
       </view>
       <view class="hint_cont">
         <view>拼单费⽤</view>
@@ -425,6 +430,12 @@ const getStockFees = (assetCode: string) => {
 .group_order_data{
   overflow: hidden;
   white-space: nowrap;
+}
+
+.row_copy{
+  display: flex;
+  align-items: center;
+  gap: 7px;
 }
 
 .progress_bg{

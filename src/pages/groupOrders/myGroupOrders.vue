@@ -8,7 +8,12 @@
             <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.termName}} {{groupOrder.optionType}}</text></view>
             <view class="row">
               <view class="small_tit">订单编号：</view>
-              <view class="group_order_data">{{ groupOrder.groupOrderNo }} </view>
+              <view class="group_order_data">
+                {{ groupOrder.groupOrderNo }}
+<!--                <up-copy :content="groupOrder.groupOrderNo">-->
+<!--                  <up-icon name="file-text-fill" color="#acacac" size="18"></up-icon>-->
+<!--                </up-copy>-->
+              </view>
             </view>
             <view class="row">
               <view class="small_tit">订单状态：</view>

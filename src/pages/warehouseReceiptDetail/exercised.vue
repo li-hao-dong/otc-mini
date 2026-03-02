@@ -85,7 +85,11 @@ const getDetail = (orderId: string) => {
 .card{ width: 90%; margin: auto; padding: 10px; border-bottom: 1px solid silver;
   .fir_title{ font-size: 15px; font-weight: bold; margin-bottom: 8px; }
   .row{ padding: 2px 0; display: flex; align-items: center; justify-content: space-between;
-    .row_cont{ text{ color: #999999; } }
+    .row_cont{
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      text{ color: #999999; } }
   }
 }
 .submit{ margin: auto; margin-top: 20px; width: 95%; text-align: center; background: var(--color-primary-bg); line-height: 50px; border-radius: 15px; box-sizing: border-box; color: #FFFFFF; }

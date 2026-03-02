@@ -40,7 +40,7 @@ const getBankReceiptInfo = (orderId: string) => {
 }
 
 const exexercise = () => {
-  if(!orderId.value){
+  if(!orderId.value && !props.detail.orderNo){
     return;
   }
 
@@ -57,7 +57,7 @@ const exexercise = () => {
           exerciseType: ExerciseType.Manual,
           remarks: undefined
         }
-        exerciseHandler(orderId.value, payload).then(res => {
+        exerciseHandler(orderId.value || props.detail.orderNo, payload).then(res => {
           // console.log("行权结果", res)
           if (res.status !== "success") {
             uni.showToast({
@@ -213,7 +213,9 @@ const exexercise = () => {
 
     .row_cont{
       /*white-space: nowrap;*/
-
+      display: flex;
+      align-items: center;
+      gap: 7px;
       text{
         color: #999999;
       }

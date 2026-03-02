@@ -162,7 +162,9 @@ const getBankReceiptInfo = (orderId: string) => {
 
     .row_cont{
       /*white-space: nowrap;*/
-
+      display: flex;
+      align-items: center;
+      gap: 7px;
       text{
         color: #999999;
       }

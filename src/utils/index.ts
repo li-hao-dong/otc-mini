@@ -54,3 +54,19 @@ export const truncToTwo = (num: number) => {
 
     return intPart + '.' + decimalPart;
 };
+
+
+export const goBack = () => {
+	// 获取页面栈
+	const pages = getCurrentPages();
+	// 如果页面栈大于1，说明有上一页
+	if (pages.length > 1) {
+		uni.navigateBack();
+	} else {
+		// 否则，返回首页或者指定页面
+		// 注意：如果首页是tabbar，请使用 uni.switchTab
+		uni.switchTab({
+			url: '/pages/home/home'
+		});
+	}
+};

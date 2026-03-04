@@ -298,7 +298,7 @@ import {
   Status
 } from "@/interfaces/groupOrders/getGroupOrders";
 
-const store = useStore()
+
 const activeTab = ref<Number>(0);
 const subTabs = ref<Array<string>>(['单独购买', '拼单购买']);
 const selectedPriceType = ref<PriceType>(PriceType.MARKET);
@@ -312,11 +312,11 @@ const fee = ref<number>()
 
 onLoad(() => { initData(); });
 
-watch(() => store.miniData.orderPlacementTabIndex, (newVal) => {
+watch(() => useStore().miniData.orderPlacementTabIndex, (newVal) => {
   activeTab.value = newVal
 })
 
-watch(() => store.miniData.groupPeople, (newVal) => {
+watch(() => useStore().miniData.groupPeople, (newVal) => {
   choosePeople.value = newVal
 })
 

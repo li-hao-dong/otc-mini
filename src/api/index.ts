@@ -34,12 +34,13 @@ import type {SmsCodeRes} from "@/interfaces/smsCode";
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
 // const BASE_URL: string = "http://backtest.sunsmicro.com:22901/api/v1"
 
+export let BASE_URL: string
 // #ifdef MP-WEIXIN
-export const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
+BASE_URL = "https://option.sunsmicro.com/api/v1"
 // #endif
 
 // #ifdef H5
-export const BASE_URL: string = "/apiAgent"
+BASE_URL = "/apiAgent"
 export const BASE_URL_BOARD: string = "/boardApiAgent"
 // export const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
 // #endif

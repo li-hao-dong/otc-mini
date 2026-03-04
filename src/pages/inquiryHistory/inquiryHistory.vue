@@ -112,7 +112,7 @@ import Fab from "@/components/fab.vue";
 import Tabbar from "@/components/tabbar.vue";
 import ZPaging from "@/components/zPaging/zPaging.vue";
 
-const store = useStore();
+// const store = useStore();
 const history = ref<InquiryHistoryResp[]>([]);
 const moreDataStatus = ref<boolean>(true);
 const structureData = ref<any>([]);

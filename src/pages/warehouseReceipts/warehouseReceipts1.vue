@@ -108,7 +108,7 @@
       <view class="orderStatus">{{order?.orderStatus}}</view>
     </view>
 
-    <view v-if="store.user.token">
+    <view v-if="useStore().user.token">
       <view class="more_data_cont" v-if="moreDataStatus" @click="moreData">加载更多</view>
       <view class="more_data_cont" v-else>没有数据了</view>
     </view>
@@ -130,8 +130,6 @@ import { useStore } from "@/stores"
 import { failToast } from "@/utils/toast/toast"
 import {truncToTwo} from "@/utils";
 
-
-const store = useStore()
 const orderTypeKey = ref<number>(0)
 const orderType = ref<string[]>(['持仓中', '已结算'])
 const orderUpOrDownKey = ref<number>(0)

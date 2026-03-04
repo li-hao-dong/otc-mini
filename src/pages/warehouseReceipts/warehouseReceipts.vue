@@ -157,14 +157,13 @@ import { ref, watch } from "vue"
 import { getUserOrderInfo } from "@/api"
 import {onBackPress, onLoad, onShow} from "@dcloudio/uni-app"
 import type { OrdersSummary, OrderSummary, Pagination } from "@/interfaces/orders"
-import { useStore } from "@/stores"
 import { failToast } from "@/utils/toast/toast"
 import {truncToTwo} from "@/utils";
 import Fab from "@/components/fab.vue";
 import ZPaging from "@/components/zPaging/zPaging.vue";
 
 
-const store = useStore()
+
 const orderTypeKey = ref<number>(0)
 const orderType = ref<string[]>(['持仓中', '已结算'])
 const orderUpOrDownKey = ref<number>(0)
@@ -186,7 +185,7 @@ onShow(() => {
     customeBackPage.value = urlParams.get('origin') as string;
   }
   resetData()
-  zPaging.value.reload()
+  zPaging.value?.reload()
 })
 
 const backPage =() => {

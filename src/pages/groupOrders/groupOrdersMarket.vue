@@ -80,7 +80,7 @@ const emits = defineEmits<{
 const paging = ref()
 
 onShow(() => {
-  paging.value.reload()
+  paging.value?.reload()
 })
 
 const groupOrderDatas = defineModel({

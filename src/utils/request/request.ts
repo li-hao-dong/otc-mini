@@ -86,7 +86,8 @@ const http = {
                 success: (res:response) => {
                     // console.log("res@@@", res);
                     if (res.statusCode != 200) {
-                        let hintContent = this.checkoutDataCode(res.data?.code??res?.statusCode, res?.msg ?? res?.data);
+                        console.log("res", res)
+                        let hintContent = this.checkoutDataCode(res.data?.code??res?.statusCode, res?.msg ?? res?.data?.message ?? res?.data);
                         // failToast(res.data.msg);
                         setTimeout(() => {reject(hintContent ?? res?.msg ?? res?.data);}, 2000)
                         return;
@@ -161,6 +162,11 @@ const http = {
     checkoutDataCode(code: number, msg?: string) {
         let hintContent;
         switch (code) {
+            case 400:{
+                warnToast(msg!);
+                hintContent = new Promise(() => {})
+                break;
+            }
             case 401: {
                 // token 失效
                 const routers = getCurrentPages();

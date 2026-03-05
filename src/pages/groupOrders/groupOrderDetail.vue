@@ -18,7 +18,8 @@
           <view class="progress_active" :style="`width: ${orderDetail.currentSize / orderDetail.targetSize * 100 }%`"></view>
         </view>
       </view>
-      <view class="time_hint">截止于 {{ formatLocalTime(new Date(orderDetail.expireTime)) }}</view>
+      <view class="time_hint" v-if="orderDetail?.groupStatus === '拼单中'">截止于 {{ formatLocalTime(new Date(orderDetail.expireTime)) }}</view>
+      <view class="time_hint" v-if="orderDetail?.groupStatus === '支付中'">请在 {{ formatSeconds(validPaidTime) }} 内容完成支付，否则您将被清退拼单。</view>
       <view class="row">
         <view class="small_tit">拼单编号：</view>
         <view class="group_order_data row_copy">
@@ -101,27 +102,8 @@
         <view>成员列表</view>
         <view style="font-weight: lighter" v-if="orderDetail.currentSize !== orderDetail.targetSize">当前已有 {{orderDetail.currentSize}}人 ，还需 {{orderDetail.targetSize - orderDetail.currentSize}}人</view>
       </view>
-<!--      <view v-for="(_, index) in orderDetail.targetSize" :key="index">-->
-<!--        <view class="members" v-if="orderDetail.members[index]">-->
-<!--          <view class="row">-->
-<!--            <view style="display: flex; gap: 10px; align-items: center">-->
-<!--              <view style="display: flex; gap: 10px; align-items: center;">-->
-<!--                <view class="member_key"><p>{{index+1}}</p></view>-->
-<!--                <view class="memebr_name">{{orderDetail.members[index]?.maskedUserId}}</view>-->
-<!--              </view>-->
-<!--              <view class="member_role">-->
-<!--                {{calcRole(orderDetail.members[index].role)}}-->
-<!--              </view>-->
-<!--            </view>-->
-<!--            <view>{{orderDetail.members[index]?.orderStatus}}</view>-->
-<!--          </view>-->
-<!--          <view class="group_order_data">名义本金: ¥ {{ truncToTwo(orderDetail.members[index].nominalAmount) }}</view>-->
-<!--        </view>-->
-<!--        <view v-else>-->
-<!--          <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>待加入</view>-->
-<!--        </view>-->
-<!--      </view>-->
-      <view >
+
+      <view>
         <view class="members" v-for="(member, index) in orderDetail.members" :key="index">
           <view class="row">
             <view style="display: flex; gap: 10px; align-items: center">
@@ -139,6 +121,11 @@
         </view>
         <view v-if="Object.keys(myOrderDetail).length == 0 && orderDetail.currentSize < orderDetail.targetSize">
           <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>点击加入</view>
+        </view>
+
+        <view v-if="Object.keys(myOrderDetail).length > 0 &&　(orderDetail?.groupStatus==='拼单中' ||  orderDetail?.groupStatus==='已满员' || orderDetail?.groupStatus==='支付中')
+&& (!member?.isMe && member?.role=='Leader')">
+          <view class="wait_add" @click="toLeaveGroupOrder(orderDetail.groupOrderNo)"><uni-icons type="closeempty" size="20" color="#d6423a"></uni-icons>点击退出</view>
         </view>
       </view>
     </view>
@@ -173,25 +160,57 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
-import {onLoad} from "@dcloudio/uni-app";
-import {addGroupOrder, getGroupOrderDetail, getStockFee} from "@/api";
+import {computed, ref} from "vue";
+import {onHide, onLoad} from "@dcloudio/uni-app";
+import {
+  addGroupOrder,
+  getGroupOrderDetail,
+  getStockFee,
+  getUserGroupOrderSuccessOrders,
+  leaveGroupOrder,
+  orderDetail
+} from "@/api";
 import type {GroupOrderDetailResp, Member} from "@/interfaces/groupOrders/groupOrderDetail";
 import {formatLocalTime, truncToTwo} from "@/utils";
 import NavigationTitle from "@/components/navigationTitle.vue";
 import {useStore} from "@/stores";
+import dayjs from "dayjs";
 
 const orderDetail = ref<GroupOrderDetailResp>({});
 const myOrderDetail = ref<Member>({});
 const fee = ref<number>()
+const validPaidTime = ref<number>(0)
+const timer = ref()
 
 onLoad((option) => {
   // 页面加载时的逻辑
   // console.log('Page loaded with options:', option);
-  initOrderDetail(option.groupOrderNo)
+  initOrderDetail(option?.groupOrderNo)
+  getOwnerOrder(option?.groupOrderNo)
 });
 
-const calcStatus = (groupStatus) => {
+onHide(() => {
+  if(timer.value){
+    clearInterval(timer.value)
+    timer.value = null
+  }
+})
+
+const formatSeconds = computed(() => {
+  return function (totalSeconds: number){
+    // 计算分钟和秒数
+    const minutes = Math.floor(totalSeconds / 60);
+    const seconds = totalSeconds % 60;
+
+    // 使用 padStart(2, '0') 确保数值小于10时前面补0
+    const mm = String(minutes).padStart(2, '0');
+    const ss = String(seconds).padStart(2, '0');
+
+    return `${mm}:${ss}`;
+  }
+})
+
+const calcStatus = (groupStatus: string) => {
   // 计算订单状态的逻辑
 
   let text = "";
@@ -221,7 +240,7 @@ const calcStatus = (groupStatus) => {
   return text;
 }
 
-const calcRole = (role) => {
+const calcRole = (role: string) => {
   // 计算用户角色的逻辑
   let text = "";
   switch (role.toUpperCase()){
@@ -236,7 +255,7 @@ const calcRole = (role) => {
   return text;
 }
 
-const calcOrderStatus = (orderStatus) => {
+const calcOrderStatus = (orderStatus: string) => {
   // 计算订单状态的逻辑
   //  待⽀付 / 已上传凭证 · 待确认 / ⽀付已确认
   let text = "";
@@ -257,7 +276,7 @@ const calcOrderStatus = (orderStatus) => {
   return text;
 }
 
-const initOrderDetail = (groupOrderNo) => {
+const initOrderDetail = (groupOrderNo: string) => {
   // 初始化订单详情的逻辑
   getGroupOrderDetail(groupOrderNo).then(res => {
     // console.log('Order detail:', res);
@@ -309,7 +328,7 @@ const copyUrl = () => {
 const toOrderDetail = () => {
   // 跳转到订单详情页的逻辑
   uni.navigateTo({
-    url: `/pages/warehouseReceiptDetail/warehouseReceiptDetail?groupOrderNo=${orderDetail.value.groupOrderNo}`
+    url: `/pages/warehouseReceiptDetail/warehouseReceiptDetail?groupOrderNo=${orderDetail.value?.groupOrderNo}`
   });
 }
 
@@ -330,13 +349,13 @@ const addHintCont = () => {
     confirmText: '确认',
     success: (res) => {
       if (res.confirm) {
-        addGroupOrder(orderDetail.value.groupOrderNo, Number(orderDetail.value.totalNominalAmount)).then(res => {
+        addGroupOrder(orderDetail.value?.groupOrderNo, Number(orderDetail.value?.totalNominalAmount)).then(res => {
           uni.showToast({
             title: '加入拼单成功',
             icon: 'success'
           });
           setTimeout(() => {
-            initOrderDetail(orderDetail.value.groupOrderNo);
+            initOrderDetail(orderDetail.value?.groupOrderNo);
           }, 1000);
         }).catch(err => {
           console.log('加入拼单失败:', err);
@@ -361,6 +380,47 @@ const getStockFees = (assetCode: string) => {
   }).catch(err => {
     console.log("getStockFee err", err)
   })
+}
+
+const getOwnerOrder = (groupOrderNo: string) => {
+  getUserGroupOrderSuccessOrders(groupOrderNo).then(res => {
+    const localTime = dayjs(res.upstreamQuoteTime).add(15, "minute").format('YYYY-MM-DD HH:mm:ss')
+    const nowTime = new Date().getTime()
+    const targetTime = new Date(localTime).getTime()
+    if(nowTime <= targetTime){
+      validPaidTime.value = Math.floor((targetTime - nowTime) / 1000)
+      setInterval(() => {
+        if(!validPaidTime.value || validPaidTime.value < 0) {
+          clearInterval(timer.value)
+          timer.value = null
+        }
+        validPaidTime.value = validPaidTime.value - 1
+      }, 1000)
+    }
+  }).catch(err => {
+    console.error("get owner order fail.", err)
+  })
+}
+
+const toLeaveGroupOrder = (groupOrder: string) => {
+  uni.showModal({
+    title: '提示',
+    content: '您确认要离开吗？',
+    showCancel: true,
+    cancelText: '取消',
+    confirmText: '确认',
+    success: (res) => {
+      if (res.confirm) {
+        leaveGroupOrder(groupOrder).then(res => {
+          if(res.code === 200){
+            initOrderDetail(groupOrder)
+            uni.$u.toast(res?.message)
+          }
+        })
+      }
+    }
+  })
+
 }
 </script>
 

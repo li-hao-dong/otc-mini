@@ -692,6 +692,22 @@ export const getConstituents = (board_type: string, symbol:string):Promise<const
     })
 }
 
+export const leaveGroupOrder = (groupOrderNo: string) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.post(`${BASE_URL}/group-orders/${groupOrderNo}/leave`, null, "application/json")
+            // console.log("addGroupOrder res", res);
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as AddGroupOrder)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch addGroupOrder info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
 // TODO 废弃
 export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {
     return new Promise(async (resolve, reject) => {

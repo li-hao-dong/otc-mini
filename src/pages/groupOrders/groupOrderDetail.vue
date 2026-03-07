@@ -119,12 +119,11 @@
           </view>
           <view class="group_order_data">名义本金: ¥ {{ truncToTwo(member.nominalAmount) }}</view>
         </view>
-        <view v-if="Object.keys(myOrderDetail).length == 0 && orderDetail.currentSize < orderDetail.targetSize">
+        <view v-if="Object.keys(myOrderDetail).length == 0 && orderDetail.currentSize < orderDetail.targetSize && orderDetail.groupStatus !== '已超时'">
           <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>点击加入</view>
         </view>
 
-        <view v-if="Object.keys(myOrderDetail).length > 0 &&　(orderDetail?.groupStatus==='拼单中' ||  orderDetail?.groupStatus==='已满员' || orderDetail?.groupStatus==='支付中')
-&& (!member?.isMe && member?.role=='Leader')">
+        <view v-if="Object.keys(myOrderDetail).length > 0 &&　(orderDetail?.groupStatus==='拼单中' ||  orderDetail?.groupStatus==='已满员' || orderDetail?.groupStatus==='支付中')">
           <view class="wait_add" @click="toLeaveGroupOrder(orderDetail.groupOrderNo)"><uni-icons type="closeempty" size="20" color="#d6423a"></uni-icons>点击退出</view>
         </view>
       </view>
@@ -375,7 +374,7 @@ const addHintCont = () => {
 
 const getStockFees = (assetCode: string) => {
   getStockFee(assetCode).then(res => {
-    console.log("getStockFee res", res)
+    // console.log("getStockFee res", res)
     fee.value= res;
   }).catch(err => {
     console.log("getStockFee err", err)
@@ -412,9 +411,9 @@ const toLeaveGroupOrder = (groupOrder: string) => {
     success: (res) => {
       if (res.confirm) {
         leaveGroupOrder(groupOrder).then(res => {
-          if(res.code === 200){
+          if(res?.status === 'success'){
             initOrderDetail(groupOrder)
-            uni.$u.toast(res?.message)
+            uni.$u.toast(res!.message)
           }
         })
       }

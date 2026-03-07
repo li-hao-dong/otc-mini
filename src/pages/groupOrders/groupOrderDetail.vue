@@ -119,12 +119,12 @@
           </view>
           <view class="group_order_data">名义本金: ¥ {{ truncToTwo(member.nominalAmount) }}</view>
         </view>
-        <view v-if="Object.keys(myOrderDetail).length == 0 && orderDetail.currentSize < orderDetail.targetSize && orderDetail.groupStatus !== '已超时'">
-          <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>点击加入</view>
+        <view v-if="Object.keys(myOrderDetail).length == 0 && orderDetail.currentSize < orderDetail.targetSize && orderDetail.groupStatus !== '已超时'&& orderDetail.groupStatus !== '已取消'">
+          <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>点击加入拼单</view>
         </view>
 
         <view v-if="Object.keys(myOrderDetail).length > 0 &&　(orderDetail?.groupStatus==='拼单中' ||  orderDetail?.groupStatus==='已满员' || orderDetail?.groupStatus==='支付中')">
-          <view class="wait_add" @click="toLeaveGroupOrder(orderDetail.groupOrderNo)"><uni-icons type="closeempty" size="20" color="#d6423a"></uni-icons>点击退出</view>
+          <view class="wait_add" @click="toLeaveGroupOrder(orderDetail.groupOrderNo)"><uni-icons type="closeempty" size="20" color="#d6423a"></uni-icons>点击退出拼单</view>
         </view>
       </view>
     </view>

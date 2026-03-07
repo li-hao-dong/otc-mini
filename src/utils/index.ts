@@ -1,3 +1,5 @@
+import {computed} from "vue";
+
 export const calcClassName = (priceChange:string|number) => {
     let changePrice:number = 0;
     if (typeof priceChange === 'number'){
@@ -70,3 +72,17 @@ export const goBack = () => {
 		});
 	}
 };
+
+export const formatSeconds = computed(() => {
+    return function (totalSeconds: number){
+        // 计算分钟和秒数
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+
+        // 使用 padStart(2, '0') 确保数值小于10时前面补0
+        const mm = String(minutes).padStart(2, '0');
+        const ss = String(seconds).padStart(2, '0');
+
+        return `${mm}:${ss}`;
+    }
+})

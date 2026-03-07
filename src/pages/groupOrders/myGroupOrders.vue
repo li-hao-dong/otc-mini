@@ -3,9 +3,19 @@
       <z-paging v-model="groupOrderDatas" @callback="getMyGroupOrdersData">
         <view class="container container_box">
           <view class="card" v-for="(groupOrder, key) in groupOrderDatas" :key="key" @click="toDetail(groupOrder)">
-            <view :class="`${groupOrder.creatorName == '我' ? 'Leader':'Member'}`">{{groupOrder.creatorName == '我' ? '发起人':'成员'}}</view>
+            <view class="isOfficialRecommend" v-if="groupOrder.isOfficialRecommend">
+              官方推荐
+            </view>
             <!--        贵州茅台 600519.SH · 轻度价外看涨-->
-            <view class="bd">{{ groupOrder.underlyingAssetName }} <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.termName}} {{groupOrder.optionType}}</text></view>
+            <view class="bd">
+              <view style="display: flex; align-items: center; gap: 7px;">
+                <view>{{ groupOrder.underlyingAssetName }}</view>
+                <view class="group_order_data" v-if="groupOrder.isOfficialRecommend">
+                  <up-tag :class="`${groupOrder.creatorName == '我' ? 'Leader':'Member'}`" shape="circle" :text="groupOrder.creatorName == '我' ? '发起人':'成员'"></up-tag>
+                </view>
+              </view>
+
+              <text>{{ groupOrder.underlyingAssetCode }} · {{groupOrder.productCode.split("_")[3]}} {{groupOrder.termName}} {{groupOrder.optionType}}</text></view>
             <view class="row">
               <view class="small_tit">订单编号：</view>
               <view class="group_order_data">
@@ -30,13 +40,9 @@
             </view>
 
             <view class="row ">
-              <view class="time_hint">截止于 {{ formatLocalTime(new Date(groupOrder.expireTime)) }}</view>
-              <!--            <view class="add_group">加⼊拼单</view>-->
-              <view class="group_order_data" v-if="groupOrder.isOfficialRecommend">
-                <up-tag shape="circle" text="官⽅推荐"></up-tag>
-              </view>
+              <view class="time_hint" v-if="groupOrder?.groupStatus === '拼单中'">截止于 {{ formatLocalTime(new Date(groupOrder.expireTime)) }}</view>
+<!--              <view class="time_hint" v-if="groupOrder?.groupStatus === '支付中'">请在 {{ formatSeconds(validPaidTime) }} 内完成支付，超时自动退出拼单。</view>-->
             </view>
-
             <!--          <view class="hint_cont">-->
             <!--            拼单服务费仅在对应订单最终盈利时按约定⽐例收取；如订单亏损，则不收取该项费⽤。-->
             <!--          </view>-->
@@ -67,9 +73,9 @@
 <script setup lang="ts">
 
 import {onMounted, onUnmounted, reactive, ref} from "vue";
-import {getGroupOrders, getMyGroupOrders} from "@/api";
+import {getGroupOrders, getMyGroupOrders, orderDetail} from "@/api";
 import type {GetGroupOrdersReq, GetGroupOrdersResp, Group} from "@/interfaces/groupOrders/getGroupOrders";
-import {formatLocalTime, truncToTwo} from "../../utils";
+import {formatLocalTime, formatSeconds, truncToTwo} from "../../utils";
 import type {MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
 import {onHide, onLoad, onShow} from "@dcloudio/uni-app";
 import ZPaging from "@/components/zPaging/zPaging.vue";
@@ -83,6 +89,8 @@ const groupResp = reactive<{total: number, totalPages: number}>({
   total: 0,
   totalPages: 0,
 })
+const validPaidTime = ref<number>(0)
+
 // const porps = defineProps<{groupOrderDatas: Array<Group>, payloadData: GetGroupOrdersReq, groupResp:{total: number, totalPages: number}}>();
 // const emits = defineEmits<{
 //   (e: 'getGroupOrders'): void
@@ -129,6 +137,24 @@ const getMyGroupOrdersData = ({paging, pageNo, pageSize}) => {
 </script>
 
 <style scoped>
+.group_order_data >>> .u-tag__content{
+  display: flex;
+  align-items: center;
+}
+.group_order_data >>> .u-tag--primary{
+  background: transparent;
+  border-color: transparent;
+}
+.group_order_data >>> .u-tag__text--primary{
+  color: #707070;
+}
+.group_order_data >>> .u-tag--medium{
+  height: fit-content;
+}
+.group_order_data >>> .u-tag__text--medium{
+  font-size: 10px;
+  line-height: unset;
+}
 .container_box{
   min-height: unset;
   padding-top: 10px;
@@ -150,26 +176,41 @@ const getMyGroupOrdersData = ({paging, pageNo, pageSize}) => {
   position: relative;
 }
 
-.Leader{
+.isOfficialRecommend{
   position: absolute;
   top: 0px;
   right: 0px;
   padding: 5px 8px;
-  background-color: #FFE5B4;
-  color: #FF8C00;
+  background-color: #3c9cff;
+  color: #FFFFFF;
   border-radius: 0px 12px 0px 8px;
   font-size: 12px;
 }
 
-.Member {
-  position: absolute;
+.Leader{
+  /*position: absolute;
   top: 0px;
   right: 0px;
-  padding: 5px 8px;
+  padding: 5px 8px;*/
+  width: fit-content;
+  background-color: #FFE5B4;
+  color: #FF8C00;
+  /*border-radius: 0px 12px 0px 8px;*/
+  font-size: 12px;
+  border-radius: 100px;
+}
+
+.Member {
+  /*position: absolute;
+  top: 0px;
+  right: 0px;
+  padding: 5px 8px;*/
+  width: fit-content;
   background-color: #E0E0E0;
   color: #666666;
-  border-radius: 0px 12px 0px 8px;
+  /*border-radius: 0px 12px 0px 8px;*/
   font-size: 12px;
+  border-radius: 100px;
 }
 
 .bd{
@@ -184,7 +225,7 @@ const getMyGroupOrdersData = ({paging, pageNo, pageSize}) => {
 .bd text{
   font-weight: lighter;
   font-size: 14px;
-  margin-left: 6px;
+  /*margin-left: 6px;*/
 }
 
 

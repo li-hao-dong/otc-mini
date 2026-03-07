@@ -19,7 +19,7 @@
         </view>
       </view>
       <view class="time_hint" v-if="orderDetail?.groupStatus === '拼单中'">截止于 {{ formatLocalTime(new Date(orderDetail.expireTime)) }}</view>
-      <view class="time_hint" v-if="orderDetail?.groupStatus === '支付中'">请在 {{ formatSeconds(validPaidTime) }} 内容完成支付，否则您将被清退拼单。</view>
+      <view class="time_hint red" v-if="orderDetail?.groupStatus === '支付中'">请在 {{ formatSeconds(validPaidTime) }} 内完成支付，超时自动退出拼单。</view>
       <view class="row">
         <view class="small_tit">拼单编号：</view>
         <view class="group_order_data row_copy">
@@ -170,7 +170,7 @@ import {
   orderDetail
 } from "@/api";
 import type {GroupOrderDetailResp, Member} from "@/interfaces/groupOrders/groupOrderDetail";
-import {formatLocalTime, truncToTwo} from "@/utils";
+import {formatLocalTime, formatSeconds, truncToTwo} from "@/utils";
 import NavigationTitle from "@/components/navigationTitle.vue";
 import {useStore} from "@/stores";
 import dayjs from "dayjs";
@@ -192,20 +192,6 @@ onHide(() => {
   if(timer.value){
     clearInterval(timer.value)
     timer.value = null
-  }
-})
-
-const formatSeconds = computed(() => {
-  return function (totalSeconds: number){
-    // 计算分钟和秒数
-    const minutes = Math.floor(totalSeconds / 60);
-    const seconds = totalSeconds % 60;
-
-    // 使用 padStart(2, '0') 确保数值小于10时前面补0
-    const mm = String(minutes).padStart(2, '0');
-    const ss = String(seconds).padStart(2, '0');
-
-    return `${mm}:${ss}`;
   }
 })
 
@@ -426,7 +412,7 @@ const toLeaveGroupOrder = (groupOrder: string) => {
 <style lang="scss" scoped>
 .container{
   padding-top: 10px;
-  padding-bottom: 90px;
+  padding-bottom: 126px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -513,6 +499,10 @@ const toLeaveGroupOrder = (groupOrder: string) => {
 
 .time_hint{
   padding-top: 10px;
+}
+
+.red{
+  color: #d6423a;
 }
 
 .hint_cont{

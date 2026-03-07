@@ -64,6 +64,16 @@
           </view>
         </view>
       </view>
+
+      <view style="margin-top: 20px">
+        <view class="row" @click="newcomerGuide">
+          <view class="label">新人引导</view>
+          <view class="value">
+            <uni-icons type="right" size="16"></uni-icons>
+          </view>
+        </view>
+      </view>
+
       <view style="margin-top: 20px">
         <view class="row" @click="signOut">
           <view class="label">退出登录</view>
@@ -86,6 +96,7 @@ import {useStore} from "@/stores";
 import {onLoad, onShow} from "@dcloudio/uni-app";
 import {failToast, succToast} from "@/utils/toast/toast";
 import Tabbar from "@/components/tabbar.vue";
+import {startGuide} from "@/utils/guide/guide";
 
 const avatarUrl = ref<string|undefined>("")
 const address = ref<string|undefined>("暂无")
@@ -215,6 +226,11 @@ const signOut = () => {
       url: '/pages/reLogin/reLogin'
     })
   }, 1000)
+}
+
+const newcomerGuide = () => {
+  uni.setStorageSync('appGuide', false)
+  startGuide()
 }
 
 </script>

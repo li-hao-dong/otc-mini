@@ -449,10 +449,13 @@ export const startGuide = () => {
         title: '提示',
         content: '即将进行交易引导',
         success: (res) => {
-            // console.log("success 123", res)
             if(res.confirm) {
                 uni.$u.route({url: '/pages/home/home', type: "switchTab"})
                 delayJump(driverObj.drive)
+            }
+
+            if(res.cancel){
+                uni.setStorageSync('appGuide', true)
             }
         },
     })

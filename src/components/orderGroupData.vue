@@ -46,7 +46,7 @@
   </view>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 import {formatLocalTime} from "@/utils";
 </script>

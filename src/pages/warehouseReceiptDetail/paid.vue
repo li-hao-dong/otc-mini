@@ -13,12 +13,12 @@ const voucher = ref<string>()
 // const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const remitData = reactive({
-  bankAccount: null,
-  bankName: null,
+  bankAccount: undefined as string | undefined,
+  bankName: undefined as string | undefined,
   paymentAmount: 0,
-  paymentTime: null,
-  uploadTime: null,
-  voucherUrl: null
+  paymentTime: undefined as Date | undefined,
+  uploadTime: undefined as Date | undefined,
+  voucherUrl: undefined as string | undefined
 })
 const props = defineProps<{orderId: string, detail: OrderDetail | UserGroupOrderDetailResp}>();
 
@@ -40,24 +40,24 @@ watchEffect(() => {
 })
 
 
-const getDetail = (orderId: string) => {
-  orderDetail(orderId).then(res => {
-    // console.log("订单详情", res)
-    detail.value = res
-    uni.downloadFile({
-      url: `${BASE_URL}${res.paymentVoucherUrl}`,
-      header:{
-        'Authorization': `Bearer ${useStore().user.token}`
-      },
-      success: res => {
-        // console.log("下载支付凭证结果", res)
-        if(res.statusCode === 200){
-          voucher.value = res.tempFilePath;
-        }
-      }
-    })
-  })
-}
+// const getDetail = (orderId: string) => {
+//   orderDetail(orderId).then(res => {
+//     // console.log("订单详情", res)
+//     detail.value = res
+//      uni.downloadFile({
+//       url: `${BASE_URL}${res.paymentVoucherUrl}`,
+//       header:{
+//         'Authorization': `Bearer ${useStore().user.token}`
+//       },
+//       success: res => {
+//         // console.log("下载支付凭证结果", res)
+//         if(res.statusCode === 200){
+//           voucher.value = res.tempFilePath;
+//         }
+//       }
+//     })
+//   })
+// }
 
 function downloadImage(url: string) {
   if (!url) {
@@ -88,16 +88,17 @@ const getPaymentProofInfo = (orderId:string) => {
   paymentProofInfo(orderId).then(res => {
     // console.log("支付凭证信息", res)
     // voucher.value = res.paymentVoucherUrl;
-    remitData.bankAccount = res.bankAccount;
-    remitData.bankName = res.bankName;
-    remitData.paymentAmount = res.paymentAmount;
-    remitData.paymentTime = res.paymentTime;
-    remitData.uploadTime = res.uploadTime;
-    remitData.voucherUrl = res.voucherUrl;
+    remitData.bankAccount = res.bankAccount ?? undefined;
+    remitData.bankName = res.bankName ?? undefined;
+    remitData.paymentAmount = res.paymentAmount ?? 0;
+    remitData.paymentTime = res.paymentTime ?? undefined;
+    remitData.uploadTime = res.uploadTime ?? undefined;
+    remitData.voucherUrl = res.voucherUrl ?? undefined;
   })
 }
 
 const previewImage = () =>  {
+  if (!voucher.value) return;
   uni.previewImage({
     current: voucher.value, // 当前预览的图片链接
     urls: [voucher.value],  // 预览列表（单图仅需自身）
@@ -109,6 +110,19 @@ const previewImage = () =>  {
       console.error("预览失败", err);
     }
   });
+}
+
+const formatDate = (date: string | Date | undefined): string => {
+  if (!date) return '-';
+  return formatLocalTime(new Date(date));
+}
+
+const getProfitRatePercent = (rate: string | number | undefined): string => {
+  return truncToTwo((Number(rate) ?? 0) * 100);
+}
+
+const formatNumber = (val: string | number | null | undefined): string => {
+  return truncToTwo(Number(val ?? 0));
 }
 
 watch(() => props.orderId, (newVal) => {
@@ -133,7 +147,7 @@ watch(() => props.orderId, (newVal) => {
         </view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>本次实付金额：</text>¥ {{ truncToTwo(detail.paymentAmount) }}</view>
+        <view class="row_cont"><text>本次实付金额：</text>¥ {{ formatNumber(detail.paymentAmount) }}</view>
       </view>
     </view>
 
@@ -152,7 +166,7 @@ watch(() => props.orderId, (newVal) => {
         </view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>下单时间：</text>{{ formatLocalTime(new Date(detail.createdTime)) }}</view>
+        <view class="row_cont"><text>下单时间：</text>{{ formatDate(detail.createdTime) }}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>订单类型：</text>{{detail.optionType}}</view>
@@ -163,14 +177,14 @@ watch(() => props.orderId, (newVal) => {
     <view class="card">
       <view class="fir_title">费用明细</view>
       <view class="row">
-        <view class="row_cont"><text>名义本金：</text>¥ {{ truncToTwo(detail.nominalAmount) }}</view>
-        <view class="row_cont"><text>期权费率：</text>{{ truncToTwo(detail.optionFeeRate * 100) }}%</view>
+        <view class="row_cont"><text>名义本金：</text>¥ {{ formatNumber(detail.nominalAmount) }}</view>
+        <view class="row_cont"><text>期权费率：</text>{{ getProfitRatePercent(detail.optionFeeRate) }}%</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view>
+        <view class="row_cont"><text>期权费：</text>¥ {{ formatNumber(detail.optionFee) }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>通道费：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
+        <view class="row_cont"><text>通道费：</text>¥ {{ formatNumber(detail.transactionFee) }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
       </view>
@@ -190,7 +204,7 @@ watch(() => props.orderId, (newVal) => {
       </view>
       <view class="row">
         <view class="row_cont"><text>支付时间：</text>
-          {{ formatLocalTime(new Date(remitData.paymentTime)) }}</view>
+          {{ formatDate(remitData.paymentTime) }}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>汇款银行：</text>

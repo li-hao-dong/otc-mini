@@ -51,13 +51,13 @@
       </view>
 
       <view style="margin-top: 20px">
-        <view class="row my_order" @click="uni.navigateTo({url: '/pages/warehouseReceipts/warehouseReceipts'})">
+        <view class="row my_order" @click="warehouseReceipts">
           <view class="label">我的仓单</view>
           <view class="value">
             <uni-icons type="right" size="16"></uni-icons>
           </view>
         </view>
-        <view class="row my_group_order" @click="uni.navigateTo({url: '/pages/groupOrders/myGroupOrders'})">
+        <view class="row my_group_order" @click="myGroupOrders">
           <view class="label">我的拼单</view>
           <view class="value">
             <uni-icons type="right" size="16"></uni-icons>
@@ -210,8 +210,8 @@ const onChooseAvatar = (e:any) => {
   }
 }
 
-const changePicker = <T>(e: T) => {
-  address.value = e.detail!.value.join('');
+const changePicker = (e: { detail: { value: string[] } }) => {
+  address.value = e.detail.value.join('');
 }
 
 const signOut = () => {
@@ -232,6 +232,9 @@ const newcomerGuide = () => {
   uni.setStorageSync('appGuide', false)
   startGuide()
 }
+
+const warehouseReceipts = () => uni.navigateTo({url: '/pages/warehouseReceipts/warehouseReceipts'})
+const myGroupOrders = () => uni.navigateTo({url: '/pages/groupOrders/myGroupOrders'})
 
 </script>
 

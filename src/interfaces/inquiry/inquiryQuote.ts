@@ -6,7 +6,7 @@ export interface InquiryQuoteReq {
     /**
      * 期权类型
      */
-    optionType: OptionType;
+    optionType: string;
     /**
      * 报价方代码列表，空数组表示全选
      */
@@ -25,15 +25,6 @@ export interface InquiryQuoteReq {
     underlying: string;
     [property: string]: any;
 }
-
-/**
- * 期权类型
- */
-enum OptionType {
-    Snowball = "SNOWBALL",
-    Vanilla = "VANILLA",
-}
-
 
 /**
  * InquiryResp

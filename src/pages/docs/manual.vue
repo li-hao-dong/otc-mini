@@ -151,8 +151,12 @@
   </view>
 </template>
 
-<script setup>
-
+<script setup lang="ts">
+const productSeriesName = '';
+const productDocNo = '';
+const productDocVersion = '';
+const productDocEffectiveDate = '';
+const platformName = '';
 </script>
 
 <style lang="scss" scoped>

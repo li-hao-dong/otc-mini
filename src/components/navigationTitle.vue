@@ -13,7 +13,7 @@ const callBackPage = () => {
   let currentPages = pages[pages.length - 1]; // 当前页面
   let prevPage = pages[pages.length - 2]; // 上一个页面 (如果存在)
   if (prevPage){
-    uni.navigateBack(-1);
+    uni.navigateBack({ delta: 1 });
   }else {
     uni.switchTab({
       url: '/pages/groupOrders/groupOrders'

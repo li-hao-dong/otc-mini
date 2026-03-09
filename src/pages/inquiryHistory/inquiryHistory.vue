@@ -1,6 +1,6 @@
 <template>
   <view class="container">
-    <view class="hitBox"  @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">
+    <view class="hitBox"  @click="handleNavigateToInquiry">
 <!--      <view class="name">{{ store.miniData.name }}</view>-->
       <view class="inquiryBox">
         <view class="inquiryIcon"><uni-icons type="search" size="20" color="#000"></uni-icons></view>
@@ -40,11 +40,11 @@
             <view style="width: 100%; display: inline-grid; grid-template-columns: 25% 25% 25% 25%; align-items: center; padding: 10px 0; line-height: 20px; border-bottom: 1px solid #eaeaea;"
                   v-for="(res, key) in structureData[index]" :key="key">
               <view>{{ res.structureName }}</view>
-              <view><view style="line-height: 26px;" v-for="(term, i) in Object.keys(res?.terms)" :key="i">{{term}}</view></view>
-              <view><view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i" :class="calcClassName(term.price)">{{term.price}}%</view></view>
+              <view><view style="line-height: 26px;" v-for="(term, i) in Object.keys(res?.terms ?? {})" :key="i">{{term}}</view></view>
+              <view><view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms ?? {})" :key="i" :class="calcClassName(getTermPrice(term))">{{getTermPrice(term)}}%</view></view>
               <view>
-                <view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms)" :key="i">
-                  {{term.sourceCode}}
+                <view style="line-height: 26px;" v-for="(term, i) in Object.values(res?.terms ?? {})" :key="i">
+                  {{getTermSourceCode(term)}}
                   <!--                <uni-icons type="right" size="16" color="#c3c9d3"></uni-icons>-->
                 </view>
               </view>
@@ -76,7 +76,7 @@
       <template #empty>
         <view class="hint">
           <view class="hint_sign">您还没有询价记录，请先询价！</view>
-          <button class="to_sign" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">去询价</button>
+          <button class="to_sign" @click="handleNavigateToInquiry">去询价</button>
         </view>
       </template>
     </z-paging>
@@ -121,39 +121,39 @@ const structureData = ref<any>([]);
 // })
 
 
-const inquiryHistoryFun = async ({paging, pageNo, pageSize}) => {
+const inquiryHistoryFun = async ({paging, pageNo, pageSize}: {paging: any, pageNo: number, pageSize: number}) => {
   // inquiryHistory(pageNum.value, pageSize.value).then((res:InquiryHistoryResp) => {
   uni.showLoading({title: '加载中'})
   inquiryHistory(pageNo, pageSize).then((res:InquiryHistoryResp) => {
     // console.log("res.inquiries", res.inquiries);
 
-    res.inquiries!.map((data:InquiryResp, key: number) => {
+    res.inquiries!.map((data:InquiryResp) => {
       const filterData: any = {};
 
-      data.inquiry_results.map((item: QuoteResult, index: number) => {
+      data.inquiry_results?.map((item: QuoteResult, index: number) => {
         // console.log("item.structure", item.structure)
-        data.inquiry_results[index].days = item.term?.replace("W", '') * 7 || item.term?.replace('M', '') * 30 || 0;
+        data.inquiry_results![index].days = item.term?.replace("W", '') ? Number(item.term?.replace("W", '')) * 7 : (item.term?.replace('M', '') ? Number(item.term?.replace('M', '')) * 30 : 0);
       })
 
-      data.inquiry_results.sort((a,b) => a.days! - b.days!);
+      data.inquiry_results?.sort((a: QuoteResult, b: QuoteResult) => (a.days ?? 0) - (b.days ?? 0));
 
-      data.inquiry_results.map((item: QuoteResult, index: number) => {
+      data.inquiry_results?.map((item: QuoteResult) => {
         if(!filterData[item.structure!]){
           filterData[item.structure!] = {
             structure: item.structure,
             structureName: item.structureName,
             terms: {
-              [item.termName!]: item.quotes!.length > 0 && item.quotes![0],
+              [item.termName!]: (item.quotes?.length ?? 0) > 0 ? item.quotes![0] : null,
             },
-            sourceName: item.quotes!.length > 0 && item.quotes![0].sourceName,
-            sourceCode: item.quotes!.length > 0 && item.quotes![0].sourceCode,
+            sourceName: (item.quotes?.length ?? 0) > 0 ? item.quotes![0]?.sourceName : undefined,
+            sourceCode: (item.quotes?.length ?? 0) > 0 ? item.quotes![0]?.sourceCode : undefined,
           };
         }else {
           filterData[item.structure!] = {
             ...filterData[item.structure!],
             terms: {
               ...filterData[item.structure!].terms,
-              [item.termName!]: item.quotes!.length > 0 && item.quotes![0],
+              [item.termName!]: (item.quotes?.length ?? 0) > 0 ? item.quotes![0] : null,
             },
           };
         }
@@ -185,6 +185,18 @@ const resetDate = () => {
   history.value = [];
   structureData.value = [];
   moreDataStatus.value = true;
+}
+
+const handleNavigateToInquiry = () => {
+  uni.navigateTo({url: '/pages/inquiry/inquiry'})
+}
+
+const getTermPrice = (term: any): number => {
+  return term?.price ?? 0
+}
+
+const getTermSourceCode = (term: any): string => {
+  return term?.sourceCode ?? ''
 }
 
 </script>

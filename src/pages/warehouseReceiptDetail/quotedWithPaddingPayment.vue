@@ -10,7 +10,7 @@ import {formatLocalTime, truncToTwo} from "@/utils";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
 
 const orderId = ref<string>("")
-const voucher = ref<File>()
+const voucher = ref<UniApp.ChooseImageSuccessCallbackResultFile>()
 const voucherUrl = ref<string>()
 // const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
@@ -22,6 +22,10 @@ const remitData = reactive<{accountName: string | null, bankName: string | null,
   paymentTime: null,
   bankUserName: null
 })
+const dayDate = ref()
+const startDate = ref()
+const endDate = ref()
+
 
 const props = defineProps<{detail: OrderDetail | UserGroupOrderDetailResp, orderId: string}>();
 const emits = defineEmits<{
@@ -41,12 +45,12 @@ onLoad((option) =>{
 //   }
 // })
 
-const getDetail = (orderId: string) => {
-  orderDetail(orderId).then(res => {
-    // console.log("订单详情", res)
-    detail.value = res
-  })
-}
+// const getDetail = (orderId: string) => {
+//   orderDetail(orderId).then(res => {
+//     // console.log("订单详情", res)
+//     detail.value = res
+//   })
+// }
 
 const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
@@ -62,7 +66,8 @@ const uploadPaymentVoucher = () => {
     sourceType: ['album', 'camera'],
     success: (res) => {
       // console.log('选择的图片:', res);
-      if(res.tempFiles[0].size > 1 * 1024 * 1024){
+      const tempFiles = res.tempFiles as UniApp.ChooseImageSuccessCallbackResultFile[];
+      if(tempFiles?.[0]?.size && tempFiles[0].size > 1 * 1024 * 1024){
         uni.showToast({
           title: '图片大小不能超过1MB',
           icon: 'none'
@@ -81,7 +86,7 @@ const uploadPaymentVoucher = () => {
 
       if (tempFilePaths && tempFilePaths.length > 0) {
         voucherUrl.value = tempFilePaths[0];
-        voucher.value = res.tempFiles[0];
+        voucher.value = tempFiles[0];
       }
 
     },
@@ -243,15 +248,15 @@ watch(() => props.orderId, (newVal) => {
     <view class="card">
       <view class="fir_title">费用明细</view>
       <view class="row">
-        <view class="row_cont"><text>名义本金：</text>¥ {{ truncToTwo(detail?.nominalAmount) }}</view>
+        <view class="row_cont"><text>名义本金：</text>¥ {{ truncToTwo(Number(detail?.nominalAmount) ?? 0) }}</view>
         <view class="row_cont"><text>期权费率：</text>
-          {{ truncToTwo(detail?.optionFeeRate * 100) }}%</view>
+          {{ truncToTwo(Number(detail?.optionFeeRate) * 100) }}%</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail?.optionFee) }}</view>
+        <view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(Number(detail?.optionFee) ?? 0) }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
-        <view class="row_cont"><text>通道费：</text>¥ {{ truncToTwo(detail?.transactionFee) }}</view>
+        <view class="row_cont"><text>通道费：</text>¥ {{ truncToTwo(Number(detail?.transactionFee) ?? 0) }}</view>
       </view>
       <view class="row">
 <!--        <view class="row_cont"><text>合计应付：</text>¥ {{ detail?.optionFee  }}</view>-->

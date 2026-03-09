@@ -37,7 +37,7 @@ const initPdf = async (url: string) => {
 };
 
 onLoad((opt) => {
-  if (opt.pdfUrl) initPdf(opt.pdfUrl);
+  if (opt?.pdfUrl) initPdf(opt.pdfUrl);
 });
 </script>
 

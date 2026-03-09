@@ -80,7 +80,7 @@ import {onLoad, onShow} from "@dcloudio/uni-app";
 import type {calculatorReq, EquityOptionCalculatorResult} from "@/interfaces/calculator";
 
 const structures = reactive({
-  range: [],
+  range: [] as { value: string; text: string }[],
 })
 const calculator = reactive({
   structure: 'Call', // 香草
@@ -107,7 +107,7 @@ const getOptions = () => {
     // Process response if needed
     // console.log("res!!!!", res)
     structures.range = calcSameTypeStructure(<StructureDefinition[]>res.structures).map(v => {
-      return {value: v.code, text: v.name}
+      return { value: v.code ?? '', text: v.name ?? '' }
     })
   }).catch(() => {
     failToast("获取询价选项失败");
@@ -122,7 +122,7 @@ const calcSameTypeStructure = ( structures: StructureDefinition[]) => {
   })
 }
 
-const change = (e) => {
+const change = (e: string) => {
   // console.log("选择了结构:", e);
   calculator.structuresCode = e;
 }
@@ -146,9 +146,9 @@ const calculatorHandler = () => {
       title: '计算成功',
       duration: 2000
     })
-    results.expectedPayment = res.expectedPayout.toFixed(2) || res.expectedPayout;
-    results.actualProfitLoss = res.netProfit.toFixed(2) || res.netProfit;
-    results.profitLossRatio = res.profitRate;
+    results.expectedPayment = res.expectedPayout?.toFixed(2) ? Number(res.expectedPayout.toFixed(2)) : 0;
+    results.actualProfitLoss = res.netProfit?.toFixed(2) ? Number(res.netProfit.toFixed(2)) : 0;
+    results.profitLossRatio = res.profitRate ?? 0;
   }).catch((err: Error) => {
     console.log("calculatorData err", err);
   });

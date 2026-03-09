@@ -13,12 +13,12 @@ const voucher = ref<string>()
 // const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const remitData = reactive({
-  bankAccount: null,
-  bankName: null,
+  bankAccount: undefined as string | undefined,
+  bankName: undefined as string | undefined,
   paymentAmount: 0,
-  paymentTime: null,
-  uploadTime: null,
-  voucherUrl: null
+  paymentTime: undefined as Date | undefined,
+  uploadTime: undefined as Date | undefined,
+  voucherUrl: undefined as string | undefined
 })
 const props = defineProps<{orderId: string, detail: OrderDetail | UserGroupOrderDetailResp}>();
 
@@ -51,24 +51,24 @@ watchEffect(() => {
   downloadImage(props.detail?.paymentVoucherUrl || "")
 })
 
-const getDetail = (orderId: string) => {
-  orderDetail(orderId).then(res => {
-    // console.log("订单详情", res)
-    detail.value = res
-    uni.downloadFile({
-      url: `${BASE_URL}${res.paymentVoucherUrl}`,
-      header:{
-        'Authorization': `Bearer ${useStore().user.token}`
-      },
-      success: res => {
-        // console.log("下载支付凭证结果", res)
-        if(res.statusCode === 200){
-          voucher.value = res.tempFilePath;
-        }
-      }
-    })
-  })
-}
+// const getDetail = (orderId: string) => {
+//   orderDetail(orderId).then(res => {
+//     // console.log("订单详情", res)
+//     detail.value = res
+//     uni.downloadFile({
+//       url: `${BASE_URL}${res.paymentVoucherUrl}`,
+//       header:{
+//         'Authorization': `Bearer ${useStore().user.token}`
+//       },
+//       success: res => {
+//         // console.log("下载支付凭证结果", res)
+//         if(res.statusCode === 200){
+//           voucher.value = res.tempFilePath;
+//         }
+//       }
+//     })
+//   })
+// }
 
 const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
@@ -98,16 +98,17 @@ function downloadImage(url: string) {
 const getPaymentProofInfo = (orderId:string) => {
   paymentProofInfo(orderId).then(res => {
     // voucher.value = res.paymentVoucherUrl;
-    remitData.bankAccount = res.bankAccount;
-    remitData.bankName = res.bankName;
-    remitData.paymentAmount = res.paymentAmount;
-    remitData.paymentTime = res.paymentTime;
-    remitData.uploadTime = res.uploadTime;
-    remitData.voucherUrl = res.voucherUrl;
+    remitData.bankAccount = res.bankAccount ?? undefined;
+    remitData.bankName = res.bankName ?? undefined;
+    remitData.paymentAmount = res.paymentAmount ?? 0;
+    remitData.paymentTime = res.paymentTime ?? undefined;
+    remitData.uploadTime = res.uploadTime ?? undefined;
+    remitData.voucherUrl = res.voucherUrl ?? undefined;
   })
 }
 
 const previewImage = () =>  {
+  if (!voucher.value) return;
   uni.previewImage({
     current: voucher.value, // 当前预览的图片链接
     urls: [voucher.value],  // 预览列表（单图仅需自身）
@@ -121,6 +122,23 @@ const previewImage = () =>  {
   });
 }
 
+const backToList = () => {
+  uni.navigateTo({url: '/pages/warehouseReceipts/warehouseReceipts'})
+}
+
+const formatDate = (date: string | Date | undefined): string => {
+  if (!date) return '-';
+  return formatLocalTime(new Date(date));
+}
+
+const getProfitRatePercent = (rate: string | number | undefined): string => {
+  return truncToTwo(Number((rate ?? 0) as number * 100));
+}
+
+const formatNumber = (val: string | number | undefined): string => {
+  return truncToTwo(Number(val ?? 0));
+}
+
 </script>
 
 <template>
@@ -128,7 +146,7 @@ const previewImage = () =>  {
     <view class="card">
       <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color:#2ECC71;">已结算 · 订单已完成</view>
-      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{Number(detail?.estimatedProfit) >= 0 ? '+' : '-'}} ¥ {{Math.abs(truncToTwo(Number(detail?.estimatedProfit)))}}（{{ truncToTwo(detail?.profitRate * 100)}}%）</text></view></view>
+      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{Number(detail?.estimatedProfit ?? 0) >= 0 ? '+' : '-'}} ¥ {{Math.abs(Number(truncToTwo(Number(detail?.estimatedProfit ?? 0))))}}（{{ getProfitRatePercent(detail?.profitRate) }}%）</text></view></view>
       <view class="row"><view class="row_cont"><text>结算金额：</text>¥ {{ detail?.settlementAmount }} </view></view>
       <view class="row"><view class="row_cont"><text>总投入（期权费 + 通道费）：</text>¥ {{truncToTwo(Number(detail?.transactionFee) + Number(detail?.optionFee))}}</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">本单已完成全部结算，资金方向与盈亏结果已最终确定。上述数据基于合作机构结算结果，已不再变动，仅供对账与历史查询使用。</view></view>
@@ -145,11 +163,11 @@ const previewImage = () =>  {
     <view class="card">
       <view class="fir_title">资金结算明细</view>
       <view class="row"><view class="row_cont"><text>总投入：</text>¥ {{truncToTwo(Number(detail?.transactionFee) + Number(detail?.optionFee))}}</view></view>
-      <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail?.optionFee) }}</view></view>
-      <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{truncToTwo(detail?.transactionFee)}}</view></view>
+      <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(Number(detail?.optionFee)) }}</view></view>
+      <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{truncToTwo(Number(detail?.transactionFee))}}</view></view>
       <view class="row"><view class="row_cont"><text>结算金额：</text>¥ {{ detail?.settlementAmount }}</view></view>
 <!--      <view class="row"><view class="row_cont"><text>结算通道费：</text>¥ 500.00???</view></view>-->
-      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{(Number(detail?.estimatedProfit)) >= 0 ? '+' : '-'}} ¥ {{Math.abs(truncToTwo(Number(detail?.estimatedProfit)))}}（{{ truncToTwo(detail?.profitRate * 100)}}%）</text></view></view>
+      <view class="row"><view class="row_cont"><text>本单最终盈亏：</text><text style="color:#E8473A">{{(Number(detail?.estimatedProfit ?? 0)) >= 0 ? '+' : '-'}} ¥ {{Math.abs(Number(truncToTwo(Number(detail?.estimatedProfit ?? 0))))}}（{{ getProfitRatePercent(detail?.profitRate) }}%）</text></view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">资金结算明细用于帮助您理解本单的投入、结算及最终盈亏构成，如对具体金额有疑问，请以结算单及银行流水为准，并及时联系客服核对。</view></view>
     </view>
 
@@ -166,8 +184,8 @@ const previewImage = () =>  {
         </view>
       </view>
       <view class="row"><view class="row_cont"><text>订单类型：</text>个股场外期权</view></view>
-      <view class="row"><view class="row_cont"><text>生效日期：</text>{{ formatLocalTime(new Date(detail?.createdTime)) }}</view></view>
-      <view class="row"><view class="row_cont"><text>到期日期：</text>{{ formatLocalTime(new Date(detail?.maturityDate)) }}</view></view>
+      <view class="row"><view class="row_cont"><text>生效日期：</text>{{ formatDate(detail?.createdTime) }}</view></view>
+      <view class="row"><view class="row_cont"><text>到期日期：</text>{{ formatDate(detail?.maturityDate) }}</view></view>
       <view class="row"><view class="row_cont"><text>期限：</text>{{ detail?.termName }}</view></view>
       <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail?.structureDisplayName}}{{detail?.optionType}}（{{ detail?.optionCode }}）</view></view>
       <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{ detail?.optionType }}）</view></view>
@@ -183,10 +201,10 @@ const previewImage = () =>  {
       </view>
       <view class="row">
         <view class="row_cont"><text>下单时间：</text>
-          {{ formatLocalTime(new Date(detail?.createdTime)) }}</view>
+          {{ formatDate(detail?.createdTime) }}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>支付时间：</text>{{formatLocalTime(new Date(remitData.paymentTime))}}</view>
+        <view class="row_cont"><text>支付时间：</text>{{ formatDate(remitData.paymentTime) }}</view>
       </view>
       <view class="row">
         <view class="row_cont"><text>支付方式：</text>银行转账</view>
@@ -230,7 +248,7 @@ const previewImage = () =>  {
       </view>
     </view>
 
-    <view class="submit" @click="()=> uni.navigateTo({url: '/pages/warehouseReceipts/warehouseReceipts'})">返回订单列表</view>
+    <view class="submit" @click="backToList">返回订单列表</view>
     <view class="card"><view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">我有疑问，联系客服</view></view></view>
 
     <view class="card">

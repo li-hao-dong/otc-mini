@@ -53,6 +53,7 @@ export interface Group{
     productCode: string,
     productName: string,
     underlyingAssetName: string,
+    underlyingAssetCode: string,
     optionType: string,
     termName: string,
     targetSize: number,

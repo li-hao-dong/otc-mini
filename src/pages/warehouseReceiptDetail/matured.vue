@@ -17,11 +17,24 @@ const props = defineProps<{orderId?: string, detail: OrderDetail | UserGroupOrde
 //   getDetail(option?.id)
 // })
 
-const getDetail = (orderId: string) => {
-  orderDetail(orderId).then(res => {
-    // console.log("订单详情", res)
-    detail.value = res
-  })
+// const getDetail = (orderId: string) => {
+//   orderDetail(orderId).then(res => {
+//     // console.log("订单详情", res)
+//     detail.value = res
+//   })
+// }
+
+const formatDate = (date: string | Date | undefined): string => {
+  if (!date) return '-';
+  return formatLocalTime(new Date(date));
+}
+
+const getProfitRatePercent = (rate: string | number | undefined): string => {
+  return truncToTwo((Number(rate) ?? 0) * 100);
+}
+
+const formatNumber = (val: string | number | undefined): string => {
+  return truncToTwo(Number(val ?? 0));
 }
 
 </script>
@@ -31,7 +44,7 @@ const getDetail = (orderId: string) => {
     <view class="card">
       <view class="fir_title">订单状态</view>
       <view class="fir_title" style="color:#FF9800;">已到期 · 待结算</view>
-      <view class="row"><view class="row_cont">合约已于 {{ formatLocalTime(new Date(detail?.maturityDate)) }} 到期。我们正在与合作机构进行对账和资金结算确认，请耐心等待。</view></view>
+      <view class="row"><view class="row_cont">合约已于 {{ formatDate(detail?.maturityDate) }} 到期。我们正在与合作机构进行对账和资金结算确认，请耐心等待。</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">本页面仅说明合约已到期，相关收益与结算金额将在订单状态更新为「已结算」后展示，当前不展示具体盈亏数字。</view></view>
     </view>
 
@@ -48,8 +61,8 @@ const getDetail = (orderId: string) => {
       </view>
       <view class="row"><view class="row_cont"><text>订单类型：</text>个股场外期权</view></view>
       <view class="row"><view class="row_cont"><text>生效日期：</text>
-        {{ formatLocalTime(new Date(detail.createdTime)) }}</view></view>
-      <view class="row"><view class="row_cont"><text>到期日期：</text>{{ formatLocalTime(new Date(detail?.maturityDate)) }}</view></view>
+        {{ formatDate(detail.createdTime) }}</view></view>
+      <view class="row"><view class="row_cont"><text>到期日期：</text>{{ formatDate(detail?.maturityDate) }}</view></view>
       <view class="row"><view class="row_cont"><text>期限：</text>
         {{ detail.termName }}</view></view>
       <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail.structureDisplayName}}{{detail.optionType}}（{{ detail.optionCode }}）</view></view>
@@ -60,10 +73,10 @@ const getDetail = (orderId: string) => {
 
     <view class="card">
       <view class="fir_title">资金投入与成本</view>
-      <view class="row"><view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(detail.nominalAmount)}}</view></view>
-      <view class="row"><view class="row_cont"><text>期权费率：</text>{{ truncToTwo(detail.optionFeeRate * 100) }}%</view></view>
-      <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(detail.optionFee) }}</view></view>
-      <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{truncToTwo(detail.transactionFee)}}</view></view>
+      <view class="row"><view class="row_cont"><text>名义本金：</text>¥ {{formatNumber(detail.nominalAmount)}}</view></view>
+      <view class="row"><view class="row_cont"><text>期权费率：</text>{{ getProfitRatePercent(detail.optionFeeRate) }}%</view></view>
+      <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ formatNumber(detail.optionFee) }}</view></view>
+      <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{formatNumber(detail.transactionFee)}}</view></view>
       <view class="row"><view class="row_cont"><text>总计支出：</text>¥ {{truncToTwo(Number(detail.transactionFee) + Number(detail.optionFee))}}</view></view>
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">上述为您在本笔订单中的历史投入与费用情况，并不代表最终结算金额，实际盈亏请以「已结算」状态页面及结算单为准。</view></view>
     </view>

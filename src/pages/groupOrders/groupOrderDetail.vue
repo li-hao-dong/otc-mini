@@ -11,14 +11,14 @@
       </view>
       <view class="row">
         <view class="small_tit">拼单进度：</view>
-        <view class="group_order_data">{{ orderDetail.currentSize }} / {{ orderDetail.targetSize }} ⼈ </view>
+        <view class="group_order_data">{{ orderDetail.currentSize ?? 0 }} / {{ orderDetail.targetSize ?? 1 }} ⼈ </view>
       </view>
       <view>
         <view class="progress_bg">
-          <view class="progress_active" :style="`width: ${orderDetail.currentSize / orderDetail.targetSize * 100 }%`"></view>
+          <view class="progress_active" :style="`width: ${(orderDetail.currentSize ?? 0) / (orderDetail.targetSize ?? 1) * 100 }%`"></view>
         </view>
       </view>
-      <view class="time_hint" v-if="orderDetail?.groupStatus === '拼单中'">截止于 {{ formatLocalTime(new Date(orderDetail.expireTime)) }}</view>
+      <view class="time_hint" v-if="orderDetail?.groupStatus === '拼单中' && orderDetail.expireTime">截止于 {{ formatLocalTime(new Date(orderDetail.expireTime)) }}</view>
       <view class="time_hint red" v-if="orderDetail?.groupStatus === '支付中'">请在 {{ formatSeconds(validPaidTime) }} 内完成支付，超时自动退出拼单。</view>
       <view class="row">
         <view class="small_tit">拼单编号：</view>
@@ -49,7 +49,7 @@
       </view>
       <view class="row">
         <view class="small_tit">我的名义本金：</view>
-        <view class="group_order_data">¥ {{ truncToTwo(myOrderDetail.nominalAmount) }}</view>
+        <view class="group_order_data">¥ {{ truncToTwo(myOrderDetail.nominalAmount ?? 0) }}</view>
       </view>
 <!--      <view>-->
 <!--        &lt;!&ndash;    • 若我的订单状态为待⽀付/待上传：&ndash;&gt;-->
@@ -68,17 +68,17 @@
         <text class="sectionTitle">个人费用概览</text>
       </view>
       <view class="row">
-        <view class="row_cont"><text class="popup_card_row_title">名义本金：</text>¥ {{truncToTwo(Math.ceil(orderDetail?.totalNominalAmount / orderDetail?.targetSize * 100)/100)}}</view>
+        <view class="row_cont"><text class="popup_card_row_title">名义本金：</text>¥ {{truncToTwo(Math.ceil((orderDetail?.totalNominalAmount ?? 0) / (orderDetail?.targetSize ?? 1) * 100)/100)}}</view>
       </view>
 <!--      <view class="row">-->
 <!--        <view class="row_cont"><text class="popup_card_row_title">期权费率：</text>-->
 <!--          {{ truncToTwo(orderDetail?.quotedPrice * 100) }}% {{useStore().miniData.waitPriceHint}}</view>-->
 <!--      </view>-->
       <view class="row">
-        <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(Math.ceil(orderDetail.optionFee / orderDetail?.targetSize * 100) / 100)}}{{useStore().miniData.waitPriceHint}}</view>
+        <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(Math.ceil((orderDetail.optionFee ?? 0) / (orderDetail?.targetSize ?? 1) * 100) / 100)}}{{useStore().miniData.waitPriceHint}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text class="popup_card_row_title">通道费：</text>¥ {{ truncToTwo(Math.ceil((orderDetail.transactionFee || useStore().miniData.channelFee) / orderDetail?.targetSize * 100) / 100) }}</view>
+        <view class="row_cont"><text class="popup_card_row_title">通道费：</text>¥ {{ truncToTwo(Math.ceil((orderDetail.transactionFee || useStore().miniData.channelFee) / (orderDetail?.targetSize ?? 1) * 100) / 100) }}</view>
       </view>
 <!--      <view class="row">-->
 <!--        <view class="row_cont"><text class="popup_card_row_title">拼单佣金：</text>-->
@@ -87,7 +87,7 @@
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
       </view>
       <view class="row">
-        <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(Math.ceil((orderDetail.transactionFee || useStore().miniData.channelFee) / orderDetail?.targetSize * 100) / 100 + Math.ceil(orderDetail.optionFee / orderDetail?.targetSize * 100) / 100) }}{{useStore().miniData.waitPriceHint}}</view>
+        <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(Math.ceil((orderDetail.transactionFee || useStore().miniData.channelFee) / (orderDetail?.targetSize ?? 1) * 100) / 100 + Math.ceil((orderDetail.optionFee ?? 0) / (orderDetail?.targetSize ?? 1) * 100) / 100) }}{{useStore().miniData.waitPriceHint}}</view>
       </view>
       <view>
         <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>
@@ -100,7 +100,7 @@
     <view class="card">
       <view class="fir_title row">
         <view>成员列表</view>
-        <view style="font-weight: lighter" v-if="orderDetail.currentSize !== orderDetail.targetSize">当前已有 {{orderDetail.currentSize}}人 ，还需 {{orderDetail.targetSize - orderDetail.currentSize}}人</view>
+        <view style="font-weight: lighter" v-if="(orderDetail.currentSize ?? 0) !== (orderDetail.targetSize ?? 0)">当前已有 {{orderDetail.currentSize ?? 0}}人 ，还需 {{(orderDetail.targetSize ?? 0) - (orderDetail.currentSize ?? 0)}}人</view>
       </view>
 
       <view>
@@ -117,9 +117,9 @@
             </view>
             <view>{{member?.orderStatus}}</view>
           </view>
-          <view class="group_order_data">名义本金: ¥ {{ truncToTwo(member.nominalAmount) }}</view>
+          <view class="group_order_data">名义本金: ¥ {{ truncToTwo(member.nominalAmount ?? 0) }}</view>
         </view>
-        <view v-if="Object.keys(myOrderDetail).length == 0 && orderDetail.currentSize < orderDetail.targetSize && orderDetail.groupStatus !== '已超时'&& orderDetail.groupStatus !== '已取消'">
+        <view v-if="Object.keys(myOrderDetail).length == 0 && (orderDetail.currentSize ?? 0) < (orderDetail.targetSize ?? 0) && orderDetail.groupStatus !== '已超时'&& orderDetail.groupStatus !== '已取消'">
           <view class="wait_add" @click="addHintCont"><uni-icons type="plusempty" size="20" color="#d6423a"></uni-icons>点击加入拼单</view>
         </view>
 
@@ -144,11 +144,11 @@
 <!--      &lt;!&ndash;   我尚未⽀付   &ndash;&gt;-->
 <!--      <view class="operation_btn">去支付?? 如何寻找的支付状态</view>-->
 <!--    </view>-->
-    <view class="btns_bottom" v-if="orderDetail?.currentSize<orderDetail?.targetSize">
+    <view class="btns_bottom" v-if="(orderDetail?.currentSize ?? 0) < (orderDetail?.targetSize ?? 0)">
       <!--   拼单未满员   -->
       <view class="operation_btn" @click="copyUrl">分享给好友拼单</view>
     </view>
-    <view class="btns_bottom" v-if="Object.keys(myOrderDetail).length > 0 && orderDetail?.currentSize==orderDetail?.targetSize" >
+    <view class="btns_bottom" v-if="Object.keys(myOrderDetail).length > 0 && (orderDetail?.currentSize ?? 0) == (orderDetail?.targetSize ?? 0)" >
       <!--   我参与，拼单满员   -->
       <view class="operation_btn" @click="toOrderDetail">前往仓单详情</view>
       <view class="hint_cont">
@@ -166,8 +166,7 @@ import {
   getGroupOrderDetail,
   getStockFee,
   getUserGroupOrderSuccessOrders,
-  leaveGroupOrder,
-  orderDetail
+  leaveGroupOrder
 } from "@/api";
 import type {GroupOrderDetailResp, Member} from "@/interfaces/groupOrders/groupOrderDetail";
 import {formatLocalTime, formatSeconds, truncToTwo} from "@/utils";
@@ -175,8 +174,8 @@ import NavigationTitle from "@/components/navigationTitle.vue";
 import {useStore} from "@/stores";
 import dayjs from "dayjs";
 
-const orderDetail = ref<GroupOrderDetailResp>({});
-const myOrderDetail = ref<Member>({});
+const orderDetail = ref<Partial<GroupOrderDetailResp>>({});
+const myOrderDetail = ref<Partial<Member>>({});
 const fee = ref<number>()
 const validPaidTime = ref<number>(0)
 const timer = ref()
@@ -184,8 +183,10 @@ const timer = ref()
 onLoad((option) => {
   // 页面加载时的逻辑
   // console.log('Page loaded with options:', option);
-  initOrderDetail(option?.groupOrderNo)
-  getOwnerOrder(option?.groupOrderNo)
+  if (option?.groupOrderNo) {
+    initOrderDetail(option.groupOrderNo)
+    getOwnerOrder(option.groupOrderNo)
+  }
 });
 
 onHide(() => {
@@ -225,8 +226,9 @@ const calcStatus = (groupStatus: string) => {
   return text;
 }
 
-const calcRole = (role: string) => {
+const calcRole = (role: string | undefined) => {
   // 计算用户角色的逻辑
+  if (!role) return '';
   let text = "";
   switch (role.toUpperCase()){
     case "LEADER":
@@ -268,7 +270,9 @@ const initOrderDetail = (groupOrderNo: string) => {
     res.members = res.members.reverse();
     orderDetail.value = res;
     myOrderDetail.value = res.members.find(member => member.isMe) || {};
-    getStockFees(orderDetail.value.underlyingAssetCode)
+    if (orderDetail.value.underlyingAssetCode) {
+      getStockFees(orderDetail.value.underlyingAssetCode);
+    }
   }).catch(err => {
     console.log('Error fetching order detail:', err);
   })
@@ -334,21 +338,25 @@ const addHintCont = () => {
     confirmText: '确认',
     success: (res) => {
       if (res.confirm) {
-        addGroupOrder(orderDetail.value?.groupOrderNo, Number(orderDetail.value?.totalNominalAmount)).then(res => {
-          uni.showToast({
-            title: '加入拼单成功',
-            icon: 'success'
+        const groupOrderNo = orderDetail.value?.groupOrderNo;
+        const totalNominalAmount = orderDetail.value?.totalNominalAmount;
+        if (groupOrderNo && totalNominalAmount) {
+          addGroupOrder(groupOrderNo, Number(totalNominalAmount)).then(res => {
+            uni.showToast({
+              title: '加入拼单成功',
+              icon: 'success'
+            });
+            setTimeout(() => {
+              initOrderDetail(groupOrderNo);
+            }, 1000);
+          }).catch(err => {
+            console.log('加入拼单失败:', err);
+            uni.showToast({
+              title: '加入拼单失败',
+              icon: 'none'
+            });
           });
-          setTimeout(() => {
-            initOrderDetail(orderDetail.value?.groupOrderNo);
-          }, 1000);
-        }).catch(err => {
-          console.log('加入拼单失败:', err);
-          uni.showToast({
-            title: '加入拼单失败',
-            icon: 'none'
-          });
-        });
+        }
         // uni.showToast({
         //   title: '加入拼单成功',
         //   icon: 'success'
@@ -387,7 +395,8 @@ const getOwnerOrder = (groupOrderNo: string) => {
   })
 }
 
-const toLeaveGroupOrder = (groupOrder: string) => {
+const toLeaveGroupOrder = (groupOrder: string | undefined) => {
+  if (!groupOrder) return;
   uni.showModal({
     title: '提示',
     content: '您确认要离开吗？',
@@ -396,10 +405,11 @@ const toLeaveGroupOrder = (groupOrder: string) => {
     confirmText: '确认',
     success: (res) => {
       if (res.confirm) {
-        leaveGroupOrder(groupOrder).then(res => {
-          if(res?.status === 'success'){
+        leaveGroupOrder(groupOrder).then((res) => {
+          const result = res as { status?: string; message?: string };
+          if(result?.status === 'success'){
             initOrderDetail(groupOrder)
-            uni.$u.toast(res!.message)
+            uni.$u.toast(result.message || '操作成功')
           }
         })
       }

@@ -15,7 +15,7 @@
             <view>{{item.板块名称}}</view>
             <view class="stext">{{item.板块代码}}</view>
           </view>
-          <view :class="`${item.涨跌幅.toFixed(2) > 0 ? 'red':'green'}`">{{item.涨跌幅 >0 ? '+':''}}{{ item.涨跌幅.toFixed(2) }}%</view>
+          <view :class="`${Number(item.涨跌幅.toFixed(2)) > 0 ? 'red':'green'}`">{{item.涨跌幅 >0 ? '+':''}}{{ item.涨跌幅.toFixed(2) }}%</view>
           <view>{{item.换手率}}%</view>
         </view>
       </view>
@@ -69,7 +69,7 @@ const getIndustries = () => {
   })
 }
 
-function calcOrdinalBg(n){
+function calcOrdinalBg(n: number){
   if(n === 1){
     return 'bg_gold'
   }else if(n === 2){

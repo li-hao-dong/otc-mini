@@ -19,7 +19,7 @@
             role="button"
             tabindex="0"
             :aria-pressed="selectedType === t.code"
-            @click="selectType(t.code)"
+            @click="selectType(t.code as OptionTypeCode)"
           >
             <text class="chipText">{{ t.name }}</text>
           </view>
@@ -33,11 +33,11 @@
             v-for="s in currentTypeStructures?.slice(0, 1)"
             :key="s.code"
             class="chip"
-            :class="{ active: selectedStructures.includes(s.code) }"
+            :class="{ active: selectedStructures.includes(s.code ?? '') }"
             role="button"
             tabindex="0"
-            :aria-pressed="selectedStructures.includes(s.code)"
-            @click="toggleStructure(s.code)"
+            :aria-pressed="selectedStructures.includes(s.code ?? '')"
+            @click="toggleStructure(s.code ?? '')"
           >
             <text class="chipText">{{ s.name }}</text>
           </view>
@@ -70,11 +70,11 @@
             v-for="t in terms"
             :key="t.code"
             class="chip"
-            :class="{ active: selectedTerms.includes(t.code) }"
+            :class="{ active: selectedTerms.includes(t.code ?? '') }"
             role="button"
             tabindex="0"
-            :aria-pressed="selectedTerms.includes(t.code)"
-            @click="toggleTerm(t.code)"
+            :aria-pressed="selectedTerms.includes(t.code ?? '')"
+            @click="toggleTerm(t.code ?? '')"
           >
             <text class="chipText">{{ t.name }}</text>
           </view>
@@ -88,11 +88,11 @@
             v-for="s in sources"
             :key="s.code"
             class="chip"
-            :class="{ primary: selectedSources.includes(s.code) }"
+            :class="{ primary: selectedSources.includes(s.code ?? '') }"
             role="button"
             tabindex="0"
-            :aria-pressed="selectedSources.includes(s.code)"
-            @click="toggleSource(s.code)"
+            :aria-pressed="selectedSources.includes(s.code ?? '')"
+            @click="toggleSource(s.code ?? '')"
           >
             <text class="chipText">{{ s.code }}</text>
           </view>
@@ -113,13 +113,13 @@
 import {onMounted, ref} from "vue";
 import {failToast, hideLoading, loadingToast} from "@/utils/toast/toast";
 import {inquiryOptions, inquiryQuote} from "@/api";
-import {
+import type {
   Code,
-  type InquiryOptionsResp,
-  type OptionType,
-  type Source,
-  type StructureDefinition,
-  type Term
+  InquiryOptionsResp,
+  OptionType,
+  Source,
+  StructureDefinition,
+  Term
 } from "@/interfaces/inquiry/inquiryOptions";
 import type {InquiryQuoteReq, InquiryResp} from "@/interfaces/inquiry/inquiryQuote";
 import {onLoad, onShow} from "@dcloudio/uni-app";
@@ -151,7 +151,7 @@ const sources = ref<Source[]>();
 const selectedSources = ref<string[]>([]);
 
 onLoad(option => {
-  if(option.name){
+  if(option?.name){
     underlying.value = option.name;
   }
 })
@@ -169,7 +169,7 @@ const calcSameTypeStructure = ( structures: StructureDefinition[]) => {
 }
 
 const selectType = (code: OptionTypeCode) => {
-  selectedType.value = <Code>code;
+  selectedType.value = code as Code;
   currentTypeStructures.value = calcSameTypeStructure(structures.value!)
   selectedStructures.value = <string[]>[currentTypeStructures.value![0].code, currentTypeStructures.value![1].code,currentTypeStructures.value![2].code];
 };
@@ -231,10 +231,10 @@ const getOptions = () => {
     nominalAmounts.value = <number[]>res.nominalAmounts;
     selectedNominal.value = <number>res.nominalAmounts![0];
     // console.log("res.terms.sort((termA, termB) => return termB.days > termA.days ? termA:termB);", res.terms.sort((termA, termB) => return termB.days > termA.days ? termA:termB))
-    terms.value = <Term[]>res.terms.sort((a, b) => a.days - b.days);
+    terms.value = <Term[]>(res.terms ?? []).sort((a, b) => (a.days ?? 0) - (b.days ?? 0));
     selectedTerms.value = <string[]>[res.terms![3].code, res.terms![1].code, res.terms![2].code];
     // selectedTerms.value = <string[]>[res.terms![1].code];
-    sources.value = res.sources?.length == 0 ? <Source[]>[{ code: "ALL", name: "ALL", isActive: true }] : <Source[]>[{ code: "ALL", name: "ALL", isActive: true }, ...res!.sources];
+    sources.value = res.sources?.length == 0 ? <Source[]>[{ code: "ALL", name: "ALL", isActive: true }] : <Source[]>[{ code: "ALL", name: "ALL", isActive: true }, ...(res.sources ?? [])];
     selectedSources.value = <string[]>[sources.value![0].code];
   }).catch(() => {
     failToast("获取询价选项失败");
@@ -249,8 +249,8 @@ const submit = () => {
 
   const payload: InquiryQuoteReq = {
     nominalAmount: selectedNominal.value,
-    optionType: <Code>selectedType.value,
-    sources: selectedSources.value.filter(v=> v == "ALL").length > 0 ? <string[]>sources.value!.filter(s => s.code !== "ALL").map(s =>s.code) : selectedSources.value,
+    optionType: selectedType.value as Code,
+    sources: selectedSources.value.filter(v=> v == "ALL").length > 0 ? sources.value!.filter(s => s.code !== "ALL").map(s =>s.code ?? '') : selectedSources.value,
     structures: selectedStructures.value,
     terms: selectedTerms.value,
     underlying: underlying.value,

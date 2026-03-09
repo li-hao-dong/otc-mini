@@ -76,11 +76,11 @@ import {onMounted, onUnmounted, reactive, ref} from "vue";
 import {getGroupOrders, getMyGroupOrders, orderDetail} from "@/api";
 import type {GetGroupOrdersReq, GetGroupOrdersResp, Group} from "@/interfaces/groupOrders/getGroupOrders";
 import {formatLocalTime, formatSeconds, truncToTwo} from "../../utils";
-import type {MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
+import type {groups, MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
 import {onHide, onLoad, onShow} from "@dcloudio/uni-app";
 import ZPaging from "@/components/zPaging/zPaging.vue";
 
-const groupOrderDatas = ref<Array<Group>>([])
+const groupOrderDatas = ref<Array<groups>>([])
 const payloadData = reactive<MyGroupOrderReq>({
   page: 1,
   pageSize: 10
@@ -105,13 +105,13 @@ const getPlatGroupOrders = () => {
   // getMyGroupOrdersData()
 }
 
-const toDetail = (groupOrder: Group) => {
+const toDetail = (groupOrder: groups) => {
   uni.navigateTo({
     url: `/pages/groupOrders/groupOrderDetail?groupOrderNo=${groupOrder.groupOrderNo}`
   })
 }
 
-const getMyGroupOrdersData = ({paging, pageNo, pageSize}) => {
+const getMyGroupOrdersData = ({paging, pageNo, pageSize}:{paging:any, pageNo:number, pageSize:number}) => {
   // if(groupOrderDatas.value.length>0){
   //   if(groupResp.totalPages === payloadData.page){
   //     return

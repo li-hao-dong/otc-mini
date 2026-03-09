@@ -44,13 +44,13 @@
                 </view>
                 <view class="row rowPrice">
                     <view class="para"><text class="labelGray">股价：</text></view>
-                    <view class="para"><text :class="orderPayload?.currentPrice > 0 ? valueRed : valueGreen">￥{{ orderPayload?.currentPrice }}</text></view>
+                    <view class="para"><text :class="orderPayload?.currentPrice > 0 ? 'valueRed' : 'valueGreen'">￥{{ orderPayload?.currentPrice }}</text></view>
                 </view>
               </view>
               <view class="two_col">
                 <view class="row rowChange">
                     <view class="para"><text class="labelGray">涨幅：</text></view>
-                    <view class="para"><text :class="orderPayload?.priceChange > 0 ? valueRed : valueGreen">{{ orderPayload?.priceChange }}</text></view>
+                    <view class="para"><text :class="orderPayload?.priceChange > 0 ? 'valueRed' : 'valueGreen'">{{ orderPayload?.priceChange }}</text></view>
                 </view>
 <!--                <view class="row rowInquirer">-->
 <!--                    <view class="para"><text class="labelGray">询价人：</text></view>-->
@@ -110,14 +110,14 @@
                 <text class="sectionTitle">总费用概览</text>
               </view>
               <view class="row">
-                <view class="row_cont"><text class="popup_card_row_title">名义本金：</text>¥ {{truncToTwo(orderPayload?.nominalAmount * 10000 * quantity)}}</view>
+                <view class="row_cont"><text class="popup_card_row_title">名义本金：</text>¥ {{truncToTwo((orderPayload?.nominalAmount ?? 0) * 10000 * (quantity ?? 0))}}</view>
               </view>
               <view class="row">
                 <view class="row_cont"><text class="popup_card_row_title">期权费率：</text>
                   {{ truncToTwo(orderPayload?.quote.price) }}% {{useStore().miniData.waitPriceHint}}</view>
               </view>
               <view class="row">
-                <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100)}}{{useStore().miniData.waitPriceHint}}</view>
+                <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo((orderPayload?.nominalAmount ?? 0) * 10000 * (quantity ?? 0) * (orderPayload?.quote?.price ?? 0) / 100)}}{{useStore().miniData.waitPriceHint}}</view>
               </view>
               <view class="row">
                 <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(useStore().miniData.channelFee) }}</view>
@@ -125,7 +125,7 @@
               <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
               </view>
               <view class="row">
-                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 + useStore().miniData.channelFee) }}{{useStore().miniData.waitPriceHint}}</view>
+                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo((orderPayload?.nominalAmount ?? 0) * 10000 * (quantity ?? 0) * (orderPayload?.quote?.price ?? 0) / 100 + (useStore().miniData.channelFee ?? 0)) }}{{useStore().miniData.waitPriceHint}}</view>
               </view>
               <view>
                 <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>
@@ -167,7 +167,7 @@
                         <view class="group_buy_data">截止时间 {{formatLocalTime(new Date(item.expireTime))}}</view>
                       </view>
                       <view>
-                        <view class="add_group_buy" @click="uni.navigateTo({url: '/pages/groupOrders/groupOrderDetail?groupOrderNo='+item.groupOrderNo})">加入拼单</view>
+                        <view class="add_group_buy" @click="handleJoinGroupOrder(item.groupOrderNo)">加入拼单</view>
                       </view>
                     </view>
                   </view>
@@ -176,7 +176,7 @@
                   暂无其他拼单，快来发起拼单吧！
                 </view>
               </view>
-              <view class="show_more" @click="uni.switchTab({ url: '/pages/groupOrders/groupOrders' })">
+              <view class="show_more" @click="handleViewAllGroupOrders">
                 查看全部拼单 >
               </view>
             </view>
@@ -217,7 +217,7 @@
               </view>
               <view class="popup_card_row">
                 <view class="popup_card_row_title">名义本金</view>
-                <view class="popup_card_row_cont">¥ {{truncToTwo(quantity * 1000000)}}</view>
+                <view class="popup_card_row_cont">¥ {{truncToTwo((quantity ?? 0) * 1000000)}}</view>
               </view>
               <view class="popup_card_row">
                 <view class="popup_card_row_title">拼单类型</view>
@@ -252,22 +252,22 @@
                 <text class="popup_title">个人费用概览</text>
               </view>
               <view class="popup_card_row">
-                <view class="row_cont"><text class="popup_card_row_title">名义本金：</text>¥ {{truncToTwo(Math.ceil(orderPayload?.nominalAmount * 10000 * quantity / choosePeople * 100) / 100)}}</view>
+                <view class="row_cont"><text class="popup_card_row_title">名义本金：</text>¥ {{truncToTwo(Math.ceil((orderPayload?.nominalAmount ?? 0) * 10000 * (quantity ?? 0) / (choosePeople ?? 1) * 100) / 100)}}</view>
               </view>
               <view class="popup_card_row">
                 <view class="row_cont"><text class="popup_card_row_title">期权费率：</text>
-                  {{ truncToTwo(orderPayload?.quote.price) }}%</view>
+                  {{ truncToTwo(orderPayload?.quote?.price ?? 0) }}%</view>
               </view>
               <view class="popup_card_row">
-                <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(Math.ceil(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 / choosePeople * 100) / 100)}}</view>
+                <view class="row_cont"><text class="popup_card_row_title">期权费（预估）：</text>¥ {{truncToTwo(Math.ceil((orderPayload?.nominalAmount ?? 0) * 10000 * (quantity ?? 0) * (orderPayload?.quote?.price ?? 0) / 100 / (choosePeople ?? 1) * 100) / 100)}}</view>
               </view>
               <view class="popup_card_row">
-                <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(Math.ceil(useStore().miniData.channelFee / choosePeople)) }}</view>
+                <view class="row_cont"><text class="popup_card_row_title">通道费（预估）：</text>¥ {{ truncToTwo(Math.ceil((useStore().miniData.channelFee ?? 0) / (choosePeople ?? 1))) }}</view>
               </view>
               <view class="popup_card_row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
               </view>
               <view class="popup_card_row">
-                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(Math.ceil(orderPayload?.nominalAmount * 10000 * quantity * orderPayload?.quote.price / 100 / choosePeople * 100) / 100 + Math.ceil(useStore().miniData.channelFee / choosePeople)) }}</view>
+                <view class="row_cont"><text class="popup_card_row_title">预估合计：</text>¥ {{ truncToTwo(Math.ceil((orderPayload?.nominalAmount ?? 0) * 10000 * (quantity ?? 0) * (orderPayload?.quote?.price ?? 0) / 100 / (choosePeople ?? 1) * 100) / 100 + Math.ceil((useStore().miniData.channelFee ?? 0) / (choosePeople ?? 1))) }}</view>
               </view>
               <view class="popup_card_row">
                 <view class="row_cont" style="color: #999999; font-size: 12px;">(最终金额以渠道确认后为准)</view>
@@ -299,14 +299,14 @@ import {
 } from "@/interfaces/groupOrders/getGroupOrders";
 
 
-const activeTab = ref<Number>(0);
+const activeTab = ref<number>(0);
 const subTabs = ref<Array<string>>(['单独购买', '拼单购买']);
 const selectedPriceType = ref<PriceType>(PriceType.MARKET);
 const orderPayload = ref<any>(null);
-const quantity = ref<Number>(1);
-const limitPrice = ref<Number>(0);
+const quantity = ref<number>(1);
+const limitPrice = ref<number>(0);
 const popup = ref<any>(null);
-const choosePeople = ref<Number>(1);
+const choosePeople = ref<number>(1);
 const groupOrders = ref<Array<Group>>([]);
 const fee = ref<number>()
 
@@ -368,7 +368,7 @@ const placeOrder = () => {
             if (res.confirm) {
                 buyProduct(orderPayload.value?.inquiryId, orderPayload.value?.quote?.productCode, selectedPriceType.value, Number(quantity.value * 1000000), Number(limitPrice.value)).then(res => {
                     // console.log('buyProduct res', res);
-                    if (res.status && res.status === 'success'){
+                    if (res.status && String(res.status) === 'success'){
                       uni.showToast({ title: '下单成功', icon: 'success' });
 
                       // #ifdef MP-WEIXIN
@@ -378,7 +378,7 @@ const placeOrder = () => {
                           {
                             tmplIds: messageIds, // 替换为你的模板ID
                             success(res) {
-                              if (res[messageIds[0]] === 'accept'){
+                              if ((res as unknown as Record<string, string>)[messageIds[0]] === 'accept'){
                                 // console.log('订阅消息授权成功：', res);
                                 subscribeMessage(messageIds[0]).then(res => {
                                   // console.log('订阅消息接口调用结果：', res);
@@ -411,7 +411,7 @@ const placeOrder = () => {
 };
 
 const applySubscribeMessage = () => {
-    const messageIds = 'vRe7yXMLbcmLgExmZkMuH5zaAk1Nh7X9gh9cmwndsr4'
+    const messageIds = ['vRe7yXMLbcmLgExmZkMuH5zaAk1Nh7X9gh9cmwndsr4']
     uni.getSetting({
       withSubscriptions: true,
       success(res) {
@@ -421,11 +421,11 @@ const applySubscribeMessage = () => {
           return;
         }
         // 检查特定模板的订阅状态
-        const tmplId = messageIds;
-        const tmplStatus = res.subscriptionsSetting[tmplId];
+        const tmplId = messageIds[0];
+        const tmplStatus = (res.subscriptionsSetting as unknown as Record<string, string | boolean>)[tmplId];
         if (tmplStatus === 'accept') {
           console.log('用户已授权订阅该模板消息');
-          subscribeMessage(messageIds).then(res => {
+          subscribeMessage(tmplId).then(res => {
             console.log('订阅消息接口调用结果：', res);
           });
           setTimeout(() => { uni.navigateTo({ url: '/pages/warehouseReceipts/warehouseReceipts' }); }, 1500);
@@ -440,9 +440,9 @@ const applySubscribeMessage = () => {
           {
             tmplIds: messageIds, // 替换为你的模板ID
             success(res) {
-              if (res.subscriptionsSetting[tmplId] === 'accept'){
+              if ((res as unknown as Record<string, string>)[tmplId] === 'accept'){
                 console.log('订阅消息授权成功：', res);
-                subscribeMessage(messageIds).then(res => {
+                subscribeMessage(tmplId).then(res => {
                   console.log('订阅消息接口调用结果：', res);
                 });
               }else {
@@ -510,6 +510,14 @@ const getStockFees = () => {
   }).catch(err => {
     console.log("getStockFee err", err)
   })
+}
+
+const handleJoinGroupOrder = (groupOrderNo: string) => {
+  uni.navigateTo({url: '/pages/groupOrders/groupOrderDetail?groupOrderNo=' + groupOrderNo})
+}
+
+const handleViewAllGroupOrders = () => {
+  uni.switchTab({ url: '/pages/groupOrders/groupOrders' })
 }
 
 </script>

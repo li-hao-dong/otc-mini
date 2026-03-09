@@ -51,7 +51,7 @@
          <view class="not_data">
             当前市场暂⽆该标的的拼单，您可以
             <view class="new_group_order">
-              <view class="add_group" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">发起新的拼单</view>
+              <view class="add_group" @click="handleCreateGroupOrder">发起新的拼单</view>
             </view>
          </view>
        </template>
@@ -74,7 +74,7 @@ const porps = defineProps<{payloadData: GetGroupOrdersReq, groupResp:{total: num
  */
 // const attrs = useAttrs()
 const emits = defineEmits<{
-  (e: 'getGroupOrders'): void
+  (e: 'getGroupOrders', data: {paging: any, pageNo: number, pageSize: number}): void
 }>()
 
 const paging = ref()
@@ -83,12 +83,12 @@ onShow(() => {
   paging.value?.reload()
 })
 
-const groupOrderDatas = defineModel({
+const groupOrderDatas = defineModel<Array<Group>>({
   type: Array,
   default: () => []
 })
 
-const getPlatGroupOrders = ({paging, pageNo, pageSize}) => {
+const getPlatGroupOrders = ({paging, pageNo, pageSize}: {paging: any, pageNo: number, pageSize: number}) => {
   emits("getGroupOrders", {paging, pageNo, pageSize})
 }
 
@@ -96,6 +96,10 @@ const toDetail = (groupOrder: Group) => {
   uni.navigateTo({
     url: `/pages/groupOrders/groupOrderDetail?groupOrderNo=${groupOrder.groupOrderNo}`
   })
+}
+
+const handleCreateGroupOrder = () => {
+  uni.navigateTo({url: '/pages/inquiry/inquiry'});
 }
 </script>
 
@@ -212,5 +216,3 @@ const toDetail = (groupOrder: Group) => {
 }
 
 </style>
-<script setup lang="ts">
-</script>

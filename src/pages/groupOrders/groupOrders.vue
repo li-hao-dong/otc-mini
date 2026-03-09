@@ -8,7 +8,7 @@
 <!--    </view>-->
     <uni-notice-bar scrollable text=" 选一条拼单 → 看清拼单模式和单人名义本金 → 加入并在截止前支付 → 人数凑齐后系统统一帮您下单。优势：多人合伙分摊期权费，单笔投入更低；仅在订单盈利时按拼单模式收取服务费，亏损不额外收费。" />
 
-    <view class="create_group_order_btn" @click="uni.navigateTo({url: '/pages/inquiry/inquiry'})">创建新拼单</view>
+    <view class="create_group_order_btn" @click="handleCreateGroupOrder">创建新拼单</view>
 
 <!--    <component :is="activeComponent" :key="activeTab" />-->
     <!--0        <groupOrdersMarket/>-->
@@ -33,7 +33,7 @@ import {reactive, ref} from "vue";
 import MyGroupOrders from "@/pages/groupOrders/myGroupOrders.vue";
 import GroupOrdersMarket from "@/pages/groupOrders/groupOrdersMarket.vue";
 import {getGroupOrders, getMyGroupOrders} from "@/api";
-import type {MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
+import type {groups, MyGroupOrderReq} from "@/interfaces/groupOrders/myGroupOrder";
 import {type GetGroupOrdersReq, type Group, Status} from "@/interfaces/groupOrders/getGroupOrders";
 import {onShow} from "@dcloudio/uni-app";
 import Fab from "@/components/fab.vue";
@@ -54,7 +54,7 @@ const groupResp = reactive<{total: number, totalPages: number}>({
   total: 0,
   totalPages: 0,
 })
-const myGroupOrderDatas = ref<Array<Group>>([])
+const myGroupOrderDatas = ref<Array<groups>>([])
 const myGroupOrderPayloadData = reactive<MyGroupOrderReq>({
   page: 1,
   pageSize: 10
@@ -88,8 +88,12 @@ const changeComponent = (key:number) => {
   currentKey.value += 1; // 强制重新渲染组件
 };
 
+const handleCreateGroupOrder = () => {
+  uni.navigateTo({url: '/pages/inquiry/inquiry'});
+};
 
-const getPlatGroupOrders = async ({paging, pageNo, pageSize}) => {
+
+const getPlatGroupOrders = async ({paging, pageNo, pageSize}:{paging: any, pageNo: number, pageSize: number}) => {
   // if(groupOrderDatas.value.length>0){
   //   if(groupResp.totalPages === payloadData.page){
   //     return
@@ -123,10 +127,10 @@ const clearPlatGroupOrdersData = () => {
 
 const getMyGroupOrdersData = () => {
   if(myGroupOrderDatas.value.length>0){
-    if(myGroupOrderResp.totalPages === myGroupOrderPayloadData.page){
+    if(myGroupOrderResp.totalPages === (myGroupOrderPayloadData.page ?? 0)){
       return
     }
-    myGroupOrderPayloadData.page += 1
+    myGroupOrderPayloadData.page = (myGroupOrderPayloadData.page ?? 0) + 1
   }
   getMyGroupOrders(myGroupOrderPayloadData).then(res => {
     // console.log('res222', res)

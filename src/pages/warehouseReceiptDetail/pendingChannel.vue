@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref, defineProps} from "vue";
+import {ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {orderDetail} from "@/api";
@@ -22,6 +22,10 @@ const getDetail = (orderId: string) => {
     // console.log("订单详情", res)
     // detail.value = res
   })
+}
+
+const formatNumber = (val: string | number | undefined): string => {
+  return truncToTwo(Number(val ?? 0));
 }
 
 </script>
@@ -62,7 +66,7 @@ const getDetail = (orderId: string) => {
       </view>
       <view class="row">
         <view class="row_cont"><text>下单时间：</text>
-          {{ formatLocalTime(new Date(detail.createdTime)) }}</view>
+          {{ formatLocalTime(new Date(detail.createdTime ?? '')) }}</view>
       </view>
     </view>
 
@@ -91,14 +95,14 @@ const getDetail = (orderId: string) => {
     <view class="card">
       <view class="fir_title">费用概览 {{useStore().miniData.waitPriceHint}}</view>
       <view class="row">
-        <view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(detail.nominalAmount)}}</view>
+        <view class="row_cont"><text>名义本金：</text>¥ {{formatNumber(detail.nominalAmount)}}</view>
         <view class="row_cont"><text>期权费率：</text>{{ detail.volatilityPercent }}%</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>期权费（预估）：</text>¥ {{truncToTwo(detail.optionFee)}}</view>
+        <view class="row_cont"><text>期权费（预估）：</text>¥ {{formatNumber(detail.optionFee)}}</view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>通道费（预估）：</text>¥ {{ truncToTwo(detail.transactionFee) }}</view>
+        <view class="row_cont"><text>通道费（预估）：</text>¥ {{ formatNumber(detail.transactionFee) }}</view>
       </view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px">
       </view>

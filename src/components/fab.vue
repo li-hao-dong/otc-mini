@@ -40,7 +40,7 @@
         // },
     ])
 
-    const trigger = (e) => {
+    const trigger = (e: { item: { pagePath: string } }) => {
       // content.value[e.index].active = !e.item.active
       // if(e.item.type === 'tabbar'){
       //   uni.switchTab({url: e.item.pagePath})

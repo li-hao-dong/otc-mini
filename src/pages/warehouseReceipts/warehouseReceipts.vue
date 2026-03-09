@@ -38,26 +38,26 @@
         <view class="sumCol">
           <view class="sumMain">
             <view class="sumLabel">名义本金</view>
-            <view :class="ordersSummary?.nominalAmount / 10000 >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.nominalAmount / 10000)}}万</view>
+            <view :class="(ordersSummary?.nominalAmount ?? 0) / 10000 >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo((ordersSummary?.nominalAmount ?? 0) / 10000)}}万</view>
           </view>
           <view class="sumMain">
             <view class="sumLabel">期权费</view>
-            <view :class="ordersSummary?.optionFee >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.optionFee)}}元</view>
+            <view :class="(ordersSummary?.optionFee ?? 0) >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.optionFee ?? 0)}}元</view>
           </view>
         </view>
         <view class="sumCol">
            <view class="sumSub">
             <view class="subLabel">预计回款</view>
-            <view :class="ordersSummary?.estimatedPayout >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.estimatedPayout)}}元</view>
+            <view :class="(ordersSummary?.estimatedPayout ?? 0) >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.estimatedPayout ?? 0)}}元</view>
           </view>
 
           <view class="sumSub">
             <view class="subLabel">预计盈亏</view>
-            <view :class="ordersSummary?.estimatedProfit >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.estimatedProfit)}}元</view>
+            <view :class="(ordersSummary?.estimatedProfit ?? 0) >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.estimatedProfit ?? 0)}}元</view>
           </view>
           <view class="sumSub">
             <view class="subLabel">盈亏比例</view>
-            <view :class="ordersSummary?.profitRate * 100 >=0 ? 'sumValueRed':'subValueGreen'">{{ordersSummary?.profitRate ? truncToTwo(ordersSummary.profitRate * 100) : 0}}%</view>
+            <view :class="(ordersSummary?.profitRate ?? 0) * 100 >=0 ? 'sumValueRed':'subValueGreen'">{{ordersSummary?.profitRate ? truncToTwo(ordersSummary.profitRate * 100) : 0}}%</view>
           </view>
         </view>
       </view>
@@ -75,28 +75,28 @@
               <view class="fir_row_text">{{order?.termName}}</view>
             </view>
             <view style="margin-top: 4px; padding: 0 0 10px 0;">
-              <view class="para"><text class="label">名义本金：</text>{{truncToTwo(order?.nominalAmount / 10000)}}万</view>
+              <view class="para"><text class="label">名义本金：</text>{{truncToTwo((order?.nominalAmount ?? 0) / 10000)}}万</view>
             </view>
           </view>
           <view style="white-space: nowrap;">
-            距离结束 {{ calcLeftDay(order?.maturityDate) }} 天
+            距离结束 {{ calcLeftDay(order?.maturityDate ?? '') }} 天
           </view>
         </view>
 
         <view class="sec_middle_row">
           <view class="para_1">
-            <view>{{truncToTwo(order?.strikePrice)}}元</view>
+            <view>{{truncToTwo(order?.strikePrice ?? 0)}}元</view>
             <view style="color: #6d7075;">行权价格</view>
           </view>
           <view class="para_2">
             <view style="width: fit-content;">
-              <view :class="order?.estimatedProfit >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.estimatedProfit)}}元</view>
+              <view :class="(order?.estimatedProfit ?? 0) >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.estimatedProfit ?? 0)}}元</view>
               <view style="color: #6d7075;">预计盈亏</view>
             </view>
           </view>
           <view class="para_3">
             <view style="width: fit-content;">
-              <view :class="order?.profitRate >= 0 ? 'valueRed' : 'valueGreen'">{{order?.profitRate ? truncToTwo(order.profitRate * 100) : 0}}%</view>
+              <view :class="(order?.profitRate ?? 0) >= 0 ? 'valueRed' : 'valueGreen'">{{order?.profitRate ? truncToTwo(order.profitRate * 100) : 0}}%</view>
               <view style="color: #6d7075;">盈亏比例</view>
             </view>
           </view>
@@ -104,8 +104,8 @@
 
         <view class="row bottom_row" @click.stop="order['showDetail'] = !order['showDetail']">
           <view class="orderStatus">{{order?.orderStatus}}</view>
-          <view class="para"><text class="label">股价：</text><text :class="order?.underlyingPrice >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.underlyingPrice)}}</text></view>
-          <view class="para"><text class="label">涨幅：</text><text :class="Number(order?.priceChange.slice(0, -1)) >= 0 ? 'valueRed' : 'valueGreen'">{{order?.priceChange}}</text></view>
+          <view class="para"><text class="label">股价：</text><text :class="(order?.underlyingPrice ?? 0) >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.underlyingPrice ?? 0)}}</text></view>
+          <view class="para"><text class="label">涨幅：</text><text :class="Number((order?.priceChange ?? '0').slice(0, -1)) >= 0 ? 'valueRed' : 'valueGreen'">{{order?.priceChange}}</text></view>
           <view v-show="!order['showDetail']"><uni-icons type="down" size="16"></uni-icons></view>
           <view v-show="order['showDetail']"><uni-icons type="up" size="16"></uni-icons></view>
         </view>
@@ -120,7 +120,7 @@
             <text class="dataText"><text>剩余天数：</text>{{order?.daysToExpiry}}天</text>
           </view>
           <view class="rowBorder">
-            <text class="dataText"><text>开仓价格：</text>{{truncToTwo(order?.strikePrice)}}元</text>
+            <text class="dataText"><text>开仓价格：</text>{{truncToTwo(order?.strikePrice ?? 0)}}元</text>
             <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{order?.estimatedPayout ? truncToTwo(order.estimatedPayout) : '-'}}元</text></text>
           </view>
           <view class="rowBorder">
@@ -129,7 +129,7 @@
             <text class="dataText"><text>期权费：</text>{{order?.upstreamFee || order?.optionFee}}元</text>
           </view>
           <view class="rowBorder">
-            <text class="dataText"><text>通道费：</text>{{truncToTwo(order?.transactionFee)}}元</text>
+            <text class="dataText"><text>通道费：</text>{{truncToTwo(order?.transactionFee ?? 0)}}元</text>
           </view>
         </view>
       </view>
@@ -203,7 +203,8 @@ watch(() => orderTypeKey.value, () => {
   // getUserOrder()
 })
 
-const calcLeftDay = (endDate: string): number => {
+const calcLeftDay = (endDate: string | Date): number => {
+  if (!endDate) return 0;
   const now = new Date();
   const end = new Date(endDate);
   const diffTime = end.getTime() - now.getTime();
@@ -260,7 +261,7 @@ const resetData = () => {
 }
 
 
-const getUserOrder = ({paging, pageNo, pageSize}) => {
+const getUserOrder = ({paging, pageNo, pageSize}: {paging: any, pageNo: number, pageSize: number}) => {
   uni.showLoading({title: '加载中'})
   getUserOrderInfo(pageNo, pageSize, status.value).then(res => {
     moreDataStatus.value = res.pagination?.total_pages! >= page.value;

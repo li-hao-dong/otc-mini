@@ -164,7 +164,7 @@ export const subscribeMessage = (templateIds: string):Promise<subscribeMessageRe
 /**
  * 用户注册 H5
  * */
-export const userRegister = (userName: string, password: string, telephone: string, smsCode: number, referrerUuid: string):Promise<any> => {
+export const userRegister = (userName: string, password: string, telephone: string, smsCode: string, referrerUuid: string):Promise<any> => {
     return new Promise(async (resolve, reject) => {
         try {
             const params = {
@@ -174,7 +174,7 @@ export const userRegister = (userName: string, password: string, telephone: stri
                 phone: telephone,
                 referrer_uuid: referrerUuid
             }
-            const res: response = <response>await  http.post(`${BASE_URL}/users/register`, params)
+            const res: response = <response>await http.post(`${BASE_URL}/users/register`, params)
             // // console.log("userRegister res", res);
             if (res.data?.status === "success") {
                 resolve(res.data.data as any)
@@ -600,13 +600,13 @@ export const getIndices = ():Promise<IndicesResp> => {
 /**
  * 获取行业板块指数排行榜
  * */
-export const getIndustry = (limit: number):Promise<industryStruct> => {
+export const getIndustry = (limit?: number):Promise<industryStruct[]> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL_BOARD}/industry?limit=${limit ? limit:5}`)
             // console.log("getIndustry res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
-                resolve(res.data as industryStruct)
+                resolve(res.data as industryStruct[])
             } else {
                 reject(new Error(res.message || 'Failed to fetch getIndustry info'));
             }
@@ -619,13 +619,13 @@ export const getIndustry = (limit: number):Promise<industryStruct> => {
 /**
  * 获取概念板块指数排行榜
  * */
-export const getConcept = (limit: number):Promise<conceptStruct> => {
+export const getConcept = (limit?: number):Promise<conceptStruct[]> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL_BOARD}/concept?limit=${limit ? limit:5}`)
             // // console.log("getConcept res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
-                resolve(res.data as conceptStruct)
+                resolve(res.data as conceptStruct[])
             } else {
                 reject(new Error(res.message || 'Failed to fetch getConcept info'));
             }
@@ -639,13 +639,13 @@ export const getConcept = (limit: number):Promise<conceptStruct> => {
 /**
  * 获取推荐股票
  * */
-export const getRecommendations = ():Promise<RecommendationItemResp> => {
+export const getRecommendations = ():Promise<RecommendationItemResp[]> => {
     return new Promise(async (resolve, reject) => {
         try {
             const res: response = <response>await http.get(`${BASE_URL_BOARD}/recommendations?limit=${10}`)
             // // console.log("getConcept res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
-                resolve(res.data as RecommendationItemResp)
+                resolve(res.data as RecommendationItemResp[])
             } else {
                 reject(new Error(res.message || 'Failed to fetch getConcept info'));
             }

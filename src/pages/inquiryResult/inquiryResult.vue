@@ -8,11 +8,11 @@
         </view>
         <view class="para">
           <text class="labelText">股价：</text>
-          <text class="valueText" :class="calcClassName(priceChange)">{{ currentPrice }}</text>
+          <text class="valueText" :class="calcClassName(currentPrice ?? 0)">{{ currentPrice }}</text>
         </view>
         <view class="para">
           <text class="labelText" >涨幅：</text>
-          <text class="valueText" :class="calcClassName(priceChange)">{{ priceChange }}</text>
+          <text class="valueText" :class="calcClassName(priceChange ?? '')">{{ priceChange }}</text>
         </view>
       </view>
 
@@ -32,7 +32,7 @@
               v-for="(item, index) in results" :key="index">
           <view>{{ item.structureName }}</view>
           <view v-for="(term, i) in terms" :key="i">
-            <view style="line-height: 26px;" v-for="(quote, x) in Object.values(item.quotes)" :key="x"
+            <view style="line-height: 26px;" v-for="(quote, x) in Object.values(item.quotes ?? {})" :key="x"
                   :class="`price ${quote[term] && quote[term][0].isRecommended?'rise_color':''}`"
                   @click="placeAnOrder(quote[term][0], term, item)">
               {{ `${quote[term] ? quote[term][0].price+'%' : '-'}` }}
@@ -40,7 +40,7 @@
             </view>
           </view>
           <view>
-            <view style="line-height: 26px;" v-for="(quote, x) in Object.keys(item.quotes)" :key="x">{{ quote }}</view>
+            <view style="line-height: 26px;" v-for="(quote, x) in Object.keys(item.quotes ?? {})" :key="x">{{ quote }}</view>
           </view>
         </view>
       </view>
@@ -206,7 +206,7 @@ const formatInquiryStruct = (quoteResult:QuoteResult[]) =>　{
     }
   })
 
-  terms.value = Object.values(filterData[Object.keys(filterData)[0]].terms).sort((a,b) => a.days - b.days).map(termObj => termObj.term);
+  terms.value = (Object.values(filterData[Object.keys(filterData)[0]].terms) as { days: number; term: string }[]).sort((a, b) => a.days - b.days).map(termObj => termObj.term);
   results.value = Object.values(filterData)
   // console.log("filterData,", filterData)
   // console.log("terms,", terms.value)

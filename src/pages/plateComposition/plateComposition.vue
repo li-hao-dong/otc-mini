@@ -9,14 +9,14 @@
         <view>换手率</view>
       </view>
       <view v-if="hotSectors && hotSectors.length > 0">
-        <view class="hot_sectors_td" v-for="(item,n) in hotSectors" :key="n" @click="uni.navigateTo({url: `/pages/inquiry/inquiry?name=${item.名称}`})">
+        <view class="hot_sectors_td" v-for="(item,n) in hotSectors" :key="n" @click="toInquiry(item.名称)">
           <view :class="`regular ordinal ${calcOrdinalBg(item.序号)}`">{{item.序号}}</view>
           <view>
             <view>{{item.名称}}</view>
             <view class="stext">{{item.代码}}</view>
           </view>
           <view>{{item.最新价}}</view>
-          <view :class="`${item.涨跌幅.toFixed(2) > 0 ? 'red':'green'}`">{{item.涨跌幅 >0 ? '+':''}}{{ item.涨跌幅.toFixed(2) }}%</view>
+          <view :class="`${Number(item.涨跌幅.toFixed(2)) > 0 ? 'red':'green'}`">{{item.涨跌幅 >0 ? '+':''}}{{ item.涨跌幅.toFixed(2) }}%</view>
           <view>{{item.换手率}}%</view>
         </view>
       </view>
@@ -36,10 +36,6 @@
   const hotSectors = ref<constituents[]>()
 
   onLoad((option)=>{
-    // option.board_type
-    // option.symbol
-    // console.log("board_type", option?.board_type)
-    // console.log("board_type", option?.symbol)
     if(option?.board_type && option?.symbol){
       getConstituentss(option?.board_type, option?.symbol)
     }
@@ -57,7 +53,11 @@
     })
   }
 
-  function calcOrdinalBg(n){
+  const toInquiry = (name: string) => {
+    uni.navigateTo({url: `/pages/inquiry/inquiry?name=${name}`})
+  }
+
+  function calcOrdinalBg(n: number){
     if(n === 1){
       return 'bg_gold'
     }else if(n === 2){
@@ -89,7 +89,7 @@
     color: #807d7e;
 
     & view:nth-child(1),
-    & view:nth-child(2),
+    & view:nth-child(2)
     {
       text-align: left;
     }

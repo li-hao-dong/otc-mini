@@ -46,7 +46,7 @@
               <view>{{item.板块名称}}</view>
               <view class="stext">{{item.板块代码}}</view>
             </view>
-            <view :class="`${item.涨跌幅.toFixed(2) > 0 ? 'red':'green'}`">{{item.涨跌幅 >0 ? '+':''}}{{ item.涨跌幅.toFixed(2) }}%</view>
+            <view :class="`${Number(item.涨跌幅.toFixed(2)) > 0 ? 'red':'green'}`">{{item.涨跌幅 >0 ? '+':''}}{{ item.涨跌幅.toFixed(2) }}%</view>
             <view>{{item.换手率}}%</view>
           </view>
         </view>
@@ -58,9 +58,9 @@
 
     <view class="part_box hot_target">
       <view class="title">官推标的</view>
-      <view>
+      <!-- <view>
         <view :class="`bk_menu ${activeBdReferral==menu.code?'bk_menu_active':''}`" v-for="(menu, key) in bdReferral" :key="key" @click="activeBdReferral = menu.code">{{menu.name}}</view>
-      </view>
+      </view> -->
       <view>
         <view class="hot_target_th">
           <view>名称/代码</view>
@@ -69,14 +69,14 @@
           <view>换手率</view>
         </view>
         <view v-if="referralBd && referralBd.length > 0">
-          <view class="hot_target_td" v-for="(item,n) in referralBd" :key="n" @click="uni.navigateTo({url: `/pages/inquiry/inquiry?name=${item.name}`})">
+          <view class="hot_target_td" v-for="(item,n) in referralBd" :key="n" @click="handleNavigateToInquiry(item.name)">
             <view>
               <view>{{ item.name}}</view>
               <view class="stext">{{ item.code }}</view>
             </view>
-            <view :class="` ordinal ${calcOrdinalBg(item.latest_price)}`">￥{{Number(truncToTwo(item.latest_price))}}</view>
-            <view :class="`${Number(truncToTwo(item.pct_change)) > 0 ? 'red':'green'}`">{{Number(truncToTwo(item.pct_change)) >0 ? '+':''}}{{ Number(truncToTwo(item.pct_change)) }}%</view>
-            <view>{{ Number(truncToTwo(item.pct_change_5d)) }}%</view>
+            <view :class="` ordinal ${calcOrdinalBg(item.latest_price ?? 0)}`">￥{{Number(truncToTwo(item.latest_price ?? 0))}}</view>
+            <view :class="`${Number(truncToTwo(item.pct_change ?? 0)) > 0 ? 'red':'green'}`">{{Number(truncToTwo(item.pct_change ?? 0)) >0 ? '+':''}}{{ Number(truncToTwo(item.pct_change ?? 0)) }}%</view>
+            <view>{{ Number(truncToTwo(item.pct_change_5d ?? 0)) }}%</view>
           </view>
         </view>
         <view v-else class="noData">
@@ -121,7 +121,7 @@ const hotSectors = ref<industryStruct[] | conceptStruct[]>([])
 //   {name: '推荐', code: 1},
 //   {name: '保本', code: 2},
 // ]);
-const activeBdReferral = ref<number>(1);
+const activeBdReferral = ref<string>('1');
 const referralBd = ref<RecommendationItemResp[]>();
 
 const background = ref(["/static/post.png"])
@@ -163,12 +163,13 @@ const initSwiperHeight = () => {
 }
 const toPlateDetail = (item: industryStruct|conceptStruct) => {
   const boardType = bkTypes.value.find( (val)=> val.code==activeBkType.value)
+  if(!boardType) return;
   // console.log("boardType", boardType)
   uni.navigateTo({url: `/pages/plateComposition/plateComposition?board_type=${boardType.type}&symbol=${item.板块代码}`})
 }
 
-const change = (e) => {
-  current.value = e.detail.current;
+const change = (e: { detail: { current: number } }) => {
+  console.log(e.detail.current);
 }
 
 function changeHotSelector(code: number){
@@ -180,7 +181,7 @@ function changeHotSelector(code: number){
   }
 }
 
-function calcOrdinalBg(n){
+function calcOrdinalBg(n: number){
   if(n === 1){
     return 'bg_gold'
   }else if(n === 2){
@@ -196,7 +197,9 @@ const getIndustries = () => {
   uni.showLoading({title: "加载中…"})
   getIndustry().then(res => {
     // console.log("res", res)
-    hotSectors.value = res
+    if(res){
+      hotSectors.value = res
+    }
     uni.hideLoading()
   }).catch(err => {
     console.log("getIndustries err.", err)
@@ -207,7 +210,9 @@ const getIndustries = () => {
 const getConcepts = () => {
   uni.showLoading({title: "加载中…"})
   getConcept().then(res => {
-    hotSectors.value = res
+    if(res){
+      hotSectors.value = res
+    }
     uni.hideLoading()
   }).catch(err => {
     console.log("getConcepts err.", err)
@@ -241,6 +246,10 @@ const showMoreData = () => {
     uni.navigateTo({url: `/pages/plateList/plateList?type=industries`})
     // getIndustries()
   }
+}
+
+const handleNavigateToInquiry = (name: string) => {
+  uni.navigateTo({url: `/pages/inquiry/inquiry?name=${name}`})
 }
 
 </script>

@@ -62,4 +62,6 @@ export interface groups{
     "expireTime": string;
     "remainingTime": number;
     "creatorName": string;
+    "isOfficialRecommend": boolean;
+    [property: string]: any;
 }

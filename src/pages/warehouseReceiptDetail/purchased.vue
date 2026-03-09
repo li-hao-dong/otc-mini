@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
-import {bankReceiptInfo, exerciseHandler, orderDetail} from "@/api";
+import {bankReceiptInfo, exerciseHandler} from "@/api";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import {formatLocalTime, truncToTwo} from "@/utils";
 import {type ExerciseReq, ExerciseType} from "@/interfaces/exercise";
@@ -10,7 +10,6 @@ import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGro
 import {prodBook, riskBook} from "@/utils/instruction";
 
 const voucher = ref<string | string[]>()
-// const detail = ref<OrderDetail | null>(null);
 const bankReceiptInfoData = ref<BankAccountInfoResp>();
 const orderId = ref<string>("");
 const props = defineProps<{orderId?: string, detail: OrderDetail | UserGroupOrderDetailResp}>();
@@ -18,19 +17,13 @@ const emits = defineEmits<{
   (e: 'callback'): void;
 }>();
 
+// 使用计算属性来访问 detail
+const detail = computed(() => props.detail);
+
 onLoad((option) =>{
   // console.log("option", option)
   orderId.value = option?.id || "";
-  // getDetail(option?.id)
-  // getBankReceiptInfo(option?.id)
 })
-
-const getDetail = (orderId: string) => {
-  orderDetail(orderId).then(res => {
-    // console.log("订单详情", res)
-    detail.value = res
-  })
-}
 
 const getBankReceiptInfo = (orderId: string) => {
   bankReceiptInfo(orderId).then(res => {
@@ -40,7 +33,8 @@ const getBankReceiptInfo = (orderId: string) => {
 }
 
 const exexercise = () => {
-  if(!orderId.value && !props.detail.orderNo){
+  const orderNo = orderId.value || props.detail.orderNo;
+  if(!orderNo){
     return;
   }
 
@@ -57,7 +51,7 @@ const exexercise = () => {
           exerciseType: ExerciseType.Manual,
           remarks: undefined
         }
-        exerciseHandler(orderId.value || props.detail.orderNo, payload).then(res => {
+        exerciseHandler(orderNo, payload).then(res => {
           // console.log("行权结果", res)
           if (res.status !== "success") {
             uni.showToast({
@@ -108,8 +102,8 @@ const exexercise = () => {
         </view>
       </view>
       <view class="row">
-        <view class="row_cont"><text>当前参考盈亏：</text><text :class="Number(detail?.estimatedProfit) >= 0 ? 'valueRed' : 'valueGreen'">
-          {{ Number(detail?.estimatedProfit) >=0 ? '+':'-' }} ¥ {{truncToTwo(Math.abs(detail?.estimatedProfit))}} ({{detail?.profitRate}}%)</text></view>
+        <view class="row_cont"><text>当前参考盈亏：</text><text :class="Number(detail?.estimatedProfit ?? 0) >= 0 ? 'valueRed' : 'valueGreen'">
+          {{ Number(detail?.estimatedProfit ?? 0) >=0 ? '+':'-' }} ¥ {{truncToTwo(Math.abs(Number(detail?.estimatedProfit ?? 0)))}} ({{detail?.profitRate ?? 0}}%)</text></view>
       </view>
 <!--      <view class="row">-->
 <!--        <view class="row_cont" style="color:#999999; font-size:12px;">参考数据更新时间：{{ formatLocalTime(new Date()) }}</view>-->
@@ -117,12 +111,12 @@ const exexercise = () => {
       <view class="row">
         <view class="row_cont" style="color:#999999; font-size:12px;">参考盈亏 = 当前预估期权价值 - 总计支出，仅供参考，不作为最终结算依据。</view>
       </view>
-      <view class="row"><view class="row_cont"><text>标的现价：</text>¥ {{truncToTwo(detail?.underlyingPrice)}}</view></view>
-      <view class="row"><view class="row_cont"><text>行权价：</text>¥ {{ truncToTwo(detail?.strikePrice) }}</view></view>
-      <view class="row"><view class="row_cont"><text>距行权价：</text>{{truncToTwo(detail?.underlyingPrice - detail?.strikePrice)}}</view></view>
+      <view class="row"><view class="row_cont"><text>标的现价：</text>¥ {{truncToTwo(Number(detail?.underlyingPrice ?? 0))}}</view></view>
+      <view class="row"><view class="row_cont"><text>行权价：</text>¥ {{ truncToTwo(Number(detail?.strikePrice ?? 0)) }}</view></view>
+      <view class="row"><view class="row_cont"><text>距行权价：</text>{{truncToTwo(Number(detail?.underlyingPrice ?? 0) - Number(detail?.strikePrice ?? 0))}}</view></view>
       <view class="row"><view class="row_cont"><text>剩余到期：</text>
         {{ detail?.daysToExpiry }} 天</view></view>
-      <view class="row"><view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(detail?.nominalAmount)}}</view></view>
+      <view class="row"><view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(Number(detail?.nominalAmount ?? 0))}}</view></view>
       <view class="row" style="border-bottom: 1px #999 dashed; padding-bottom: 8px; margin-bottom: 8px"></view>
       <view class="row"><view class="row_cont"><text>当前行权状态：</text>可申请行权</view></view>
       <view class="row"><view class="row_cont"><text>行权截止时间：</text>
@@ -149,22 +143,22 @@ const exexercise = () => {
     <!-- 资金投入与成本 -->
     <view class="card">
       <view class="fir_title">资金投入与成本</view>
-      <view class="row"><view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(detail?.nominalAmount)}}</view></view>
-      <view class="row"><view class="row_cont"><text>期权费率：</text>{{ truncToTwo(detail?.optionFeeRate * 100) }}%</view></view>
-      <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{truncToTwo(detail?.optionFee)}}</view></view>
-      <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{ truncToTwo(detail?.transactionFee) }}</view></view>
-      <view class="row"><view class="row_cont"><text>总计支出：</text>¥ {{ truncToTwo(Number(detail?.optionFee) + Number(detail?.transactionFee)) }}</view></view>
+      <view class="row"><view class="row_cont"><text>名义本金：</text>¥ {{truncToTwo(Number(detail?.nominalAmount ?? 0))}}</view></view>
+      <view class="row"><view class="row_cont"><text>期权费率：</text>{{ truncToTwo(Number(detail?.optionFeeRate ?? 0) * 100) }}%</view></view>
+      <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{truncToTwo(Number(detail?.optionFee ?? 0))}}</view></view>
+      <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{ truncToTwo(Number(detail?.transactionFee ?? 0)) }}</view></view>
+      <view class="row"><view class="row_cont"><text>总计支出：</text>¥ {{ truncToTwo(Number(detail?.optionFee ?? 0) + Number(detail?.transactionFee ?? 0)) }}</view></view>
     </view>
 
     <!-- 支付信息 -->
     <view class="card">
       <view class="fir_title">支付信息</view>
       <view class="row"><view class="row_cont"><text>支付状态：</text>已支付</view></view>
-      <view class="row"><view class="row_cont"><text>实际支付金额：</text>¥ {{ truncToTwo(detail?.paymentAmount) }}</view></view>
+      <view class="row"><view class="row_cont"><text>实际支付金额：</text>¥ {{ truncToTwo(Number(detail?.paymentAmount ?? 0)) }}</view></view>
       <view class="row"><view class="row_cont"><text>支付方式：</text>银行转账</view></view>
       <view class="row"><view class="row_cont"><text>付款银行：</text>{{ detail?.bankName }}</view></view>
-      <view class="row"><view class="row_cont"><text>付款账号：</text>尾号 {{ detail?.bankAccount.substr(-4) }}</view></view>
-      <view class="row"><view class="row_cont"><text>支付时间：</text>{{formatLocalTime(new Date(detail?.paymentTime))}}</view></view>
+      <view class="row"><view class="row_cont"><text>付款账号：</text>尾号 {{ (detail?.bankAccount ?? '').slice(-4) }}</view></view>
+      <view class="row"><view class="row_cont"><text>支付时间：</text>{{detail?.paymentTime ? formatLocalTime(new Date(detail.paymentTime)) : '-'}}</view></view>
 <!--      <view class="row"><view class="row_cont"><text>转账备注：</text>12cfe2566119 0000（没看到）</view></view>-->
       <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">如支付信息与您实际转账不符，请尽快联系客服核对。</view></view>
     </view>
@@ -184,7 +178,7 @@ const exexercise = () => {
     </view>
 
     <!-- 底部按钮 -->
-    <view class="submit" @click="exexercise">行权</view>
+    <view v-if="detail?.groupOrderNo && detail?.groupRole=='Leader'" class="submit" @click="exexercise">行权</view>
 <!--    <view class="card">-->
 <!--      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看收益试算</view></view>-->
 <!--      <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">行权申请提交后，可能无法撤销，请在充分理解产品及风险的前提下谨慎操作。如需其他操作（提前终止、特殊安排等），请联系客服。</view></view>-->

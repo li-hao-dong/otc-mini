@@ -224,9 +224,9 @@ const getUserOrder = () => {
 </script>
 
 <style>
-.wrPage {
+/* .wrPage { */
   /* background-color: #F7F7F7; */
-}
+/* } */
 
 .topBar {
   background-color: var(--color-primary-bg);

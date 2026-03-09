@@ -232,7 +232,7 @@ export const userLoginH5 = (userName: string, password: string, wechatLoginJsCod
             }
         } catch (error) {
             console.error("err", error)
-            reject(error?.message);
+            reject((error as Error)?.message);
         }
     })
 }
@@ -319,11 +319,12 @@ export const calculatorData = (payload: calculatorReq):EquityOptionCalculatorRes
 /**
  * 上传支付凭证
  * */
-export const uploadPaymentProof = (orderId: string, imgFile: File, bankName: string, bankAccount: string):Promise<UploadImageResp> => {
-    const payload:UploadImageReq = {
-        voucherImage: imgFile,
+export const uploadPaymentProof = (orderId: string, imgFile: File, bankName: string, bankAccount: string, bankUserName: string):Promise<UploadImageResp> => {
+    const payload: UploadImageReq = {
+        voucherImage: imgFile as unknown as string,
         bankName,
-        bankAccount
+        bankAccount,
+        bankUserName
     }
 
     return new Promise(async (resolve, reject) => {
@@ -712,7 +713,9 @@ export const leaveGroupOrder = (groupOrderNo: string) => {
 export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {
     return new Promise(async (resolve, reject) => {
         try {
-            const res: response = <response>await http.pat(`${BASE_URL}/users/info`)
+            // TODO: implement patch method
+            // const res: response = <response>await http.patch(`${BASE_URL}/users/info`, userInfo)
+            const res: response = <response>await http.post(`${BASE_URL}/users/info`, userInfo)
             // // console.log("getUserInfo res", res);
             if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
                 resolve(res.data as UserResp)

@@ -68,7 +68,7 @@ const http = {
      * @param {object} data
      * @param {string} [contentType]
      * */
-    post(url: string, data: any, contentType: string) {
+    post(url: string, data: any, contentType?: string) {
         return new Promise((resolve, reject) => {
             if(!beforeRequest(url)){
                 reject(false)
@@ -182,7 +182,8 @@ const http = {
                     // #endif
 
                     // #ifdef H5
-                    if (currentPage.route !== "pages/reLogin/reLogin" && currentPage.route !== "/") {
+                    const currentRoute = currentPage.route as string;
+                    if (currentRoute !== "pages/reLogin/reLogin" && currentRoute !== "/" && currentRoute !== "pages/user/user") {
                         warnToast("请重新登录");
                         setTimeout(() => uni.redirectTo({url: '/pages/reLogin/reLogin'}), 2000);
                         return;

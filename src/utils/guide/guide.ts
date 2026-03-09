@@ -237,7 +237,7 @@ export const driverObj = driver({
             },
             onNextClick: () => {
                 // uni.$u.route({url: '/pages/user/user', type: 'switchTab'})
-                document.querySelector('.submitBtn')!.click();
+                (document.querySelector('.submitBtn') as HTMLElement)!.click();
                 delayJump(driverObj.moveNext, 500)
             }
         }},
@@ -255,7 +255,7 @@ export const driverObj = driver({
                 },
                 onNextClick: () => {
                     // uni.$u.route({url: '/pages/user/user', type: 'switchTab'})
-                    document.querySelector('.price')!.click();
+                    (document.querySelector('.price') as HTMLElement)!.click();
                     delayJump(driverObj.moveNext)
                 },
 
@@ -349,7 +349,7 @@ export const driverObj = driver({
                 },
                 onNextClick: () => {
                     // uni.$u.route({url: '/pages/user/user', type: 'switchTab'})
-                    document.querySelector('.group_buy_btn')!.click();
+                    (document.querySelector('.group_buy_btn') as HTMLElement)!.click();
                     useStore().miniData.groupPeople = 2
                     delayJump(driverObj.moveNext)
                 },
@@ -366,7 +366,7 @@ export const driverObj = driver({
                 },
                 onNextClick: () => {
                     // uni.$u.route({url: '/pages/user/user', type: 'switchTab'})
-                    // document.querySelector('.group_buy_btn')!.click();
+                    // (document.querySelector('.group_buy_btn') as HTMLElement)!.click();
                     delayJump(driverObj.moveNext)
                 },
 
@@ -382,7 +382,7 @@ export const driverObj = driver({
                 },
                 onNextClick: () => {
                     // uni.$u.route({url: '/pages/user/user', type: 'switchTab'})
-                    // document.querySelector('.group_buy_btn')!.click();
+                    // (document.querySelector('.group_buy_btn') as HTMLElement)!.click();
                     delayJump(driverObj.moveNext)
                 },
 

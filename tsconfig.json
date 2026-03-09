@@ -1,7 +1,7 @@
 {
   "extends": "@vue/tsconfig/tsconfig.json",
   "compilerOptions": {
-    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {

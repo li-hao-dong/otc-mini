@@ -113,9 +113,11 @@ export const getHandler = (req: any) => {
         // const queryParams = Object.fromEntries(url.searchParams.entries()) as InquiryHistoryReq;
 
         const url = new URL(window.location.href);
-        const queryParams = Object.fromEntries(
-            (url.searchParams as globalThis.URLSearchParams).entries()
-        );
+        const searchParams = url.searchParams;
+        const queryParams: Record<string, string> = {};
+        searchParams.forEach((value, key) => {
+            queryParams[key] = value;
+        });
 
         // console.log("query参数:", queryParams);
 

@@ -46,7 +46,7 @@ onHide(() => {
 // })
 
 onLaunch(() => {
-  goBack()
+  // goBack()
 })
 
 </script>

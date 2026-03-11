@@ -200,7 +200,7 @@ const clearMyPlatGroupOrdersData = () => {
   margin-bottom: 10px;
 }
 
-.group_cont_box{
+// .group_cont_box{
 
-}
+// }
 </style>

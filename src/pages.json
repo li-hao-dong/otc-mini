@@ -153,6 +153,7 @@
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
+				// "navigationStyle": "custom"
 			}
 		},
 		{

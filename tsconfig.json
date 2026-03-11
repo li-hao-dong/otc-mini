@@ -12,7 +12,11 @@
       "@dcloudio/types",
       "uview-plus/types"
     ],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "ignoreDeprecations": "5.0",
+    "verbatimModuleSyntax": true,
+    "preserveValueImports": false,
+    "importsNotUsedAsValues": "remove"
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "exclude": ["node_modules", "dist", "**/*.js"]

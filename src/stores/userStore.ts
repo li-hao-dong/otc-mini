@@ -88,10 +88,15 @@ export const useUserStore = defineStore('user', {
                         this.update_timestamp = <Date>res.update_timestamp;
                         this.user_type = <string>res.user_type;
 
-                        let pageRouter = window.location.pathname;
+                        // 使用 getCurrentPages 获取当前路由（跨平台兼容）
+                        const currentPages = getCurrentPages();
+                        const currentPage = currentPages.length > 0 ? currentPages[currentPages.length - 1] : null;
+                        const pageRouter = currentPage ? `/${currentPage.route}` : '';
+                        // #ifdef H5 || APP-PLUS
                         if (pageRouter == "/pages/reLogin/reLogin") {
                             uni.switchTab({url:'/pages/home/home'})
                         }
+                        // #endif
                         startGuide()
                     }).catch(err => {
                         console.error("Failed to fetch user info:", err);

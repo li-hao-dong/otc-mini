@@ -65,6 +65,10 @@ const myGroupOrderResp = reactive<{total: number, totalPages: number}>({
 })
 
 onShow(() => {
+  // #ifdef APP-PLUS
+  // App 端隐藏原生 tabbar，使用自定义 tabbar 组件
+  uni.hideTabBar({ animation: false });
+  // #endif
   if(activeTab.value === 0){
     clearPlatGroupOrdersData()
     // getPlatGroupOrders()

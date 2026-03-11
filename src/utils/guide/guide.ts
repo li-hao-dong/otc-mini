@@ -1,6 +1,8 @@
+// #ifdef H5
 import { driver } from "driver.js";
 import "driver.js/dist/driver.css";
 import "./driver.css"
+// #endif
 import {nextTick} from "vue";
 import {useStore} from "@/stores";
 
@@ -14,6 +16,7 @@ const delayJump = (move: Function, delay: number = 300 ) => {
 }
 
 
+// #ifdef H5
 export const driverObj = driver({
     showProgress: true,
     progressText: "当前 {{current}} 步,共 {{total}} 步",
@@ -237,7 +240,9 @@ export const driverObj = driver({
             },
             onNextClick: () => {
                 // uni.$u.route({url: '/pages/user/user', type: 'switchTab'})
+                // #ifdef H5
                 (document.querySelector('.submitBtn') as HTMLElement)!.click();
+                // #endif
                 delayJump(driverObj.moveNext, 500)
             }
         }},
@@ -255,7 +260,9 @@ export const driverObj = driver({
                 },
                 onNextClick: () => {
                     // uni.$u.route({url: '/pages/user/user', type: 'switchTab'})
+                    // #ifdef H5
                     (document.querySelector('.price') as HTMLElement)!.click();
+                    // #endif
                     delayJump(driverObj.moveNext)
                 },
 
@@ -349,7 +356,9 @@ export const driverObj = driver({
                 },
                 onNextClick: () => {
                     // uni.$u.route({url: '/pages/user/user', type: 'switchTab'})
+                    // #ifdef H5
                     (document.querySelector('.group_buy_btn') as HTMLElement)!.click();
+                    // #endif
                     useStore().miniData.groupPeople = 2
                     delayJump(driverObj.moveNext)
                 },
@@ -442,9 +451,12 @@ export const driverObj = driver({
     ],
 
 });
+// #endif
+
 // driverObj.drive() // 调用方式
 export const startGuide = () => {
     if(uni.getStorageSync('appGuide')) return
+    // #ifdef H5
     uni.showModal({
         title: '提示',
         content: '即将进行交易引导',
@@ -459,4 +471,10 @@ export const startGuide = () => {
             }
         },
     })
+    // #endif
+
+    // #ifndef H5
+    // 非 H5 平台暂不支持引导功能，直接标记为已完成
+    uni.setStorageSync('appGuide', true)
+    // #endif
 }

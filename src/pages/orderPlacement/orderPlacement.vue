@@ -289,7 +289,7 @@ import { PriceType, type orderPayloadReq } from '@/interfaces/inquiry/orderPaylo
 import { onLoad } from '@dcloudio/uni-app';
 import {ref, watch, watchEffect} from 'vue';
 import {useStore} from "@/stores";
-import {formatLocalTime, truncToTwo} from "@/utils";
+import {clearOrderFlowAndNavigate, formatLocalTime, truncToTwo} from "@/utils";
 import type {CreateGroupOrderReq} from "@/interfaces/groupOrders/createGroupOrders";
 import {
   type GetGroupOrdersReq,
@@ -397,8 +397,10 @@ const placeOrder = () => {
                       )
                       // #endif
 
-                      // #ifdef H5
-                      setTimeout(() => { uni.reLaunch({ url: '/pages/warehouseReceipts/warehouseReceipts?origin=home'}); }, 1500);
+                      // #ifdef H5 || APP-PLUS
+                      setTimeout(() => {
+                        clearOrderFlowAndNavigate('/pages/warehouseReceipts/warehouseReceipts?origin=home');
+                      }, 1500);
                       // #endif
 
                     }
@@ -488,7 +490,9 @@ const createGroupOrders = () => {
     if(res.status && res.status === 'success'){
       uni.showToast({ title: '拼单创建成功', icon: 'success' });
       popup.value.close();
-      setTimeout(() => { uni.reLaunch({ url: '/pages/groupOrders/groupOrderDetail?groupOrderNo='+ res?.data?.groupOrderNo}); }, 1500);
+      setTimeout(() => {
+        clearOrderFlowAndNavigate('/pages/groupOrders/groupOrderDetail?groupOrderNo='+ res?.data?.groupOrderNo);
+      }, 1500);
     } else {
       uni.showToast({ title: res.message || '拼单创建失败', icon: 'none' });
     }

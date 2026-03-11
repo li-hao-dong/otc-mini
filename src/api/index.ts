@@ -35,15 +35,18 @@ import type {SmsCodeRes} from "@/interfaces/smsCode";
 // const BASE_URL: string = "http://backtest.sunsmicro.com:22901/api/v1"
 
 export let BASE_URL: string
-// #ifdef MP-WEIXIN
+export let BASE_URL_BOARD: string
+
+// #ifdef MP-WEIXIN || APP-PLUS || MP-HARMONY
 BASE_URL = "https://option.sunsmicro.com/api/v1"
+BASE_URL_BOARD = "https://option.sunsmicro.com/board-api/v1"
 // #endif
 
 // #ifdef H5
 BASE_URL = "/apiAgent"
-export const BASE_URL_BOARD: string = "/boardApiAgent"
-// export const BASE_URL: string = "https://option.sunsmicro.com/api/v1"
+BASE_URL_BOARD = "/boardApiAgent"
 // #endif
+
 
 /**
  * 发起询价

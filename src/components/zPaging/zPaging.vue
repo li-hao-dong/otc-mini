@@ -40,7 +40,7 @@
 
   const paging = ref<any>(null);
 
-  const emits = defineEmits();
+  const emits = defineEmits(['callback']);
   const dataList = defineModel({
     type: Array,
     default: () => [],

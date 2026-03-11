@@ -1,5 +1,5 @@
 <template>
-  <navigation-title title="拼单详情"></navigation-title>
+  <!-- <navigation-title title="拼单详情"></navigation-title> -->
   <view class="container">
     <view class="card">
       <view class="tag" v-if="orderDetail.isOfficialRecommend">

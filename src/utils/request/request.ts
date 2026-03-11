@@ -5,11 +5,13 @@ const timeout = 6000; // 6s内未返回数据视为超时
 
 const beforeRequest = (url:string) => {
     // 对 不需要 token 的接口 直接放行
-    // if(url.includes("/users/register") || url.includes("/users/login") || url.includes("/inquiry/history") ||
-    //     url.includes("/inquiry/options") || url.includes("/inquiry/quote") ||
-    //     url.includes("/tools/equity-option/calculate") || url.includes("/users/orders?page=")) return true;
-
+    // 用户认证相关
     if(url.includes("/users/register") || url.includes("/users/login") || url.includes("/sms/register-code")) return true;
+
+    // 公开数据接口（市场数据、板块数据等，无需登录即可访问）
+    // if(url.includes("/market/indices") || url.includes("/board/industry") ||
+    //    url.includes("/board/concept") || url.includes("/board/recommendations") ||
+    //    url.includes("/board/constituents") || url.includes("/board/stock/fee")) return true;
 
     if(!useStore().user.token){
         warnToast("请先登录");
@@ -18,7 +20,7 @@ const beforeRequest = (url:string) => {
             uni.switchTab({url: '/pages/user/user'})
             // #endif
 
-            // #ifdef H5
+            // #ifdef H5 || APP-PLUS
             uni.reLaunch({url: '/pages/reLogin/reLogin'})
             // #endif
         }, 2000)
@@ -181,7 +183,7 @@ const http = {
                     }
                     // #endif
 
-                    // #ifdef H5
+                    // #ifdef H5 || APP-PLUS
                     const currentRoute = currentPage.route as string;
                     if (currentRoute !== "pages/reLogin/reLogin" && currentRoute !== "/" && currentRoute !== "pages/user/user") {
                         warnToast("请重新登录");
@@ -190,7 +192,11 @@ const http = {
                     }
                     // #endif
                 }
-                let pageRouter = window.location.pathname;
+                // 使用 getCurrentPages 获取当前页面路由（跨平台兼容）
+                const currentPages = getCurrentPages();
+                const currentPage = currentPages.length > 0 ? currentPages[currentPages.length - 1] : null;
+                const pageRouter = currentPage ? `/${currentPage.route}` : '';
+
                 // #ifdef MP-WEIXIN
                 if (pageRouter !== "/pages/user/user") {
                     warnToast("请重新登录");
@@ -198,7 +204,7 @@ const http = {
                 }
                 // #endif
 
-                // #ifdef H5
+                // #ifdef H5 || APP-PLUS
                 if (pageRouter !== "/pages/reLogin/reLogin" && pageRouter !== "/") {
                     warnToast("请重新登录");
                     setTimeout(() => uni.redirectTo({url: '/pages/reLogin/reLogin'}), 2000);

@@ -179,11 +179,14 @@ const moreDataStatus = ref<boolean>(false);
 const customeBackPage = ref<string>()
 const zPaging = ref()
 
-onShow(() => {
-  const urlParams = new URLSearchParams(window.location.search);
-  if(urlParams.get('origin')){
-    customeBackPage.value = urlParams.get('origin') as string;
+// 使用 onLoad 获取页面参数，跨平台兼容
+onLoad((options) => {
+  if(options?.origin){
+    customeBackPage.value = options.origin as string;
   }
+})
+
+onShow(() => {
   resetData()
   zPaging.value?.reload()
 })

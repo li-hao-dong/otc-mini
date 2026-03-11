@@ -1,41 +1,41 @@
 const network = {
     /**
-     * @description 刷新页面
-     * */
-    // reload() {
-    //     this.$store.commit("isRouterAlive", false);
-    //     this.$nextTick(() => {
-    //         this.$store.commit("isRouterAlive", true);
-    //     })
-    // },
-    /**
      * @description 判断网络连接状态
      * @return false 未连接网络 true 连接网络
      * */
-    handleNetworkChange() {
-        // console.log("network check system");
-        if (!navigator.onLine) {
-            // 无网络连接
-            // this.errHint("网络异常");
-            return false;
-        } else {
-            // 有网络
-            // this.succHint("网络恢复");
-            // this.reload();
-            return true;
-        }
+    handleNetworkChange(): Promise<boolean> {
+        return new Promise((resolve) => {
+            uni.getNetworkType({
+                success: (res) => {
+                    // networkType 可能值：wifi/2g/3g/4g/5g/unknown/none
+                    if (res.networkType === 'none') {
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                },
+                fail: () => {
+                    resolve(false);
+                }
+            });
+        });
     },
     /**
-     * @description 监听网络状态
-     * @param {boolean} navigator.onLine 有网络true 无网络false
+     * @description 监听网络状态变化
      * */
-    checkNetworkStatus() {
-        window.addEventListener("online", this.handleNetworkChange);
-        window.addEventListener("offline", this.handleNetworkChange);
+    checkNetworkStatus(callback?: (isOnline: boolean) => void) {
+        uni.onNetworkStatusChange((res) => {
+            if (callback) {
+                callback(res.isConnected);
+            }
+        });
     },
+    /**
+     * @description 移除网络状态监听（uni-app 中不需要手动移除）
+     * */
     removeNetworkEvent() {
-        window.removeEventListener("online", this.handleNetworkChange);
-        window.removeEventListener("offline", this.handleNetworkChange);
+        // uni.onNetworkStatusChange 返回的函数可以用来取消监听
+        // 但这里简化处理，App 生命周期内通常不需要移除
     },
 };
 

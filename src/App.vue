@@ -1,53 +1,66 @@
 <script setup lang="ts">
 import {onLaunch, onShow, onHide, onBackPress} from "@dcloudio/uni-app";
 import {useStore} from "@/stores";
-import {goBack, truncToTwo} from "@/utils";
+// #ifdef H5
 import VConsole from 'vconsole';
-import {driverObj, startGuide} from "@/utils/guide/guide";
+// #endif
+import {startGuide} from "@/utils/guide/guide";
+// #ifdef H5
+import {driverObj} from "@/utils/guide/guide";
+// #endif
 
+
+// 通用返回处理函数
+const handleBackPress = (): boolean => {
+  const pages = getCurrentPages();
+  // 如果页面栈只有1页，说明是 reLaunch 后的状态，返回首页
+  if (pages.length <= 1) {
+    uni.switchTab({
+      url: '/pages/home/home'
+    });
+    return true; // 阻止默认返回行为
+  }
+  return false; // 允许默认返回行为
+};
 
 onLaunch(() => {
   console.log("App Launch");
-  // const vConsole = new VConsole();
+  // #ifdef APP-PLUS
+  // App 端隐藏原生 tabbar，使用自定义 tabbar 组件
+  // 延迟调用确保 tabbar 已初始化
+  setTimeout(() => {
+    uni.hideTabBar({
+      animation: false
+    });
+  }, 100);
+  // #endif
 });
+
 onShow(() => {
   console.log("App Show");
   useStore().user.initUserInfo()
+  // #ifdef APP-PLUS
+  // 每次 App 显示时确保隐藏原生 tabbar
+  uni.hideTabBar({
+    animation: false
+  });
+  // #endif
 });
+
 onHide(() => {
   console.log("App Hide");
 });
 
-// onBackPress((options) => {
-//   // options.from === 'backbutton' 检查是否是物理/左上角返回按钮触发
-//   console.log("options", options)
-//   if (options.from === 'backbutton') {
-//     console.log("window.location", window.location)
-//     // 检查当前页面栈或业务逻辑，决定是否返回主页
-//     if (window.location.path === '/pages/index/index') { // 假设这是首页附近
-//       uni.showModal({
-//         title: '提示',
-//         content: '已经是首页附近，是否退出应用或返回主页?',
-//         success: function (res) {
-//           if (res.confirm) {
-//             // 退出应用或跳转到主页
-//             uni.reLaunch({ url: '/pages/index/index' }); // 返回主页并清理历史栈
-//           } else if (res.cancel) {
-//             // console.log('用户点击取消');
-//           }
-//         }
-//       });
-//       return true; // 阻止默认返回行为（防止直接退出应用）
-//     }
-//     // 如果有上一页，则让其正常返回
-//     uni.navigateBack(); // 默认返回上一页
-//   }
-//   return false; // 允许默认返回行为
-// })
-
-onLaunch(() => {
-  goBack()
-})
+// #ifdef APP-PLUS
+// APP 端拦截物理返回键
+onBackPress((options) => {
+  // options.from === 'backbutton' 检查是否是物理/左上角返回按钮触发
+  if (options.from === 'backbutton') {
+    return handleBackPress();
+  }
+  return false;
+});
+// #endif
 
 </script>
 <style>
@@ -68,10 +81,11 @@ page{
 
 .container{
   width: 100%;
-  min-height: 100dvh;
+  min-height: 100vh;
   background-color: var(--color-secondary-bg);
   font-size: var(--size-text);
   padding-bottom: 80px;
+  box-sizing: border-box;
 }
 
 .rise_color,

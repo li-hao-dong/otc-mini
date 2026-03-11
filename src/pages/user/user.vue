@@ -7,11 +7,18 @@
         <!-- #endif -->
         <view class="signBox">
           <view class="avator">
+            <!-- #ifdef MP-WEIXIN -->
             <button class="avatar-wrapper" open-type="chooseAvatar" @chooseavatar="onChooseAvatar">
               <uni-icons v-if="!avatarUrl" type="person" size="66" color="white"></uni-icons>
               <image v-else open-type="chooseAvatar" @chooseavatar="onChooseAvatar" class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>
             </button>
-<!--            <image v-else class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>-->
+            <!-- #endif -->
+            <!-- #ifndef MP-WEIXIN -->
+            <view class="avatar-wrapper" @click="chooseAvatar">
+              <uni-icons v-if="!avatarUrl" type="person" size="66" color="white"></uni-icons>
+              <image v-else class="avatar" :src="avatarUrl" style="width: 70px; height: 70px;"></image>
+            </view>
+            <!-- #endif -->
           </view>
           <view class="userData">
             <view class="userName">
@@ -65,6 +72,7 @@
         </view>
       </view>
 
+      <!-- #ifdef H5 -->
       <view style="margin-top: 20px">
         <view class="row" @click="newcomerGuide">
           <view class="label">新人引导</view>
@@ -73,6 +81,8 @@
           </view>
         </view>
       </view>
+      <!-- #endif -->
+
 
       <view style="margin-top: 20px">
         <view class="row" @click="signOut">
@@ -108,6 +118,10 @@ const ticket = ref<string|undefined>("")
 const userDataStatus = ref<boolean>(false)
 
 onShow(() =>{
+  // #ifdef APP-PLUS
+  // App 端隐藏原生 tabbar，使用自定义 tabbar 组件
+  uni.hideTabBar({ animation: false });
+  // #endif
   initUserInfo()
 })
 
@@ -209,6 +223,26 @@ const onChooseAvatar = (e:any) => {
     useStore().user.setAvatarUrl(e.detail.avatarUrl)
   }
 }
+
+// #ifndef MP-WEIXIN
+// 非微信小程序平台使用 uni.chooseImage 选择头像
+const chooseAvatar = () => {
+  uni.chooseImage({
+    count: 1,
+    sizeType: ['compressed'],
+    sourceType: ['album', 'camera'],
+    success: (res) => {
+      if (res.tempFilePaths && res.tempFilePaths.length > 0) {
+        avatarUrl.value = res.tempFilePaths[0];
+        useStore().user.setAvatarUrl(res.tempFilePaths[0])
+      }
+    },
+    fail: (err) => {
+      console.error('选择头像失败:', err);
+    }
+  });
+}
+// #endif
 
 const changePicker = (e: { detail: { value: string[] } }) => {
   address.value = e.detail.value.join('');

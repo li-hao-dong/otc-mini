@@ -62,22 +62,20 @@
 </template>
 
 <style scoped lang="scss">
-:deep(.uni-fab__content--other-platform){
-  box-shadow: unset;
+::v-deep(.uni-fab__content--other-platform){
+  box-shadow: unset ;
 }
-:deep{
+::v-deep{
   .uni-fab__plus{
     background: var(--color-primary-bg) !important;
   }
-
-  //.uni-fab__content{
-  //  width: 40px !important;
-  //
-  //}
-  //.uni-fab__item,
-  //.uni-fab__circle{
-  //  width: 40px !important;
-  //  height: 40px !important;
-  //}
 }
+
+/* #ifdef APP-PLUS */
+/* App 端向上偏移，避免与自定义 tabbar 重合 */
+::v-deep .uni-fab,
+::v-deep .uni-fab__circle{
+  bottom: 70px !important;
+}
+/* #endif */
 </style>

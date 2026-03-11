@@ -95,6 +95,28 @@
 			}
 		},
 		// #endif
+		// #ifdef APP-PLUS
+		{
+			"path": "pages/reLogin/reLogin",
+			"style": {
+				"navigationBarTitleText": "登录/注册",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#d6423a",
+				"enablePullDownRefresh": false
+			}
+		},
+		// #endif
+		// #ifdef MP-HARMONY
+		{
+			"path": "pages/reLogin/reLogin",
+			"style": {
+				"navigationBarTitleText": "登录/注册",
+				"navigationBarTextStyle": "white",
+				"navigationBarBackgroundColor": "#d6423a",
+				"enablePullDownRefresh": false
+			}
+		},
+		// #endif
 		{
 			"path": "pages/warehouseReceiptDetail/warehouseReceiptDetail",
 			"style": {
@@ -130,8 +152,7 @@
 				"navigationBarTitleText": "拼单详情",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "linear",
-				"enablePullDownRefresh": false,
-				"navigationStyle": "custom"
+				"enablePullDownRefresh": false
 			}
 		},
 		{
@@ -166,6 +187,7 @@
 		}
 	],
 	"tabBar": {
+		"custom": true,
 		"color": "#7A7E83",
 		"selectedColor": "#d6423a",
 		"borderStyle": "black",

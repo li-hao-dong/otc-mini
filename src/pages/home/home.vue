@@ -6,7 +6,7 @@
             :duration="duration">
       <swiper-item v-for="(img,key) in background" :key="key">
 <!--        <view class="swiper-item" :style="{background: color, height: '100%'}">{{ color }}</view>-->
-        <img :src="img" alt="img" srcset="" width="100%">
+        <image :src="img" mode="widthFix" style="width: 100%;"></image>
       </swiper-item>
     </swiper>
 
@@ -133,6 +133,10 @@ const timer = ref();
 const swiperHeight = ref()
 
 onShow(() => {
+  // #ifdef APP-PLUS
+  // App 端隐藏原生 tabbar，使用自定义 tabbar 组件
+  uni.hideTabBar({ animation: false });
+  // #endif
   initSwiperHeight()
   activeBkType.value = 1;
   getIndicess();
@@ -156,7 +160,9 @@ onHide(() => {
 })
 
 const initSwiperHeight = () => {
-  const width = document.body.clientWidth || document.documentElement.clientWidth
+  // 使用 uni API 获取屏幕宽度（跨平台兼容）
+  const systemInfo = uni.getSystemInfoSync()
+  const width = systemInfo.windowWidth
   const imgWidth = 390
   const imgHeight = 150
   swiperHeight.value = width * imgHeight / imgWidth

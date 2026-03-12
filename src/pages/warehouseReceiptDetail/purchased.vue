@@ -178,7 +178,7 @@ const exexercise = () => {
     </view>
 
     <!-- 底部按钮 -->
-    <view v-if="detail?.groupOrderNo && detail?.groupRole=='Leader'" class="submit" @click="exexercise">行权</view>
+    <view v-if="(detail?.groupOrderNo && detail?.groupRole=='Leader') || !detail?.groupOrderNo" class="submit" @click="exexercise">行权</view>
 <!--    <view class="card">-->
 <!--      <view class="row"><view class="row_cont" style="color:#5E8ED6; font-size:12px;">查看收益试算</view></view>-->
 <!--      <view class="row"><view class="row_cont" style="color:#999999; font-size:12px;">行权申请提交后，可能无法撤销，请在充分理解产品及风险的前提下谨慎操作。如需其他操作（提前终止、特殊安排等），请联系客服。</view></view>-->

@@ -5,20 +5,19 @@
 <!--      <text class="topText">机构</text>-->
 <!--&lt;!&ndash;      <text class="topText">录入 +</text>&ndash;&gt;-->
 <!--    </view>-->
-    <up-navbar
+    <!-- <up-navbar
         title="仓单"
         @leftClick="backPage"
         bg-color="#d6423a"
         leftIconColor="#fff"
         titleStyle="color: #fff"
     >
-    </up-navbar>
+    </up-navbar> -->
     <!--  菜单部分  -->
     <view class="segTabs">
-      <view class="segItem" style="width: 100%;" v-for="(item, index) in orderType" :key="index" @click="orderTypeKey = index">
+      <view class="segItem" v-for="(item, index) in orderType" :key="index" @click="orderTypeKey = index">
         <text :class="`${orderTypeKey === index ? 'segActive' : 'segText'}`" >
           {{item}}
-<!--          <text>({{ index + 1 }})</text>-->
         </text>
 
         <view v-show="orderTypeKey === index" class="segUnderline"></view>
@@ -286,7 +285,7 @@ const getUserOrder = ({paging, pageNo, pageSize}: {paging: any, pageNo: number, 
 
 <style scoped>
 .container{
-  padding-top: 44px;
+  /* padding-top: 44px; */
   padding-bottom: 0;
 }
 

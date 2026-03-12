@@ -58,7 +58,6 @@
 		{
 			"path": "pages/warehouseReceipts/warehouseReceipts",
 			"style": {
-				"navigationStyle": "custom",
 				"navigationBarTitleText": "仓单",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "linear",

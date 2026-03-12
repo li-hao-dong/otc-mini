@@ -209,6 +209,15 @@ const bindDayDateChange = (e: any) => {
   remitData.paymentTime = e.detail?.value as string
 }
 
+const previewImage = () => {
+  if (voucherUrl.value) {
+    uni.previewImage({
+      urls: [voucherUrl.value],
+      current: voucherUrl.value
+    })
+  }
+}
+
 
 watch(() => props.orderId, (newVal) => {
   // console.log("props.orderId@@@@", props.orderId)
@@ -332,8 +341,8 @@ watch(() => props.orderId, (newVal) => {
 <!--        <view class="card-title">支付凭证图片 + 上传支付凭证</view>-->
 
         <view class="upload-area">
-          <view v-if="voucherUrl"  class="upload-placeholder">
-            <img :src="voucherUrl" alt="" srcset="" />
+          <view v-if="voucherUrl" class="upload-placeholder" @click="previewImage">
+            <image :src="voucherUrl" mode="aspectFit" />
           </view>
           <view v-else class="upload-placeholder" @click="uploadPaymentVoucher">
             <view class="camera-icon">📷</view>

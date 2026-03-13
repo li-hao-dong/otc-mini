@@ -48,8 +48,10 @@
     },
     "h5": {
         "router": {
-            "mode": "history" // 可选"hash"或"history"
-        }
+            "mode": "history"
+        },
+        "title": "期奕",
+        "favicon": "./static/favicon.ico"
     },
     /* 快应用特有相关 */
     "quickapp" : {},

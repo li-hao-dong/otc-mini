@@ -1,28 +1,49 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="UTF-8" />
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
 
-    <link rel="icon" href="../static/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/static/apple-touch-icon-180x180.png"
+    />
+    <link
+      rel="apple-touch-icon-precomposed"
+      href="/static/apple-touch-icon.png"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="apple-mobile-web-app-title" content="期奕" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
 
     <script>
-      var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') ||
-        CSS.supports('top: constant(a)'))
+      var coverSupport =
+        "CSS" in window &&
+        typeof CSS.supports === "function" &&
+        (CSS.supports("top: env(a)") || CSS.supports("top: constant(a)"));
       document.write(
         '<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0' +
-        (coverSupport ? ', viewport-fit=cover' : '') + '" />')
+          (coverSupport ? ", viewport-fit=cover" : "") +
+          '" />',
+      );
     </script>
-    <title></title>
-    <!--preload-links-->
-    <!--app-context-->
+
     <style type="text/css">
       body {
         -webkit-overflow-scrolling: touch;
       }
     </style>
+    <title>期奕</title>
+    <!--preload-links-->
+    <!--app-context-->
   </head>
   <body>
     <div id="app"><!--app-html--></div>

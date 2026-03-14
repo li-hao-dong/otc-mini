@@ -467,9 +467,9 @@ const getUserOrder = ({paging, pageNo, pageSize}: {paging: any, pageNo: number, 
   grid-template-columns: repeat(3, 1fr);
 }
 
-.para_1{
-  /*border: 1px solid red;*/
-}
+/* .para_1{
+  border: 1px solid red;
+} */
 
 .para_2{
   /*border: 1px solid red;*/

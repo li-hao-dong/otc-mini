@@ -41,17 +41,19 @@
                 ]
             },
             /* ios打包配置 */
-            "ios" : {},
+            "ios" : {
+                "dSYMs" : false
+            },
             /* SDK配置 */
             "sdkConfigs" : {}
         }
     },
-    "h5": {
-        "router": {
-            "mode": "history"
+    "h5" : {
+        "router" : {
+            "mode" : "history"
         },
-        "title": "期奕",
-        "favicon": "./static/favicon.ico"
+        "title" : "期奕",
+        "favicon" : "./static/favicon.ico"
     },
     /* 快应用特有相关 */
     "quickapp" : {},

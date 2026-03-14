@@ -77,15 +77,19 @@
               <view class="para"><text class="label">名义本金：</text>{{truncToTwo((order?.nominalAmount ?? 0) / 10000)}}万</view>
             </view>
           </view>
-          <view style="white-space: nowrap;">
+          <view v-if="order?.orderStatus === '已购买'" style="white-space: nowrap;">
             距离结束 {{ calcLeftDay(order?.maturityDate ?? '') }} 天
           </view>
         </view>
 
         <view class="sec_middle_row">
-          <view class="para_1">
+          <view class="para_1" v-if="orderTypeKey === 0">
             <view>{{truncToTwo(order?.strikePrice ?? 0)}}元</view>
             <view style="color: #6d7075;">行权价格</view>
+          </view>
+          <view class="para_1"  v-if="orderTypeKey === 1">
+            <view>{{truncToTwo(order?.settlementPrice ?? 0)}}元</view>
+            <view style="color: #6d7075;">结算价格</view>
           </view>
           <view class="para_2">
             <view style="width: fit-content;">

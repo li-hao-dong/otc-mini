@@ -165,6 +165,7 @@ const formatNumber = (val: string | number | undefined): string => {
       <view class="row"><view class="row_cont"><text>总投入：</text>¥ {{truncToTwo(Number(detail?.transactionFee) + Number(detail?.optionFee))}}</view></view>
       <view class="row"><view class="row_cont"><text>期权费：</text>¥ {{ truncToTwo(Number(detail?.optionFee)) }}</view></view>
       <view class="row"><view class="row_cont"><text>通道费：</text>¥ {{truncToTwo(Number(detail?.transactionFee))}}</view></view>
+      <view class="row"><view class="row_cont"><text>行权价格：</text>¥ {{ truncToTwo(Number(detail?.strikePrice)) }}</view></view>
       <view class="row"><view class="row_cont"><text>结算价格：</text>¥ {{ detail?.settlementPrice }}</view></view>
       <view class="row"><view class="row_cont"><text>结算金额：</text>¥ {{ detail?.settlementAmount }}</view></view>
 <!--      <view class="row"><view class="row_cont"><text>结算通道费：</text>¥ 500.00???</view></view>-->

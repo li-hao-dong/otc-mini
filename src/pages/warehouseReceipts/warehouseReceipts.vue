@@ -124,7 +124,7 @@
           </view>
           <view class="rowBorder">
             <text class="dataText"><text>开仓价格：</text>{{truncToTwo(order?.strikePrice ?? 0)}}元</text>
-            <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{order?.estimatedPayout ? truncToTwo(order.estimatedPayout) : '-'}}元</text></text>
+            <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{truncToTwo(order?.estimatedPayout ?? 0)}}元</text></text>
           </view>
           <view class="rowBorder">
             <!--            <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>-->

@@ -8,7 +8,7 @@
       </view>
     </view>
 
-    <z-paging v-model="history" @callback="inquiryHistoryFun">
+    <z-paging v-model="history" @callback="inquiryHistoryFun" ref="zPaging">
       <view class="inquiryHistoryBox" >
         <view class="inquiryHistoryList" v-for="(item, index) in history" :key="item.inquiryId" @click="toDetail(item.inquiry_parameters)">
           <view class="fir_row">
@@ -93,8 +93,10 @@
 <!--      <button class="to_sign" @click="uni.switchTab({url: '/pages/user/user'})">去登录</button>-->
 <!--    </view>-->
 
+    <!-- #ifdef H5 || APP-PLUS || MP-HARMONY -->
     <fab />
     <tabbar :currentTabbarKey="1"/>
+    <!-- #endif -->
   </view>
 </template>
 
@@ -116,6 +118,7 @@ import ZPaging from "@/components/zPaging/zPaging.vue";
 const history = ref<InquiryHistoryResp[]>([]);
 const moreDataStatus = ref<boolean>(true);
 const structureData = ref<any>([]);
+const zPaging = ref();
 // onShow(() => {
 //   resetDate();
 // })
@@ -125,7 +128,11 @@ onShow(() => {
   uni.hideTabBar({ animation: false });
 });
 // #endif
-
+// #ifdef MP-WEIXIN
+onShow(() => {
+    zPaging.value?.reload()
+})
+// #endif
 
 const inquiryHistoryFun = async ({paging, pageNo, pageSize}: {paging: any, pageNo: number, pageSize: number}) => {
   // inquiryHistory(pageNum.value, pageSize.value).then((res:InquiryHistoryResp) => {

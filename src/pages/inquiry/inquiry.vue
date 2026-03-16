@@ -103,7 +103,9 @@
         <text class="submitText">询价</text>
       </view>
 
+      <!-- #ifdef H5 || APP-PLUS || MP-HARMONY -->
       <tabbar :currentTabbarKey="2"/>
+      <!-- #endif -->
     </view>
   </view>
 

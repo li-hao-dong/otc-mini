@@ -40,11 +40,13 @@ export let BASE_URL_BOARD: string
 // #ifdef MP-WEIXIN || APP-PLUS || MP-HARMONY
 BASE_URL = "https://option.sunsmicro.com/api/v1"
 BASE_URL_BOARD = "https://option.sunsmicro.com/board-api/v1"
+// BASE_URL = import.meta.env.BASE_URL
+// BASE_URL_BOARD = import.meta.env.BOARD_URL
 // #endif
 
 // #ifdef H5
-BASE_URL = "/apiAgent"
-BASE_URL_BOARD = "/boardApiAgent"
+BASE_URL = import.meta.env.BASE_URL_KEY
+BASE_URL_BOARD = import.meta.env.BOARD_URL_KEY
 // #endif
 
 

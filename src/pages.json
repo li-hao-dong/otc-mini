@@ -10,6 +10,7 @@
 		}
 	},
 	"pages": [
+		// #ifdef H5 || APP-PLUS || MP-HARMONY
 		{
 			"path": "pages/home/home",
 			"style": {
@@ -19,6 +20,8 @@
 				"enablePullDownRefresh": false
 			}
 		},
+		// #endif
+		// #ifdef H5 || APP-PLUS || MP-HARMONY
 		{
 			"path": "pages/inquiryHistory/inquiryHistory",
 			"style": {
@@ -28,6 +31,8 @@
 				"enablePullDownRefresh": false
 			}
 		},
+		// #endif
+		// #ifdef MP-WEIXIN
 		{
 			"path": "pages/inquiry/inquiry",
 			"style": {
@@ -37,6 +42,8 @@
 				"enablePullDownRefresh": false
 			}
 		},
+		// #endif
+		// #ifdef H5 || APP-PLUS || MP-HARMONY
 		{
 			"path": "pages/inquiryResult/inquiryResult",
 			"style": {
@@ -46,6 +53,8 @@
 				"enablePullDownRefresh": false
 			}
 		},
+		// #endif
+		// #ifdef H5 || APP-PLUS || MP-HARMONY
 		{
 			"path": "pages/orderPlacement/orderPlacement",
 			"style": {
@@ -73,6 +82,8 @@
 				"enablePullDownRefresh": false
 			}
 		},
+		// #endif
+		// #ifdef MP-WEIXIN || H5 || APP-PLUS || MP-HARMONY
 		{
 			"path": "pages/user/user",
 			"style": {
@@ -82,40 +93,20 @@
 				"enablePullDownRefresh": false
 			}
 		},
-		// #ifdef H5
+		// #endif
+		// #ifdef H5 || APP-PLUS || MP-HARMONY
 		{
 			"path": "pages/reLogin/reLogin",
 			"style": {
 				"navigationBarTitleText": "登录/注册",
 				"navigationBarTextStyle": "white",
 				"navigationBarTextWeight": "linear",
+				"navigationBarBackgroundColor": "#d6423a",
 				"enablePullDownRefresh": false,
 				"navigationStyle": "custom"
 			}
 		},
-		// #endif
-		// #ifdef APP-PLUS
-		{
-			"path": "pages/reLogin/reLogin",
-			"style": {
-				"navigationBarTitleText": "登录/注册",
-				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor": "#d6423a",
-				"enablePullDownRefresh": false
-			}
-		},
-		// #endif
-		// #ifdef MP-HARMONY
-		{
-			"path": "pages/reLogin/reLogin",
-			"style": {
-				"navigationBarTitleText": "登录/注册",
-				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor": "#d6423a",
-				"enablePullDownRefresh": false
-			}
-		},
-		// #endif
+
 		{
 			"path": "pages/warehouseReceiptDetail/warehouseReceiptDetail",
 			"style": {
@@ -185,39 +176,57 @@
 				"enablePullDownRefresh": false
 			}
 		}
+		// #endif
 	],
 	"tabBar": {
+		// #ifdef H5 || APP-PLUS || MP-HARMONY
 		"custom": true,
+		// #endif
 		"color": "#7A7E83",
 		"selectedColor": "#d6423a",
 		"borderStyle": "black",
 		"backgroundColor": "#ffffff",
 		"list": [
+			// #ifdef H5 || APP-PLUS || MP-HARMONY
 			{
 				"pagePath": "pages/home/home",
 				"iconPath": "static/menu/icon_home.png",
 				"selectedIconPath": "static/menu/icon_home_active.png",
 				"text": "首页"
 			},
+			// #endif
+			// #ifdef H5 || APP-PLUS || MP-HARMONY
 			{
 				"pagePath": "pages/inquiryHistory/inquiryHistory",
 				"iconPath": "static/menu/icon_inquiry_history.png",
 				"selectedIconPath": "static/menu/icon_inquiry_history_active.png",
 				"text": "询价"
 			},
+			// #endif
+			// #ifdef H5 || APP-PLUS || MP-HARMONY
 			{
 				"pagePath": "pages/groupOrders/groupOrders",
 				"iconPath": "static/menu/icon_group_order.png",
 				"selectedIconPath": "static/menu/icon_group_order_active.png",
 				"text": "拼单"
 			},
-
+			// #endif
+			// #ifdef MP-WEIXIN
+			{
+				"pagePath": "pages/inquiry/inquiry",
+				"iconPath": "static/menu/icon_place_an_order.png",
+				"selectedIconPath": "static/menu/icon_place_an_order_active.png",
+				"text": "询价"
+			},
+			// #endif
+			// #ifdef MP-WEIXIN || H5 || APP-PLUS || MP-HARMONY
 			{
 				"pagePath": "pages/user/user",
 				"iconPath": "static/menu/icon_user.png",
 				"selectedIconPath": "static/menu/icon_user_active.png",
 				"text": "我的"
 			}
+			// #endif
 		]
 	},
 	"globalStyle": {

@@ -57,6 +57,7 @@
         </view>
       </view>
 
+      <!-- #ifdef H5 || APP-PLUS || MP-HARMONY -->
       <view style="margin-top: 20px">
         <view class="row my_order" @click="warehouseReceipts">
           <view class="label">我的仓单</view>
@@ -71,6 +72,7 @@
           </view>
         </view>
       </view>
+      <!-- #endif -->
 
       <!-- #ifdef H5 -->
       <view style="margin-top: 20px">
@@ -93,7 +95,10 @@
         </view>
       </view>
     </view>
+
+    <!-- #ifdef H5 || APP-PLUS || MP-HARMONY -->
     <tabbar  :currentTabbarKey="4"/>
+    <!-- #endif -->
   </view>
 </template>
 
@@ -124,21 +129,22 @@ onShow(() =>{
   // #endif
   initUserInfo()
 })
-
-// watch(username, (newVal, oldValue) => {
-//   if (newVal != oldValue && !token.value) {
-//     // console.log("用户名已设置，执行登录操作", newVal)
-//     uni.showLoading({title: '登录中...'})
-//     const timer = setInterval(()=>{
-//       if(ticket.value){
-//         login()
-//         clearInterval(timer)
-//         uni.hideLoading()
-//       }
-//     }, 100)
-//   }
-// })
-
+// #ifdef MP-WEIXIN
+watch(username, (newVal, oldValue) => {
+  if (newVal != oldValue && !token.value) {
+    // console.log("用户名已设置，执行登录操作", newVal)
+    const timer = setInterval(()=>{
+      if (!ticket.value) return
+      uni.showLoading({title: '登录中...'})
+      if(ticket.value){
+        login()
+        clearInterval(timer)
+        uni.hideLoading()
+      }
+    }, 100)
+  }
+})
+// #endif
 const updateUserData = () => {
   // Placeholder for updating user data
   // console.log("更新用户数据:", {idCard: idCard.value, address: address.value})
@@ -182,8 +188,11 @@ const login = () => {
   userLogin(ticket.value, username.value).then((res: loginResp) => {
     if(res.status === 'success'){
       useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type, token_valid_until: new Date().getTime() + (60 * 60 * 24 * 1000)});
+      //  avatarUrl.value = res.data.userInfo.avatarUrl;
       succToast("登录成功!")
-      getUserInfo()
+      getUserInfo().then(res => {
+        console.log("res", res)
+      })
     }else {
       // console.log("res", res)
     }
@@ -194,7 +203,7 @@ const login = () => {
 }
 
 const getUserProfile = () => {
-  if (token.value) return
+  // if (token.value) return
   if(uni.getUserProfile){
     uni.getUserProfile({desc: '用于完善会员资料'}).then((res) => {
       // console.log("res", res)
@@ -249,17 +258,20 @@ const changePicker = (e: { detail: { value: string[] } }) => {
 }
 
 const signOut = () => {
+  if(!token.value) return
   useStore().user.clearUserInfo();
   token.value = undefined;
   username.value = undefined;
   avatarUrl.value = undefined;
   ticket.value = undefined;
   succToast("已退出登录")
+  //  #ifdef H5 || APP-PLUS || MP-HARMONY
   setTimeout(() => {
     uni.reLaunch({
       url: '/pages/reLogin/reLogin'
     })
   }, 1000)
+  // #endif
 }
 
 const newcomerGuide = () => {

@@ -93,8 +93,9 @@
     </view>
 
     <fab />
-
+    <!-- #ifdef H5 || APP-PLUS || MP-HARMONY -->
     <tabbar :currentTabbarKey="0"/>
+    <!-- #endif -->
   </view>
 </template>
 

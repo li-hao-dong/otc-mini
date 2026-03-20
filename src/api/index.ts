@@ -28,6 +28,7 @@ import type {ConceptResp, conceptStruct} from "@/interfaces/concept";
 import type {RecommendationItemResp} from "@/interfaces/recommendation";
 import type {IndicesResp} from "@/interfaces/indices";
 import type {constituents} from "@/interfaces/constituents";
+import type {CheckAppVersionReq, CheckAppVersionResp} from "@/interfaces/appVersion";
 import type {SmsCodeRes} from "@/interfaces/smsCode";
 
 // MOCK API 基础地址
@@ -730,3 +731,28 @@ export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {
         }
     })
 }
+
+// #ifdef APP-PLUS
+
+/**
+ * 检测APP更新状态
+ * @param {CheckAppVersionReq} params - 请求参数
+ * @returns {Promise<CheckAppVersionResp>} 返回版本检测结果
+ */
+export const checkAppVersion = (params: CheckAppVersionReq): Promise<CheckAppVersionResp> => {
+    // GET /api/v1/app/version/check?platform=android&version_code=10001&current_version=1.0.1&channel=official&build_type=release
+    return new Promise(async (resolve, reject) => {
+        try{
+            const res = await <response>http.get(`${BASE_URL}/app/version/check?platform=${params.platform ?? 'android'}&version_code=${params.version_code}` )
+
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data)
+            } else {
+                reject(new Error(res.message || 'Failed to fetch checkout app version'));
+            }
+        } catch(err){
+            reject(err);
+        }
+    })
+}
+// #endif

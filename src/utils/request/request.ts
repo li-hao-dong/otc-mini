@@ -20,7 +20,7 @@ const beforeRequest = (url:string) => {
             uni.switchTab({url: '/pages/user/user'})
             // #endif
 
-            // #ifdef H5 || APP-PLUS
+            // #ifdef H5 || APP-PLUS || APP-HARMONY
             uni.reLaunch({url: '/pages/reLogin/reLogin'})
             // #endif
         }, 2000)
@@ -183,7 +183,7 @@ const http = {
                     }
                     // #endif
 
-                    // #ifdef H5 || APP-PLUS
+                    // #ifdef H5 || APP-PLUS || APP-HARMONY
                     const currentRoute = currentPage.route as string;
                     if (currentRoute !== "pages/reLogin/reLogin" && currentRoute !== "/" && currentRoute !== "pages/user/user") {
                         warnToast("请重新登录");
@@ -204,7 +204,7 @@ const http = {
                 }
                 // #endif
 
-                // #ifdef H5 || APP-PLUS
+                // #ifdef H5 || APP-PLUS || APP-HARMONY
                 if (pageRouter !== "/pages/reLogin/reLogin" && pageRouter !== "/") {
                     warnToast("请重新登录");
                     setTimeout(() => uni.redirectTo({url: '/pages/reLogin/reLogin'}), 2000);

@@ -38,7 +38,7 @@ import type {SmsCodeRes} from "@/interfaces/smsCode";
 export let BASE_URL: string
 export let BASE_URL_BOARD: string
 
-// #ifdef MP-WEIXIN || APP-PLUS || MP-HARMONY
+// #ifdef MP-WEIXIN || APP-PLUS || APP-HARMONY || MP-HARMONY
 BASE_URL = "https://option.sunsmicro.com/api/v1"
 BASE_URL_BOARD = "https://option.sunsmicro.com/board-api/v1"
 // #endif
@@ -732,7 +732,7 @@ export const patUserInfo = (userInfo: Partial<UserResp>):Promise<UserResp> => {
     })
 }
 
-// #ifdef APP-PLUS
+// #ifdef APP-PLUS || APP-HARMONY
 
 /**
  * 检测APP更新状态

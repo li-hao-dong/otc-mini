@@ -8,7 +8,7 @@ import {startGuide} from "@/utils/guide/guide";
 // #ifdef H5
 import {driverObj} from "@/utils/guide/guide";
 // #endif
-// #ifdef APP-PLUS
+// #ifdef APP-PLUS || APP-HARMONY
 import {checkAppUpdate} from "@/utils/checkAppUpdate";
 // #endif
 
@@ -28,7 +28,7 @@ const handleBackPress = (): boolean => {
 
 onLaunch(() => {
   console.log("App Launch");
-  // #ifdef APP-PLUS
+  // #ifdef APP-PLUS || APP-HARMONY
   // App 端隐藏原生 tabbar，使用自定义 tabbar 组件
   // 延迟调用确保 tabbar 已初始化
   setTimeout(() => {
@@ -43,7 +43,7 @@ onShow(() => {
   console.log("App Show");
   const userStore = useStore().user
   userStore.initUserInfo()
-  // #ifdef APP-PLUS
+  // #ifdef APP-PLUS || APP-HARMONY
   // 每次 App 显示时确保隐藏原生 tabbar
   uni.hideTabBar({
     animation: false
@@ -59,7 +59,7 @@ onHide(() => {
   console.log("App Hide");
 });
 
-// #ifdef APP-PLUS
+// #ifdef APP-PLUS || APP-HARMONY
 // APP 端拦截物理返回键
 onBackPress((options) => {
   // options.from === 'backbutton' 检查是否是物理/左上角返回按钮触发

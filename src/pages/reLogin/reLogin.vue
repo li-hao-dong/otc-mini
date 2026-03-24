@@ -2,7 +2,7 @@
 import { reactive, ref } from 'vue'
 import {getSmsCode, userLoginH5, userRegister} from "@/api";
 import {useStore} from "@/stores";
-// #ifdef APP-PLUS
+// #ifdef APP-PLUS || APP-HARMONY
 import {checkAppUpdate} from "@/utils/checkAppUpdate";
 // #endif
 
@@ -163,7 +163,7 @@ const userLoggedIn = () => {
         // uni.setStorageSync('userInfo', res.data.userInfo)
         useStore().user.setUserInfo({uuid:res.data.user_info.user_uuid,name:res.data.user_info.user_name, token:res.data.access_token, token_type:res.data.token_type, token_valid_until: new Date().getTime() + (60 * 60 * 24 * 6 * 1000)});
 
-        // #ifdef APP-PLUS
+        // #ifdef APP-PLUS || APP-HARMONY
         // 登录成功后检测版本更新
         checkAppUpdate()
         // #endif

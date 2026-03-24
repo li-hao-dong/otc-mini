@@ -92,7 +92,7 @@ export const useUserStore = defineStore('user', {
                         const currentPages = getCurrentPages();
                         const currentPage = currentPages.length > 0 ? currentPages[currentPages.length - 1] : null;
                         const pageRouter = currentPage ? `/${currentPage.route}` : '';
-                        // #ifdef H5 || APP-PLUS
+                        // #ifdef H5 || APP-PLUS || APP-HARMONY
                         if (pageRouter == "/pages/reLogin/reLogin") {
                             uni.switchTab({url:'/pages/home/home'})
                         }

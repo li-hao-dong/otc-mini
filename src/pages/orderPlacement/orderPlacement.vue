@@ -397,7 +397,7 @@ const placeOrder = () => {
                       )
                       // #endif
 
-                      // #ifdef H5 || APP-PLUS
+                      // #ifdef H5 || APP-PLUS || APP-HARMONY
                       setTimeout(() => {
                         clearOrderFlowAndNavigate('/pages/warehouseReceipts/warehouseReceipts?origin=home');
                       }, 1500);

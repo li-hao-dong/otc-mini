@@ -94,7 +94,7 @@
 			}
 		},
 		// #endif
-		// #ifdef APP-PLUS
+		// #ifdef APP-PLUS || APP-HARMONY
 		{
 			"path": "pages/reLogin/reLogin",
 			"style": {
@@ -118,17 +118,6 @@
 				}
 			}
         },
-		// #endif
-		// #ifdef MP-HARMONY
-		{
-			"path": "pages/reLogin/reLogin",
-			"style": {
-				"navigationBarTitleText": "登录/注册",
-				"navigationBarTextStyle": "white",
-				"navigationBarBackgroundColor": "#d6423a",
-				"enablePullDownRefresh": false
-			}
-		},
 		// #endif
 		{
 			"path": "pages/warehouseReceiptDetail/warehouseReceiptDetail",

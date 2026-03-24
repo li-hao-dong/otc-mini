@@ -48,6 +48,10 @@
             "sdkConfigs" : {}
         }
     },
+    /* 鸿蒙 App 特有相关 */
+    "app-harmony" : {
+        "usingComponents" : true
+    },
     "h5" : {
         "router" : {
             "mode" : "history"

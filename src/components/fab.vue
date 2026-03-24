@@ -71,7 +71,7 @@
   }
 }
 
-/* #ifdef APP-PLUS */
+/* #ifdef APP-PLUS || APP-HARMONY */
 /* App 端向上偏移，避免与自定义 tabbar 重合 */
 ::v-deep .uni-fab,
 ::v-deep .uni-fab__circle{

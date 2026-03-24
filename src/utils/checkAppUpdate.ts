@@ -18,7 +18,7 @@ let isForceUpdateBlocking = false
  * @param force 是否强制检测（忽略缓存时间）
  */
 export const checkAppUpdate = async (force = false): Promise<CheckAppVersionResp | null> => {
-    // #ifdef APP-PLUS
+    // #ifdef APP-PLUS || APP-HARMONY
     const now = Date.now()
     if (!force && now - lastCheckTime < CHECK_INTERVAL) {
         console.log('[VersionCheck] 跳过检测，距离上次检测未超过5分钟')
@@ -48,7 +48,7 @@ export const checkAppUpdate = async (force = false): Promise<CheckAppVersionResp
     }
     // #endif
 
-    // #ifndef APP-PLUS
+    // #if !(APP-PLUS || APP-HARMONY)
     return null
     // #endif
 }
@@ -127,7 +127,7 @@ const handleUpdate = (
         return
     }
 
-    // #ifdef APP-PLUS
+    // #ifdef APP-PLUS || APP-HARMONY
     // 打开浏览器下载
     plus.runtime.openURL(updateUrl, (err) => {
         console.error('[VersionCheck] 打开更新地址失败:', err)

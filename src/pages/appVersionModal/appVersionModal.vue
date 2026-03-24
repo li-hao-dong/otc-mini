@@ -54,7 +54,7 @@
   <!-- #endif -->
 
   <!-- APP-PLUS环境: 作为页面直接显示 -->
-  <!-- #ifdef APP-PLUS -->
+  <!-- #ifdef APP-PLUS || APP-HARMONY -->
   <view class="popup-overlay" @click="handleOverlayClick">
     <view class="popup-container" @click.stop>
       <view v-if="pageConfig.type === 1" class="popup-feedback">
@@ -152,7 +152,7 @@ const pageConfig = ref<PopupConfig>({
 let eventChannel: any = null;
 
 onLoad((options) => {
-  // #ifdef APP-PLUS
+  // #ifdef APP-PLUS || APP-HARMONY
   if (options) {
     pageConfig.value = {
       type: Number(options.type) as 1 | 2 | 3 || 1,
@@ -176,7 +176,7 @@ onLoad((options) => {
   // #endif
 });
 
-// #ifdef APP-PLUS
+// #ifdef APP-PLUS || APP-HARMONY
 // APP端拦截返回键：强制更新时不允许返回
 onBackPress(() => {
   // 如果没有取消按钮（强制更新），阻止返回
@@ -231,7 +231,7 @@ const handleOverlayClick = () => {
     handleCancel();
   }
   // #endif
-  // #ifdef APP-PLUS
+  // #ifdef APP-PLUS || APP-HARMONY
   if (pageConfig.value.closeOpacity) {
     handleCancel();
   }
@@ -239,7 +239,7 @@ const handleOverlayClick = () => {
 };
 
 const handleCancel = () => {
-  // #ifdef APP-PLUS
+  // #ifdef APP-PLUS || APP-HARMONY
   if (eventChannel) {
     eventChannel.emit('cancel');
   }
@@ -251,7 +251,7 @@ const handleCancel = () => {
 };
 
 const handleConfirm = () => {
-  // #ifdef APP-PLUS
+  // #ifdef APP-PLUS || APP-HARMONY
   if (eventChannel) {
     eventChannel.emit('confirm');
   }

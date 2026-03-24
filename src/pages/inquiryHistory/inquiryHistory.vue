@@ -119,7 +119,7 @@ const structureData = ref<any>([]);
 // onShow(() => {
 //   resetDate();
 // })
-// #ifdef APP-PLUS
+// #ifdef APP-PLUS || APP-HARMONY
 onShow(() => {
   // App 端隐藏原生 tabbar，使用自定义 tabbar 组件
   uni.hideTabBar({ animation: false });

@@ -65,7 +65,7 @@ const myGroupOrderResp = reactive<{total: number, totalPages: number}>({
 })
 
 onShow(() => {
-  // #ifdef APP-PLUS
+  // #ifdef APP-PLUS || APP-HARMONY
   // App 端隐藏原生 tabbar，使用自定义 tabbar 组件
   uni.hideTabBar({ animation: false });
   // #endif

@@ -55,7 +55,7 @@ class GlobalPopup {
 
     /** 显示弹窗 */
     show(params: PopupConfig): void {
-        // #ifdef APP-PLUS
+        // #ifdef APP-PLUS || APP-HARMONY
         uni.navigateTo({
             url: `/pages/appVersionModal/appVersionModal?type=${params.type || 1}&title=${encodeURIComponent(params.title || '')}&content=${encodeURIComponent(params.content || '')}&subContent=${encodeURIComponent(params.subContent || '')}&showCancel=${params.showCancel ? 1 : 0}&confirmText=${encodeURIComponent(params.confirmText || '确定')}&cancelText=${encodeURIComponent(params.cancelText || '取消')}&closeOpacity=${params.closeOpacity ? 1 : 0}&icon=${params.icon || 1}`,
             events: {
@@ -136,7 +136,7 @@ class GlobalPopup {
         this.hideH5();
         // #endif
 
-        // #ifdef APP-PLUS
+        // #ifdef APP-PLUS || APP-HARMONY
         uni.navigateBack();
         // #endif
     }

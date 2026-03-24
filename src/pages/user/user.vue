@@ -83,7 +83,7 @@
       </view>
       <!-- #endif -->
 
-      <!-- #ifdef APP-PLUS -->
+      <!-- #ifdef APP-PLUS || APP-HARMONY -->
       <view style="margin-top: 20px">
         <view class="row" @click="handleCheckUpdate">
           <view class="label">检查更新</view>
@@ -118,7 +118,7 @@ import {onLoad, onShow} from "@dcloudio/uni-app";
 import {failToast, succToast} from "@/utils/toast/toast";
 import Tabbar from "@/components/tabbar.vue";
 import {startGuide} from "@/utils/guide/guide";
-// #ifdef APP-PLUS
+// #ifdef APP-PLUS || APP-HARMONY
 import {checkAppUpdate} from "@/utils/checkAppUpdate";
 // #endif
 
@@ -132,7 +132,7 @@ const ticket = ref<string|undefined>("")
 const userDataStatus = ref<boolean>(false)
 
 onShow(() =>{
-  // #ifdef APP-PLUS
+  // #ifdef APP-PLUS || APP-HARMONY
   // App 端隐藏原生 tabbar，使用自定义 tabbar 组件
   uni.hideTabBar({ animation: false });
   // #endif
@@ -281,7 +281,7 @@ const newcomerGuide = () => {
   startGuide()
 }
 
-// #ifdef APP-PLUS
+// #ifdef APP-PLUS || APP-HARMONY
 const handleCheckUpdate = async () => {
   const result = await checkAppUpdate(true) // 强制检测，忽略缓存
   if (result && !result.has_update) {

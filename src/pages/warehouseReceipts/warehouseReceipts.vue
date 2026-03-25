@@ -46,12 +46,12 @@
         </view>
         <view class="sumCol">
            <view class="sumSub">
-            <view class="subLabel">预计回款</view>
+            <view class="subLabel">{{orderTypeKey == 1 ? '已回款':'预计回款'}}</view>
             <view :class="(ordersSummary?.estimatedPayout ?? 0) >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.estimatedPayout ?? 0)}}元</view>
           </view>
 
           <view class="sumSub">
-            <view class="subLabel">预计盈亏</view>
+            <view class="subLabel">{{orderTypeKey == 1 ? '已实现盈亏':'预计盈亏'}}</view>
             <view :class="(ordersSummary?.estimatedProfit ?? 0) >=0 ? 'sumValueRed':'subValueGreen'">{{truncToTwo(ordersSummary?.estimatedProfit ?? 0)}}元</view>
           </view>
           <view class="sumSub">
@@ -93,8 +93,9 @@
           </view>
           <view class="para_2">
             <view style="width: fit-content;">
-              <view :class="(order?.estimatedProfit ?? 0) >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.estimatedProfit ?? 0)}}元</view>
-              <view style="color: #6d7075;">预计盈亏</view>
+              <view  v-if="orderTypeKey === 0" :class="(order?.estimatedProfit ?? 0) >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo(order?.estimatedProfit ?? 0)}}元</view>
+              <view  v-if="orderTypeKey === 1" :class="((order?.settlementAmount ?? 0) - (order?.optionFee ?? 0) - (order?.transactionFee ?? 0)) >= 0 ? 'valueRed' : 'valueGreen'">{{truncToTwo((order?.settlementAmount ?? 0) - (order?.optionFee ?? 0) - (order?.transactionFee ?? 0))}}元</view>
+              <view style="color: #6d7075;">{{orderTypeKey == 1 ? '已实现盈亏':'预计盈亏'}}</view>
             </view>
           </view>
           <view class="para_3">
@@ -120,11 +121,11 @@
           </view>
           <view class="rowBorder">
             <text class="dataText"><text>期限：</text>{{order?.termName}}</text>
-            <text class="dataText"><text>剩余天数：</text>{{order?.daysToExpiry}}天</text>
+            <text class="dataText"><text>剩余天数：</text>{{orderTypeKey === 1 ? 0 : order?.daysToExpiry}}天</text>
           </view>
           <view class="rowBorder">
             <text class="dataText"><text>开仓价格：</text>{{truncToTwo(order?.strikePrice ?? 0)}}元</text>
-            <text class="dataText"><text>预计回款：</text><text class="linkBlue">{{truncToTwo(order?.estimatedPayout ?? 0)}}元</text></text>
+            <text class="dataText"><text>{{orderTypeKey === 1 ? '回款':'预计回款'}}：</text><text class="linkBlue">{{truncToTwo(orderTypeKey === 1 ? order?.settlementAmount ?? 0: order?.estimatedPayout ?? 0)}}元</text></text>
           </view>
           <view class="rowBorder">
             <!--            <text class="dataText"><text>交易商：</text>{{order?.sourceShortName}}</text>-->

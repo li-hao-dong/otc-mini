@@ -99,7 +99,7 @@ const toDetail = (groupOrder: Group) => {
 }
 
 const handleCreateGroupOrder = () => {
-  uni.navigateTo({url: '/pages/inquiry/inquiry'});
+  uni.navigateTo({url: '/pages/inquiry/inquiry?origin=groupOrder'});
 }
 </script>
 
@@ -175,9 +175,9 @@ const handleCreateGroupOrder = () => {
   gap: 7px;
 }
 
-.time_hint{
+/* .time_hint{
 
-}
+} */
 
 .add_group{
   width: fit-content;

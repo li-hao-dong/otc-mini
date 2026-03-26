@@ -150,10 +150,12 @@ const selectedTerms = ref<string[]>([]);
 const sources = ref<Source[]>();
 const selectedSources = ref<string[]>([]);
 
+// origin
+const origin = ref("");
+
 onLoad(option => {
-  if(option?.name){
-    underlying.value = option.name;
-  }
+  if(option?.name) underlying.value = option.name;
+  if(option?.origin === "groupOrder") origin.value = option?.origin;
 })
 
 onShow(() => {
@@ -219,6 +221,7 @@ const toggleSource = (code: string) => {
 
 const getOptions = () => {
   // Placeholder for fetching options from an API if needed
+  uni.showLoading()
   inquiryOptions().then((res: InquiryOptionsResp) => {
     // Process response if needed
     // console.log("res!!!!", res)
@@ -238,6 +241,8 @@ const getOptions = () => {
     selectedSources.value = <string[]>[sources.value![0].code];
   }).catch(() => {
     failToast("获取询价选项失败");
+  }).finally(() => {
+    uni.hideLoading()
   });
 };
 
@@ -254,6 +259,7 @@ const submit = () => {
     structures: selectedStructures.value,
     terms: selectedTerms.value,
     underlying: underlying.value,
+    origin: origin?.value
   };
   uni.setStorageSync('InquiryQuoteReqPayload', payload)
   uni.navigateTo({ url: "/pages/inquiryResult/inquiryResult" });

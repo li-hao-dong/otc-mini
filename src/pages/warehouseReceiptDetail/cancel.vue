@@ -3,7 +3,7 @@ import {reactive, ref, watch, watchEffect} from "vue";
 import type {OrderDetail} from "@/interfaces/orderDetail";
 import {onLoad} from "@dcloudio/uni-app";
 import {bankReceiptInfo, BASE_URL, orderDetail, paymentProofInfo} from "@/api";
-import {formatLocalTime, truncToTwo} from "@/utils";
+import {formatLocalTime, FormatType, truncToTwo} from "@/utils";
 import {useStore} from "@/stores";
 import type {BankAccountInfoResp} from "@/interfaces/bankData";
 import type {UserGroupOrderDetailResp} from "@/interfaces/groupOrders/getUserGroupOrderDetail";
@@ -126,9 +126,9 @@ const backToList = () => {
   uni.navigateTo({url: '/pages/warehouseReceipts/warehouseReceipts'})
 }
 
-const formatDate = (date: string | Date | undefined): string => {
+const formatDate = (date: string | Date | undefined, type?: FormatType): string => {
   if (!date) return '-';
-  return formatLocalTime(new Date(date));
+  return formatLocalTime(new Date(date), type);
 }
 
 const getProfitRatePercent = (rate: string | number | undefined): string => {
@@ -180,8 +180,8 @@ const getProfitRatePercent = (rate: string | number | undefined): string => {
         </view>
       </view>
       <view class="row"><view class="row_cont"><text>订单类型：</text>个股场外期权</view></view>
-      <view class="row"><view class="row_cont"><text>生效日期：</text>{{ formatDate(detail?.createdTime) }}</view></view>
-      <view class="row"><view class="row_cont"><text>到期日期：</text>{{ formatDate(detail?.maturityDate) }}</view></view>
+      <view class="row"><view class="row_cont"><text>生效日期：</text>{{ formatDate(detail?.createdTime, FormatType.YMD) }}</view></view>
+      <view class="row"><view class="row_cont"><text>到期日期：</text>{{ formatDate(detail?.maturityDate, FormatType.YMD) }}</view></view>
       <view class="row"><view class="row_cont"><text>期限：</text>{{ detail?.termName }}</view></view>
       <view class="row"><view class="row_cont"><text>合约结构：</text>{{detail?.structureDisplayName}}{{detail?.optionType}}（{{ detail?.optionCode }}）</view></view>
       <view class="row"><view class="row_cont"><text>期权类型：</text>看涨期权（{{ detail?.optionType }}）</view></view>

@@ -93,7 +93,7 @@ const changeComponent = (key:number) => {
 };
 
 const handleCreateGroupOrder = () => {
-  uni.navigateTo({url: '/pages/inquiry/inquiry'});
+  uni.navigateTo({url: '/pages/inquiry/inquiry?origin=groupOrder'});
 };
 
 

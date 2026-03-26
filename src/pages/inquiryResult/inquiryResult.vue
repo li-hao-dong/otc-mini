@@ -111,7 +111,6 @@ const getInquiryResults = () => {
 
   loadingToast("询价中");
   inquiryQuote(payload).then((res: InquiryResp) =>{
-    // console.log("inquiryQuote res1111,", res.data)
     inquiryId.value = res.data.inquiryId;
     assetName.value = res.data.underlying;
     assetCode.value = res.data.underlyingCode;
@@ -119,16 +118,6 @@ const getInquiryResults = () => {
     priceChange.value = res.data.priceChange;
     nominalAmount.value = res.data.nominalAmount;
     optionType.value = res.data.optionType;
-    // interface QuoteItem {
-    //   structure: string;
-    //   structureName: string;
-    //   term: string;
-    //   termName: string;
-    //   quotes: {
-    //     price: string;
-    //     sourceCode: string;
-    //   }[];
-    // }
     //
 
     formatInquiryStruct(res.data.results)
@@ -214,20 +203,15 @@ const formatInquiryStruct = (quoteResult:QuoteResult[]) =>　{
 }
 
 const toInquiry = () => {
+  const payload = uni.getStorageSync('InquiryQuoteReqPayload')
   uni.redirectTo({
-    url: '/pages/inquiry/inquiry'
+    url: '/pages/inquiry/inquiry?origin=' + payload?.origin
   });
 }
 
 const placeAnOrder = (quote: any, term: string, result: any) => {
-  // console.log("placeAnOrder", quote)
-  // console.log("assetName:", assetName.value)
-  // console.log("assetCode:", assetCode.value)
-  // console.log("priceChange:", priceChange.value)
-  // console.log("currentPrice:", currentPrice.value)
-  // console.log("nominalAmount:", nominalAmount.value)
-  // console.log("quote:", quote)
-  // console.log("result:", result)
+  const storage = uni.getStorageSync('InquiryQuoteReqPayload')
+
   const payload = {
     inquiryId: inquiryId.value,
     assetName: assetName.value,
@@ -240,6 +224,7 @@ const placeAnOrder = (quote: any, term: string, result: any) => {
     structure: result.structure,
     structureName: result.structureName,
     optionType: optionType.value,
+    origin: storage?.origin
   };
   uni.setStorageSync('OrderPayload', payload)
 

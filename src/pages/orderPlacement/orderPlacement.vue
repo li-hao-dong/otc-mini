@@ -2,7 +2,7 @@
     <view class="container orderPage">
         <view class="pageWrap">
 
-          <view class="sub_tabs">
+          <view class="sub_tabs" v-if="!origin">
             <view class="tab_btn "
                   v-for="(tab,k) in subTabs" :class="activeTab == k ? 'tab_btn_avtive': ''"
                   @click="activeTab = k"
@@ -203,7 +203,7 @@
             </view>
 
           <view class="group_buy_btns" v-show="activeTab === 1">
-            <view class="own_buy_btn" @click="activeTab = 0">单独购买</view>
+            <view class="own_buy_btn" v-if="!origin" @click="activeTab = 0">单独购买</view>
             <view class="group_buy_btn" @click="openConvenedBland">发起拼单</view>
           </view>
         </view>
@@ -309,8 +309,16 @@ const popup = ref<any>(null);
 const choosePeople = ref<number>(1);
 const groupOrders = ref<Array<Group>>([]);
 const fee = ref<number>()
+const origin = ref<string>('')
 
-onLoad(() => { initData(); });
+onLoad(() => {
+  initData();
+  const payload = uni.getStorageSync('OrderPayload');
+  if(payload?.origin === 'groupOrder') {
+    origin.value = payload.origin
+    activeTab.value = 1
+  }
+});
 
 watch(() => useStore().miniData.orderPlacementTabIndex, (newVal) => {
   activeTab.value = newVal
@@ -866,16 +874,21 @@ const handleViewAllGroupOrders = () => {
   margin: 0 auto ;
   display: flex;
   gap: 20px;
-  background: #FFFFFF;
+  /* background: #FFFFFF; */
   padding: 10px 2.5%;
   box-sizing: border-box;
 }
 
 .own_buy_btn,
 .group_buy_btn{
-  width: 50%;
+  width: 100%;
   text-align: center;
-  border-radius: 20px;
+  margin: 8px auto 20px auto;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 14px 0;
 }
 
 .own_buy_btn{

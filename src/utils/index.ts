@@ -18,14 +18,29 @@ export const calcClassName = (priceChange:string|number) => {
 
 
 // 格式化输出本地时间（年/月/日 时:分:秒）
-export const formatLocalTime = (date: Date) => {
+export enum FormatType {
+	YMD = "YYYY-MM-DD",
+	YMDHMS = "YYYY-MM-DD HH:mm:ss",
+}
+export const formatLocalTime = (date: Date, type?: FormatType) => {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0"); // 月份从 0 开始
     const day = String(date.getDate()).padStart(2, "0");
     const hours = String(date.getHours()).padStart(2, "0");
     const minutes = String(date.getMinutes()).padStart(2, "0");
     const seconds = String(date.getSeconds()).padStart(2, "0");
-    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+	let formatTime;
+	switch (type) {
+		case FormatType.YMD:
+			formatTime = `${year}-${month}-${day}`;
+		case FormatType.YMDHMS:
+			formatTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+		default:
+			formatTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+	}
+
+	return formatTime
 };
 
 // 截断两位小数（不四舍五入）

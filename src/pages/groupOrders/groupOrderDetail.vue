@@ -179,9 +179,11 @@ const myOrderDetail = ref<Partial<Member>>({});
 const fee = ref<number>()
 const validPaidTime = ref<number>(0)
 const timer = ref()
+const pageOptions = ref<Record<string, string>>({}) // 保存页面参数
 
 onLoad((option) => {
-  // 页面加载时的逻辑
+  // 保存页面参数
+  pageOptions.value = option as Record<string, string>;
   // console.log('Page loaded with options:', option);
   if (option?.groupOrderNo) {
     initOrderDetail(option.groupOrderNo)
@@ -292,26 +294,41 @@ const copyUrl = () => {
       }
     }
   })
+}
 
-  function copyToClipboard() {
-    // 复制链接的逻辑
-    const url = `${window.location.origin}${window.location.pathname}${window.location.search}`;
-    uni.setClipboardData({
-      data: url,
-      success: () => {
-        uni.showToast({
-          title: '复制链接成功',
-          icon: 'success'
-        });
-      },
-      fail: () => {
-        uni.showToast({
-          title: '复制链接失败',
-          icon: 'none'
-        });
-      }
-    });
-  }
+const copyToClipboard = () => {
+  let url: string;
+  // #ifdef H5
+  url = `${window.location.origin}${window.location.pathname}${window.location.search}`;
+  // #endif
+
+  // #ifndef H5
+  const route = 'pages/groupOrders/groupOrderDetail'; // 固定路由
+  const options = pageOptions.value;
+  // 构建带参数的完整路径
+  const queryParams = Object.entries(options)
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
+  // APP 端拼接域名（从环境变量读取）
+  const baseUrl = import.meta.env.APP_SHARE_BASE_URL || 'https://op.baidu.com';
+  url = queryParams ? `${baseUrl}/${route}?${queryParams}` : `${baseUrl}/${route}`;
+  // #endif
+
+  uni.setClipboardData({
+    data: url,
+    success: () => {
+      uni.showToast({
+        title: '复制链接成功',
+        icon: 'success'
+      });
+    },
+    fail: () => {
+      uni.showToast({
+        title: '复制链接失败',
+        icon: 'none'
+      });
+    }
+  });
 }
 
 const toOrderDetail = () => {

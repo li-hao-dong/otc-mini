@@ -8,6 +8,9 @@ import {startGuide} from "@/utils/guide/guide";
 // #ifdef H5
 import {driverObj} from "@/utils/guide/guide";
 // #endif
+// #ifdef APP-PLUS
+import {checkAppUpdate} from "@/utils/checkAppUpdate";
+// #endif
 
 
 // 通用返回处理函数
@@ -38,12 +41,17 @@ onLaunch(() => {
 
 onShow(() => {
   console.log("App Show");
-  useStore().user.initUserInfo()
+  const userStore = useStore().user
+  userStore.initUserInfo()
   // #ifdef APP-PLUS
   // 每次 App 显示时确保隐藏原生 tabbar
   uni.hideTabBar({
     animation: false
   });
+  // 检测APP版本更新（需要登录状态）
+  if (userStore.token && userStore.token_valid_until && new Date().getTime() < userStore.token_valid_until) {
+    checkAppUpdate();
+  }
   // #endif
 });
 
@@ -63,6 +71,7 @@ onBackPress((options) => {
 // #endif
 
 </script>
+
 <style>
 page{
   --color-primary-bg: #d6423a;

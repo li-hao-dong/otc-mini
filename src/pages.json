@@ -104,6 +104,20 @@
 				"enablePullDownRefresh": false
 			}
 		},
+		{
+			"path": "pages/appVersionModal/appVersionModal",
+			"style": {
+            	"navigationStyle": "custom",
+				"backgroundColor": "transparent",
+				"app-plus": {
+					"animationType": "fade-in",
+					"background": "transparent",
+					"popGesture": "none",
+					"bounce": "none",
+					"titleNView": false
+				}
+			}
+        },
 		// #endif
 		// #ifdef MP-HARMONY
 		{

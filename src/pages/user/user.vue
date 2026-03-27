@@ -83,6 +83,17 @@
       </view>
       <!-- #endif -->
 
+      <!-- #ifdef APP-PLUS -->
+      <view style="margin-top: 20px">
+        <view class="row" @click="handleCheckUpdate">
+          <view class="label">检查更新</view>
+          <view class="value">
+            <uni-icons type="right" size="16"></uni-icons>
+          </view>
+        </view>
+      </view>
+      <!-- #endif -->
+
 
       <view style="margin-top: 20px">
         <view class="row" @click="signOut">
@@ -107,6 +118,9 @@ import {onLoad, onShow} from "@dcloudio/uni-app";
 import {failToast, succToast} from "@/utils/toast/toast";
 import Tabbar from "@/components/tabbar.vue";
 import {startGuide} from "@/utils/guide/guide";
+// #ifdef APP-PLUS
+import {checkAppUpdate} from "@/utils/checkAppUpdate";
+// #endif
 
 const avatarUrl = ref<string|undefined>("")
 const address = ref<string|undefined>("暂无")
@@ -266,6 +280,19 @@ const newcomerGuide = () => {
   uni.setStorageSync('appGuide', false)
   startGuide()
 }
+
+// #ifdef APP-PLUS
+const handleCheckUpdate = async () => {
+  const result = await checkAppUpdate(true) // 强制检测，忽略缓存
+  if (result && !result.has_update) {
+    // 手动检查时，无更新需要提示
+    uni.showToast({
+      title: '当前已是最新版本',
+      icon: 'none'
+    })
+  }
+}
+// #endif
 
 const warehouseReceipts = () => uni.navigateTo({url: '/pages/warehouseReceipts/warehouseReceipts'})
 const myGroupOrders = () => uni.navigateTo({url: '/pages/groupOrders/myGroupOrders'})

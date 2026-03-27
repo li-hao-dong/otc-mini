@@ -1,0 +1,175 @@
+// 弹窗样式
+
+// 遮罩层
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+// 弹窗容器
+.popup-container {
+  width: 80%;
+  max-width: 320px;
+  background-color: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+// 反馈弹窗
+.popup-feedback {
+  padding: 30px 20px 20px;
+  text-align: center;
+
+  .popup-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .icon-text {
+      width: 60px;
+      height: 60px;
+      line-height: 60px;
+      font-size: 30px;
+      font-weight: bold;
+      border-radius: 50%;
+      color: #fff;
+    }
+
+    .icon-success {
+      background-color: #52c41a;
+    }
+
+    .icon-error {
+      background-color: #ff4d4f;
+    }
+
+    .icon-info {
+      background-color: #1890ff;
+    }
+  }
+
+  .popup-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .popup-content {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+}
+
+// Modal弹窗
+.popup-modal {
+  .popup-header {
+    padding: 15px 20px;
+    border-bottom: 1px solid #eee;
+    text-align: center;
+
+    .popup-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: #333;
+    }
+  }
+
+  .popup-body {
+    padding: 20px;
+
+    .popup-content-main {
+      font-size: 15px;
+      color: #333;
+      line-height: 1.6;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .popup-content-sub {
+      font-size: 13px;
+      color: #999;
+      line-height: 1.8;
+      text-align: left;
+      background-color: #f9f9f9;
+      padding: 10px 12px;
+      border-radius: 8px;
+      white-space: pre-line;
+    }
+  }
+}
+
+// 自定义弹窗
+.popup-custom {
+  padding: 20px;
+
+  .popup-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .popup-content {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 15px;
+  }
+}
+
+// 按钮区域
+.popup-btns {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 0 10px 20px;
+
+  .popup-btn {
+    flex: 1;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    border-radius: 22px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:active {
+      opacity: 0.8;
+    }
+  }
+
+  .cancel-btn {
+    background-color: #f5f5f5;
+    color: #666;
+    border: 1px solid #ddd;
+  }
+
+  .confirm-btn {
+    background-color: #d6423a;
+    color: #fff;
+  }
+}
+
+// 单按钮样式
+.popup-btns .popup-btn:only-child {
+  margin: 0 auto;
+  max-width: 200px;
+}

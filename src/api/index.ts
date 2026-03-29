@@ -6,7 +6,7 @@ import type {InquiryOptionsResp} from "@/interfaces/inquiry/inquiryOptions";
 import type {InquiryHistoryResp} from "@/interfaces/inquiry/inquiryHistory";
 import http from "@/utils/request/request";
 import type {loginReq, loginResp} from "@/interfaces/login";
-import type {UserResp} from "@/interfaces/user";
+import type {UserResp, ChangePasswordReq, ChangePasswordResp, ChangePhoneReq, ChangePhoneResp} from "@/interfaces/user";
 import type {calculatorReq, EquityOptionCalculatorResult} from "@/interfaces/calculator";
 import type { orderPayloadReq, orderPayloadResp, PriceType } from "@/interfaces/inquiry/orderPayload";
 import type { userOrderResp } from "@/interfaces/orders";
@@ -29,7 +29,7 @@ import type {RecommendationItemResp} from "@/interfaces/recommendation";
 import type {IndicesResp} from "@/interfaces/indices";
 import type {constituents} from "@/interfaces/constituents";
 import type {CheckAppVersionReq, CheckAppVersionResp} from "@/interfaces/appVersion";
-import type {SmsCodeRes} from "@/interfaces/smsCode";
+import type {SmsCodeRes, SmsCodeReq} from "@/interfaces/smsCode";
 
 // MOCK API 基础地址
 // const BASE_URL: string = "https://m1.apifoxmock.com/m1/7383056-7115424-default"
@@ -213,6 +213,27 @@ export const getSmsCode = (telephone: string):Promise<SmsCodeRes> => {
     })
 }
 
+/**
+ * 发送短信验证码（通用）
+ * @param payload - 请求参数
+ * @returns 验证码发送结果
+ */
+export const sendSmsCode = (payload: SmsCodeReq):Promise<SmsCodeRes> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.post(`${BASE_URL}/sms/register-code`, payload)
+            if (res.data) {
+                resolve(res.data.data as SmsCodeRes)
+            }
+            else {
+                reject(new Error(res.message || 'Failed to send sms code'));
+            }
+        }catch (error) {
+            reject(error);
+        }
+    })
+}
+
 
 
 /**
@@ -292,6 +313,42 @@ export const getUserInfo = ():Promise<UserResp> => {
                 resolve(res as UserResp)
             } else {
                 reject(new Error(res.message || 'Failed to fetch user info'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 修改密码
+ * */
+export const changePassword = (payload: ChangePasswordReq):Promise<ChangePasswordResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.put(`${BASE_URL}/users/change_password`, payload)
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as ChangePasswordResp)
+            } else {
+                reject(new Error(res.message || 'Failed to change password'));
+            }
+        } catch (error) {
+            reject(error);
+        }
+    })
+}
+
+/**
+ * 修改手机号
+ * */
+export const changePhone = (payload: ChangePhoneReq):Promise<ChangePhoneResp> => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const res: response = <response>await http.put(`${BASE_URL}/users/change-phone`, payload)
+            if (res.code == 200 || res.statusCode == 200 || res.status == "success") {
+                resolve(res.data as ChangePhoneResp)
+            } else {
+                reject(new Error(res.message || 'Failed to change phone'));
             }
         } catch (error) {
             reject(error);
@@ -756,3 +813,4 @@ export const checkAppVersion = (params: CheckAppVersionReq): Promise<CheckAppVer
     })
 }
 // #endif
+

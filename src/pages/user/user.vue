@@ -96,6 +96,21 @@
 
 
       <view style="margin-top: 20px">
+        <view class="row" @click="changePassword">
+          <view class="label">修改密码</view>
+          <view class="value">
+            <uni-icons type="right" size="16"></uni-icons>
+          </view>
+        </view>
+        <view class="row" @click="changePhone">
+          <view class="label">修改手机号</view>
+          <view class="value">
+            <uni-icons type="right" size="16"></uni-icons>
+          </view>
+        </view>
+      </view>
+
+      <view style="margin-top: 20px">
         <view class="row" @click="signOut">
           <view class="label">退出登录</view>
           <view class="value">
@@ -296,6 +311,8 @@ const handleCheckUpdate = async () => {
 
 const warehouseReceipts = () => uni.navigateTo({url: '/pages/warehouseReceipts/warehouseReceipts'})
 const myGroupOrders = () => uni.navigateTo({url: '/pages/groupOrders/myGroupOrders'})
+const changePassword = () => uni.navigateTo({url: '/pages/changePassword/changePassword'})
+const changePhone = () => uni.navigateTo({url: '/pages/changePhone/changePhone'})
 
 </script>
 

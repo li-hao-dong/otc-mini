@@ -198,6 +198,26 @@
 				"navigationBarTextWeight": "linear",
 				"enablePullDownRefresh": false
 			}
+		},
+		{
+			/* 修改密码 */
+			"path": "pages/changePassword/changePassword",
+			"style": {
+				"navigationBarTitleText": "修改密码",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "linear",
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			/* 修改手机号 */
+			"path": "pages/changePhone/changePhone",
+			"style": {
+				"navigationBarTitleText": "修改手机号",
+				"navigationBarTextStyle": "white",
+				"navigationBarTextWeight": "linear",
+				"enablePullDownRefresh": false
+			}
 		}
 	],
 	"tabBar": {

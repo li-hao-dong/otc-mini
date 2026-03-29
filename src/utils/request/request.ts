@@ -104,6 +104,40 @@ const http = {
         });
     },
     /**
+     * @description http 请求 put 方法
+     * @param {string} url
+     * @param {object} data
+     * */
+    put(url: string, data: any) {
+        return new Promise((resolve, reject) => {
+            if(!beforeRequest(url)){
+                reject(false)
+                return
+            }
+            uni.request({
+                method: "PUT",
+                timeout,
+                url,
+                header: {
+                    'content-type': "application/json",
+                    'Authorization': `${useStore().user.token_type} ${useStore().user.token}`,
+                },
+                data,
+                success: (res:response) => {
+                    if (res.statusCode != 200) {
+                        let hintContent = this.checkoutDataCode(res.data?.code??res?.statusCode, res?.msg ?? res?.data?.message ?? res?.data);
+                        setTimeout(() => {reject(hintContent ?? res?.msg ?? res?.data);}, 2000)
+                        return;
+                    }
+                    resolve(res);
+                },
+                fail: (err) => {
+                    reject(err);
+                }
+            });
+        });
+    },
+    /**
      * @description http 请求 patch 方法
      * @param {string} url
      * @param {object} data

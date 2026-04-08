@@ -27,6 +27,7 @@ export default defineConfig(async(envConfig) => {
       }
     },
     server: {
+      host: '0.0.0.0',
       proxy: {
         [env.BASE_URL_KEY]: {
           target: env.BASE_URL, // 跨域目标

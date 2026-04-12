@@ -277,7 +277,7 @@ const handleRenew = async () => {
     setTimeout(() => {
       uni.$u.route({
         url: "/tools/record-list/index",
-        type: "redirectTo",
+        type: "redirect",
       })
     }, 300)
   } catch (error) {

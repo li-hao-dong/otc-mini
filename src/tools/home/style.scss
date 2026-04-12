@@ -1,0 +1,218 @@
+page {
+  background: #f5f5f5;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Segoe UI",
+    sans-serif;
+}
+
+.toolsHomePage {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.pageInner {
+  padding: 20rpx 20rpx calc(40rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* 顶部说明卡片 */
+.headerCard {
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+.headerTitle {
+  font-size: 34rpx;
+  line-height: 1.4;
+  font-weight: 700;
+  color: #18181b;
+  margin-bottom: 12rpx;
+}
+
+.headerDesc {
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: #71717a;
+}
+
+/* 工具列表 */
+.toolList {
+  display: flex;
+  flex-direction: column;
+  gap: 20rpx;
+}
+
+/* 工具卡片 */
+.toolCard {
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  box-sizing: border-box;
+}
+
+.toolCardHeader {
+  display: flex;
+  align-items: flex-start;
+  gap: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.toolIconWrap {
+  width: 88rpx;
+  height: 88rpx;
+  flex-shrink: 0;
+  border-radius: 16rpx;
+  background: #fdf2f2;
+  border: 1px solid #f3d4d1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.toolIconWrap.toolIconCalc {
+  background: #fdf2f2;
+  border-color: #f3d4d1;
+}
+
+.toolIcon {
+  font-size: 40rpx;
+  line-height: 1;
+  font-weight: 700;
+  color: #d6423a;
+}
+
+.toolHeaderContent {
+  min-width: 0;
+  flex: 1;
+}
+
+.toolTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+  margin-bottom: 8rpx;
+}
+
+.toolTitle {
+  font-size: 30rpx;
+  line-height: 1.4;
+  font-weight: 600;
+  color: #18181b;
+}
+
+.toolDesc {
+  font-size: 24rpx;
+  line-height: 1.6;
+  color: #71717a;
+}
+
+/* 状态标签 */
+.statusTag {
+  padding: 4rpx 12rpx;
+  border-radius: 9999rpx;
+  display: inline-flex;
+  align-items: center;
+}
+
+.statusTagTrial {
+  background: #fdf2f2;
+  border: 1px solid #f3d4d1;
+}
+
+.statusTagText {
+  font-size: 20rpx;
+  color: #d6423a;
+  font-weight: 600;
+}
+
+/* 标签组 */
+.tagList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-bottom: 20rpx;
+}
+
+.tagItem {
+  padding: 6rpx 16rpx;
+  background: #f5f5f5;
+  border-radius: 9999rpx;
+  font-size: 22rpx;
+  color: #71717a;
+}
+
+/* 状态信息 */
+.statusInfo {
+  background: #fafafa;
+  border: 1px solid #e4e4e7;
+  border-radius: 12rpx;
+  padding: 16rpx 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8rpx 0;
+}
+
+.statusRow + .statusRow {
+  border-top: 1px solid #e4e4e7;
+  margin-top: 8rpx;
+  padding-top: 12rpx;
+}
+
+.statusLabel {
+  font-size: 24rpx;
+  color: #71717a;
+}
+
+.statusValue {
+  font-size: 24rpx;
+  font-weight: 600;
+}
+
+.statusValueWarn {
+  color: #d6423a;
+}
+
+/* 底部按钮组 */
+.actionRow {
+  display: flex;
+  gap: 16rpx;
+}
+
+.btnSecondary,
+.btnPrimary {
+  flex: 1;
+  min-height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+}
+
+.btnSecondary {
+  background: #fafafa;
+  border: 1px solid #e4e4e7;
+}
+
+.btnPrimary {
+  background: linear-gradient(90deg, #d6423a 0%, #c7342c 100%);
+  box-shadow: 0 8rpx 16rpx rgba(214, 66, 58, 0.2);
+}
+
+.btnText {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: #18181b;
+}
+
+.btnTextPrimary {
+  color: #ffffff;
+}

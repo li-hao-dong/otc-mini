@@ -1,0 +1,319 @@
+page {
+  background: #f5f5f5;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", "Segoe UI",
+    sans-serif;
+}
+
+.recordEmptyPage {
+  min-height: 100vh;
+  background: #f5f5f5;
+}
+
+.pageInner {
+  padding: 20rpx 20rpx calc(480rpx + env(safe-area-inset-bottom));
+  box-sizing: border-box;
+}
+
+/* 顶部说明卡片 */
+.headerCard {
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  position: relative;
+}
+
+.headerTitle {
+  font-size: 34rpx;
+  line-height: 1.4;
+  font-weight: 700;
+  color: #18181b;
+  margin-bottom: 12rpx;
+}
+
+.headerDesc {
+  font-size: 26rpx;
+  line-height: 1.6;
+  color: #71717a;
+  padding-right: 100rpx;
+}
+
+.headerTag {
+  position: absolute;
+  top: 24rpx;
+  right: 24rpx;
+  padding: 6rpx 16rpx;
+  background: #fdf2f2;
+  border: 1px solid #f3d4d1;
+  border-radius: 9999rpx;
+  font-size: 20rpx;
+  color: #d6423a;
+  font-weight: 600;
+}
+
+/* 状态卡片 */
+.statusCard {
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+  border: 1px solid #e4e4e7;
+}
+
+.statusCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.statusCardTitle {
+  font-size: 30rpx;
+  font-weight: 700;
+  color: #18181b;
+}
+
+.statusCardHint {
+  font-size: 24rpx;
+  color: #71717a;
+}
+
+/* 试用信息盒 */
+.trialBox {
+  background: #fdf2f2;
+  border: 1px solid #f3d4d1;
+  border-radius: 12rpx;
+  padding: 20rpx;
+}
+
+.trialTopRow {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+  margin-bottom: 12rpx;
+}
+
+.statusTag {
+  padding: 6rpx 16rpx;
+  border-radius: 9999rpx;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.statusTagTrial {
+  background: #ffffff;
+  border: 1px solid #f3d4d1;
+}
+
+.statusTagText {
+  font-size: 20rpx;
+  color: #d6423a;
+  font-weight: 600;
+}
+
+.trialMainText {
+  flex: 1;
+  font-size: 26rpx;
+  font-weight: 600;
+  color: #18181b;
+  line-height: 1.5;
+  text-align: right;
+}
+
+.trialDesc {
+  font-size: 24rpx;
+  line-height: 1.7;
+  color: #71717a;
+  margin-bottom: 16rpx;
+}
+
+.trialDivider {
+  height: 1px;
+  background: rgba(243, 212, 209, 0.8);
+  margin-bottom: 16rpx;
+}
+
+.trialFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16rpx;
+}
+
+.trialMetaLabel {
+  font-size: 24rpx;
+  color: #71717a;
+}
+
+.trialMetaValue {
+  font-size: 24rpx;
+  font-weight: 600;
+  color: #d6423a;
+}
+
+.trialAction {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.btnPrimary {
+  min-width: 180rpx;
+  min-height: 60rpx;
+  padding: 0 28rpx;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999rpx;
+  background: #ffffff;
+  border: 1px solid #e4e4e7;
+  box-sizing: border-box;
+}
+
+.btnTextPrimary {
+  font-size: 24rpx;
+  color: #18181b;
+  font-weight: 600;
+}
+
+/* 空状态区域 */
+.emptySection {
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 20rpx;
+}
+
+/* 提示和按钮区域 */
+.actionSection {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin: 20rpx;
+  margin-bottom: calc(20rpx + env(safe-area-inset-bottom));
+  box-shadow: 0 -4rpx 16rpx rgba(0, 0, 0, 0.08);
+  z-index: 100;
+}
+
+.emptyIllustration {
+  width: 164rpx;
+  height: 164rpx;
+  padding: 12rpx;
+  border-radius: 9999rpx;
+  background: #fafafa;
+  border: 1px solid #e4e4e7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.emptyIllustrationInner {
+  width: 100%;
+  height: 100%;
+  border-radius: 9999rpx;
+  background: #fdf2f2;
+  border: 1px solid #f3d4d1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyIllustrationMain {
+  font-size: 56rpx;
+  line-height: 1;
+  font-weight: 700;
+  color: #d6423a;
+}
+
+.emptyTitle {
+  margin-top: 28rpx;
+  font-size: 32rpx;
+  line-height: 1.45;
+  color: #18181b;
+  font-weight: 700;
+  text-align: center;
+}
+
+.emptyDesc {
+  margin-top: 14rpx;
+  font-size: 24rpx;
+  line-height: 1.8;
+  color: #71717a;
+  text-align: center;
+}
+
+.emptyNoticeCard {
+  margin-top: 24rpx;
+  padding: 20rpx;
+  background: #fafafa;
+  border: 1px solid #e4e4e7;
+  border-radius: 12rpx;
+  text-align: left;
+}
+
+.emptyNoticeCardHighlight {
+  background: #fdf2f2;
+  border-color: #f3d4d1;
+}
+
+.emptyNoticeTitle {
+  font-size: 24rpx;
+  line-height: 1.5;
+  color: #71717a;
+  font-weight: 500;
+}
+
+.emptyNoticeDesc {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  line-height: 1.7;
+  color: #18181b;
+}
+
+.emptyActions {
+  margin-top: 24rpx;
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  width: 100%;
+  min-height: 88rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12rpx;
+  box-sizing: border-box;
+}
+
+.primaryBtn {
+  background: linear-gradient(90deg, #d6423a 0%, #c7342c 100%);
+  box-shadow: 0 8rpx 16rpx rgba(214, 66, 58, 0.2);
+}
+
+.secondaryBtn {
+  background: #fafafa;
+  border: 1px solid #e4e4e7;
+}
+
+.primaryBtnText {
+  font-size: 30rpx;
+  line-height: 1.2;
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.secondaryBtnText {
+  font-size: 28rpx;
+  line-height: 1.2;
+  color: #18181b;
+  font-weight: 600;
+}
